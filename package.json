@@ -1,0 +1,46 @@
+{
+  "name": "ubumaths",
+  "version": "0.5.22",
+  "private": true,
+  "scripts": {
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install",
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "sirv public -s",
+    "format": "prettier --write \"src/**/*\"",
+    "deploy": "firebase deploy",
+    "savedb": "node ./savedb.js "
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-node-resolve": "^8.0.0",
+    "autoprefixer": "^9.8.6",
+    "eslint": "^7.7.0",
+    "eslint-plugin-svelte3": "^2.7.3",
+    "firestore-export-import": "^0.5.0",
+    "node-sass": "^4.14.1",
+    "postcss": "^7.0.32",
+    "rollup": "^2.3.4",
+    "rollup-plugin-livereload": "^1.0.0",
+    "rollup-plugin-postcss": "^3.1.5",
+    "rollup-plugin-sass": "^1.2.2",
+    "rollup-plugin-svelte": "^5.0.3",
+    "rollup-plugin-terser": "^6.0.0",
+    "svelte": "^3.0.0",
+    "svelte-preprocess": "^4.0.12"
+  },
+  "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^5.14.0",
+    "@smui/button": "^1.0.0",
+    "@smui/card": "^1.0.0",
+    "@smui/fab": "^1.0.0",
+    "@smui/select": "^1.0.0",
+    "firebase": "^7.18.0",
+    "mathlive": "^0.55.0",
+    "query-string": "^6.13.1",
+    "sirv-cli": "^1.0.0",
+    "svelte-fa": "^2.1.1",
+    "svelte-loading-spinners": "^0.1.1",
+    "svelte-routing": "^1.4.2"
+  }
+}
