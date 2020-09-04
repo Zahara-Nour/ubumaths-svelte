@@ -13,7 +13,7 @@
 <div class="card content">
 
   <div class="title-answer">Réponse</div>
-  <div class="answer textmath">{card.answer}</div>
+  <div class="answer textmath">{@html card.answer}</div>
   {#if localUrlP}
     {#await localUrlP}
       <Spinner />
@@ -25,8 +25,12 @@
       <p style="color: red">{error.message}</p>
     {/await}
   {/if}
-  <div class="textmath">{card.explanation}</div>
-  <div class="textmath">{card.warning}</div>
+  {#if card.explanation}
+  <div class="textmath">{@html card.explanation}</div>
+  {/if}
+  {#if card.warning}
+  <div class="textmath">{@html card.warning}</div>
+  {/if}
   <div class="buttons">
     <Button
       on:click="{toggleFlip}"
@@ -66,12 +70,12 @@
   }
 
   .title-answer {
-    // color: $mdc-theme-secondary;
+    color: $mdc-theme-secondary;
     font-size: 1.2em;
     margin-bottom: 2em;
   }
   .answer {
-    font-size: 1.4em;
+    font-size: 1.3em;
     font-weight: 500;
   }
 

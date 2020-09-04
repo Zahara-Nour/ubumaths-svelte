@@ -6,6 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 import preprocess from 'svelte-preprocess';
 import postcss from 'rollup-plugin-postcss'
 import autoprefixer from 'autoprefixer'
+import analyze from 'rollup-plugin-analyzer'
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -43,18 +44,21 @@ const postcssOptions = () => ({
 		]
 	  }]
 	],
-	plugins: [autoprefixer()]
+	plugins: [autoprefixer() ]
   });
 
 export default {
+	// external: ['mathlive'],
+	
 	input: 'src/main.js',
 	output: {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: 'public/build/bundle.js'
+		file: 'public/build/bundle.js',
+		// globals:{mathlive: 'Mathlive'},
 	},
-	plugins: [
+	plugins: [analyze({summaryOnly:true}),
 		svelte({
 			hydratable:true,
 			// enable run-time checks when not in production

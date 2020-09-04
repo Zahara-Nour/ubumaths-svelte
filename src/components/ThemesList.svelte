@@ -1,9 +1,9 @@
 <script>
-  import { getCollection } from '../collections'
+  import { getCollection } from '../app/collections'
   import Spinner from './Spinner.svelte'
   import ThemeItem from './ThemeItem.svelte'
   import Button, { Label } from '@smui/button'
-  import { lexicoSort, isEmpty } from '../utils'
+  import { lexicoSort, isEmpty } from '../app/utils'
   import Fab from '@smui/fab'
   import { navigate } from 'svelte-routing'
 
@@ -17,15 +17,13 @@
   let promise
   let levels
 
-
   let grades
   const gradesP = getCollection({
     collectionPath: 'Grades',
-    extract: 'name',
     sort: lexicoSort,
   })
     .then((values) => {
-      grades = values
+      grades = values.map((value) => value.name)
       return values
     })
     .catch((error) => console.log(error))
@@ -34,7 +32,8 @@
 
   const findLevels = (theme, grade) => {
     const levelsTheme = levelsByThemes[theme]
-
+    if (!levelsTheme) return []
+    console.log('levelsTheme', theme)
     const levels = grades.reduce((prev, current) => {
       return grades.indexOf(current) >= grades.indexOf(grade) &&
         levelsTheme[current]
@@ -51,8 +50,7 @@
   $: themesP = getCollection({
     collectionPath: 'Themes',
     filters,
-    extract: 'name',
-  })
+  }).then((themes) => themes.map((theme) => theme.name))
 
   $: cardsP = getCollection({
     collectionPath: 'FlashCards',
@@ -63,6 +61,7 @@
 
       const levelsTheme = levelsByThemes[theme]
       if (levelsTheme) {
+        if (!levelsTheme[grade]) levelsTheme[grade] = []
         levelsTheme[grade] = levelsTheme[grade].includes(level)
           ? levelsTheme[grade]
           : levelsTheme[grade].concat(level).sort((a, b) => a - b)

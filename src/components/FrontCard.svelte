@@ -6,6 +6,10 @@
   export let card
   export let localUrlP
   export let toggleFlip
+
+
+  //sanityse
+  
 </script>
 
 <div class="card">
@@ -14,7 +18,7 @@
     {card.theme}
   </div>
   <div class="content">
-    <div class="textmath">{card.enounce}</div>
+    <div class="textmath">{@html card.enounce}</div>
     {#if localUrlP}
       {#await localUrlP}
         <Spinner />
@@ -42,6 +46,8 @@
 </div>
 
 <style type="text/scss">
+
+  @import '../theme/_smui-theme.scss';
   .card {
     -webkit-box-shadow: 0 -1px 1px rgba(230, 188, 188, 0.04),
       0 2px 2px rgba(0, 0, 0, 0.04), 0 4px 4px rgba(0, 0, 0, 0.04),
@@ -79,7 +85,8 @@
   }
 
   .info {
-    // color: $mdc-theme-secondary;
+    color: rgb(80, 162, 244);
+    // color: $mdc-theme-primary;
     margin-bottom: 2em;
     font-size: 1.2em;
   }

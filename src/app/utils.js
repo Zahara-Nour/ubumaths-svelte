@@ -84,4 +84,13 @@ const lexicoSort = (a, b) => {
   return 0
 }
 
-export {getLogger, shuffle, isEmpty, getPropertyName, lexicoSort}
+const cleanString = (str) =>
+    str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s/g, '')
+      .toLowerCase()
+
+
+
+export {getLogger, shuffle, isEmpty, getPropertyName, lexicoSort, cleanString}

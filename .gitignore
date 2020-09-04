@@ -30,3 +30,6 @@ firebase.json
 /private
 
 cors.json
+
+db.json
+buildlog.txt

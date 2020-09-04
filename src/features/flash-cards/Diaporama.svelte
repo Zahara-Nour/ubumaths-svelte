@@ -1,11 +1,11 @@
 <script>
-  import { getLocalUrl } from './localUrl'
-  import { shuffle, getLogger } from './utils'
+  import { getLocalUrl } from '../../app/localUrl'
+  import { shuffle, getLogger } from '../../app/utils'
   import FlashCard from './FlashCard.svelte'
   import queryString from 'query-string'
   import { navigate } from 'svelte-routing'
-  import { getCollection } from './collections'
-  import Spinner from './components/Spinner.svelte'
+  import { getCollection } from '../../app/collections'
+  import Spinner from '../../components/Spinner.svelte'
   import { afterUpdate } from 'svelte'
   import generate from './generateCard'
 

@@ -5,8 +5,7 @@ import { getPropertyName } from './utils'
 
 
 
-  export async function getCollection({collectionPath, filters=[], thenCallback, extract, sort}) {
-    
+  export async function getCollection({collectionPath, filters=[], extract}) {
     //  check in store
     const store = get(collections)
    
@@ -21,6 +20,7 @@ import { getPropertyName } from './utils'
     }
 
     if (values && values.collection) {
+      console.log('collection found in store', values.collection)
       promise=Promise.resolve(values.collection)
     }
 
@@ -31,7 +31,6 @@ import { getPropertyName } from './utils'
     }).then((documents) => {
      
         if (extract) documents = documents.map((value) => value[extract])
-        if (sort) documents = documents.sort(sort)
       // updating store
       collections.update((store) => {
         if (!store[collectionPath]) {
@@ -53,11 +52,8 @@ import { getPropertyName } from './utils'
       return documents
 
     })
-  
-    promise = promise.then(values=> {
-    
-        if (thenCallback) thenCallback(values)
-        return values})
+
+
 
     return promise
   }

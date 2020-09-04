@@ -1,8 +1,8 @@
 <script>
-  import Mathlive from 'mathlive'
+  import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { afterUpdate } from 'svelte'
-  import BackCard from './components/BackCard.svelte'
-  import FrontCard from './components/FrontCard.svelte'
+  import BackCard from '../../components/BackCard.svelte'
+  import FrontCard from '../../components/FrontCard.svelte'
   export let card
   export let onNext
   export let frontLocalUrlP
