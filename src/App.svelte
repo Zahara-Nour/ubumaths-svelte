@@ -1,31 +1,31 @@
 <script>
   import FlashCards from './features/flash-cards/FlashCards.svelte'
-  import EditCards from './features/flash-cards/EditCards.svelte'
+  // import EditCards from './features/flash-cards/EditCards.svelte'
   import { Router, Link, Route } from 'svelte-routing'
   import Home from './routes/Home.svelte'
-  import About from './routes/About.svelte'
+  // import About from './routes/About.svelte'
   import Diaporama from './features/flash-cards/Diaporama.svelte'
-  import Layout from './routes/Layout.svelte'
+
   export let url = ''
 </script>
 
 <Router {url}>
 
   <nav>
-    <!-- <Link to="/">Home</Link>
-    <Link to="about">About</Link> -->
+    <Link to="/">Home</Link>
+    <!-- <Link to="about">About</Link> -->
     <Link to="flash-cards">Flash cards</Link>
 
   </nav>
   <div class="main">
-    <Route path="about/:id/:id2" let:params>
-      <About {...params} />
-    </Route>
-    <Route path="flash-cards/edit" let:location>
+    <!-- <Route path="about/:id/:id2" let:params> -->
+      <!-- <About {...params} /> -->
+    <!-- </Route> -->
+    <!-- <Route path="flash-cards/edit" let:location> -->
       <!-- <Layout> -->
-        <EditCards {location} />
+        <!-- <EditCards {location} /> -->
       <!-- </Layout> -->
-    </Route>
+    <!-- </Route> -->
     <Route path="flash-cards/play" let:location>
       <Diaporama {location} />
     </Route>

@@ -3,13 +3,13 @@
   import Fa from 'svelte-fa'
   import { faNewspaper } from '@fortawesome/free-solid-svg-icons'
   import Spinner from '../components/Spinner.svelte'
+  import { getLocalUrl } from '../app/localUrl'
+
   export let card
   export let localUrlP
-  export let toggleFlip
-
+  export let toggleFlip = () => {}
 
   //sanityse
-  
 </script>
 
 <div class="card">
@@ -18,18 +18,19 @@
     {card.theme}
   </div>
   <div class="content">
-    <div class="textmath">{@html card.enounce}</div>
-    {#if localUrlP}
-      {#await localUrlP}
-        <Spinner />
-      {:then localUrl}
-        {#if localUrl !== 'none'}
-          <img alt="flash card" src="{localUrl}" width="80%" />
-        {/if}
-      {:catch error}
-        <p style="color: red">{error.message}</p>
-      {/await}
-    {/if}
+    <div class="textmath">
+      {@html card.enounce}
+    </div>
+
+    {#await localUrlP}
+      <Spinner />
+    {:then localUrl}
+      {#if localUrl !== 'none'}
+        <img alt="flash card" src="{localUrl}" width="80%" />
+      {/if}
+    {:catch error}
+      <p style="color: red">{error.message}</p>
+    {/await}
 
     <div class="buttons">
       <Button
@@ -38,15 +39,13 @@
         class="button-shaped-round"
         color="secondary"
       >
-        <Label>Réponse</Label>
+        <Label>Voir la réponse</Label>
       </Button>
-
     </div>
   </div>
 </div>
 
 <style type="text/scss">
-
   @import '../theme/_smui-theme.scss';
   .card {
     -webkit-box-shadow: 0 -1px 1px rgba(230, 188, 188, 0.04),

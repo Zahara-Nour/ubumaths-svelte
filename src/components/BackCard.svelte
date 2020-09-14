@@ -1,13 +1,18 @@
 <script>
   import Button, { Label } from '@smui/button'
+import { getLocalUrl } from '../app/localUrl';
   import Spinner from './Spinner.svelte'
   export let card
   export let localUrlP
   export let isLast = false
-  export let toggleFlip
-  export let onNext
-  export let disableNext
+  export let toggleFlip = () => {}
+  export let onNext = () => {}
+  export let disableNext = true
   
+
+  if (card.imageAnswer && !localUrlP) {
+    localUrp = getLocalUrl(card.imageAnswer)
+  }
 </script>
 
 <div class="card content">
@@ -38,7 +43,7 @@
       class="button-shaped-round"
       color="secondary"
     >
-      <Label>Question</Label>
+      <Label>Revoir la question</Label>
     </Button>
 
     <Button
@@ -48,7 +53,7 @@
       color="secondary"
       disabled={disableNext}
     >
-      <Label>{isLast ? 'Fin' : 'Suivante'}</Label>
+      <Label>{isLast ? 'Fin' : 'Question suivante'}</Label>
     </Button>
   </div>
 </div>

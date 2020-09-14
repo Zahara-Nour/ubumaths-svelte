@@ -6,14 +6,14 @@ import {lexicoSort} from '../../app/utils'
 export default function generateCard(card) {
     // firestore returns objects with read-only properties
    
-    if (!card) return emptyCard
-    // console.log('generate card', card)
-  
-    let tempCard = {
-      ...card,
-      variables: {},
-      
-    }
+  if (!card) return emptyCard
+  // console.log('generate card', card)
+
+  let tempCard = {
+    ...card,
+    variables: {},
+    
+  }
     
 
      // generate variables which can depend on precedent ones
@@ -50,6 +50,7 @@ export default function generateCard(card) {
   }
 
   // const regex = /\*\*(.*?)\*\*/g
+  //expression to evaluate
   const regex = /#\{(.*?)\}/g
   const replacement = (matched, p1) => {
     const e = math(p1)

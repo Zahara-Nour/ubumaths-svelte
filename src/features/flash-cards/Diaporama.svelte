@@ -64,6 +64,7 @@
           ? getLocalUrl(nextcard.imageAnswer)
           : Promise.resolve('none')
 
+        // allow to go to next card if images are downloaded
         Promise.all([nextFrontLocalUrlP, nextBackLocalUrlP]).then(() => {
           disable = false
         })

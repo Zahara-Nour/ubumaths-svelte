@@ -9,9 +9,14 @@
   import { navigate } from 'svelte-routing'
   import { updateCardsList } from '../../app/stores'
   import { lexicoSort } from '../../app/utils'
+  import Dropzone from '../../components/Dropzone.svelte'
 
   export let card
+  export let edited
 
+  const addedfile = (file) => console.log(file)
+  const drop = (event) => console.log(event.target)
+  const init = () => console.log('dropzone init ! 😍')
   let level = '1'
   let title = ''
   let enounce = ''
@@ -25,6 +30,8 @@
   let saving = false
   let id
   let variables = {}
+  let imageAnswer
+  let image
 
   async function save() {
     saving = true
@@ -39,6 +46,8 @@
       warning,
       explanation,
       name: title,
+      image,
+      imageAnswer,
     }
 
     if (id) newcard.id = id
@@ -74,7 +83,6 @@
           return store
         })
 
-      
         if (
           card.domain !== domain ||
           card.theme !== theme ||
@@ -152,10 +160,31 @@
       theme = card.theme
       grade = card.grade
       id = card.id || null
+      variables = { ...card.variables }
+      image = card.image
+      imageAnswer = card.imageAnswer
     }
   }
 
   $: updateCard(card)
+
+  $: if (card)
+    edited = {
+      ...edited,
+      level,
+      name: title,
+      enounce,
+      answer,
+      explanation,
+      warning,
+      subject,
+      domain,
+      theme,
+      grade,
+      variables,
+      image,
+      imageAnswer,
+    }
 
   $: if (saving) {
   }
@@ -232,6 +261,17 @@
   {/if}
 
   <Filter label="Classe" collectionPath="Grades" bind:value="{grade}" />
+
+  Image pour la question : {image}
+  <Dropzone
+    dropzoneEvents="{{ addedfile, drop, init }}"
+    options="{{ clickable: true, acceptedFiles: 'image/*', init }}"
+  >
+    <p>Drop files here to upload</p>
+ 
+  </Dropzone>
+
+  <!-- <form action="/file-upload" class="dropzone" id="my-awesome-dropzone"></form> -->
 
   Variables
   <Fab mini on:click="{addVariable}" disabled="{saving}">

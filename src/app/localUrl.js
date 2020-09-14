@@ -9,9 +9,11 @@ export const getLocalUrl = async (imgPath) => {
   const store = get(images)
 
   if (store[imgPath]) {
+    console.log('image found in store', imgPath)
     return store[imgPath]
   }
 
+  console.log('fetching image', imgPath)
   return storage
     .child(imgPath)
     .getDownloadURL()
