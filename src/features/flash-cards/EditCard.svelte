@@ -61,6 +61,16 @@
 
         // update store
         collections.update((store) => {
+          if (!store.FlashCards[subject][domain]) {
+            store.FlashCards[subject][domain] = {}
+          }
+          if (!store.FlashCards[subject][domain][theme]) {
+            store.FlashCards[subject][domain][theme] = {}
+          }
+          if (!store.FlashCards[subject][domain][theme].collection) {
+            store.FlashCards[subject][domain][theme].collection = []
+          }
+
           let collection = store.FlashCards[subject][domain][theme].collection
           let index = collection.findIndex((doc) => doc.id === document.id)
           if (index >= 0) {
@@ -145,6 +155,7 @@
       domain,
       theme,
       grade,
+      level
     })
   }
 
@@ -159,10 +170,11 @@
       domain = card.domain
       theme = card.theme
       grade = card.grade
+      level = card.level
       id = card.id || null
       variables = { ...card.variables }
-      image = card.image
-      imageAnswer = card.imageAnswer
+      image = card.image || ''
+      imageAnswer = card.imageAnswer || ''
     }
   }
 
@@ -262,13 +274,14 @@
 
   <Filter label="Classe" collectionPath="Grades" bind:value="{grade}" />
 
+  <Textfield bind:value="{level}" label="Niveau" />
+
   Image pour la question : {image}
   <Dropzone
     dropzoneEvents="{{ addedfile, drop, init }}"
     options="{{ clickable: true, acceptedFiles: 'image/*', init }}"
   >
     <p>Drop files here to upload</p>
- 
   </Dropzone>
 
   <!-- <form action="/file-upload" class="dropzone" id="my-awesome-dropzone"></form> -->
