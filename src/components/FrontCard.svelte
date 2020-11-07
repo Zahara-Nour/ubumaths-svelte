@@ -4,15 +4,29 @@
   import { faNewspaper } from '@fortawesome/free-solid-svg-icons'
   import Spinner from '../components/Spinner.svelte'
   import { getLocalUrl } from '../app/localUrl'
+  import Mathlive from 'mathlive/dist/mathlive.min.js'
+  import { onMount, afterUpdate } from 'svelte'
 
   export let card
   export let localUrlP
   export let toggleFlip = () => {}
 
+  let mounted
+
+  onMount(() => {
+    mounted = true
+  })
+
+  afterUpdate(() => {
+    if (card && mounted) {
+      Mathlive.renderMathInElement('front_card')
+    }
+  })
+
   //sanityse
 </script>
 
-<div class="card">
+<div class="card" id="front_card">
   <div class="info">
     <Fa icon="{faNewspaper}" />
     {card.theme}

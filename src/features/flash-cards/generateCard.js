@@ -24,6 +24,7 @@ export default function generateCard(card) {
       .forEach((name, i) => {
         // console.log('\n treating', name, variables[name])
         let generated = variables[name]
+    
 
         // replace the precent variables by their generated value
         for (let j = 1; j < i+1; j++) {
@@ -33,9 +34,10 @@ export default function generateCard(card) {
             regex,
             tempCard.variables[precedentName],
           )
-          // console.log('replace precedent', precedentName,'with',tempCard.variables[precedentName], 'got',generated)
+       
+   
         }
-
+     
         generated = math(generated).generate().string
 
         const regex = new RegExp(name, 'g')
@@ -45,7 +47,7 @@ export default function generateCard(card) {
           tempCard.explanation = tempCard.explanation.replace(regex, generated)
         }
         tempCard.variables[name] = generated
-        // console.log('replace', name, 'with', generated)
+       
       })
   }
 

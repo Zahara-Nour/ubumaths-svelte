@@ -35,26 +35,10 @@
 
   async function save() {
     saving = true
-    const newcard = {
-      subject,
-      domain,
-      theme,
-      grade,
-      level,
-      answer,
-      enounce,
-      warning,
-      explanation,
-      name: title,
-      image,
-      imageAnswer,
-    }
-
-    if (id) newcard.id = id
 
     const promise = saveDocument({
       path: 'FlashCards',
-      document: newcard,
+      document: edited,
     })
       .then((document) => {
         saving = false
@@ -125,13 +109,10 @@
     throw new Error('too much variables')
   }
 
-  const editVariable = (name) => (value) => {
-    variables[name] = value
-  }
-
   const addVariable = () => {
     const nextId = getNextId()
     variables[`&${nextId}`] = ''
+    variables = variables
   }
 
   const deleteVariable = (name) => () => {
@@ -140,11 +121,13 @@
   }
 
   function duplicate() {
-    const { id, ...rest } = card.id ? card : { ...card, id: '' }
+    // const { id, ...rest } = card.id ? card : { ...card, id: '' }
+    // const { id, ...rest } = card.id ? card : { ...card, id: '' }
 
     updateCard({
-      ...rest,
-      name: card.name + ' (copie)',
+      ...edited,
+      id: '',
+      name: edited.name + ' (copie)',
     })
   }
 
@@ -155,7 +138,7 @@
       domain,
       theme,
       grade,
-      level
+      level,
     })
   }
 
@@ -171,7 +154,7 @@
       theme = card.theme
       grade = card.grade
       level = card.level
-      id = card.id || null
+      id = card.id
       variables = { ...card.variables }
       image = card.image || ''
       imageAnswer = card.imageAnswer || ''
@@ -180,25 +163,22 @@
 
   $: updateCard(card)
 
-  $: if (card)
-    edited = {
-      ...edited,
-      level,
-      name: title,
-      enounce,
-      answer,
-      explanation,
-      warning,
-      subject,
-      domain,
-      theme,
-      grade,
-      variables,
-      image,
-      imageAnswer,
-    }
-
-  $: if (saving) {
+  $: edited = {
+    ...edited,
+    level,
+    name: title,
+    enounce,
+    answer,
+    explanation,
+    warning,
+    subject,
+    domain,
+    theme,
+    grade,
+    image,
+    imageAnswer,
+    variables,
+    id,
   }
 </script>
 
@@ -276,7 +256,8 @@
 
   <Textfield bind:value="{level}" label="Niveau" />
 
-  Image pour la question : {image}
+  Image pour la question :
+  {image}
   <Dropzone
     dropzoneEvents="{{ addedfile, drop, init }}"
     options="{{ clickable: true, acceptedFiles: 'image/*', init }}"
@@ -285,25 +266,29 @@
   </Dropzone>
 
   <!-- <form action="/file-upload" class="dropzone" id="my-awesome-dropzone"></form> -->
+  
+  
 
   Variables
+
+
   <Fab mini on:click="{addVariable}" disabled="{saving}">
     <Icon class="material-icons">add</Icon>
   </Fab>
   <div class="variables">
     {#each Object.getOwnPropertyNames(variables).sort(lexicoSort) as name}
-      <Textfield
-        fullwidth
-        textarea
-        value="{variables[name]}"
-        on:change="{editVariable(name)}"
-        label="{name}"
-        input$aria-controls="helper-text-textarea"
-        input$aria-describedby="helper-text-textarea"
-      />
-      <Fab mini on:click="{deleteVariable(name)}" disabled="{saving}">
-        <Icon class="material-icons">delete</Icon>
-      </Fab>
+      <div class="variable">
+        <Textfield
+          fullwidth
+          bind:value="{variables[name]}"
+          label="{name}"
+          input$aria-controls="helper-text-textarea"
+          input$aria-describedby="helper-text-textarea"
+        />
+        <Fab mini on:click="{deleteVariable(name)}" disabled="{saving}">
+          <Icon class="material-icons">delete</Icon>
+        </Fab>
+      </div>
     {/each}
   </div>
 
@@ -336,7 +321,12 @@
     justify-content: space-around;
   }
 
+  .variable {
+    display: flex;
+  }
+
   .variables {
     display: flex;
+    flex-direction: column;
   }
 </style>

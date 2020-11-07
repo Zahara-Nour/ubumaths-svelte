@@ -1,24 +1,39 @@
 <script>
   import Button, { Label } from '@smui/button'
-import { getLocalUrl } from '../app/localUrl';
+  import { getLocalUrl } from '../app/localUrl'
   import Spinner from './Spinner.svelte'
+  import { onMount, afterUpdate } from 'svelte'
+  import Mathlive from 'mathlive/dist/mathlive.min.js'
+
   export let card
   export let localUrlP
   export let isLast = false
   export let toggleFlip = () => {}
   export let onNext = () => {}
   export let disableNext = true
-  
+
+  let mounted
+
+  onMount(() => {
+    mounted = true
+  })
+
+  afterUpdate(() => {
+    if (card && mounted) {
+      Mathlive.renderMathInElement('back_card')
+    }
+  })
 
   if (card.imageAnswer && !localUrlP) {
     localUrp = getLocalUrl(card.imageAnswer)
   }
 </script>
 
-<div class="card content">
-
+<div class="card content" id="back_card">
   <div class="title-answer">Réponse</div>
-  <div class="answer textmath">{@html card.answer}</div>
+  <div class="answer textmath">
+    {@html card.answer}
+  </div>
   {#if localUrlP}
     {#await localUrlP}
       <Spinner />
@@ -31,10 +46,14 @@ import { getLocalUrl } from '../app/localUrl';
     {/await}
   {/if}
   {#if card.explanation}
-  <div class="textmath">{@html card.explanation}</div>
+    <div class="textmath">
+      {@html card.explanation}
+    </div>
   {/if}
   {#if card.warning}
-  <div class="textmath">{@html card.warning}</div>
+    <div class="textmath">
+      {@html card.warning}
+    </div>
   {/if}
   <div class="buttons">
     <Button
@@ -47,11 +66,14 @@ import { getLocalUrl } from '../app/localUrl';
     </Button>
 
     <Button
-      on:click="{()=>{toggleFlip();onNext()}}"
+      on:click="{() => {
+        toggleFlip()
+        onNext()
+      }}"
       variant="raised"
       class="button-shaped-round"
       color="secondary"
-      disabled={disableNext}
+      disabled="{disableNext}"
     >
       <Label>{isLast ? 'Fin' : 'Question suivante'}</Label>
     </Button>
@@ -94,10 +116,10 @@ import { getLocalUrl } from '../app/localUrl';
     display: flex;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
-        -ms-flex-direction: column;
+    -ms-flex-direction: column;
     flex-direction: column;
     -webkit-box-align: center;
-        -ms-flex-align: center;
+    -ms-flex-align: center;
     align-items: center;
     -ms-flex-pack: distribute;
     justify-content: space-around;

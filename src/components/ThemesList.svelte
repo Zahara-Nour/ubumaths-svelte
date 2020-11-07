@@ -23,7 +23,9 @@
     sort: lexicoSort,
   })
     .then((values) => {
-      grades = values.map((value) => value.name)
+      grades = [...values]
+        .sort((a, b) => a.rank - b.rank)
+        .map((value) => value.name)
       return values
     })
     .catch((error) => console.log(error))

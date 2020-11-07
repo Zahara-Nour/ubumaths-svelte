@@ -1,6 +1,6 @@
 <script>
   import FlashCards from './features/flash-cards/FlashCards.svelte'
-  // import EditCards from './features/flash-cards/EditCards.svelte'
+  import EditCards from './features/flash-cards/EditCards.svelte'
   import { Router, Link, Route } from 'svelte-routing'
   import Home from './routes/Home.svelte'
   // import About from './routes/About.svelte'
@@ -21,11 +21,11 @@
     <!-- <Route path="about/:id/:id2" let:params> -->
       <!-- <About {...params} /> -->
     <!-- </Route> -->
-    <!-- <Route path="flash-cards/edit" let:location> -->
+    <Route path="flash-cards/edit" let:location>
       <!-- <Layout> -->
-        <!-- <EditCards {location} /> -->
+        <EditCards {location} />
       <!-- </Layout> -->
-    <!-- </Route> -->
+    </Route>
     <Route path="flash-cards/play" let:location>
       <Diaporama {location} />
     </Route>

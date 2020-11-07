@@ -56,7 +56,7 @@ function fetchCollection({ path, filters }) {
 
 
 function saveDocument({ path, document }) {
-  console.log('creating doc :', document)
+  console.log('saving doc :', document)
   const pathArray = path.split('/')
   let collectionRef = db.collection(pathArray.shift())
   while (pathArray.length > 0) {

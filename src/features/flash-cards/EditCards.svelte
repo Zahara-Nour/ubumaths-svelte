@@ -91,7 +91,7 @@ import { getLocalUrl } from '../../app/localUrl';
     // } else  {
     // Mathlive.renderMathInElement('back')
     // }
-    Mathlive.renderMathInDocument()
+    // Mathlive.renderMathInDocument()
   })
 </script>
 
