@@ -5,23 +5,19 @@
   import Spinner from '../components/Spinner.svelte'
   import { getLocalUrl } from '../app/localUrl'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
-  import { onMount, afterUpdate } from 'svelte'
+  import { onMount, afterUpdate, onDestroy } from 'svelte'
 
   export let card
   export let localUrlP
   export let toggleFlip = () => {}
 
-  let mounted
-
-  onMount(() => {
-    mounted = true
-  })
 
   afterUpdate(() => {
-    if (card && mounted) {
+    if (document.getElementById("front_card")) {
       Mathlive.renderMathInElement('front_card')
     }
   })
+
 
   //sanityse
 </script>

@@ -2,7 +2,7 @@
   import Button, { Label } from '@smui/button'
   import { getLocalUrl } from '../app/localUrl'
   import Spinner from './Spinner.svelte'
-  import { onMount, afterUpdate } from 'svelte'
+  import { onMount, afterUpdate, onDestroy } from 'svelte'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
 
   export let card
@@ -12,14 +12,9 @@
   export let onNext = () => {}
   export let disableNext = true
 
-  let mounted
-
-  onMount(() => {
-    mounted = true
-  })
 
   afterUpdate(() => {
-    if (card && mounted) {
+    if (document.getElementById("back_card")) {
       Mathlive.renderMathInElement('back_card')
     }
   })

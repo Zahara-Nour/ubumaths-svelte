@@ -20,7 +20,7 @@
     // } else  {
     // Mathlive.renderMathInElement('back')
     // }
-    Mathlive.renderMathInDocument()
+    // Mathlive.renderMathInDocument()
   })
 </script>
 
