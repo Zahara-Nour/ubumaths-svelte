@@ -8,8 +8,10 @@
   import Spinner from '../../components/Spinner.svelte'
   import { afterUpdate } from 'svelte'
   import generate from './generateCard'
+  import Button, { Label } from '@smui/button'
 
   export let location
+  export let toggleFlip = () => {flip = !flip}
 
   let queryParams
   let subject, domain, theme, level
@@ -51,6 +53,7 @@
       navigate(`/flash-cards?subject=${subject}&domain=${domain}`)
     } 
     else {
+     
       frontLocalUrlP = nextFrontLocalUrlP
       backLocalUrlP = nextBackLocalUrlP
 
@@ -95,15 +98,25 @@
 {:then cards}
   {#if cards.length}
     {#if card_i >= 0}
+    <div>
       <FlashCard
         card="{generate(cards[card_i])}"
-        onNext="{nextCard}"
         preloadImages
         {frontLocalUrlP}
         {backLocalUrlP}
-        isLast="{card_i === cards.length - 1}"
-        disableNext="{disable}"
+       
       />
+      <Button
+      on:click={nextCard}
+      
+      variant="raised"
+      class="button-shaped-round"
+      color="secondary"
+      disabled="{disable}"
+    >
+      <Label>{card_i === cards.length - 1 ? 'Fin' : 'Question suivante'}</Label>
+    </Button>
+  </div>
     {/if}
   {:else}
     <p style="color: red">liste vide</p>

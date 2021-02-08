@@ -7,10 +7,8 @@
 
   export let card
   export let localUrlP
-  export let isLast = false
   export let toggleFlip = () => {}
-  export let onNext = () => {}
-  export let disableNext = true
+ 
 
 
   afterUpdate(() => {
@@ -60,18 +58,6 @@
       <Label>Revoir la question</Label>
     </Button>
 
-    <Button
-      on:click="{() => {
-        toggleFlip()
-        onNext()
-      }}"
-      variant="raised"
-      class="button-shaped-round"
-      color="secondary"
-      disabled="{disableNext}"
-    >
-      <Label>{isLast ? 'Fin' : 'Question suivante'}</Label>
-    </Button>
   </div>
 </div>
 

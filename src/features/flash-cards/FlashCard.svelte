@@ -4,11 +4,10 @@
   import BackCard from '../../components/BackCard.svelte'
   import FrontCard from '../../components/FrontCard.svelte'
   export let card
-  export let onNext
   export let frontLocalUrlP
   export let backLocalUrlP
-  export let isLast = false
-  export let disableNext
+
+
 
   let flip = false
   const toggleFlip = () => (flip = !flip)
@@ -22,6 +21,8 @@
     // }
     // Mathlive.renderMathInDocument()
   })
+
+  $: if (card) flip = false
 </script>
 
 {#if flip}
@@ -30,9 +31,6 @@
       {card}
       localUrlP="{backLocalUrlP}"
       {toggleFlip}
-      {onNext}
-      {disableNext}
-      {isLast}
     />
   </div>
 {:else}
