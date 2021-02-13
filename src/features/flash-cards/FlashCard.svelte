@@ -1,44 +1,37 @@
 <script>
   import Mathlive from 'mathlive/dist/mathlive.min.js'
-  import { afterUpdate } from 'svelte'
+  import { afterUpdate, onMount } from 'svelte'
   import BackCard from '../../components/BackCard.svelte'
   import FrontCard from '../../components/FrontCard.svelte'
   export let card
-  export let frontLocalUrlP
-  export let backLocalUrlP
-
 
 
   let flip = false
   const toggleFlip = () => (flip = !flip)
 
-  afterUpdate(() => {
-    
-    // if (!flip) {
-    // Mathlive.renderMathInElement('front')
-    // } else  {
-    // Mathlive.renderMathInElement('back')
-    // }
-    // Mathlive.renderMathInDocument()
-  })
+  
 
   $: if (card) flip = false
 </script>
 
 {#if flip}
-  <div id="back">
+  <div class="card" >
     <BackCard
-      {card}
-      localUrlP="{backLocalUrlP}"
-      {toggleFlip}
+      card="{card}"
+      toggleFlip="{toggleFlip}"
     />
   </div>
 {:else}
-  <div id="front">
-    <FrontCard {card} localUrlP="{frontLocalUrlP}" {toggleFlip} />
+  <div  class="card">
+    <FrontCard
+      card="{card}"
+      toggleFlip="{toggleFlip}"
+    />
   </div>
 {/if}
 
-<style type="text/scss">
-
+<style >
+  .card {
+    height:100%;
+  }
 </style>

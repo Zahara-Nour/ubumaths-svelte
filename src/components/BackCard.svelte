@@ -6,15 +6,15 @@
   import Mathlive from 'mathlive/dist/mathlive.min.js'
 
   export let card
-  export let localUrlP
+  let localUrlP = card.imageAnswer
+          ? getLocalUrl(card.imageAnswer)
+          : Promise.resolve('none')
   export let toggleFlip = () => {}
  
 
 
-  afterUpdate(() => {
-    if (document.getElementById("back_card")) {
-      Mathlive.renderMathInElement('back_card')
-    }
+  onMount(() => {
+    Mathlive.renderMathInElement('back' + card.id)
   })
 
   if (card.imageAnswer && !localUrlP) {
@@ -22,7 +22,7 @@
   }
 </script>
 
-<div class="card content" id="back_card">
+<div class="card content" id="{'back' + card.id}">
   <div class="title-answer">Réponse</div>
   <div class="answer textmath">
     {@html card.answer}
@@ -65,16 +65,18 @@
   @import '../theme/_smui-theme';
 
   .card {
-    -webkit-box-shadow: 0 -1px 1px rgba(230, 188, 188, 0.04),
-      0 2px 2px rgba(0, 0, 0, 0.04), 0 4px 4px rgba(0, 0, 0, 0.04),
-      0 8px 8px rgba(0, 0, 0, 0.04), 0 16px 16px rgba(0, 0, 0, 0.04);
-    box-shadow: 0 -1px 1px rgba(230, 188, 188, 0.04),
-      0 2px 2px rgba(0, 0, 0, 0.04), 0 4px 4px rgba(0, 0, 0, 0.04),
-      0 8px 8px rgba(0, 0, 0, 0.04), 0 16px 16px rgba(0, 0, 0, 0.04);
-    border-radius: 0.25rem;
+    // -webkit-box-shadow: 0 -1px 1px rgba(230, 188, 188, 0.04),
+    //   0 2px 2px rgba(0, 0, 0, 0.04), 0 4px 4px rgba(0, 0, 0, 0.04),
+    //   0 8px 8px rgba(0, 0, 0, 0.04), 0 16px 16px rgba(0, 0, 0, 0.04);
+    // box-shadow: 0 -1px 1px rgba(230, 188, 188, 0.04),
+    //   0 2px 2px rgba(0, 0, 0, 0.04), 0 4px 4px rgba(0, 0, 0, 0.04),
+    //   0 8px 8px rgba(0, 0, 0, 0.04), 0 16px 16px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
+    border-radius: 5px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     padding: 1.5rem;
+    height:100%;
   }
 
   .title-answer {
