@@ -102,8 +102,9 @@
   }
 
   img {
-    flex: 1;
+    // flex: 1;
     overflow: hidden;
+    max-width: 100%;
     object-fit: contain;
   }
 

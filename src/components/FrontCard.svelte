@@ -99,13 +99,16 @@
     // -webkit-box-align: center;
     // -ms-flex-align: center;
     align-items: center;
+    width:100%;
     
   }
 
   img {
-    flex: 1;
+    // flex: 1;
     overflow: hidden;
+    max-width: 100%;
     object-fit: contain;
+    
   }
 
   .info {
