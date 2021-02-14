@@ -69,10 +69,11 @@
     border-radius: 5px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    padding: 1.5rem;
-    height: 100%;
+    // padding: 1.5rem;
+    height: calc(100% - 4px);
     // display: flex;
     // flex-direction: column;
+    padding:1em;
   }
   .buttons {
     margin-top: 2em;
@@ -98,6 +99,7 @@
     // -webkit-box-align: center;
     // -ms-flex-align: center;
     align-items: center;
+    
   }
 
   img {

@@ -21,8 +21,6 @@
   let cards,
     card_i = -1
 
-
-
   const getCards = async (filters) => {
     // first seek in store
 
@@ -40,14 +38,12 @@
   }
 
   function nextCard() {
-    if (cards.length >1) {
+    if (cards.length > 1) {
       cards = [...cards.slice(1, cards.length)]
       console.log('cards', cards)
-      
     } else {
       navigate(`/flash-cards?subject=${subject}&domain=${domain}`)
     }
-    
 
     // console.log('change card', card_i)
 
@@ -116,52 +112,34 @@
     variant="raised"
     class="button-shaped-round"
     color="secondary"
-    
   >
-    <Label>{ cards.length > 1 ? 'Question suivante' : 'Fin'}</Label>
+    <Label>{cards.length > 1 ? 'Question suivante' : 'Fin'}</Label>
   </Button>
-  <!-- {#if card_i >= 0}
-      <div>
-        <FlashCard
-          card="{generate(cards[card_i])}"
-          preloadImages
-          frontLocalUrlP="{frontLocalUrlP}"
-          backLocalUrlP="{backLocalUrlP}"
-        />
-        <Button
-          on:click="{nextCard}"
-          variant="raised"
-          class="button-shaped-round"
-          color="secondary"
-          disabled="{disable}"
-        >
-          <Label
-            >{card_i === cards.length - 1 ? 'Fin' : 'Question suivante'}</Label
-          >
-        </Button>
-      </div>-->
-
 {:else}
   <p style="color: red">liste vide</p>
 {/if}
 
 <style>
   #cards-container {
+    padding-top: 50px;
     position: relative;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    
+    height: 650px;
+    width: 100%;
   }
   #cards {
     display: flex;
     flex-wrap: nowrap;
-   
+    height: 600px;
+    overflow-x: hidden;
+    width: 100%;
   }
   .card {
-    min-width: calc(100% - 8px);
-    margin :4px;
-    height:500px;
+    /* min-width: calc(100% - 8px); */
+    margin: 4px;
+    height: 100%;
   }
 
   .center {
@@ -169,5 +147,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    #cards-container {
+      max-width: 800px;
+      min-width: 800px;
+    }
+    .card {
+      max-width: calc(800px - 8px);
+      min-width: calc(800px - 8px);
+    }
   }
 </style>

@@ -22,7 +22,7 @@
   }
 </script>
 
-<div class="card content" id="{'back' + card.id}">
+<div class="card" id="{'back' + card.id}">
   <div class="title-answer">Réponse</div>
   <div class="answer textmath">
     {@html card.answer}
@@ -32,7 +32,7 @@
       <Spinner />
     {:then localUrl}
       {#if localUrl !== 'none'}
-        <img alt="flash card" src="{localUrl}" width="80%" />
+        <img alt="flash card" src="{localUrl}"/>
       {/if}
     {:catch error}
       <p style="color: red">{error.message}</p>
@@ -75,8 +75,20 @@
     border-radius: 5px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    padding: 1.5rem;
-    height:100%;
+    padding: 1em;
+    height: calc(100% - 4px);
+     // display: -webkit-box;
+    // display: -ms-flexbox;
+    display: flex;
+    // -webkit-box-orient: vertical;
+    // -webkit-box-direction: normal;
+    // -ms-flex-direction: column;
+    flex-direction: column;
+    // -webkit-box-align: center;
+    // -ms-flex-align: center;
+    align-items: center;
+    // -ms-flex-pack: distribute;
+    justify-content: space-around;
   }
 
   .title-answer {
@@ -89,24 +101,16 @@
     font-weight: 500;
   }
 
+  img {
+    flex: 1;
+    overflow: hidden;
+    object-fit: contain;
+  }
+
   .buttons {
     margin-top: 2em;
   }
 
-  .content {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -ms-flex-pack: distribute;
-    justify-content: space-around;
-  }
 
   .textmath {
     display: inline-block;
