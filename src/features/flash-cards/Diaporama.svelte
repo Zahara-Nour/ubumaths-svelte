@@ -137,7 +137,8 @@
     width: 100%;
   }
   .card {
-    /* min-width: calc(100% - 8px); */
+    min-width: calc(100% - 8px);
+    /* min-width: 400px; */
     margin: 4px;
     height: 100%;
   }
