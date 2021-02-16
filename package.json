@@ -45,7 +45,7 @@
     "@sveltejs/svelte-virtual-list": "^3.0.1",
     "dropzone": "^5.7.2",
     "firebase": "^7.18.0",
-    "mathlive": "^0.55.0",
+    "mathlive": "^0.59.0",
     "query-string": "^6.13.1",
     "sirv-cli": "^1.0.0",
     "svelte-fa": "^2.1.1",

@@ -121,12 +121,12 @@
 
 <style>
   #cards-container {
-    padding-top: 50px;
+    /* padding-top: 50px; */
     position: relative;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    height: 650px;
+    height: 90vh;
     width: 100%;
   }
   #cards {
@@ -134,6 +134,7 @@
     flex-wrap: nowrap;
     height: 600px;
     overflow-x: hidden;
+    height: 100%;
     width: 100%;
   }
   .card {

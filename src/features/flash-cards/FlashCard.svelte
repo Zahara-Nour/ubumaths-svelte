@@ -1,5 +1,5 @@
 <script>
-  import Mathlive from 'mathlive/dist/mathlive.min.js'
+  
   import { afterUpdate, onMount } from 'svelte'
   import BackCard from '../../components/BackCard.svelte'
   import FrontCard from '../../components/FrontCard.svelte'

@@ -65,29 +65,15 @@
   @import '../theme/_smui-theme';
 
   .card {
-    // -webkit-box-shadow: 0 -1px 1px rgba(230, 188, 188, 0.04),
-    //   0 2px 2px rgba(0, 0, 0, 0.04), 0 4px 4px rgba(0, 0, 0, 0.04),
-    //   0 8px 8px rgba(0, 0, 0, 0.04), 0 16px 16px rgba(0, 0, 0, 0.04);
-    // box-shadow: 0 -1px 1px rgba(230, 188, 188, 0.04),
-    //   0 2px 2px rgba(0, 0, 0, 0.04), 0 4px 4px rgba(0, 0, 0, 0.04),
-    //   0 8px 8px rgba(0, 0, 0, 0.04), 0 16px 16px rgba(0, 0, 0, 0.04);
+    
     box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
     border-radius: 5px;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     padding: 1em;
     height: calc(100% - 4px);
-     // display: -webkit-box;
-    // display: -ms-flexbox;
     display: flex;
-    // -webkit-box-orient: vertical;
-    // -webkit-box-direction: normal;
-    // -ms-flex-direction: column;
     flex-direction: column;
-    // -webkit-box-align: center;
-    // -ms-flex-align: center;
     align-items: center;
-    // -ms-flex-pack: distribute;
     justify-content: space-around;
   }
 
