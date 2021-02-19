@@ -1,43 +1,57 @@
 <script>
-  import FlashCards from './features/flash-cards/FlashCards.svelte'
-  import EditCards from './features/flash-cards/EditCards.svelte'
+  import gidouille from './assets/gidouille'
+  // import FlashCards from './features/flash-cards/FlashCards.svelte'
+  // import EditCards from './features/flash-cards/EditCards.svelte'
   import { Router, Link, Route } from 'svelte-routing'
   import Home from './routes/Home.svelte'
   // import About from './routes/About.svelte'
-  import Diaporama from './features/flash-cards/Diaporama.svelte'
+  // import Diaporama from './features/flash-cards/Diaporama.svelte'
+  import { MaterialApp } from 'svelte-materialify'
+  import NavBar from './components/NavBar.svelte'
+  import Mental from './features/calcul-mental/Mental.svelte'
+import MentalTest from './features/calcul-mental/MentalTest.svelte';
 
   export let url = ''
+
+  let theme = 'light'
+
+  function toggleTheme() {
+    if (theme === 'light') theme = 'dark'
+    else theme = 'light'
+  }
 </script>
 
-<Router {url}>
+<MaterialApp theme="{theme}">
+  <Router url="{url}">
+    <!-- <button on:click="{toggleTheme}">Toggle Theme</button> -->
 
-  <nav>
-    <Link to="/">Home</Link>
-    <!-- <Link to="about">About</Link> -->
-    <Link to="flash-cards">Flash cards</Link>
-
-  </nav>
-  <div class="main">
-    <!-- <Route path="about/:id/:id2" let:params> -->
+    <NavBar />
+    <div class="main">
+      <!-- <Route path="about/:id/:id2" let:params> -->
       <!-- <About {...params} /> -->
-    <!-- </Route> -->
-    <Route path="flash-cards/edit" let:location>
-      <!-- <Layout> -->
-        <EditCards {location} />
-      <!-- </Layout> -->
+      <!-- </Route> -->
+      <!-- <Route path="flash-cards/edit" let:location>
+     
+      <EditCards location="{location}" />
     </Route>
     <Route path="flash-cards/play" let:location>
-      <Diaporama {location} />
+      <Diaporama location="{location}" />
     </Route>
     <Route path="flash-cards" let:location>
-      <FlashCards {location} />
-    </Route>
-    <Route path="/">
-      <Home />
-    </Route>
-  </div>
-
-</Router>
+      <FlashCards location="{location}" />
+    </Route> -->
+      <Route path="calcul-mental" let:location>
+        <Mental location="{location}" />
+      </Route>
+      <Route path="mental-test" let:location>
+        <MentalTest location="{location}" />
+      </Route>
+      <Route path="/">
+        <Home />
+      </Route>
+    </div>
+  </Router>
+</MaterialApp>
 
 <style type="text/scss">
   @import 'style/_include-media';

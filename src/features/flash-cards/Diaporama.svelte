@@ -8,7 +8,7 @@
   import Spinner from '../../components/Spinner.svelte'
   import { afterUpdate } from 'svelte'
   import generate from './generateCard'
-  import Button, { Label } from '@smui/button'
+  // import Button, { Label } from '@smui/button'
   import { flip } from 'svelte/animate'
   import { fly } from 'svelte/transition'
 
@@ -87,7 +87,7 @@
   $: getCards(filters)
 </script>
 
-{#if error}
+<!-- {#if error}
   <p style="color: red">{error}</p>
 {:else if !cards}
   <div class="center">
@@ -117,7 +117,7 @@
   </Button>
 {:else}
   <p style="color: red">liste vide</p>
-{/if}
+{/if} -->
 
 <style>
   #cards-container {

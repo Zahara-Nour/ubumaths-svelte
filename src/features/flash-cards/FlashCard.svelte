@@ -1,6 +1,4 @@
 <script>
-  
-  import { afterUpdate, onMount } from 'svelte'
   import BackCard from '../../components/BackCard.svelte'
   import FrontCard from '../../components/FrontCard.svelte'
   export let card
@@ -24,7 +22,7 @@
 
 <style>
   .card {
-    width:100%;
+    width: 100%;
     height: calc(100% - 8px);
     perspective: 1000px;
   }
@@ -36,18 +34,18 @@
   .flipper {
     transition: 0.6s;
     transform-style: preserve-3d;
-    height:100%;
+    height: 100%;
     position: relative;
-    width:100%;
+    width: 100%;
   }
 
   /* hide back of pane during swap */
   .front,
   .back {
     -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-    height:100%;
-    width:100%;
+    backface-visibility: hidden;
+    height: 100%;
+    width: 100%;
     position: absolute;
     top: 0;
     left: 0;

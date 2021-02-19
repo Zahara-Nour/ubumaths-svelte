@@ -1,5 +1,5 @@
 <script>
-  import Button, { Label } from '@smui/button'
+  import { Button } from 'svelte-materialify/src'
   import { getLocalUrl } from '../app/localUrl'
   import Spinner from './Spinner.svelte'
   import { onMount, afterUpdate, onDestroy } from 'svelte'
@@ -51,18 +51,15 @@
   <div class="buttons">
     <Button
       on:click="{toggleFlip}"
-      variant="raised"
-      class="button-shaped-round"
-      color="secondary"
     >
-      <Label>Revoir la question</Label>
+      Revoir la question
     </Button>
 
   </div>
 </div>
 
 <style type="text/scss">
-  @import '../theme/_smui-theme';
+  // @import '../theme/_smui-theme';
 
   .card {
     
@@ -78,7 +75,7 @@
   }
 
   .title-answer {
-    color: $mdc-theme-secondary;
+    // color: $mdc-theme-secondary;
     font-size: 1.2em;
     margin-bottom: 2em;
   }

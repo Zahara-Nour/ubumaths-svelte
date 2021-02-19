@@ -1,30 +1,47 @@
 <script>
   import Gidouille from './Gidouille.svelte'
-  import IconButton from '@smui/icon-button'
   import { onMount } from 'svelte'
+  import {
+    AppBar,
+    Button,
+    Icon,
+    Menu,
+    List,
+    ListItem,
+    ListItemGroup,
+    NavigationDrawer,
+    Overlay,
+  } from 'svelte-materialify/src'
+  import { navigate, Link } from 'svelte-routing'
+  import { mdiMenu } from '@mdi/js'
 
-  export let links
-  export let toggleDrawer
+  let links = [
+    {
+      name: 'Calcul mental',
+      url: 'calcul-mental',
+    },
+    {
+      name: 'Flash cards',
+      url: 'flash-cards',
+    },
+  ]
 
-  //   let mediaListener
   let miniWindow = false
+  let active = false
 
-  //   const mediaQueryHandler = (e) => {
-  //       if (!e.matches) {
-  //         showMobileMenu = false
-  //       }
-  //     //
-  //   }
-
-  onMount(() => {
-      setMiniWindow()
-    // mediaListener = window.matchMedia('(max-width: 767px)')
-    // mediaQueryHandler(mediaListener)
-    // mediaListener.addEventListener('change', mediaQueryHandler)
-  })
+  onMount(setMiniWindow)
 
   function setMiniWindow() {
     miniWindow = window.innerWidth < 720
+  }
+
+  const toggleDrawer = () => {
+    active = !active
+  }
+
+  function goTo(url) {
+    navigate(url)
+    active= false
   }
 </script>
 
@@ -32,29 +49,55 @@
 <!-- Navbars should not use list -->
 <!--  https://css-tricks.com/navigation-in-lists-to-be-or-not-to-be/ -->
 <nav role="navigation">
-
-  <span class="brand">
-    <Gidouille />
-  </span>
-  {#if !miniWindow}
-    <div class="links">
-      {#each links as link}
-        <a class="link" href="{link.href}">{link.label}</a>
-      {/each}
+  <AppBar>
+    <div slot="icon">
+      <Button on:click={()=>goTo('/')} depressed>
+        <Gidouille />
+      </Button>
     </div>
-  {/if}
-  <span class="grow"></span>
-  {#if miniWindow}
-    <span class="burger">
-      <IconButton class="material-icons" on:click="{toggleDrawer}">
-        menu
-      </IconButton>
-    </span>
-  {/if}
-
+    <span class="title" slot="title">UbuMaths</span>
+    {#if !miniWindow}
+      <div class="links">
+        <!-- <Link to="/">Home</Link> -->
+        <!-- <Link to="about">About</Link> -->
+        {#each links as link}
+          <Link to="{link.url}">{link.name}</Link>
+        {/each}
+      </div>
+    {/if}
+    <div style="flex-grow:1"></div>
+    {#if miniWindow}
+      <Button on:click="{toggleDrawer}" fab depressed>
+        <Icon path="{mdiMenu}" />
+      </Button>
+    {/if}
+  </AppBar>
+  <NavigationDrawer index={10} style="position: absolute" active="{active && miniWindow}">
+    <List nav dense>
+      <ListItemGroup>
+        {#each links as link}
+        <ListItem on:click="{() => goTo(link.url)}">
+          {link.name}
+        </ListItem>
+        {/each}
+      </ListItemGroup>
+    </List>
+  </NavigationDrawer>
+  <Overlay
+    active="{active && miniWindow}"
+    absolute
+    on:click="{toggleDrawer}"
+    index="{2}"
+  />
 </nav>
 
+<!--  https://css-tricks.com/navigation-in-lists-to-be-or-not-to-be/ -->
 <style lang="scss">
+  .title {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
   .brand {
     margin-left: 10px;
     margin-right: 10px;
@@ -64,11 +107,11 @@
     flex-grow: 1;
   }
 
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  // nav {
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: space-between;
+  // }
 
   .link {
     margin-left: 10px;
@@ -76,22 +119,12 @@
   }
 
   .links {
-    display: flex;
-    align-items: center;
+    // display: flex;
+    // align-items: center;
   }
 
   .burger {
     margin-left: 10px;
     margin-right: 10px;
   }
-
-  //   @media only screen and (max-width: 767px) {
-  //     .links {
-  //         display:none
-  //     }
-
-  //     .burger {
-  //         display:unset
-  //     }
-  //   }
 </style>

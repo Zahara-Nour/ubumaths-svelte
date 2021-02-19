@@ -1,11 +1,11 @@
 <script>
-  import Button, { Label } from '@smui/button'
+  import { Button } from 'svelte-materialify/src'
   import Fa from 'svelte-fa'
   import { faNewspaper } from '@fortawesome/free-solid-svg-icons'
   import Spinner from '../components/Spinner.svelte'
   import { getLocalUrl } from '../app/localUrl'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
-  import { onMount, afterUpdate, onDestroy } from 'svelte'
+  import { onMount } from 'svelte'
 
   export let toggleFlip = () => {}
   export let card
@@ -14,13 +14,7 @@
   onMount(() => {
     Mathlive.renderMathInElement('front' + card.id)
   })
-  afterUpdate(() => {
-    // if (document.getElementById("front_card")) {
-    //   Mathlive.renderMathInElement('front_card')
-    // }
-  })
-
-  //sanityse
+  
 </script>
 
 <div class="card" id="{'front' + card.id}">
@@ -46,18 +40,15 @@
     <div class="buttons">
       <Button
         on:click="{toggleFlip}"
-        variant="raised"
-        class="button-shaped-round"
-        color="secondary"
       >
-        <Label>Voir la réponse</Label>
+       Voir la réponse
       </Button>
     </div>
   </div>
 </div>
 
 <style type="text/scss">
-  @import '../theme/_smui-theme.scss';
+  // @import '../theme/_smui-theme.scss';
   .card {
     // -webkit-box-shadow: 0 -1px 1px rgba(230, 188, 188, 0.04),
     //   0 2px 2px rgba(0, 0, 0, 0.04), 0 4px 4px rgba(0, 0, 0, 0.04),

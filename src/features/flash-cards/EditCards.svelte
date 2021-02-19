@@ -1,5 +1,5 @@
 <script>
-  import Filter from '../../components/Filter.svelte'
+  // import Filter from '../../components/Filter.svelte'
   import queryString from 'query-string'
   import GetFilters from '../../components/GetFilters.svelte'
   import Card from '@smui/card'
@@ -95,7 +95,7 @@ import { getLocalUrl } from '../../app/localUrl';
   })
 </script>
 
-<div class="container">
+<!-- <div class="container">
   <div class="select">
     <Card padded>
       <Filter
@@ -158,7 +158,7 @@ import { getLocalUrl } from '../../app/localUrl';
       </div>
     </div>
   {/if}
-</div>
+</div> -->
 
 <style type="text/scss">
   .container {

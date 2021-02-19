@@ -19,20 +19,23 @@
     "eslint-plugin-svelte3": "^2.7.3",
     "firestore-export-import": "^0.10.0",
     "node-sass": "^4.14.1",
-    "postcss": "^7.0.32",
+    "postcss": "^8.0.0",
     "rollup": "^2.3.4",
-    "rollup-plugin-analyzer": "^3.3.0",
-    "rollup-plugin-livereload": "^1.0.0",
-    "rollup-plugin-postcss": "^3.1.5",
+    "rollup-plugin-analyzer": "^4.0.0",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-postcss": "^4.0.0",
     "rollup-plugin-sass": "^1.2.2",
-    "rollup-plugin-svelte": "^5.0.3",
-    "rollup-plugin-terser": "^6.0.0",
+    "rollup-plugin-svelte": "^7.0.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "sass": "^1.7.2",
     "svelte": "^3.0.0",
     "svelte-preprocess": "^4.0.12"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@material/layout-grid": "^7.0.0",
+    "@mdi/js": "^5.9.55",
     "@smui/button": "^1.0.0",
     "@smui/card": "^1.0.0",
     "@smui/drawer": "^1.0.0",
@@ -50,6 +53,7 @@
     "sirv-cli": "^1.0.0",
     "svelte-fa": "^2.1.1",
     "svelte-loading-spinners": "^0.1.1",
+    "svelte-materialify": "^0.3.5",
     "svelte-routing": "^1.4.2"
   }
 }

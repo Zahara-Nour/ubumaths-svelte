@@ -1,17 +1,13 @@
 <script>
-  import Select, { Option } from '@smui/select'
+  // import Select, { Option } from '@smui/select'
+  import { Select, Icon, Textfield } from 'svelte-materialify/src'
   import Spinner from './Spinner.svelte'
-  import List, { Item, Text } from '@smui/list'
+  // import List, { Item, Text } from '@smui/list'
   import { getCollection } from '../app/collections'
   import { cleanString, lexicoSort } from '../app/utils'
-  import Textfield from '@smui/textfield'
-  import Fab, { Icon } from '@smui/fab'
-  import { tick } from 'svelte'
+  // import Textfield from '@smui/textfield'
+  // import Fab, { Icon } from '@smui/fab'
   import { saveDocument } from '../app/db'
-  import Actions from '@smui/card/Actions.svelte'
-  import AuthButton from './AuthButton.svelte'
-  import Button from '@smui/button/Button.svelte'
-  import Card from '@smui/card/Card.svelte'
   import { collections } from '../app/stores'
   import { navigate } from 'svelte-routing'
   import { updateCardsList } from '../app/stores'
@@ -137,16 +133,18 @@
       {#if type === 'select'}
         <div class="filter">
           {#if add && addNew}
-            <Textfield
+          toto
+            <!-- <Textfield
               use="{[focus]}"
-              invalid="{!newValue || checkExists(newValue, values)}"
+              error="{!newValue || checkExists(newValue, values)}"
               bind:value="{newValue}"
               label="{checkExists(newValue, values) ? `${newValue} existe déjà !` : newLabel}"
               input$aria-controls="helper-text-textarea"
               input$aria-describedby="helper-text-textarea"
               bind:this="{textField}"
-            />
+            /> -->
           {:else}
+          <Select items="{values}" bind:value="{theme}">Thème</Select>
             <Select bind:value label="{label}" on:change="{onChange}">
               {#each values as v}
                 <Option value="{v.name}" selected="{value === v.name}">
@@ -156,7 +154,7 @@
             </Select>
           {/if}
 
-          {#if add}
+          <!-- {#if add}
             <Fab
               disabled="{disabled || (addNew && (!newValue || checkExists(newValue, values)))}"
               mini
@@ -171,7 +169,7 @@
             >
               <Icon class="material-icons">add</Icon>
             </Fab>
-          {/if}
+          {/if} -->
         </div>
       {:else if custom}
         <svelte:component this="{custom}" cards="{values}" bind:value {onChange}/>

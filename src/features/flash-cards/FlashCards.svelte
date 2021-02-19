@@ -1,5 +1,5 @@
 <script>
-  import Filter from '../../components/Filter.svelte'
+  // import Filter from '../../components/Filter.svelte'
   import queryString from 'query-string'
   import ThemesList from '../../components/ThemesList.svelte'
   import { getCollection } from '../../app/collections'
@@ -27,11 +27,11 @@
   $: updateWithQueryParams(location.search)
 </script>
 
-<Filter label="Classe" collectionPath="Grades" bind:value="{grade}" />
+<!-- <Filter label="Classe" collectionPath="Grades" bind:value="{grade}" /> -->
 
-<Filter label="Matière" collectionPath="Subjects" bind:value="{subject}" />
+<!-- <Filter label="Matière" collectionPath="Subjects" bind:value="{subject}" /> -->
 
-{#if subject}
+<!-- {#if subject}
   <Filter
     label="Domaine"
     collectionPath="Domains"
@@ -42,4 +42,4 @@
 
 {#if domain && grade}
   <ThemesList filters="{[{ subject }, { domain }]}" {grade} />
-{/if}
+{/if} -->
