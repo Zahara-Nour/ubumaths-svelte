@@ -15,8 +15,8 @@
   <!-- {#if question.enounce}
     {question.enounce}
   {/if} -->
-  <div id="expression">
-    <math-field read-only="true" bind:this="{mf}"></math-field>
+  <div id="expression" style="display:flex; align-items:center;justify-content:center">
+    <math-field style="display:inline-block" read-only="true" bind:this="{mf}"></math-field>
   </div>
 </div>
 

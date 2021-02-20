@@ -53,7 +53,9 @@
     elapsed = Date.now() - start
   }
 
-  onMount(() => {})
+  onMount(() => {
+    mf.focus()
+  })
 
   $: {
     if (delay >= elapsed) {
@@ -108,22 +110,32 @@
     answers_latex="{answers_latex}"
   />
 {:else}
-  <CircularProgress
-    number="{current + 1}"
-    fontSize="{24}"
-    strokeWidth="{5}"
-    percentage="{percentage}"
-  />
-  <Question question="{generated}" />
-
-  <div class:error>
+  <div style="margin-top:10px;margin-bottom:10px">
+    <CircularProgress
+      number="{current + 1}"
+      fontSize="{24}"
+      strokeWidth="{5}"
+      percentage="{percentage}"
+    />
+  </div>
+  <div style="margin-top:20px;margin-bottom:20px">
+    <Question question="{generated}" />
+  </div>
+  <!-- <div class:error> -->
+  <div style="display:flex;align-items:center">
+    <span style="margin-right:15px">Ta réponse:</span>
     <math-field
-      virtual-keyboard-mode="manual"
+      style="width:50%"
+      virtual-keyboard-mode="onfocus"
+      virtual-keyboards="numeric roman"
+      virtual-keyboard-theme="apple"
       on:input="{onChangeMathField}"
       bind:this="{mf}"></math-field>
   </div>
-
+  <!-- </div> -->
+  <div style="display:inline-block;margin-top:40px;margin-bottom:20px;right:20px;position:absolute">
   <Button on:click="{change}">Valider</Button>
+</div>
 {/if}
 
 <style>
