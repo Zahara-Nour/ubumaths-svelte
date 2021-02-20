@@ -51,7 +51,7 @@
         <Home />
       </Route>
     </div>
-    <Footer absolute>
+    <Footer>
       <div class="d-flex align-center" style="width:100%">
         <a href="https://www.lyceevoltaire.org/">
           <img
@@ -83,5 +83,6 @@
 
   .main {
     position: relative;
+    min-height: calc(100vh - 140px);
   }
 </style>
