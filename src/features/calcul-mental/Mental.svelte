@@ -1,7 +1,5 @@
 <script>
   import {
-    Row,
-    Col,
     Select,
     Icon,
     List,
@@ -53,7 +51,15 @@
   $: console.log('level', level)
 </script>
 
-<Select items="{themes}" bind:value="{theme}">Thème</Select>
+<div style="margin-top:10px;margin-bottom:10px;display:flex;justify-content:flex-end">
+  <Button class="mr-2" disabled="{!level}" fab size="x-small" on:click="{() => {}}">
+    <Icon path="{mdiCartArrowDown}" />
+  </Button>
+  <Button disabled="{!level}" fab size="x-small" on:click="{launchTest}">
+    <Icon path="{mdiRocketLaunchOutline}" />
+  </Button>
+</div>
+<Select class="mt:10px" items="{themes}" bind:value="{theme}">Thème</Select>
 
 {#if (Array.isArray(theme) && theme.length) || (!Array.isArray(theme) && theme)}
   <ExpansionPanels on:change="{onChange}" bind:value="{domain_idx}">
@@ -64,8 +70,8 @@
           <ListItemGroup>
             <div>
               {#each Object.keys(questions[theme][d]) as t}
-                <div style="display:flex; align-items:center;">
-                  <span>{t}</span>
+                <div style="margin-top:5px; margin-bottom:5px;display:flex; align-items:center;">
+                  <span style="margin-right:10px">{t}</span>
                   <div>
                     {#each questions[theme][d][t] as question, i}
                       <Button
@@ -78,22 +84,6 @@
                     {/each}
                   </div>
                   <div style="flex-grow:1;"></div>
-                  <Button
-                    disabled="{!level}"
-                    fab
-                    size="x-small"
-                    on:click="{() => {}}"
-                  >
-                    <Icon path="{mdiCartArrowDown}" />
-                  </Button>
-                  <Button
-                    disabled="{!level}"
-                    fab
-                    size="x-small"
-                    on:click="{launchTest}"
-                  >
-                    <Icon path="{mdiRocketLaunchOutline}" />
-                  </Button>
                 </div>
               {/each}
             </div>

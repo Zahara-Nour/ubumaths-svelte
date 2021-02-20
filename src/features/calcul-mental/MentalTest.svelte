@@ -3,7 +3,7 @@
   import generate from './generateQuestion'
   import CircularProgress from '../../components/CircularProgress.svelte'
   import { Button } from 'svelte-materialify/src'
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import Correction from './Correction.svelte'
   import qs from './questions'
   import queryString from 'query-string'
@@ -61,6 +61,11 @@
 
   onMount(() => {
     mf.focus()
+  })
+
+  onDestroy(() => {
+    if (timer) clearInterval(timer)
+    if (timeout) clearTimeout(timeout)
   })
 
   $: {
