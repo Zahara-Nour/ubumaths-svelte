@@ -1,123 +1,108 @@
 <script>
-  import { Row, Col, Select, Icon } from 'svelte-materialify/src'
+  import {
+    Row,
+    Col,
+    Select,
+    Icon,
+    List,
+    ListItem,
+    ListItemGroup,
+  } from 'svelte-materialify/src'
   import Button from 'svelte-materialify/src/components/Button'
   import ExpansionPanels, {
     ExpansionPanel,
   } from 'svelte-materialify/src/components/ExpansionPanels'
-  import List from 'svelte-materialify/src/components/List'
-  import ListItem from 'svelte-materialify/src/components/List/ListItem.svelte'
-  import ListItemGroup from 'svelte-materialify/src/components/List/ListItemGroup.svelte'
   import { mdiCartArrowDown, mdiRocketLaunchOutline } from '@mdi/js'
-import CircularProgress from '../../components/CircularProgress.svelte';
-  const items = [
-    { name: 'Foo', value: 'foo' },
-    { name: 'Bar', value: 'bar' },
-    { name: 'Fizz', value: 'fizz' },
-    { name: 'Buzz', value: 'buzz' },
-  ]
+  import { navigate } from 'svelte-routing'
+  import questions from './questions'
 
-  let theme
+  const themes = Object.keys(questions).map((q) => ({ name: q, value: q }))
+
+  let theme = themes[0].name
+  let domain
+  let type
   let level
-  let list = []
 
-  let value = [2]
+  let domain_idx
   let about = { index: '', active: '' }
   function onChange(e) {
     about = e.detail
     console.log('panel', about)
   }
 
-  function onChangeLevel(l) {
+  function onChangeLevel(d, t, l) {
+    domain = d
+    type = t
     level = l
-    console.log('level', l)
   }
 
+  function launchTest() {
+    const url = `/mental-test?theme=${theme}&domain=${domain}&type=${type}&level=${level}`
+    if (decodeURI(encodeURI(url)) !== url) warn('URI malformed', url)
+    navigate(url)
+  }
 
   $: if (
     (Array.isArray(theme) && theme.length) ||
     (!Array.isArray(theme) && theme)
   ) {
-    console.log('theme', theme)
+    domain_idx = [0]
   }
-
-  $: console.log('value', value)
+  $: console.log('domain', domain)
+  $: console.log('type', type)
+  $: console.log('level', level)
 </script>
 
-<Select items="{items}" bind:value="{theme}">Thème</Select>
+<Select items="{themes}" bind:value="{theme}">Thème</Select>
 
-<ExpansionPanels on:change="{onChange}" bind:value>
-  <ExpansionPanel>
-    <span slot="header">Addition</span>
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat amet natus
-    obcaecati molestiae quas mollitia error modi atque aliquam esse.
-  </ExpansionPanel>
-  <ExpansionPanel>
-    <span slot="header">Multiplication</span>
-    <List style="width:100%;">
-      <ListItemGroup>
-        <div>
-          <div style="display:flex; align-items:center;">
-            <span>A Trou</span>
+{#if (Array.isArray(theme) && theme.length) || (!Array.isArray(theme) && theme)}
+  <ExpansionPanels on:change="{onChange}" bind:value="{domain_idx}">
+    {#each Object.keys(questions[theme]) as d}
+      <ExpansionPanel>
+        <span slot="header">{d}</span>
+        <List style="width:100%;">
+          <ListItemGroup>
             <div>
-              <Button
-                fab
-                size="x-small"
-                depressed
-                on:click="{() => onChangeLevel(1)}">1</Button
-              >
-              <Button fab size="x-small" on:click="{() => onChangeLevel(2)}"
-                >2</Button
-              >
+              {#each Object.keys(questions[theme][d]) as t}
+                <div style="display:flex; align-items:center;">
+                  <span>{t}</span>
+                  <div>
+                    {#each questions[theme][d][t] as question, i}
+                      <Button
+                        fab
+                        size="x-small"
+                        depressed
+                        on:click="{() => onChangeLevel(d, t, i + 1)}"
+                        >{i + 1}</Button
+                      >
+                    {/each}
+                  </div>
+                  <div style="flex-grow:1;"></div>
+                  <Button
+                    disabled="{!level}"
+                    fab
+                    size="x-small"
+                    on:click="{() => {}}"
+                  >
+                    <Icon path="{mdiCartArrowDown}" />
+                  </Button>
+                  <Button
+                    disabled="{!level}"
+                    fab
+                    size="x-small"
+                    on:click="{launchTest}"
+                  >
+                    <Icon path="{mdiRocketLaunchOutline}" />
+                  </Button>
+                </div>
+              {/each}
             </div>
-            <div style="flex-grow:1;"></div>
-            <Button fab size="x-small" on:click="{() => {}}">
-              <Icon path="{mdiCartArrowDown}" />
-            </Button>
-            <Button fab size="x-small" on:click="{() => {}}">
-              <Icon path="{mdiRocketLaunchOutline}" />
-            </Button>
-          </div>
-          <ListItem ripple="{false}">
-            <div style="display:flex; align-items:center;">
-              <span>A Trou</span>
-              <div>
-                <Button
-                  fab
-                  size="x-small"
-                  depressed
-                  on:click="{() => onChangeLevel(1)}">1</Button
-                >
-                <Button fab size="x-small" on:click="{() => onChangeLevel(2)}"
-                  >2</Button
-                >
-              </div>
-              <div style="flex-grow:1;"></div>
-              <Button fab size="x-small" on:click="{() => {}}">
-                <Icon path="{mdiCartArrowDown}" />
-              </Button>
-              <Button fab size="x-small" on:click="{() => {}}">
-                <Icon path="{mdiRocketLaunchOutline}" />
-              </Button>
-            </div>
-          </ListItem>
-        </div></ListItemGroup
-      >
-    </List>
-  </ExpansionPanel>
-  <ExpansionPanel>
-    <span slot="header">Soustraction</span>
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat amet natus
-    obcaecati molestiae quas mollitia error modi atque aliquam esse.
-  </ExpansionPanel>
-  <ExpansionPanel>
-    <span slot="header">Division</span>
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat amet natus
-    obcaecati molestiae quas mollitia error modi atque aliquam esse.
-  </ExpansionPanel>
-</ExpansionPanels>
-
-
-
+          </ListItemGroup>
+        </List>
+      </ExpansionPanel>
+    {/each}
+  </ExpansionPanels>
+{/if}
 
 Panier
 <List />

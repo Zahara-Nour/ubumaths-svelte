@@ -49,7 +49,7 @@
 <!-- Navbars should not use list -->
 <!--  https://css-tricks.com/navigation-in-lists-to-be-or-not-to-be/ -->
 <nav role="navigation">
-  <AppBar>
+  <AppBar dense flat>
     <div slot="icon">
       <Button on:click={()=>goTo('/')} depressed>
         <Gidouille />
@@ -67,7 +67,7 @@
     {/if}
     <div style="flex-grow:1"></div>
     {#if miniWindow}
-      <Button on:click="{toggleDrawer}" fab depressed>
+      <Button class="mr-2" on:click="{toggleDrawer}" size="small" fab depressed>
         <Icon path="{mdiMenu}" />
       </Button>
     {/if}

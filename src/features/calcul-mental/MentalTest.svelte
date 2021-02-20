@@ -4,9 +4,9 @@
   import CircularProgress from '../../components/CircularProgress.svelte'
   import { Button } from 'svelte-materialify/src'
   import { onMount } from 'svelte'
-  import { math } from 'tinycas/build/math/math'
   import Correction from './Correction.svelte'
-  import q from './questions'
+  import qs from './questions'
+  import queryString from 'query-string'
 
   // export let questions = [
   //   {
@@ -29,9 +29,11 @@
   //   },
   // ]
 
-  const questions = q['Entiers']['Addition']['Compléments']
+  export let location
+  console.log('location', location)
 
   let question = {}
+  let questions
   let answer
   let answer_latex
   let current = -1
@@ -47,7 +49,11 @@
   let mf
   let error = true
   let finish = false
-  let score
+  let queryParams
+  let type
+  let domain
+  let theme
+  let level
 
   function countDown() {
     elapsed = Date.now() - start
@@ -56,6 +62,23 @@
   onMount(() => {
     mf.focus()
   })
+
+  $: {
+    queryParams = queryString.parse(location.search)
+    console.log('queryParams', queryParams)
+    type = queryParams.type
+    domain = queryParams.domain
+    theme = queryParams.theme
+    level = queryParams.level
+    if (theme && domain && type && level) {
+      questions=qs[theme][domain][type]
+      questions = questions.filter(q=>questions.indexOf(q)+1===parseInt(level,10))
+      for (let i=0;i<9;i++) questions.push(questions[0])
+      console.log("questions", questions)
+    } else {
+      questions = qs['Entiers']['Addition']['A trous']
+    }
+  }
 
   $: {
     if (delay >= elapsed) {
@@ -133,9 +156,11 @@
       bind:this="{mf}"></math-field>
   </div>
   <!-- </div> -->
-  <div style="display:inline-block;margin-top:40px;margin-bottom:20px;right:20px;position:absolute">
-  <Button on:click="{change}">Valider</Button>
-</div>
+  <div
+    style="display:inline-block;margin-top:40px;margin-bottom:20px;right:20px;position:absolute"
+  >
+    <Button on:click="{change}">Valider</Button>
+  </div>
 {/if}
 
 <style>
