@@ -1,5 +1,4 @@
 <script>
-  import { math } from 'tinycas/build/math/math'
   import CorrectionItem from './CorrectionItem.svelte'
   export let questions
   export let answers

@@ -6,7 +6,7 @@
   import { onMount } from 'svelte'
   import { math } from 'tinycas/build/math/math'
   import Correction from './Correction.svelte'
-  import q from "./questions"
+  import q from './questions'
 
   // export let questions = [
   //   {
@@ -29,7 +29,7 @@
   //   },
   // ]
 
-  const questions = q["Entiers"]["Addition"]["Résultat"]
+  const questions = q['Entiers']['Addition']['Compléments']
 
   let question = {}
   let answer
@@ -79,15 +79,15 @@
       answers_latex[current] = answer_latex
     }
     if (current < questions.length - 1) {
-      if (mf) mf.setValue('')
+      if (mf) {
+        mf.setValue('')
+        mf.focus()
+      }
       answer = ''
       current++
-      console.log('change', current)
-      console.log('questions', questions)
       question = questions[current]
       generated = generate(question)
       generateds.push(generated)
-      console.log('question', question)
       delay = question.defaultDelay * 1000
       percentage = 100
       start = Date.now()

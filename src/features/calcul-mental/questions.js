@@ -82,7 +82,7 @@ export default {
       "Sommes astucieuses":[
         {
           description: "Nombres à 1 chiffre",
-          expressions: ["&1+#{10-&1}+&2", "&1+&2+${10-&2}", "&1+&2+${10-$1}"],
+          expressions: ["&1+#{10-&1}+&2", "&1+&2+#{10-&2}", "&1+&2+#{10-&1}"],
           solutions: ["#{10+&2}","#{10+&1}","#{10+&2}"],
           variables: { "&1": "$e{1;1}", "&2":"$e{1;1}"},
           type: "result",
@@ -90,7 +90,7 @@ export default {
         },
         {
           description: "Nombres à 2 chiffres",
-          expressions: ["&1+#{100-&1}+&2", "&1+&2+${100-&2}", "&1+&2+${100-$1}"],
+          expressions: ["&1+#{100-&1}+&2", "&1+&2+#{100-&2}", "&1+&2+#{100-&1}"],
           solutions: ["#{100+&2}","#{100+&1}","#{100+&2}"],
           variables: { "&1": "$e{2;2}", "&2":"$e{2;2}"},
           type: "result",
@@ -98,7 +98,7 @@ export default {
         },
         {
           description: "Nombres à 3 chiffres",
-          expressions: ["&1+#{1000-&1}+&2", "&1+&2+${1000-&2}", "&1+&2+${1000-$1}"],
+          expressions: ["&1+#{1000-&1}+&2", "&1+&2+#{1000-&2}", "&1+&2+#{1000-&1}"],
           solutions: ["#{1000+&2}","#{1000+&1}","#{1000+&2}"],
           variables: { "&1": "$e{3;3}", "&2":"$e{3;3}"},
           type: "result",
