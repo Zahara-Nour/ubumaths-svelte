@@ -9,7 +9,8 @@
   import { MaterialApp } from 'svelte-materialify'
   import NavBar from './components/NavBar.svelte'
   import Mental from './features/calcul-mental/Mental.svelte'
-import MentalTest from './features/calcul-mental/MentalTest.svelte';
+  import MentalTest from './features/calcul-mental/MentalTest.svelte'
+  import Footer from 'svelte-materialify/src/components/Footer'
 
   export let url = ''
 
@@ -50,6 +51,19 @@ import MentalTest from './features/calcul-mental/MentalTest.svelte';
         <Home />
       </Route>
     </div>
+    <Footer absolute>
+      <div class="d-flex align-center" style="width:100%">
+        <a href="https://www.lyceevoltaire.org/">
+          <img
+            alt="logo voltaire"
+            src="./images/logo-voltaire.png"
+            height="60px"
+          />
+        </a>
+        <div class="flex-grow-1"></div>
+        <div class="text-body-2">D. Le Jolly</div>
+      </div>
+    </Footer>
   </Router>
 </MaterialApp>
 

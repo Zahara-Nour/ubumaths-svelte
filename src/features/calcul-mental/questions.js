@@ -13,7 +13,7 @@ export default {
         },
         {
           description: "Trouver le résultat d'une addition",
-          description: "Nombres entiers à 2 chiffres",
+          subdescription: "Nombres entiers à 2 chiffres",
           expressions: ["&1 + &2"],
           solutions: ["#{&1+&2}"],
           variables: { "&1": "$e[10;99]", "&2": "$e[10;99]" },
@@ -22,7 +22,7 @@ export default {
         },
         {
           description: "Trouver le résultat d'une addition",
-          description: "Nombres entiers à 3 chiffres",
+          subdescription: "Nombres entiers à 3 chiffres",
           expressions: ["&1 + &2"],
           solutions: ["#{&1+&2}"],
           variables: { "&1": "$e[100;999]", "&2": "$e[100;999]" },
