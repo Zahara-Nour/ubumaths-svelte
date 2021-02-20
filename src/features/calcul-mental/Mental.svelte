@@ -5,14 +5,21 @@
     List,
     ListItem,
     ListItemGroup,
+    Dialog,
+    Card,
+    CardTitle,
+    CardSubtitle,
+    CardText,
   } from 'svelte-materialify/src'
   import Button from 'svelte-materialify/src/components/Button'
   import ExpansionPanels, {
     ExpansionPanel,
   } from 'svelte-materialify/src/components/ExpansionPanels'
-  import { mdiCartArrowDown, mdiRocketLaunchOutline } from '@mdi/js'
+  import { mdiCartArrowDown, mdiRocketLaunchOutline, mdiHelp } from '@mdi/js'
   import { navigate } from 'svelte-routing'
   import questions from './questions'
+  import Question from './Question.svelte'
+  import generateQuestion from './generateQuestion'
 
   const themes = Object.keys(questions).map((q) => ({ name: q, value: q }))
 
@@ -20,6 +27,7 @@
   let domain
   let type
   let level
+  let generated
 
   let domain_idx
   let about = { index: '', active: '' }
@@ -32,12 +40,31 @@
     domain = d
     type = t
     level = l
+    generateExemple()
   }
 
   function launchTest() {
     const url = `/mental-test?theme=${theme}&domain=${domain}&type=${type}&level=${level}`
     if (decodeURI(encodeURI(url)) !== url) warn('URI malformed', url)
     navigate(url)
+  }
+
+  function generateExemple() {
+    let qs = questions[theme][domain][type]
+    console.log('questions', qs)
+    qs = qs.filter((q) => qs.indexOf(q) + 1 === parseInt(level, 10))
+    console.log('questions', qs)
+    const q = qs[0]
+    console.log('question', q)
+    generated = generateQuestion(q)
+  }
+
+  let active = false
+  function open() {
+    active = true
+  }
+  function close() {
+    active = false
   }
 
   $: if (
@@ -51,10 +78,22 @@
   $: console.log('level', level)
 </script>
 
-<div style="margin-top:10px;margin-bottom:10px;display:flex;justify-content:flex-end">
-  <Button class="mr-2" disabled="{!level}" fab size="x-small" on:click="{() => {}}">
-    <Icon path="{mdiCartArrowDown}" />
+<h4 style="margin-top:10px">Calcul mental</h4>
+<div
+  style="margin-top:10px;margin-bottom:10px;display:flex;justify-content:flex-end"
+>
+  <Button class="mr-2" disabled="{!level}" fab size="x-small" on:click="{open}">
+    <Icon path="{mdiHelp}" />
   </Button>
+  <!-- <Button
+    class="mr-2"
+    disabled="{!level}"
+    fab
+    size="x-small"
+    on:click="{() => {}}"
+  >
+    <Icon path="{mdiCartArrowDown}" />
+  </Button> -->
   <Button disabled="{!level}" fab size="x-small" on:click="{launchTest}">
     <Icon path="{mdiRocketLaunchOutline}" />
   </Button>
@@ -65,16 +104,21 @@
   <ExpansionPanels on:change="{onChange}" bind:value="{domain_idx}">
     {#each Object.keys(questions[theme]) as d}
       <ExpansionPanel>
-        <span slot="header">{d}</span>
+        <span slot="header" style="color:red">{d}</span>
         <List style="width:100%;">
-          <ListItemGroup>
+      
             <div>
               {#each Object.keys(questions[theme][d]) as t}
-                <div style="margin-top:5px; margin-bottom:5px;display:flex; align-items:center;">
+                <div
+                  style="margin-top:5px; margin-bottom:5px;display:flex; align-items:center;"
+                >
                   <span style="margin-right:10px">{t}</span>
                   <div>
                     {#each questions[theme][d][t] as question, i}
                       <Button
+                        class="{d === domain && type === t && level === i + 1
+                          ? 'red white-text'
+                          : ''}"
                         fab
                         size="x-small"
                         depressed
@@ -87,12 +131,23 @@
                 </div>
               {/each}
             </div>
-          </ListItemGroup>
+        
         </List>
       </ExpansionPanel>
     {/each}
   </ExpansionPanels>
 {/if}
 
-Panier
 <List />
+
+<Dialog bind:active>
+  <Card>
+    <CardTitle>{generated.description}</CardTitle>
+    {#if generated.subdescription}
+      <CardSubtitle>{generated.subdescription}</CardSubtitle>
+    {/if}
+    <CardText>
+      <Question question="{generated}" />
+    </CardText>
+  </Card>
+</Dialog>

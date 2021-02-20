@@ -3,7 +3,8 @@ export default {
     Addition:{
       Résultat:[
         {
-          description: "Nombres à 1 chiffre.",
+          description: "Trouver le résultat d'une addition",
+          subdescription: "Nombres entiers à 1 chiffre",
           expressions: ["&1 + &2"],
           solutions: ["#{&1+&2}"],
           variables: { "&1": "$e[2;9]", "&2": "$e[2;9]" },
@@ -11,7 +12,8 @@ export default {
           defaultDelay: 10
         },
         {
-          description: "Nombres à 2 chiffre.",
+          description: "Trouver le résultat d'une addition",
+          description: "Nombres entiers à 2 chiffres",
           expressions: ["&1 + &2"],
           solutions: ["#{&1+&2}"],
           variables: { "&1": "$e[10;99]", "&2": "$e[10;99]" },
@@ -19,7 +21,8 @@ export default {
           defaultDelay: 15
         },
         {
-          description: "Nombres à 3 chiffre.",
+          description: "Trouver le résultat d'une addition",
+          description: "Nombres entiers à 3 chiffres",
           expressions: ["&1 + &2"],
           solutions: ["#{&1+&2}"],
           variables: { "&1": "$e[100;999]", "&2": "$e[100;999]" },
@@ -29,7 +32,7 @@ export default {
       ],
       Compléments:[
         {
-          description: "complément à 10",
+          description: "Trouver le complément à 10",
           expressions: ["?+&1=10", "&1+?=10"],
           solutions: ["#{10-&1}","#{10-&1}"],
           variables: { "&1": "$e[1;9]"},
@@ -37,7 +40,7 @@ export default {
           defaultDelay: 10
         },
         {
-          description: "complément à 100",
+          description: "Trouver le complément à 100",
           expressions: ["?+&1=100", "&1+?=100"],
           solutions: ["#{100-&1}","#{100-&1}"],
           variables: { "&1": "$e[1;99]"},
@@ -45,7 +48,7 @@ export default {
           defaultDelay: 10
         },
         {
-          description: "complément à 1000",
+          description: "Trouver le complément à 1000",
           expressions: ["?+&1=1000", "&1+?=1000"],
           solutions: ["#{1000-&1}","#{1000-&1}"],
           variables: { "&1": "$e[1;999]"},

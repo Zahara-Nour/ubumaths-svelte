@@ -7,7 +7,6 @@
 
   $: if (mf) mf.setValue(math(question.expression).latex)
 
-  console.log('Question.svelte')
   
 </script>
 
@@ -16,7 +15,7 @@
     {question.enounce}
   {/if} -->
   <div id="expression" style="display:flex; align-items:center;justify-content:center">
-    <math-field style="display:inline-block" read-only="true" bind:this="{mf}"></math-field>
+    <math-field style="font-size:32px;display:inline-block" read-only="true" bind:this="{mf}"></math-field>
   </div>
 </div>
 
