@@ -117,89 +117,64 @@ export default {
                 subdescription: "Nombres à 1 chiffre",
                 expressions: ["&1-&2"],
                 variables: { "&1": "$e[2;9]", "&2":"$e[1;&1-1]"},
-                "defaultDelay": 10,
+                defaultDelay: 10,
               },
               {
-                "description": "Trouver le résultat d'une soustraction (résultat positif)",
-                "description": "Nombres à 2 chiffres sans retenue à effectuer",
-                "expressions": ["${ $e[2;9]*10 + $e[2;9] } - ${ $e[1;$1-1]*10 + $e[1;$2-1] }"],
-                "correction": "value",
-                "answer": "decimal",
-                "defaultDelay": 15,
-                "point": 1
+                description: "Trouver le résultat d'une soustraction (résultat positif)",
+                description: "Nombres à 2 chiffres (sans retenue)",
+                expressions: ["#{ &1*10 + &2 } - #{ &3*10 + &4 }"],
+                variables: { &1: "$e[2;9]", &2:"$e[2;9]", &3:"$e[1;&1-1]", &4:"$e[1;&2-1]"  },
+                defaultDelay: 15,
               },
               {
-                "level": 3,
-                "description": "Nombres à 3 chiffres sans retenue",
-                "enounce": "",
-                "expressions": ["${ $e[2;9]*100 + $e[2;9]*10 + $e[2;9] } - ${ $e[1;$1-1]*100 + $e[1;$2-1]*10 + $e[1;$3-1] }"],
-                "correction": "value",
-                "answer": "decimal",
-                "defaultDelay": 20,
-                "point": 1
+                description: "Trouver le résultat d'une soustraction (résultat positif)",
+                subdescription: "Nombres à 3 chiffres (sans retenue)",
+                expressions: ["#{ &1*100 + &2*10 + &3 } - #{ &4*100 + &5*10 + &6 }"],
+                variables: { &1: "$e[2;9]", &2:"$e[2;9]", &3:"$e[2;9]", &4:"$e[1;&1-1]", &5:"$e[1;&2-1]", &6:"$e[1;&3-1]"  },
+                defaultDelay: 20,
               },
               {
-                "level": 4,
-                "description": "Nombres à 2 chiffres",
-                "enounce": "",
-                "expressions": ["$e[11;99]-$e[10;$1-1]"],
-                "correction": "value",
-                "answer": "decimal",
-                "defaultDelay": 15,
-                "point": 1
+                description: "Trouver le résultat d'une soustraction (résultat positif)",
+                subdescription: "Nombres à 2 chiffres (avec retenue)",
+                expressions: ["#{ &1*10 + &4 } - #{ &3*10 + &2 }"],
+                variables: { &1: "$e[2;9]", &2:"$e[2;9]", &3:"$e[1;&1-1]", &4:"$e[1;&2-1]"  },
+                defaultDelay: 15
+               
               },
               {
-                "level": 5,
-                "description": "Nombres à 3 chiffres",
-                "enounce": "",
-                "expressions": ["$e[101;999]-$e[100;$1-1]"],
-                "correction": "value",
-                "answer": "decimal",
-                "defaultDelay": 20,
-                "point": 1
+                description: "Trouver le résultat d'une soustraction (résultat positif)",
+                subdescription: "Nombres à 3 chiffres (avec retenue)",
+                expressions: ["#{ &1*100 + &5*10 + &6 } - #{ &4*100 + &2*10 + &3 }"],
+                variables: { &1: "$e[2;9]", &2:"$e[2;9]", &3:"$e[2;9]", &4:"$e[1;&1-1]", &5:"$e[1;&2-1]", &6:"$e[1;&3-1]"  },
+                defaultDelay: 20,
               }
-            ]
-          },
-          {
-            "label": "A trou",
-            "levels": [
+            ],
+         "A trou": [
               {
-                "level": 1,
-                "description": "Nombres à 1 chiffre.",
-                "enounce": "",
-                "expressions": ["?-$e[2;8]=$e[1;9-$1]","$e[2;9]-?=$e[1;$1-1]" ],
-                "correction": "value",
-                "answer": "decimal",
-                "defaultDelay": 10,
-                "point": 1
+                description: "Compléter une soustraction à trou (résultat positif)",
+                subdescription: "Nombres à 1 chiffre",   
+                expressions: ["?-&1=&2","&1-?=&2" ],
+                variables: [{ "&1": "$e[2;8]", "&2":"$e[1;9-&1]"},{ "&1": "$e[2;9]", "&2":"$e[1;&1-1]"}],
+                solutions:["#{&1+&2}", "#{&1-&2}"]
+                defaultDelay: 10,
               },
               {
-                "level": 2,
-                "description": "Nombres à 2 chiffres sans retenue.",
-                "enounce": "",
-                "expressions": ["${ $e[2;9]*10 + $e[2;9] } - ? =  ${ $e[1;$1-1]*10 + $e[1;$2-1] }"],
-                "correction": "value",
-                "answer": "decimal",
-                "defaultDelay": 15,
-                "point": 1
+                description: "Compléter une soustraction à trou (résultat positif)",
+                subdescription: "Nombres à 2 chiffres sans retenue.",
+                expressions: ["#{ &1*10 + &2 } - ? =  #{ &3*10 + &4 }"],
+                variables: [{ "&1": "$e[2;9]", "&2":"$e[2;9]", &3:"$e[1;&1-1]", &4:"$e[1;&2-1]"}],
+                defaultDelay: 15,
               },
               {
-                "level": 3,
-                "description": "Nombres à 3 chiffres sans retenue.",
-                "enounce": "",
-                "expressions": ["${ $e[2;9]*100 + $e[2;9]*10 + $e[2;9] } - ? = ${ $e[1;$1-1]*100 + $e[1;$2-1]*10 + $e[1;$3-1] }"],
-                "correction": "value",
-                "answer": "decimal",
-                "defaultDelay": 20,
-                "point": 1
+                description: "Compléter une soustraction à trou (résultat positif)",
+                subdescription: "Nombres à 3 chiffres (sans retenue)",
+                expressions: ["#{ &1*100 + &2*10 + &3 } - ? = #{ &4*100 + &5*10 + &6 }"],
+                variables: [{ "&1": "$e[2;9]", "&2":"$e[2;9]", &3:"$e[2;9]", &4:"$e[1;&1-1]", &5:"$e[1;&2-1]", &6:"$e[1;&3-1]" }],
+                defaultDelay: 20,
               },
-              {
-                "level": 4,
+              {          
                 "description": "Nombres à 2 chiffres",
-                "enounce": "",
                 "expressions": ["?-$e[12;98]=$e[1;99-$1]","$e[12;99]-?=$e[1;$1-10]"],
-                "correction": "value",
-                "answer": "decimal",
                 "defaultDelay": 15,
                 "point": 1
               },
