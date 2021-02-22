@@ -7,7 +7,7 @@ export default function generateQuestion(question, generateds) {
   // firestore returns objects with read-only properties
   let expression
   let solution
-  const expressions = generateds.map((g) => g.expression)
+  const expressions = generateds ? generateds.map((g) => g.expression) : null
 
   if (!question) return emptyQuestion
 
@@ -69,7 +69,7 @@ export default function generateQuestion(question, generateds) {
       solution = math(expression).eval().latex
     }
 
-  } while (generateds && expressions.includes(expression))
+  } while (expressions && expressions.includes(expression))
 
   let tempQuestion = {
     ...question,
