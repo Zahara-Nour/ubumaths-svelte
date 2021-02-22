@@ -7,6 +7,7 @@
   import Correction from './Correction.svelte'
   import qs from './questions'
   import queryString from 'query-string'
+ 
 
   // export let questions = [
   //   {
@@ -76,10 +77,12 @@
     theme = queryParams.theme
     level = queryParams.level
     if (theme && domain && type && level) {
-      questions=qs[theme][domain][type]
-      questions = questions.filter(q=>questions.indexOf(q)+1===parseInt(level,10))
-      for (let i=0;i<9;i++) questions.push(questions[0])
-      console.log("questions", questions)
+      questions = qs[theme][domain][type]
+      questions = questions.filter(
+        (q) => questions.indexOf(q) + 1 === parseInt(level, 10),
+      )
+      for (let i = 0; i < 9; i++) questions.push(questions[0])
+      console.log('questions', questions)
     } else {
       questions = qs['Entiers']['Addition']['A trous']
     }
@@ -92,6 +95,7 @@
   }
 
   $: if (questions.length) {
+    generateds=[]
     change()
   }
 
@@ -116,8 +120,8 @@
       answer = ''
       current++
       question = questions[current]
-      generated = generate(question)
-      generateds.push(generated)
+      generated = generate(question, generateds)
+      if (generateds) generateds.push(generated)
       delay = question.defaultDelay * 1000
       percentage = 100
       start = Date.now()
@@ -128,7 +132,6 @@
     }
   }
 
-  $: console.log('generated', generated)
 </script>
 
 {#if finish}

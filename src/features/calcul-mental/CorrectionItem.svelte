@@ -10,6 +10,7 @@
   export let item
   export let addPoints
 
+ 
   const q_exp = math(item.question)
   const s_exp = math(item.solution)
   const a_exp = math(item.answer)
