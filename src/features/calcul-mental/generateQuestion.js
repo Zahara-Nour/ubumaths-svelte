@@ -3,11 +3,15 @@ import emptyQuestion from './emptyQuestion'
 import { lexicoSort } from '../../app/utils'
 
 export default function generateQuestion(question, generateds) {
- 
   // firestore returns objects with read-only properties
   let expression
   let solution
   const expressions = generateds ? generateds.map((g) => g.expression) : null
+  const regex = /#\{(.*?)\}/g
+  const replacement = (matched, p1) => {
+    const e = math(p1)
+    return e.string === 'Error' ? 'Error' : `${math(p1).eval().latex}`
+  }
 
   if (!question) return emptyQuestion
 
@@ -15,7 +19,7 @@ export default function generateQuestion(question, generateds) {
     // first select an expression
     const choice = Math.floor(question.expressions.length * Math.random())
     expression = question.expressions[choice]
-  
+
     if (question.solutions) {
       solution = question.solutions[choice]
     } else {
@@ -56,11 +60,7 @@ export default function generateQuestion(question, generateds) {
     //expression to evaluate
 
     // Pourquoi ne pas mettre ça dans le module maths directement ?
-    const regex = /#\{(.*?)\}/g
-    const replacement = (matched, p1) => {
-      const e = math(p1)
-      return e.string === 'Error' ? 'Error' : `${math(p1).eval().latex}`
-    }
+
     expression = expression.replace(regex, replacement)
 
     if (solution) {
@@ -68,7 +68,6 @@ export default function generateQuestion(question, generateds) {
     } else {
       solution = math(expression).eval().latex
     }
-
   } while (expressions && expressions.includes(expression))
 
   let tempQuestion = {
