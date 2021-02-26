@@ -8,27 +8,6 @@
   import qs from './questions'
   import queryString from 'query-string'
 
-  // export let questions = [
-  //   {
-  //     delay: 10,
-  //     expressions: ['3 * 4'],
-  //     solutions: ['12'],
-  //     variables: {},
-  //     type: 'result',
-  //     id: '1',
-  //     points: 1,
-  //   },
-  //   {
-  //     delay: 10,
-  //     expressions: ['&1 * &2'],
-  //     solutions: ['#{&1*&2}'],
-  //     variables: { '&1': '$e[2;9]', '&2': '$e[2;9]' },
-  //     type: 'result',
-  //     id: '2',
-  //     points: 1,
-  //   },
-  // ]
-
   export let location
   console.log('location', location)
 
@@ -267,7 +246,8 @@
       virtual-keyboards="numeric roman"
       virtual-keyboard-theme="apple"
       on:input="{onChangeMathField}"
-      bind:this="{mf}"></math-field>
+      bind:this="{mf}">
+    </math-field>
   </div>
   <!-- </div> -->
   <div

@@ -174,6 +174,28 @@ export default {
             '&1+&3+#{10-&1}+&2+#{10-&2}',
             '&3+&1+#{10-&1}+&2+#{10-&2}',
           ],
+          details: [
+            [
+              '\\textcolor{green}{&1}+\\textcolor{green}{#{10-&1}}+\\textcolor{orange}{&2}+\\textcolor{orange}{#{10-&2}}+&3',
+              '\\textcolor{green}{10}+\\textcolor{orange}{10}+&3'
+            ],
+            [
+              '\\textcolor{green}{&1}+\\textcolor{green}{#{10-&1}}+\\textcolor{orange}{&2}+&3+\\textcolor{orange}{#{10-&2}}',
+              '\\textcolor{green}{10}+\\textcolor{orange}{10}+&3',
+            ],
+            [
+              '\\textcolor{green}{&1}+\\textcolor{green}{#{10-&1}}+&3+\\textcolor{orange}{&2}+\\textcolor{orange}{#{10-&2}}',
+              '\\textcolor{green}{10}+&3+\\textcolor{orange}{10}',
+            ],
+            [
+              '\\textcolor{green}{&1}+&3+\\textcolor{green}{#{10-&1}}+\\textcolor{orange}{&2}+\\textcolor{orange}{#{10-&2}}',
+              '\\textcolor{green}{10}+&3+\\textcolor{orange}{10}+\\textcolor{orange}{#{10-&2}}',
+            ],
+            [
+              '&3+\\textcolor{green}{&1}+\\textcolor{green}{#{10-&1}}+\\textcolor{orange}{&2}+\\textcolor{orange}{#{10-&2}}',
+              '&3+\\textcolor{green}{10}+\\textcolor{orange}{10}',
+            ],
+          ],
           variables: [{ '&1': '$e{1}', '&2': '$e{1}', '&3': '$e{1}' }],
           type: 'result',
           defaultDelay: 10,
@@ -185,7 +207,6 @@ export default {
             '#{&6}+#{&1*10-(&6)}+#{&7}',
             '#{&6}+#{&7}+#{&1*10-(&6)}',
             '#{&7}+#{&6}+#{&1*10-(&6)}',
-
           ],
           variables: [
             {

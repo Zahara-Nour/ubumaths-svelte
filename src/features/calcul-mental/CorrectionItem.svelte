@@ -2,15 +2,15 @@
   import { math } from 'tinycas/build/math/math'
   import { ListItem, Icon, Button } from 'svelte-materialify/src'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
-  import { onMount } from 'svelte'
+  import { onMount, afterUpdate } from 'svelte'
 
   import { mdiCheckCircle } from '@mdi/js'
   import { mdiCloseCircle } from '@mdi/js'
 
   export let item
   export let addPoints
+  export let details
 
- 
   const q_exp = math(item.question)
   const s_exp = math(item.solution)
   const a_exp = math(item.answer)
@@ -19,68 +19,98 @@
   const correct = !badExpression && s_exp.equals(a_exp)
   const strictlyCorrect = !badExpression && s_exp.strictlyEquals(a_exp)
 
-  let correction
-  let corrections = []
+  const correction = createItem(false)
+  const detailedCorrection = createItem(true)
 
   onMount(() => {
     Mathlive.renderMathInDocument()
     if (correct) addPoints(item.points)
   })
 
-  switch (item.type) {
-    case 'result':
-      correction = q_exp.latex + '='
+  afterUpdate(() => {
+    Mathlive.renderMathInDocument()
+  })
 
-      if (empty) {
-        correction += `\\textcolor{green}{${s_exp.latex}}`
-        corrections.push('$$' + correction + '$$')
-        correction = "\\text{(tu n'as rien répondu)}"
-      } else if (badExpression || !correct) {
-        correction +=
-          '\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
-          item.answer_latex +
-          '}}\\text{  }'
-        correction += '\\color{green}' + s_exp.latex
-      } else {
-        correction += '\\color{green}' + item.answer_latex
+  console.log('****************')
 
-        if (!strictlyCorrect) {
-          correction +=
-            '\\color{black}\\text{ mais }\\color{green}' +
-            s_exp.latex +
-            "\\color{black}\\text{ c'est encore mieux !}"
+  function createItem(details) {
+    let line
+    let lines = []
+    switch (item.type) {
+      case 'result':
+        if (details) {
+          item.details.forEach((detail, i) => {
+            line = {}
+            if (i === 0) line.left = '$$' + q_exp.latex + '$$'
+            line.right = '$$' + detail + '$$'
+            lines.push(line)
+          })
+
+          line = {
+            right:
+              '$$' +
+              '\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
+              s_exp.latex +
+              '}' +
+              '$$',
+          }
+          lines.push(line)
+        } else {
+          line = q_exp.latex + '='
+          if (empty) {
+            line += `\\textcolor{green}{${s_exp.latex}}`
+            lines.push('$$' + line + '$$')
+            line = "\\text{(tu n'as rien répondu)}"
+          } else if (badExpression || !correct) {
+            line +=
+              '\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
+              item.answer_latex +
+              '}}\\text{  }'
+            line += '\\color{green}' + s_exp.latex
+          } else {
+            line += '\\color{green}' + item.answer_latex
+
+            if (!strictlyCorrect) {
+              line +=
+                '\\color{black}\\text{ mais }\\color{green}' +
+                s_exp.latex +
+                "\\color{black}\\text{ c'est encore mieux !}"
+            }
+          }
+          lines.push('$$' + line + '$$')
         }
-      }
-      corrections.push('$$' + correction + '$$')
-      break
 
-    case 'trou':
-      correction = q_exp.latex.replace(
-        /\\ldots/,
-        `\\textcolor{green}{${s_exp.latex}}`,
-      )
-      corrections.push('$$' + correction + '$$')
-      if (empty) {
-        correction = "\\text{(tu n'as rien répondu)}"
-        corrections.push('$$' + correction + '$$')
-      } else if (badExpression || !correct) {
-        correction = '\\text{(ta réponse: }'
-        correction += q_exp.latex.replace(
+        break
+
+      case 'trou':
+        line = q_exp.latex.replace(
           /\\ldots/,
-          `\\textcolor{red}{${item.answer_latex}}`,
+          `\\textcolor{green}{${s_exp.latex}}`,
         )
-        correction += '\\text{  )}'
-        corrections.push('$$' + correction + '$$')
-      } else {
-        correction += '\\color{green}' + item.answer_latex
+        lines.push('$$' + line + '$$')
+        if (empty) {
+          line = "\\text{(tu n'as rien répondu)}"
+          lines.push('$$' + line + '$$')
+        } else if (badExpression || !correct) {
+          line = '\\text{(ta réponse: }'
+          line += q_exp.latex.replace(
+            /\\ldots/,
+            `\\textcolor{red}{${item.answer_latex}}`,
+          )
+          line += '\\text{  )}'
+          lines.push('$$' + line + '$$')
+        } else {
+          line += '\\color{green}' + item.answer_latex
 
-        if (!strictlyCorrect) {
-          correction +=
-            '\\color{black}\\text{ mais }\\color{green}' +
-            s_exp.latex +
-            "\\color{black}\\text{ c'est encore mieux !}"
+          if (!strictlyCorrect) {
+            line +=
+              '\\color{black}\\text{ mais }\\color{green}' +
+              s_exp.latex +
+              "\\color{black}\\text{ c'est encore mieux !}"
+          }
         }
-      }
+    }
+    return lines
   }
 </script>
 
@@ -101,9 +131,24 @@
       </div>
 
       <div style="display:flex;flex-direction:column">
-        {#each corrections as correction}
-          {correction}
-        {/each}
+        {#if !details}
+          {#each correction as line}
+          <!-- don't remove this div because mathlive changes dom -->
+            <div>
+              {line}
+            </div>
+          {/each}
+        {:else}
+          <table>
+            {#each detailedCorrection as line}
+              <tr>
+                <td>{line.left || ''}</td>
+                <td>$$=$$</td>
+                <td>{line.right}</td>
+              </tr>
+            {/each}
+          </table>
+        {/if}
       </div>
     </div>
   </ListItem>

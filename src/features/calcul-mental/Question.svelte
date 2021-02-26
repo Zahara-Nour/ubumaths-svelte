@@ -1,5 +1,4 @@
 <script>
-  import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { math } from 'tinycas/build/math/math'
   export let question
 

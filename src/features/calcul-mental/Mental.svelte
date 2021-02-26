@@ -10,8 +10,8 @@
     CardTitle,
     CardSubtitle,
     CardText,
+    Button
   } from 'svelte-materialify/src'
-  import Button from 'svelte-materialify/src/components/Button'
   import ExpansionPanels, {
     ExpansionPanel,
   } from 'svelte-materialify/src/components/ExpansionPanels'
