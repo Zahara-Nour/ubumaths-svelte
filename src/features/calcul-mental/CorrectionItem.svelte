@@ -20,7 +20,7 @@
   const strictlyCorrect = !badExpression && s_exp.strictlyEquals(a_exp)
 
   const correction = createItem(false)
-  const detailedCorrection = createItem(true)
+  const detailedCorrection = item.details ? createItem(true) : null
 
   onMount(() => {
     Mathlive.renderMathInDocument()
@@ -30,8 +30,6 @@
   afterUpdate(() => {
     Mathlive.renderMathInDocument()
   })
-
-  console.log('****************')
 
   function createItem(details) {
     let line
@@ -83,30 +81,44 @@
         break
 
       case 'trou':
-        line = q_exp.latex.replace(
-          /\\ldots/,
-          `\\textcolor{green}{${s_exp.latex}}`,
-        )
-        lines.push('$$' + line + '$$')
-        if (empty) {
-          line = "\\text{(tu n'as rien répondu)}"
-          lines.push('$$' + line + '$$')
-        } else if (badExpression || !correct) {
-          line = '\\text{(ta réponse: }'
-          line += q_exp.latex.replace(
-            /\\ldots/,
-            `\\textcolor{red}{${item.answer_latex}}`,
-          )
-          line += '\\text{  )}'
-          lines.push('$$' + line + '$$')
-        } else {
-          line += '\\color{green}' + item.answer_latex
+        if (details) {
+          item.details.forEach((detail, i) => {
+            line =  {}
+            if (i===0) line.left = '$$' + detail + '$$'
+            if (i===item.details.length-1) {
+              line.right = '$$\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' + s_exp.latex + '}$$'
+            } else  {
+              line.right = '$$' + detail + '$$'
+            }
+            lines.push(line)
+          })
 
-          if (!strictlyCorrect) {
-            line +=
-              '\\color{black}\\text{ mais }\\color{green}' +
-              s_exp.latex +
-              "\\color{black}\\text{ c'est encore mieux !}"
+        } else {
+          line = q_exp.latex.replace(
+            /\\ldots/,
+            `\\textcolor{green}{${s_exp.latex}}`,
+          )
+          lines.push('$$' + line + '$$')
+          if (empty) {
+            line = "\\text{(tu n'as rien répondu)}"
+            lines.push('$$' + line + '$$')
+          } else if (badExpression || !correct) {
+            line = '\\text{(ta réponse: }'
+            line += q_exp.latex.replace(
+              /\\ldots/,
+              `\\textcolor{red}{${item.answer_latex}}`,
+            )
+            line += '\\text{  )}'
+            lines.push('$$' + line + '$$')
+          } else {
+            line += '\\color{green}' + item.answer_latex
+
+            if (!strictlyCorrect) {
+              line +=
+                '\\color{black}\\text{ mais }\\color{green}' +
+                s_exp.latex +
+                "\\color{black}\\text{ c'est encore mieux !}"
+            }
           }
         }
     }
@@ -131,14 +143,7 @@
       </div>
 
       <div style="display:flex;flex-direction:column">
-        {#if !details}
-          {#each correction as line}
-          <!-- don't remove this div because mathlive changes dom -->
-            <div>
-              {line}
-            </div>
-          {/each}
-        {:else}
+        {#if details && item.details}
           <table>
             {#each detailedCorrection as line}
               <tr>
@@ -148,6 +153,13 @@
               </tr>
             {/each}
           </table>
+        {:else}
+          {#each correction as line}
+            <!-- don't remove this div because mathlive changes dom -->
+            <div>
+              {line}
+            </div>
+          {/each}
         {/if}
       </div>
     </div>

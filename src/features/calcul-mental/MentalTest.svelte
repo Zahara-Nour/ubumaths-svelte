@@ -7,6 +7,7 @@
   import Correction from './Correction.svelte'
   import qs from './questions'
   import queryString from 'query-string'
+  import virtualKeyboard from './virtualKeyboard'
 
   export let location
   console.log('location', location)
@@ -41,113 +42,9 @@
   onMount(() => {
     mf.setOptions({
       virtualKeyboardMode: 'onfocus',
-      customVirtualKeyboardLayers: {
-        'layer-name': {
-          styles: '',
-          rows: [
-            [
-              {
-                class: 'keycap',
-                latex: '\\frac{x}{y}',
-              },
-            ],
-          ],
-        },
-        'layer-name2': {
-          styles: '',
-          rows: [
-            [
-              {
-                class: 'keycap',
-                latex: '7',
-              },
-              {
-                class: 'keycap',
-                latex: '8',
-              },
-              {
-                class: 'keycap',
-                latex: '9',
-              },
-              {
-                class: 'keycap',
-                latex: '\\div',
-              },
-            ],
-            [
-              {
-                class: 'keycap',
-                latex: '4',
-              },
-              {
-                class: 'keycap',
-                latex: '5',
-              },
-              {
-                class: 'keycap',
-                latex: '6',
-              },
-              {
-                class: 'keycap',
-                latex: '\\times',
-              },
-              
-            ],
-            [
-              {
-                class: 'keycap',
-                latex: '1',
-              },
-              {
-                class: 'keycap',
-                latex: '2',
-              },
-              {
-                class: 'keycap',
-                latex: '3',
-              },
-              {
-                class: 'keycap',
-                latex: '-',
-              },
-            ],
-            [
-              {
-                class: 'keycap',
-                latex: '0',
-              },
-              {
-                class: 'keycap',
-                latex: ',',
-              },
-              {
-                class: 'keycap',
-                latex: '=',
-              },
-              {
-                class: 'keycap',
-                latex: '+',
-              },
-            ],
-          ],
-        },
-      },
-      customVirtualKeyboards: {
-        'keyboard-name': {
-          label: 'Json',
-          tooltip: 'Json keyboard',
-          layer: 'layer-name',
-        },
-        'keyboard-name2': {
-          label: 'Json2',
-          tooltip: 'Json keyboard',
-          layer: 'layer-name2',
-        },
-      },
-      virtualKeyboards: 'all keyboard-name2 ',
+      ...virtualKeyboard,
     })
     mf.focus()
-    
   })
 
   onDestroy(() => {
@@ -246,7 +143,8 @@
       virtual-keyboards="numeric roman"
       virtual-keyboard-theme="apple"
       on:input="{onChangeMathField}"
-      bind:this="{mf}">
+      bind:this="{mf}"
+    >
     </math-field>
   </div>
   <!-- </div> -->

@@ -34,6 +34,7 @@
 <Button class="mt-2 mb-2" size="small" on:click="{toggleDetails}">
   Correction détaillée
 </Button>
+
 {#each items as item}
   <CorrectionItem item="{item}" addPoints="{addPoints}" details="{details}" />
 {/each}
