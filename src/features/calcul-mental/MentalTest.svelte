@@ -64,11 +64,23 @@
       questions = questions.filter(
         (q) => questions.indexOf(q) + 1 === parseInt(level, 10),
       )
-      for (let i = 0; i < 9; i++) questions.push(questions[0])
-      console.log('questions', questions)
+      const question = questions[0]
+      console.log("qestion", question)
+      if (question.options && question.options.includes('exhaust')) {
+        for (let i = 0; i < question.expressions.length; i++) {
+          questions[i] = {
+            ...question,
+            expressions: [question.expressions[i]],
+            solutions: question.solutions ? [question.solutions[i]] : null
+          }
+        }
+      } else {
+        for (let i = 0; i < 9; i++) questions.push(question)
+      }
     } else {
       questions = qs['Entiers']['Addition']['A trous']
     }
+    console.log('questions', questions)
   }
 
   $: {

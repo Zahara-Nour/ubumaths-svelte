@@ -6,7 +6,7 @@ import { mdiLinkVariantRemove } from '@mdi/js'
 export default function generateQuestion(question, generateds) {
   // firestore returns objects with read-only properties
   let expression
-  let solution
+  let solutions
   let variables
   let details
   let choice
@@ -56,39 +56,40 @@ export default function generateQuestion(question, generateds) {
     expression = expression.replace(regex, replacement)
   } while (expressions && expressions.includes(expression))
 
-
   if (question.solutions) {
-    solution = question.solutions[question.solutions.length === 1 ? 0 : choice]
-    Object.getOwnPropertyNames(variables).forEach((name) => {
-      const regex = new RegExp(name, 'g')
-      solution = solution.replace(regex, variables[name])
+    solutions = question.solutions[question.solutions.length === 1 ? 0 : choice]
+    solutions = solutions.map((solution) => {
+      if (question.variables) {
+        Object.getOwnPropertyNames(variables).forEach((name) => {
+          const regex = new RegExp(name, 'g')
+          solution = solution.replace(regex, variables[name])
+        })
+        solution = solution.replace(regex, replacement)
+        return solution
+      }
     })
-    solution = solution.replace(regex, replacement)
   } else {
-    solution = math(expression).eval().latex
+    solutions = [math(expression).eval().latex]
   }
 
   if (question.details) {
-    console.log("*details")
     details = question.details[question.details.length === 1 ? 0 : choice]
-    console.log(details)
-    details = details.map(c=> {
-    Object.getOwnPropertyNames(variables).forEach((name) => {
-      const regex = new RegExp(name, 'g')
-      
-      c = c.replace(regex, variables[name])
-      
+
+    details = details.map((c) => {
+      Object.getOwnPropertyNames(variables).forEach((name) => {
+        const regex = new RegExp(name, 'g')
+
+        c = c.replace(regex, variables[name])
+      })
+      c = c.replace(regex, replacement)
+      return c
     })
-    c = c.replace(regex, replacement)
-    console.log(c)
-    console.log('-------')
-    return c
-    })}
+  }
 
   return {
     points: 1,
     ...question,
-    solution,
+    solutions,
     expression,
     details,
   }

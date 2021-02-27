@@ -12,12 +12,14 @@
   export let details
 
   const q_exp = math(item.question)
-  const s_exp = math(item.solution)
+  const s_exp = 'sexp'
+  const s_exps = item.solutions.map((solution) => math(solution))
   const a_exp = math(item.answer)
   const empty = !item.answer
   const badExpression = a_exp.type === '!! Error !!'
-  const correct = !badExpression && s_exp.equals(a_exp)
-  const strictlyCorrect = !badExpression && s_exp.strictlyEquals(a_exp)
+  const correct = !badExpression && s_exps.some(e => e.equals(a_exp))
+  const strictlyCorrect = !badExpression && s_exps.some(e  => e.strictlyEquals(a_exp))
+  let com
 
   const correction = createItem(false)
   const detailedCorrection = item.details ? createItem(true) : null
@@ -35,6 +37,17 @@
     let line
     let lines = []
     switch (item.type) {
+      case 'decomposition':
+        if (details) {
+        } else {
+          item.solutions.forEach((solution, i) => {
+            line = {}
+            if (i === 0) line.left = '$$' + q_exp.latex + '$$'
+            line.right = '$$' + s_exps[i].latex + '$$'
+            lines.push(line)
+          })
+        }
+        break
       case 'result':
         if (details) {
           item.details.forEach((detail, i) => {
@@ -54,28 +67,29 @@
           }
           lines.push(line)
         } else {
-          line = q_exp.latex + '='
+          line = { left: '$$' + q_exp.latex + '$$' }
           if (empty) {
-            line += `\\textcolor{green}{${s_exp.latex}}`
-            lines.push('$$' + line + '$$')
-            line = "\\text{(tu n'as rien répondu)}"
+            line.right = '$$' + `\\textcolor{green}{${s_exps[0].latex}}` + '$$'
+            lines.push(line)
+            com = "(tu n'as rien répondu)"
           } else if (badExpression || !correct) {
-            line +=
+            line.right =
               '\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
               item.answer_latex +
-              '}}\\text{  }'
-            line += '\\color{green}' + s_exp.latex
+              '}}\\text{  }\\textcolor{green}{' +
+              s_exps[0].latex +
+              '}'
+            lines.push(line)
           } else {
-            line += '\\color{green}' + item.answer_latex
-
-            if (!strictlyCorrect) {
-              line +=
-                '\\color{black}\\text{ mais }\\color{green}' +
-                s_exp.latex +
-                "\\color{black}\\text{ c'est encore mieux !}"
-            }
+            line.right = '\\textcolor{green}' + item.answer_latex + '}'
+            lines.push(line)
+            // if (!strictlyCorrect) {
+            //   line +=
+            //     '\\color{black}\\text{ mais }\\color{green}' +
+            //     s_exp.latex +
+            //     "\\color{black}\\text{ c'est encore mieux !}"
+            // }
           }
-          lines.push('$$' + line + '$$')
         }
 
         break
@@ -83,42 +97,45 @@
       case 'trou':
         if (details) {
           item.details.forEach((detail, i) => {
-            line =  {}
-            if (i===0) line.left = '$$' + detail + '$$'
-            if (i===item.details.length-1) {
-              line.right = '$$\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' + s_exp.latex + '}$$'
-            } else  {
+            line = {}
+            if (i === 0) line.left = '$$' + detail + '$$'
+            if (i === item.details.length - 1) {
+              line.right =
+                '$$\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
+                s_exp.latex +
+                '}$$'
+            } else {
               line.right = '$$' + detail + '$$'
             }
             lines.push(line)
           })
-
         } else {
-          line = q_exp.latex.replace(
+
+          line = {left:'$$'+ q_exp.latex.replace(
             /\\ldots/,
-            `\\textcolor{green}{${s_exp.latex}}`,
-          )
-          lines.push('$$' + line + '$$')
+            `\\textcolor{green}{${s_exps[0].latex}}`,
+          ) +'$$'}
+          lines.push(line)
           if (empty) {
-            line = "\\text{(tu n'as rien répondu)}"
-            lines.push('$$' + line + '$$')
+            com = "(tu n'as rien répondu)"
+            
           } else if (badExpression || !correct) {
-            line = '\\text{(ta réponse: }'
-            line += q_exp.latex.replace(
+            com = '$$\\text{(ta réponse: }'
+            com += q_exp.latex.replace(
               /\\ldots/,
               `\\textcolor{red}{${item.answer_latex}}`,
             )
-            line += '\\text{  )}'
-            lines.push('$$' + line + '$$')
+            com += '\\text{  )}$$'
           } else {
-            line += '\\color{green}' + item.answer_latex
 
-            if (!strictlyCorrect) {
-              line +=
-                '\\color{black}\\text{ mais }\\color{green}' +
-                s_exp.latex +
-                "\\color{black}\\text{ c'est encore mieux !}"
-            }
+            // line += '\\color{green}' + item.answer_latex
+
+            // if (!strictlyCorrect) {
+            //   line +=
+            //     '\\color{black}\\text{ mais }\\color{green}' +
+            //     s_exp.latex +
+            //     "\\color{black}\\text{ c'est encore mieux !}"
+            // }
           }
         }
     }
@@ -143,25 +160,35 @@
       </div>
 
       <div style="display:flex;flex-direction:column">
+        <div>
         {#if details && item.details}
           <table>
             {#each detailedCorrection as line}
               <tr>
                 <td>{line.left || ''}</td>
-                <td>$$=$$</td>
-                <td>{line.right}</td>
+                <td>{line.right ? '$$=$$'  : ''}</td>
+                <td>{line.right || ''}</td>
               </tr>
             {/each}
           </table>
         {:else}
-          {#each correction as line}
-            <!-- don't remove this div because mathlive changes dom -->
-            <div>
-              {line}
-            </div>
-          {/each}
+          <table>
+            {#each correction as line}
+              <tr>
+                <td>{line.left || ''}</td>
+                <td>{line.right ? '$$=$$'  : ''}</td>
+                <td>{line.right || ''}</td>
+              </tr>
+            {/each}
+          </table>
+        
         {/if}
       </div>
+      {#if com}
+        {com}
+      {/if}
+      </div>
+      
     </div>
   </ListItem>
 </div>

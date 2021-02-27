@@ -84,7 +84,7 @@ export default {
           },
           {
             class: 'keycap',
-            latex:'\\frac{x}{y}'
+            latex:'\\frac{#0}{#0}'
           },
           {
             class: 'separator w6',

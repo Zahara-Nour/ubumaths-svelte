@@ -22,7 +22,7 @@
       question: question.expression,
       answer: answers[i],
       answer_latex: answers_latex[i],
-      solution: question.solution,
+      solutions: question.solutions,
       details: question.details,
       type: question.type,
       number: i + 1,
