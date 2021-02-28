@@ -17,8 +17,9 @@
   const a_exp = math(item.answer)
   const empty = !item.answer
   const badExpression = a_exp.type === '!! Error !!'
-  const correct = !badExpression && s_exps.some(e => e.equals(a_exp))
-  const strictlyCorrect = !badExpression && s_exps.some(e  => e.strictlyEquals(a_exp))
+  const correct = !badExpression && s_exps.some((e) => e.equals(a_exp))
+  const strictlyCorrect =
+    !badExpression && s_exps.some((e) => e.strictlyEquals(a_exp))
   let com
 
   const correction = createItem(false)
@@ -61,7 +62,7 @@
             right:
               '$$' +
               '\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-              s_exp.latex +
+              s_exps[0].latex +
               '}' +
               '$$',
           }
@@ -102,7 +103,7 @@
             if (i === item.details.length - 1) {
               line.right =
                 '$$\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-                s_exp.latex +
+                s_exps[0].latex +
                 '}$$'
             } else {
               line.right = '$$' + detail + '$$'
@@ -110,15 +111,18 @@
             lines.push(line)
           })
         } else {
-
-          line = {left:'$$'+ q_exp.latex.replace(
-            /\\ldots/,
-            `\\textcolor{green}{${s_exps[0].latex}}`,
-          ) +'$$'}
+          line = {
+            left:
+              '$$' +
+              q_exp.latex.replace(
+                /\\ldots/,
+                `\\textcolor{green}{${s_exps[0].latex}}`,
+              ) +
+              '$$',
+          }
           lines.push(line)
           if (empty) {
             com = "(tu n'as rien répondu)"
-            
           } else if (badExpression || !correct) {
             com = '$$\\text{(ta réponse: }'
             com += q_exp.latex.replace(
@@ -127,9 +131,7 @@
             )
             com += '\\text{  )}$$'
           } else {
-
             // line += '\\color{green}' + item.answer_latex
-
             // if (!strictlyCorrect) {
             //   line +=
             //     '\\color{black}\\text{ mais }\\color{green}' +
@@ -160,35 +162,33 @@
       </div>
 
       <div style="display:flex;flex-direction:column">
-        <div>
         {#if details && item.details}
           <table>
             {#each detailedCorrection as line}
               <tr>
                 <td>{line.left || ''}</td>
-                <td>{line.right ? '$$=$$'  : ''}</td>
+                <td>{line.right ? '$$=$$' : ''}</td>
                 <td>{line.right || ''}</td>
               </tr>
             {/each}
           </table>
         {:else}
-          <table>
-            {#each correction as line}
-              <tr>
-                <td>{line.left || ''}</td>
-                <td>{line.right ? '$$=$$'  : ''}</td>
-                <td>{line.right || ''}</td>
-              </tr>
-            {/each}
-          </table>
-        
+          <div>
+            <table>
+              {#each correction as line}
+                <tr>
+                  <td>{line.left || ''}</td>
+                  <td>{line.right ? '$$=$$' : ''}</td>
+                  <td>{line.right || ''}</td>
+                </tr>
+              {/each}
+            </table>
+          </div>
+          {#if com}
+            {com}
+          {/if}
         {/if}
       </div>
-      {#if com}
-        {com}
-      {/if}
-      </div>
-      
     </div>
   </ListItem>
 </div>
