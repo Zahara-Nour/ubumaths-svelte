@@ -10,13 +10,38 @@ export default function generateQuestion(question, generateds) {
   let variables
   let details
   let choice
+  let enounce
   const expressions = generateds ? generateds.map((g) => g.expression) : null
-  const regex = /#\{(.*?)\}/g
+  const regexExact = /#\{(.*?)\}/g
+  const regexDecimal = /##\{(.*?)\}/g
+  const regexExactLatex = /%\{(.*?)\}/g
+  const regexDecimalLatex = /%%\{(.*?)\}/g
 
-  const replacement = (matched, p1) => {
-    const e = math(p1)
-    return e.string === 'Error' ? 'Error' : `${math(p1).eval().latex}`
+  const replacementExact = (matched, p1) => {
+    
+    const e = math(p1)  
+    return e.string === 'Error' ? 'Error2' : math(p1).eval().string
   }
+
+  const replacementExactLatex = (matched, p1) => {
+    
+    const e = math(p1)    
+    return e.string === 'Error' ? 'Error2' : math(p1).eval().latex
+  }
+
+  const replacementDecimal = (matched, p1) => {
+    
+    const e = math(p1)
+    return e.string === 'Error' ? 'Error2' : math(p1).eval({decimal:true}).string
+  }
+
+  const replacementDecimalLatex = (matched, p1) => {
+    
+    const e = math(p1)
+    return e.string === 'Error' ? 'Error2' : math(p1).eval({decimal:true}).latex
+  }
+
+  
 
   if (!question) return emptyQuestion
 
@@ -53,7 +78,9 @@ export default function generateQuestion(question, generateds) {
       })
     }
 
-    expression = expression.replace(regex, replacement)
+    expression = expression.replace(regexDecimal, replacementDecimal)
+    expression = expression.replace(regexExact, replacementExact)
+   
   } while (expressions && expressions.includes(expression))
 
   if (question.solutions) {
@@ -64,12 +91,15 @@ export default function generateQuestion(question, generateds) {
           const regex = new RegExp(name, 'g')
           solution = solution.replace(regex, variables[name])
         })
-        solution = solution.replace(regex, replacement)
+        solution = solution.replace(regexDecimal, replacementDecimal)
+        solution = solution.replace(regexExact, replacementExact)
         return solution
       }
     })
   } else {
-    solutions = [math(expression).eval().latex]
+    console.log('eval', expression, math(expression).eval().latex)
+    
+    solutions = [math(expression).eval({decimal:question["result-type"]==='decimal'}).string]
   }
 
   if (question.details) {
@@ -81,9 +111,27 @@ export default function generateQuestion(question, generateds) {
 
         c = c.replace(regex, variables[name])
       })
-      c = c.replace(regex, replacement)
+
+      c = c.replace(regexDecimalLatex, replacementDecimalLatex)
+      c = c.replace(regexDecimal, replacementDecimal)
+      c = c.replace(regexExactLatex, replacementExactLatex)
+      c = c.replace(regexExact, replacementExact)
       return c
     })
+  }
+
+  if (question.enounce) {
+    enounce = question.enounce
+
+    Object.getOwnPropertyNames(variables).forEach((name) => {
+      const regex = new RegExp(name, 'g')
+
+      enounce = enounce.replace(regex, variables[name])
+    })
+    enounce = enounce.replace(regexDecimalLatex, replacementDecimalLatex)
+    enounce = enounce.replace(regexDecimal, replacementDecimal)
+    enounce = enounce.replace(regexExactLatex, replacementExactLatex)
+    enounce = enounce.replace(regexExact, replacementExact)
   }
 
   return {
@@ -92,5 +140,6 @@ export default function generateQuestion(question, generateds) {
     solutions,
     expression,
     details,
+    enounce,
   }
 }

@@ -22,6 +22,12 @@
   }
 </script>
 
+<svelte:head>
+	<title>UbuMaths</title>
+	<meta name="robots" content="noindex nofollow" />
+	<html lang="fr" />
+</svelte:head>
+
 <MaterialApp theme="{theme}">
   <Router url="{url}">
     <!-- <button on:click="{toggleTheme}">Toggle Theme</button> -->

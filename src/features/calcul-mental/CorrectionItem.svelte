@@ -14,6 +14,7 @@
   const q_exp = math(item.question)
   const s_exp = 'sexp'
   const s_exps = item.solutions.map((solution) => math(solution))
+  const d_exps = item.details // details are in latex form
   const a_exp = math(item.answer)
   const empty = !item.answer
   const badExpression = a_exp.type === '!! Error !!'
@@ -37,53 +38,51 @@
   function createItem(details) {
     let line
     let lines = []
+
     switch (item.type) {
       case 'decomposition':
         if (details) {
         } else {
-          item.solutions.forEach((solution, i) => {
-            line = {}
-            if (i === 0) line.left = '$$' + q_exp.latex + '$$'
-            line.right = '$$' + s_exps[i].latex + '$$'
-            lines.push(line)
+          line = '$$\\begin{align*}' + q_exp.latex
+          s_exps.forEach((solution, i) => {
+            if (i !== 0) line += ' \\\\ '
+            line += '& =' + solution.latex
           })
+          line += '\\end{align*}$$'
+          lines.push(line)
         }
         break
+
       case 'result':
         if (details) {
-          item.details.forEach((detail, i) => {
-            line = {}
-            if (i === 0) line.left = '$$' + q_exp.latex + '$$'
-            line.right = '$$' + detail + '$$'
-            lines.push(line)
+          line = '$$\\begin{align*}' + q_exp.latex
+          d_exps.forEach((detail, i) => {
+            if (i !== 0) line += ' \\\\ '
+            line += '& =' + detail
           })
-
-          line = {
-            right:
-              '$$' +
-              '\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-              s_exps[0].latex +
-              '}' +
-              '$$',
-          }
+          line +=
+            ' \\\\ & =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
+            s_exps[0].latex +
+            '}'
+          line += '\\end{align*}$$'
           lines.push(line)
         } else {
-          line = { left: '$$' + q_exp.latex + '$$' }
+          // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
+          line = '$$' + q_exp.latex
           if (empty) {
-            line.right = '$$' + `\\textcolor{green}{${s_exps[0].latex}}` + '$$'
-            lines.push(line)
+            line += `=\\textcolor{green}{${s_exps[0].latex}}` + '$$'
+
             com = "(tu n'as rien répondu)"
           } else if (badExpression || !correct) {
-            line.right =
-              '\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
+            line +=
+              '=\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
               item.answer_latex +
               '}}\\text{  }\\textcolor{green}{' +
               s_exps[0].latex +
-              '}'
-            lines.push(line)
+              '}$$'
           } else {
-            line.right = '\\textcolor{green}' + item.answer_latex + '}'
-            lines.push(line)
+            line += '=\\textcolor{green}{' + item.answer_latex + '}$$'
+
             // if (!strictlyCorrect) {
             //   line +=
             //     '\\color{black}\\text{ mais }\\color{green}' +
@@ -91,35 +90,36 @@
             //     "\\color{black}\\text{ c'est encore mieux !}"
             // }
           }
+          lines.push(line)
         }
 
         break
 
       case 'trou':
         if (details) {
+          line = '$$\\begin{align*}'
           item.details.forEach((detail, i) => {
-            line = {}
-            if (i === 0) line.left = '$$' + detail + '$$'
+            if (i === 0) line += detail
+            if (i >1)   line +=' \\\\ '
             if (i === item.details.length - 1) {
-              line.right =
-                '$$\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
+              line +=
+                '& =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
                 s_exps[0].latex +
-                '}$$'
+                '}'
             } else {
-              line.right = '$$' + detail + '$$'
+              line += '& ='+ detail
             }
+            line += '\\end{align*}$$'
             lines.push(line)
           })
         } else {
-          line = {
-            left:
-              '$$' +
+          line = '$$' +
               q_exp.latex.replace(
                 /\\ldots/,
                 `\\textcolor{green}{${s_exps[0].latex}}`,
               ) +
-              '$$',
-          }
+              '$$'
+          
           lines.push(line)
           if (empty) {
             com = "(tu n'as rien répondu)"
@@ -163,27 +163,18 @@
 
       <div style="display:flex;flex-direction:column">
         {#if details && item.details}
-          <table>
-            {#each detailedCorrection as line}
-              <tr>
-                <td>{line.left || ''}</td>
-                <td>{line.right ? '$$=$$' : ''}</td>
-                <td>{line.right || ''}</td>
-              </tr>
-            {/each}
-          </table>
+          {#each detailedCorrection as line}
+            <div class="ml-2 mr-2 mt-2 mb-2">
+              {line}
+            </div>
+          {/each}
         {:else}
-          <div>
-            <table>
-              {#each correction as line}
-                <tr>
-                  <td>{line.left || ''}</td>
-                  <td>{line.right ? '$$=$$' : ''}</td>
-                  <td>{line.right || ''}</td>
-                </tr>
-              {/each}
-            </table>
-          </div>
+          {#each correction as line}
+            <div class="ml-2 mr-2 mt-2 mb-2">
+              {line}
+            </div>
+          {/each}
+
           {#if com}
             {com}
           {/if}
