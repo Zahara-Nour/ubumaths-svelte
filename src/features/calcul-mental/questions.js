@@ -929,7 +929,7 @@ export default {
           ],
           expressions: ['&3+&6'],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
@@ -949,7 +949,7 @@ export default {
           ],
           expressions: ['&3+&7', '&7+&3'],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
@@ -968,7 +968,7 @@ export default {
           ],
           expressions: ['&3+&6'],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
@@ -987,11 +987,11 @@ export default {
           ],
           expressions: ['&3+&6'],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
       ],
-      "A trou": [
+      'A trou': [
         {
           description: 'Compléter une addition à trou ',
           subdescription:
@@ -1008,8 +1008,8 @@ export default {
           ],
           expressions: ['&3+?=##{&3+&6}'],
           type: 'trou',
-          solutions:[['&6']],
-          'result-type':'decimal',
+          solutions: [['&6']],
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
@@ -1028,9 +1028,9 @@ export default {
             },
           ],
           expressions: ['&3+?=##{&7+&3}', '?+&3=##{&7+&3}'],
-          solutions:[['&7']],
+          solutions: [['&7']],
           type: 'trou',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
@@ -1049,8 +1049,8 @@ export default {
           ],
           expressions: ['&3+?=##{&6+&3}', '?+&3=##{&6+&3}'],
           type: 'trou',
-          solutions:[['&6']],
-          'result-type':'decimal',
+          solutions: [['&6']],
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
@@ -1068,19 +1068,18 @@ export default {
             },
           ],
           expressions: ['&3+?=##{&6+&3}', '?+&3=##{&6+&3}'],
-          solutions:[['&6']],
+          solutions: [['&6']],
           type: 'trou',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
       ],
     },
-    Multiplication:{
-      Résultat:[
+    Multiplication: {
+      Résultat: [
         {
           description: 'Calculer un produit',
-          subdescription:
-            'Un des facteurs est un entier',
+          subdescription: 'Un des facteurs est un entier',
           variables: [
             {
               '&1': '$e[2;9]',
@@ -1089,13 +1088,12 @@ export default {
           ],
           expressions: ['&3*&4', '&4*&3'],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
           description: 'Calculer un produit',
-          subdescription:
-            'Un des facteurs est un entier',
+          subdescription: 'Un des facteurs est un entier',
           variables: [
             {
               '&1': '$e[2;9]',
@@ -1104,29 +1102,27 @@ export default {
           ],
           expressions: ['&1*&2', '&2*&1'],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
           description: 'Calculer un produit',
-          subdescription:
-            'Multiplier par 10, 100 ou 1000',
+          subdescription: 'Multiplier par 10, 100 ou 1000',
           variables: [
             {
               '&1': '$d{$e[1;2];$e[0;3]}',
               '&2': '$l{10;100;1000}',
-              '&3': '$l{$e[1;9];$e[11;99];$e[101;999]}:1000'
+              '&3': '$l{$e[1;9];$e[11;99];$e[101;999]}:1000',
             },
           ],
           expressions: ['##{&3}*&2', '&1*&2'],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
           description: 'Calculer un produit',
-          subdescription:
-            'Multiplier par 0,1 ; 0,01 ou 0,001',
+          subdescription: 'Multiplier par 0,1 ; 0,01 ou 0,001',
           variables: [
             {
               '&1': '$d{$e[1;3];$e[0;2]}',
@@ -1135,13 +1131,12 @@ export default {
           ],
           expressions: ['&1*##{&2}', '##{&2}*&1'],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
           description: 'Calculer un produit',
-          subdescription:
-            'Multiplier deux nombres décimaux',
+          subdescription: 'Multiplier deux nombres décimaux',
           variables: [
             {
               '&1': '$e[2;9]',
@@ -1152,14 +1147,14 @@ export default {
           ],
           expressions: ['##{&1*&2}*##{&3*&4}'],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
           description: 'Calculer un produit',
-          subdescription:
-            "Determiner un produit à partir d'un autre",
-          "enounce":'Sachant que $$%%{&1} \\times %%{&2}=%%{&1*&2}$$ combien vaut $$%%{&1*&3} \\times %%{&2}$$ ?',
+          subdescription: "Determiner un produit à partir d'un autre",
+          enounce:
+            'Sachant que $$%%{&1} \\times %%{&2}=%%{&1*&2}$$ combien vaut $$%%{&1*&3} \\times %%{&2}$$ ?',
           variables: [
             {
               '&1': '$d{$e[1;2];$e[0;2]}',
@@ -1169,19 +1164,18 @@ export default {
           ],
           options: ['no-exp'],
           expressions: ['##{&1*&3}* &2'],
-          solutions:[['##{&1*&3*&2}']],
+          solutions: [['##{&1*&3*&2}']],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
-      ]
+      ],
     },
-    Division:{
-      Résultat:[
+    Division: {
+      Résultat: [
         {
           description: 'Calculer un quotient',
-          subdescription:
-            'Diviser par 10, 100 ou 1000',
+          subdescription: 'Diviser par 10, 100 ou 1000',
           variables: [
             {
               '&1': '$d{$e[1;3];$e[0;2]}',
@@ -1190,29 +1184,27 @@ export default {
           ],
           expressions: ['&1:&2'],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
           description: 'Calculer un quotient',
-          subdescription:
-            'Diviser par 0,1 ; 0,01 ou 0,001',
+          subdescription: 'Diviser par 0,1 ; 0,01 ou 0,001',
           variables: [
             {
               '&1': '$d{$e[1;2];$e[0;3]}',
               '&2': '$l{0.1;0.01;0.001}',
-              '&3': '$l{$e[1;9];$e[11;99];$e[101;999]}:1000'
+              '&3': '$l{$e[1;9];$e[11;99];$e[101;999]}:1000',
             },
           ],
           expressions: ['##{&3}:##{&2}', '&1:##{&2}'],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
         {
           description: 'Calculer un quotient',
-          subdescription:
-            'Deux nombres décimaux',
+          subdescription: 'Deux nombres décimaux',
           variables: [
             {
               '&1': '$e[2;9]',
@@ -1221,29 +1213,300 @@ export default {
             },
           ],
           expressions: ['##{&1*&2*&3}:##{&1*&3}'],
-          details:[['##{&1*&2}:##{&1}']],
+          details: [['##{&1*&2}:##{&1}']],
           type: 'result',
-          'result-type':'decimal',
+          'result-type': 'decimal',
           defaultDelay: 10,
         },
-      ]
-
-    }
+      ],
+    },
   },
-  Relatifs:{
-    Addition:{
-      Résultat:[
+  Relatifs: {
+    Addition: {
+      'Droite graduée': [
         {
           description: 'Calculer une somme ou une différence',
           subdescription: "A l'aide de la droite graduée",
-          expressions: ['(-&1)+&2','(-&1)-&2', '&3-&1' ],
-          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]','&3':'$e[1;&1-1]' }],
+          expressions: ['(-&1)+&2', '(-&1)-&2', '&3-&1'],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[1;&1-1]' }],
           type: 'result',
           defaultDelay: 10,
         },
-      ]
+        {
+          description: 'Compléter une égalité',
+          subdescription: "A l'aide de la droite graduée",
+          expressions: [
+            '(-&1)+?=#{(-&1)+&2}',
+            '(-&1)+?=#{(-&1)+(-&2)}',
+            '&1+?=#{&1+(-&2)}',
+            '?+(-&1)=#{(-&1)+&2}',
+            '?+(-&1)=#{(-&1)+(-&2)}',
+            '?+&1=#{&1+(-&2)}',
+          ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          solutions: [
+            ['&2'],
+            ['(-&2)'],
+            ['(-&2)'],
+            ['&2'],
+            ['(-&2)'],
+            ['(-&2)'],
+          ],
+          type: 'trou',
+          defaultDelay: 10,
+        },
+      ],
+      Résultat: [
+        {
+          description: 'Calculer une somme',
+          subdescription: 'Cas général',
+          expressions: ['(-&1)+&2', '(-&1)+(-&2)', '&1+(-&2)'],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Compléter une égalité',
+          subdescription: 'Cas général',
+          expressions: [
+            '(-&1)+?=#{(-&1)+&2}',
+            '(-&1)+?=#{(-&1)+(-&2)}',
+            '&1+?=#{&1+(-&2)}',
+            '?+(-&1)=#{(-&1)+&2}',
+            '?+(-&1)=#{(-&1)+(-&2)}',
+            '?+&1=#{&1+(-&2)}',
+          ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          solutions: [
+            ['&2'],
+            ['(-&2)'],
+            ['(-&2)'],
+            ['&2'],
+            ['(-&2)'],
+            ['(-&2)'],
+          ],
+          type: 'trou',
+          defaultDelay: 10,
+        },
+        {
+          description: "Simplifier l'écriture",
+          enounce:
+            'Simplifie cette expression en enlevant les doubles signes et les parenthèses inutiles',
+          expressions: [
+            '(-&1)+(-&2)',
+            '(-&1)+&2',
+            '&1+(-&2)',
+            '(-&1)-(-&2)',
+            '(-&1)-&2',
+            '&1-(-&2)',
+          ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          solutions: [
+            ['-&1-&2'],
+            ['-&1+&2'],
+            ['&1-&2'],
+            ['-&1+&2'],
+            ['-&1-&2'],
+            ['&1+&2'],
+          ],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Calculer',
+          subdescription: 'Avec écriture simplifiée',
+          expressions: ['-&1+&2', '-&1-&2', '&3-&1'],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[1;&1-1]' }],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Multiplier',
+          expressions: ['(-&1)*&2', '(-&1)*(-&2)', '&1*(-&2)'],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Diviser',
+          expressions: [
+            '(-#{&1*&2}):&2',
+            '(-#{&1*&2}):(-&2)',
+            '#{&1*&2}:(-&2)',
+          ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Multiplication à trou',
+          expressions: [
+            '(-&1)*?=#{-&1*&2}',
+            '(-&1)*?=#{(-&1)*(-&2)}',
+            '&1*?=#{&1*(-&2)}',
+            '?*(-&1)=#{-&1*&2}',
+            '?*(-&1)=#{(-&1)*(-&2)}',
+            '?*&1=#{&1*(-&2)}',
+          ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          solutions: [['&2'], ['-&2'], ['-&2'], ['&2'], ['-&2'], ['-&2']],
+          type: 'trou',
+          defaultDelay: 10,
+        },
+      ],
+    },
+  },
+  Fractions: {
+    'Différentes écritures': {
+      'Forme décimale': [
+        {
+          description: "Déterminer la forme décimale d'une fraction",
+          expressions: ['&2/&1'],
+          variables: [{ '&1': '$l{2;4;5;10}', '&2': '$e[1;&1+1]' }],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Déterminer la forme fractionnaire',
+          expressions: ['##{&2/&1}'],
+          variables: [{ '&1': '$l{2;4;5;10}', '&2': '$e[1;&1-1]' }],
+          type: 'result',
+          defaultDelay: 10,
+        },
+      ],
+      'Egalité de fractions': [
+        {
+          description: 'Compléter une égalité de fractions',
+          expressions: [
+            '&2/&1=?/#{&1*&3}',
+            '&2/&1=#{&2*&3}/?',
+            '?/#{&1*&3}=&2/&1',
+            '#{&2*&3}/?=&2/&1',
+          ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[1;&1-1]', '&3': '$e[2;9]' }],
+          solutions: [['#{&2*&3}'], ['#{&1*&3}'], ['#{&2*&3}'], ['#{&1*&3}']],
+          type: 'trou',
+          defaultDelay: 10,
+        },
+      ],
+      Simplification: [
+        {
+          description: 'Simplifier une fraction',
+          enounce: 'Simplifier le plus possible',
+          expressions: ['#{&2*&3}/#{&1*&3}', '#{&1*&3}/#{&2*&3}'],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[1;&1-1]', '&3': '$e[2;9]' }],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Simplifier une fraction',
+          enounce: 'Simplifier le plus possible (avec signes)',
+          expressions: [
+            '(-#{&2*&3})/#{&1*&3}',
+            '(-#{&1*&3})/#{&2*&3}',
+            '#{&2*&3}/(-#{&1*&3})',
+            '#{&1*&3}/(-#{&2*&3})',
+            '(-#{&2*&3})/(-#{&1*&3})',
+            '(-#{&1*&3})/(-#{&2*&3})',
+          ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[1;&1-1]', '&3': '$e[2;9]' }],
+          type: 'result',
+          defaultDelay: 10,
+        },
+      ],
+    },
+    Calcul: {
+      'Addition et Soustraction': [
+        {
+          description: 'Additionner ou soustraire',
+          description:
+            'Fractions de même dénominateur, nombres positifs, sans simplification',
+          expressions: ['&1/&3+&2/&3', '&1/&3-&2/&3'],
+          variables: [
+            {
+              '&1': '$e[2;13]',
+              '&2': '$e[2;13]',
+              '&3': '$e[2;25]\\{cd(&1);cd(&2);cd(&2+&1)}',
+            },
+            {
+              '&1': '$e[3;13]',
+              '&2': '$e[2;&1-1]',
+              '&3': '$e[2;25]\\{cd(&1);cd(&2);cd(&1-&2)}',
+            }
+          ],
+          type: 'result',
+          details: [['\\frac{&1+&2}{&3}'],['\\frac{&1-&2}{&3}']],
+          // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
+          defaultDelay: 30,
+        },
+        {
+          description: 'Additionner ou soustraire',
+          subdescription:
+            'Fractions de même dénominateur, nombres positifs, simplification intermediaire possible, simplification finale',
+          expressions: [
+            '#{&2*&4}/#{&1*&3}+#{(&1-&2)*&4}/#{&1*&3}',
+            '#{&1*&4}/#{&2*&3}-#{(&1-&2)*&4}/#{&2*&3}',
+          ],
+          // expressions: ['&1+&2+&3+&4'],
+          details: [
+            [
+              '\\frac{#{&2*&4}+#{(&1-&2)*&4}}{#{&1*&3}}',
+              '\\frac{#{&1*&4}}{#{&1*&3}}',
+              '\\frac{#{&1*&4}:#{pgcd(&1*&3;&1*&4)}}{#{&1*&3}:#{pgcd(&1*&3;&1*&4)}}',
+            ],
+            [
+              '\\frac{#{&1*&4}-#{(&1-&2)*&4}}{#{&2*&3}}',
+              '\\frac{#{&2*&4}}{#{&2*&3}}',
+              '\\frac{#{&2*&4}:#{pgcd(&2*&3;&2*&4)}}{#{&2*&3}:#{pgcd(&2*&3;&2*&4)}}',
+            ],
+          ],
+          variables: [
+            {
+              '&1': '$e[3;9]',
+              '&2': '$e[2;&1-1]',
+              '&3': '$e[2;9]',
+              '&4': '$e[2;9]',
+            },
+          ],
+          type: 'result',
 
-      
-    }
-  }
+          defaultDelay: 10,
+        },
+        {
+          description: 'Additionner ou soustraire',
+          subdescription:
+            'Fractions de même dénominateur, nombres positifs, pas de simplification intermediaire, simplification finale',
+          expressions: [
+            '#{&2*&4}/#{&1*&3}+#{(&1-&2)*&4}/#{&1*&3}',
+            '#{&1*&4}/#{&2*&3}-#{(&1-&2)*&4}/#{&2*&3}',
+          ],
+          // expressions: ['&1+&2+&3+&4'],
+          details: [
+            [
+              '\\frac{#{&2*&4}+#{(&1-&2)*&4}}{#{&1*&3}}',
+              '\\frac{#{&1*&4}}{#{&1*&3}}',
+              '\\frac{#{&1*&4}:&1}{#{&1*&3}:&1}',
+            ],
+            [
+              '\\frac{#{&1*&4}-#{(&1-&2)*&4}}{#{&2*&3}}',
+              '\\frac{#{&2*&4}}{#{&2*&3}}',
+              '\\frac{#{&2*&4}:&2}{#{&2*&3}:&2}',
+            ],
+          ],
+          variables: [
+            {
+              '&1': '$l{3;5;7;11}',
+              '&2': '$l{2;3;5;7;11}\\[&1;11]',
+              '&3': '$l{2;3;5;7;11}\\{&1;&2;&1-&2}',
+              '&4': '$l{2;3;5;7;11}\\{&1;&2;&3}',
+            },
+          ],
+          type: 'result',
+
+          defaultDelay: 10,
+        },
+      ],
+    },
+  },
 }

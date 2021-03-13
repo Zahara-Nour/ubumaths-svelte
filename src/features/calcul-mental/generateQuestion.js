@@ -20,6 +20,11 @@ export default function generateQuestion(question, generateds) {
   const replacementExact = (matched, p1) => {
     
     const e = math(p1)  
+    if (e.string === 'Error') {
+      console.log('matched', matched)
+      console.log('p1',p1)
+      console.log("****ERROR ",e)
+    }
     return e.string === 'Error' ? 'Error2' : math(p1).eval().string
   }
 
@@ -61,15 +66,18 @@ export default function generateQuestion(question, generateds) {
         .forEach((name, i) => {
           // console.log('\n treating', name, variables[name])
           let generated = variables[name]
+          console.log("\n\n\nVariable",name,variables[name])
 
           // replace the precedent variables by their generated value
           for (let j = 1; j < i + 1; j++) {
             const precedentName = `&${j}`
             const regex = new RegExp(precedentName, 'g')
             generated = generated.replace(regex, variables[precedentName])
+            console.log("generated", generated)
           }
           generated = math(generated).generate().string
           variables[name] = generated
+          console.log("generated", generated)
         })
 
       Object.getOwnPropertyNames(variables).forEach((name) => {
