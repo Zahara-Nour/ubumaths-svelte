@@ -57,8 +57,11 @@
         if (details) {
           line = '$$\\begin{align*}' + q_exp.latex
           d_exps.forEach((detail, i) => {
-            if (i !== 0) line += ' \\\\ '
-            line += '& =' + detail
+            
+            if (detail !== s_exps[0].latex) {
+              if (i !== 0) line += ' \\\\ '
+              line += '& =' + detail
+            }
           })
           line +=
             ' \\\\ & =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +

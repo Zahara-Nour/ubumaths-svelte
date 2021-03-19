@@ -30,8 +30,8 @@
     }
   }
 
-  $: if (mf) mf.setValue(math(question.expression).latex)
-  $: console.log('enounce', question.enounce)
+  $: if (mf) mf.setValue(math(question.expression).toLatex({addBrackets:true}))
+  // $: console.log('enounce', question.enounce)
 </script>
 
 <div>

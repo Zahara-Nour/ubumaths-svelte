@@ -18,35 +18,33 @@ export default function generateQuestion(question, generateds) {
   const regexDecimalLatex = /%%\{(.*?)\}/g
 
   const replacementExact = (matched, p1) => {
-    
-    const e = math(p1)  
+    const e = math(p1)
     if (e.string === 'Error') {
       console.log('matched', matched)
-      console.log('p1',p1)
-      console.log("****ERROR ",e)
+      console.log('p1', p1)
+      console.log('****ERROR ', e)
     }
     return e.string === 'Error' ? 'Error2' : math(p1).eval().string
   }
 
   const replacementExactLatex = (matched, p1) => {
-    
-    const e = math(p1)    
+    const e = math(p1)
     return e.string === 'Error' ? 'Error2' : math(p1).eval().latex
   }
 
   const replacementDecimal = (matched, p1) => {
-    
     const e = math(p1)
-    return e.string === 'Error' ? 'Error2' : math(p1).eval({decimal:true}).string
+    return e.string === 'Error'
+      ? 'Error2'
+      : math(p1).eval({ decimal: true }).string
   }
 
   const replacementDecimalLatex = (matched, p1) => {
-    
     const e = math(p1)
-    return e.string === 'Error' ? 'Error2' : math(p1).eval({decimal:true}).latex
+    return e.string === 'Error'
+      ? 'Error2'
+      : math(p1).eval({ decimal: true }).latex
   }
-
-  
 
   if (!question) return emptyQuestion
 
@@ -66,18 +64,18 @@ export default function generateQuestion(question, generateds) {
         .forEach((name, i) => {
           // console.log('\n treating', name, variables[name])
           let generated = variables[name]
-          console.log("\n\n\nVariable",name,variables[name])
+          // console.log("\n\n\nVariable",name,variables[name])
 
           // replace the precedent variables by their generated value
           for (let j = 1; j < i + 1; j++) {
             const precedentName = `&${j}`
             const regex = new RegExp(precedentName, 'g')
             generated = generated.replace(regex, variables[precedentName])
-            console.log("generated", generated)
+            // console.log("generated", generated)
           }
           generated = math(generated).generate().string
           variables[name] = generated
-          console.log("generated", generated)
+          // console.log("generated", generated)
         })
 
       Object.getOwnPropertyNames(variables).forEach((name) => {
@@ -88,7 +86,6 @@ export default function generateQuestion(question, generateds) {
 
     expression = expression.replace(regexDecimal, replacementDecimal)
     expression = expression.replace(regexExact, replacementExact)
-   
   } while (expressions && expressions.includes(expression))
 
   if (question.solutions) {
@@ -105,9 +102,12 @@ export default function generateQuestion(question, generateds) {
       }
     })
   } else {
-    console.log('eval', expression, math(expression).eval().latex)
-    
-    solutions = [math(expression).eval({decimal:question["result-type"]==='decimal'}).string]
+    // console.log('eval', expression, math(expression).eval().latex)
+
+    solutions = [
+      math(expression).eval({ decimal: question['result-type'] === 'decimal' })
+        .string,
+    ]
   }
 
   if (question.details) {
@@ -126,6 +126,29 @@ export default function generateQuestion(question, generateds) {
       c = c.replace(regexExact, replacementExact)
       return c
     })
+
+    details = details.reduce((acc, d) => {
+      // console.log('d', d)
+      // console.log('acc', acc)
+
+      const regex = /^(.*)\?\?/
+      const found = d.match(regex)
+     
+
+      if (found) {
+        //  console.log('found', found)
+        const tests = found[1].split('&&')
+        console.log("tests", tests)
+        if (tests.every((t) => math(t).eval().string === 'true')) {
+          // console.log('tests ok, replace ', d, ' with ', d.replace(found[0], ''))
+          d = d.replace(found[0], '')
+          acc.push(d)
+        }
+      } else {
+        acc.push(d)
+      }
+      return acc
+    }, [])
   }
 
   if (question.enounce) {
