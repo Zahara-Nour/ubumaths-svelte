@@ -12,6 +12,7 @@ export default function generateQuestion(question, generateds) {
   let choice
   let enounce
   let conditions
+  let letters
 
   const expressions = generateds ? generateds.map((g) => g.expression) : []
   const regexExact = /#\{(.*?)\}/g
@@ -129,11 +130,27 @@ export default function generateQuestion(question, generateds) {
     })
   } else {
     // console.log('eval', expression, math(expression).eval().latex)
+    let params = { decimal: question['result-type'] === 'decimal' }
 
-    solutions = [
-      math(expression).eval({ decimal: question['result-type'] === 'decimal' })
-        .string,
-    ]
+    if (question.letters) {
+      letters = question.letters[question.letters.length === 1 ? 0 : choice]
+      console.log('letters', letters)
+
+      Object.getOwnPropertyNames(letters).forEach((letter) => {
+        if (letter.startsWith('&')) {
+          const value = letters[letter]
+          letters[variables[letter]] = value.startsWith('&')
+            ? variables[value]
+            : value
+        } else if (letters[letter].startsWith('&')) {
+          letters[letter] = variables[letters[letter]]
+        }
+      })
+      console.log('letters', letters)
+      params = { ...params, ...letters }
+    }
+
+    solutions = [math(expression).eval(params).string]
   }
 
   if (question.details) {

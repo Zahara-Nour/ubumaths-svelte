@@ -2047,4 +2047,35 @@ export default {
       ],
     },
   },
+  'Calcul littéral':{
+    'Calculs':{
+      'Par substitution':[
+        {
+          description: 'Calculer en substituant les variables',
+          subscription: 'Entiers naturels',
+          enounces:["Calculer $$&5$$ avec $$&1=&2$$"],
+          expressions: ['&5'],
+          variables: [
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+              '&4': '$e[2;9]',
+              '&5': '&3&1+&4',
+            },
+          ],
+          letters: [
+            {
+              '&1':'&2'
+            }
+          ],
+          options: ['no-exp'],
+          type: 'result',
+          details: [['&3 \\times &2+&4','#{&3*&2}+&4', '#{&3*&2+&4}']],
+          // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
+          defaultDelay: 30,
+        },
+      ]
+    }
+  }
 }
