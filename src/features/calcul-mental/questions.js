@@ -1416,6 +1416,140 @@ export default {
         },
       ],
     },
+    'Egalité à compléter': {
+      Définition: [
+        {
+          description: 'Compléter une égalité',
+          subdescription: "Définition d'un quotient",
+          expressions: ['&2*?=&1', '?*&2=&1'],
+          variables: [{ '&1': '$e[2;19]', '&2': '$e[2;19]\\{cd(&1)}' }],
+          // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
+          solutions: [['&1/&2']],
+          details: [['&1:&2']],
+          type: 'trou',
+          defaultDelay: 10,
+        },
+      ],
+      'Addition - Soustraction': [
+        {
+          description: 'Compléter une égalité',
+          subdescription: 'Addition ou soustraction',
+          expressions: [
+            '?/&3+&2/&3=#{&1+&2}/&3',
+            '&1/?+&2/&3=#{&1+&2}/&3',
+            '&1/&3+?/&3=#{&1+&2}/&3',
+            '&1/&3-&2/?=#{&1-&2}/&3',
+            '?/&3-&2/&3=#{&1-&2}/&3',
+            '&1/&3-?/&3=#{&1-&2}/&3',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;19]\\{cd(&1);cd(&2)}',
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;19]\\{cd(&1);cd(&2)}',
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;19]\\{cd(&1);cd(&2)}',
+            },
+            {
+              '&1': '$e[3;9]',
+              '&2': '$e[2;&1-1]',
+              '&3': '$e[2;19]\\{cd(&1);cd(&2)}',
+            },
+            {
+              '&1': '$e[3;9]',
+              '&2': '$e[2;&1-1]',
+              '&3': '$e[2;19]\\{cd(&1);cd(&2)}',
+            },
+            {
+              '&1': '$e[3;9]',
+              '&2': '$e[2;&1-1]',
+              '&3': '$e[2;19]\\{cd(&1);cd(&2)}',
+            },
+          ],
+          // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
+          solutions: [['&1'], ['&3'], ['&2'], ['&3'], ['&1'], ['&2']],
+          type: 'trou',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Compléter une égalité',
+          subdescription: 'Addition ou soustraction, avec nombres relatifs',
+          expressions: [
+            '?/&3+&2/&3=#{&1+&2}/&3',
+            '&1/?+&2/&3=#{&1+&2}/&3',
+            '&1/&3+?/&3=#{&1+&2}/&3',
+            '&1/&3-&2/?=#{&1-&2}/&3',
+            '?/&3-&2/&3=#{&1-&2}/&3',
+            '&1/&3-?/&3=#{&1-&2}/&3',
+          ],
+          variables: [
+            {
+              '&1': '$er[2;9]',
+              '&2': '$er[2;9]',
+              '&3': '$e[2;19]\\{cd(&1);cd(&2)}',
+            },
+          ],
+          // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
+          solutions: [['&1'], ['&3'], ['&2'], ['&3'], ['&1'], ['&2']],
+          type: 'trou',
+          defaultDelay: 10,
+        },
+      ],
+      Multiplication: [
+        {
+          description: 'Compléter une égalité',
+          subdescription: 'Multiplication',
+          expressions: [
+            '(?/&3)*(&2/&4)=#{&1*&2}/#{&3*&4}',
+            '(&1/?)*(&2/&4)=#{&1*&2}/#{&3*&4}',
+            '(&1/&3)*(?/&4)=#{&1*&2}/#{&3*&4}',
+            '(&1/&3)*(&2/?)=#{&1*&2}/#{&3*&4}',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{&1;&2}',
+              '&4': '$e[2;9]\\{&1;&2}',
+            },
+          ],
+          // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
+          solutions: [['&1'], ['&3'], ['&2'], ['&4']],
+          type: 'trou',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Compléter une égalité',
+          subdescription: 'Multiplication avec nombres relatifs',
+          expressions: [
+            '(?/&3)*(&2/&4)=#{&1*&2}/#{&3*&4}',
+            '(&1/?)*(&2/&4)=#{&1*&2}/#{&3*&4}',
+            '(&1/&3)*(?/&4)=#{&1*&2}/#{&3*&4}',
+            '(&1/&3)*(&2/?)=#{&1*&2}/#{&3*&4}',
+          ],
+          variables: [
+            {
+              '&1': '$er[2;9]',
+              '&2': '$er[2;9]',
+              '&3': '$er[2;9]\\{&1;&2;-&1;-&2}',
+              '&4': '$er[2;9]\\{&1;&2;-&1;-&2}',
+            },
+          ],
+          // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
+          solutions: [['&1'], ['&3'], ['&2'], ['&4']],
+          type: 'trou',
+          defaultDelay: 10,
+        },
+      ],
+    },
     Calcul: {
       'Addition et Soustraction': [
         {
@@ -1433,10 +1567,10 @@ export default {
               '&1': '$e[3;13]',
               '&2': '$e[2;&1-1]',
               '&3': '$e[2;25]\\{cd(&1);cd(&2);cd(&1-&2)}',
-            }
+            },
           ],
           type: 'result',
-          details: [['\\frac{&1+&2}{&3}'],['\\frac{&1-&2}{&3}']],
+          details: [['\\frac{&1+&2}{&3}'], ['\\frac{&1-&2}{&3}']],
           // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
           defaultDelay: 30,
         },
@@ -1511,10 +1645,16 @@ export default {
           subdescription:
             'Fractions de même dénominateur, nombres relatifs, simplification intermediaire possible, simplification finale',
           expressions: [
-            '(-&1)/&3+(-&2)/&3', '(-&1)/&3+&2/&3', '&1/&3+(-&2)/&3', '&1/&3+&2/&3',
-            '(-&1)/&3-(-&2)/&3', '(-&1)/&3-&2/&3', '&1/&3-(-&2)/&3', '&1/&3-&2/&3'
+            '(-&1)/&3+(-&2)/&3',
+            '(-&1)/&3+&2/&3',
+            '&1/&3+(-&2)/&3',
+            '&1/&3+&2/&3',
+            '(-&1)/&3-(-&2)/&3',
+            '(-&1)/&3-&2/&3',
+            '&1/&3-(-&2)/&3',
+            '&1/&3-&2/&3',
           ],
-        
+
           details: [
             [
               '\\frac{-&1+(-&2)}{&3}',
@@ -1559,7 +1699,6 @@ export default {
               '\\frac{#{&1-&2}}{&3}',
               '&4>1 && &4<&3??\\frac{#{&1-&2}:#{&4}}{&3:#{&4}}',
             ],
-
           ],
           variables: [
             {
@@ -1586,7 +1725,6 @@ export default {
               '&3': '$e[2;9]',
               '&4': 'pgcd(&1+&2;&3)',
             },
-
 
             {
               '&1': '$e[2;9]',
@@ -1615,6 +1753,295 @@ export default {
           ],
           type: 'result',
 
+          defaultDelay: 10,
+        },
+        {
+          description: 'Additionner ou soustraire',
+          description:
+            "Dénominateur multiple de l'autre, nombres positifs, sans simplification",
+          expressions: ['&1/&3+&2/#{&3*&4}', '&2/#{&3*&4}+&1/&3'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{cd(&1);cd(&2)}',
+              '&4': '$e[2;9]\\{cd(&2)}',
+            },
+          ],
+          conditions: ['pgcd(&1*&4+&2;&3*&4)=1'],
+          type: 'result',
+          details: [
+            [
+              '\\frac{&1\\times &4}{&3 \\times &4} + \\frac{&2}{#{&3*&4}}',
+              '\\frac{#{&1*&4}}{#{&3*&4}} + \\frac{&2}{#{&3*&4}}',
+              '\\frac{#{&1*&4}+&2}{#{&3*&4}}',
+            ],
+            [
+              '\\frac{&2}{#{&3*&4}} + \\frac{&1\\times &4}{&3 \\times &4}',
+              '\\frac{&2}{#{&3*&4}}+\\frac{#{&1*&4}}{#{&3*&4}}',
+              '\\frac{&2+#{&1*&4}}{#{&3*&4}}',
+            ],
+          ],
+          // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
+          defaultDelay: 30,
+        },
+
+        {
+          description: 'Additionner ou soustraire',
+          description:
+            "Dénominateur multiple de l'autre, nombres positifs, simplification initiale",
+          expressions: ['&1/&3+#{&2*&4}/#{&3*&4}', '#{&2*&4}/#{&3*&4}+&1/&3'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{cd(&1);cd(&2)}',
+              '&4': '$e[2;9]\\{cd(&2);cd(&3)}',
+            },
+          ],
+          conditions:[
+            "pgcd(&1+&2;&3)=1"
+          ],
+          type: 'result',
+          details: [
+            [
+              '\\frac{&1}{&3}+\\frac{#{&2*&4}:&4}{#{&3*&4}:&4}',
+              '\\frac{&1}{&3}+\\frac{&2}{&3}',
+              '\\frac{&1+&2}{&3}',
+            ],
+
+            [
+              '\\frac{#{&2*&4}:&4}{#{&3*&4}:&4}+\\frac{&1}{&3}',
+              '\\frac{&2}{&3}+\\frac{&1}{&3}',
+              '\\frac{&2+&1}{&3}',
+            ],
+          ],
+          // solutions: [['#{&1+&3}/&2'], ['#{&1-&2}/&3']],
+          defaultDelay: 30,
+        },
+      ],
+      "Fraction d'une quantité": [
+        {
+          description: "Calculer une fraction d'une quantité",
+          enounce: 'Calculer $$\\frac{&2}{&3}$$ de $$%{&1*&3}$$',
+          expressions: ['(&2/&3)*#{&1*&3}'],
+          options: ['no-exp'],
+          variables: [
+            { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]\\{cd(&2)}' },
+          ],
+          details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: "Calculer une fraction d'une quantité",
+          expressions: ['(&2/&3)*#{&1*&3}', '#{&1*&3}*(&2/&3)'],
+          variables: [
+            { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]\\{cd(&2)}' },
+          ],
+          details: [['\\frac{#{&1*&3}}{&3} \\times &2', '&1 \\times &2']],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: "Calculer une fraction d'une quantité",
+          expressions: ['(#{&2*&3}/&3)*&1}', '&1*(#{&2*&3}/&3)'],
+          variables: [
+            { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]\\{cd(&1)}' },
+          ],
+          details: [['&2 \\times &1'], ['&1 \\times &2']],
+          type: 'result',
+          defaultDelay: 10,
+        },
+      ],
+      Multiplication: [
+        {
+          description: 'Calculer un produit',
+          subdescription: 'Pas de simplification',
+          expressions: ['(&1/&3)*(&2/&4)}'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{cd(&2);cd(&1)}',
+              '&4': '$e[2;9]\\{cd(&2);cd(&1)}',
+            },
+          ],
+          details: [['\\frac{&1 \\times &2}{&3 \\times &4}']],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Calculer un produit',
+          subdescription: 'avec simplification',
+          expressions: ['(&1/&3)*(&2/&4)}'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+              '&4': '$e[2;9]',
+              '&5': 'pgcd(&1*&2;&3*&4)',
+            },
+          ],
+          details: [
+            [
+              '\\frac{&1 \\times &2}{&3 \\times &4}',
+              '\\frac{#{&1*&2}}{#{&3*&4}}',
+              '&5>1 && &5<&1*&2??\\frac{#{&1*&2}:#{&5}}{#{&3*&4}:#{&5}}',
+            ],
+          ],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Calculer un produit',
+          subdescription: 'un entier par un quotient',
+          expressions: ['&1*(&2/&3)}', '(&2/&3)*&1}'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{cd(&2);cd(&1)}',
+            },
+          ],
+          details: [
+            [
+              '\\frac{&1}{1} \\times \\frac{&2}{&3}',
+              '\\frac{&1 \\times &2}{1 \\times &3}',
+            ],
+            [
+              '\\frac{&2}{&3} \\times \\frac{&1}{1}',
+              '\\frac{&2 \\times &1}{&3 \\times 1}',
+            ],
+          ],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Calculer un produit',
+          subdescription: 'Nombres, relatifs, pas de simplification',
+          expressions: [
+            '(&1/&3)*(&2/&4)',
+            '((-&1)/&3)*(&2/&4)',
+            '(&1/(-&3))*(&2/&4)',
+            '(&1/&3)*((-&2)/&4)',
+            '(&1/&3)*(&2/(-&4))',
+            '((-&1)/(-&3))*((-&2)/(-&4))',
+
+            '((-&1)/(-&3))*(&2/&4)',
+            '(&1/&3)*((-&2)/(-&4))',
+            '((-&1)/&3)*((-&2)/&4)',
+            '(&1/(-&3))*(&2/(-&4))',
+            '((-&1)/&3)*(&2/(-&4))',
+            '(&1/(-&3))*((-&2)/&4)',
+
+            '(&1/(-&3))*((-&2)/(-&4))',
+            '((-&1)/(-&3))*(&2/(-&4))',
+            '((-&1)/&3)*((-&2)/(-&4))',
+            '((-&1)/(-&3))*((-&2)/&4)',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{cd(&2);cd(&1)}',
+              '&4': '$e[2;9]\\{cd(&2);cd(&1)}',
+            },
+          ],
+          details: [
+            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
+
+            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
+
+            ['\\frac{&1 \\times &2 }{&3 \\times &4}'],
+
+            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
+
+            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
+          ],
+          type: 'result',
+          defaultDelay: 10,
+        },
+      ],
+      Inverse: [
+        {
+          description: "Calculer l'inverse d'un nombre",
+          enounces: [
+            "Calculer l'inverse de $$&1$$",
+            "Calculer l'inverse de $$\\frac{1}{&1}$$",
+            "Calculer l'inverse de $$\\frac{&1}{&2}$$",
+          ],
+          options: ['no-exp'],
+          expressions: ['&1', '1/&1', '&1/&2'],
+          variables: [{ '&1': '$e[2;19]', '&2': '$e[2;19]\\{cd(&1)}' }],
+          solutions: [['1/&1'], ['&1'], ['&2/&1']],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: "Calculer l'inverse d'un nombre",
+          subdescription: 'Avec la notation puissance',
+          expressions: ['&1^(-1)', '(1/&1)^(-1)', '(&1/&2)^(-1)'],
+          variables: [{ '&1': '$e[2;19]', '&2': '$e[2;19]\\{cd(&1)}' }],
+          solutions: [['1/&1'], ['&1'], ['&2/&1']],
+          type: 'result',
+          defaultDelay: 10,
+        },
+      ],
+      Division: [
+        {
+          description: 'Calculer un quotient',
+          subdescription:
+            'Pas de simplification, avec le symbole de la division',
+          expressions: ['(&1/&3):(&4/&2)}'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{cd(&2);cd(&1)}',
+              '&4': '$e[2;9]\\{cd(&2);cd(&1)}',
+            },
+          ],
+          details: [
+            [
+              '\\frac{&1}{&3} \\times \\frac{&2}{&4}',
+              '\\frac{&1 \\times &2}{&3 \\times &4}',
+            ],
+          ],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: 'Calculer un quotient',
+          subdescription: 'Pas de simplification',
+          expressions: ['(&1/&3)/(&4/&2)}'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{cd(&2);cd(&1)}',
+              '&4': '$e[2;9]\\{cd(&2);cd(&1)}',
+            },
+          ],
+          details: [
+            [
+              '\\frac{&1}{&3} \\times \\frac{&2}{&4}',
+              '\\frac{&1 \\times &2}{&3 \\times &4}',
+            ],
+          ],
+          type: 'result',
           defaultDelay: 10,
         },
       ],

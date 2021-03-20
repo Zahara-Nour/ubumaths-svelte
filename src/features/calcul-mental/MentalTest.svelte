@@ -152,7 +152,7 @@
     <math-field
       style="width:50%"
       virtual-keyboard-mode="onfocus"
-      virtual-keyboards="numeric roman"
+     
       virtual-keyboard-theme="apple"
       on:input="{onChangeMathField}"
       bind:this="{mf}"

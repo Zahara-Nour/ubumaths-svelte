@@ -193,5 +193,5 @@ export default {
       layer: 'college',
     },
   },
-  virtualKeyboards: 'college ',
+  virtualKeyboards: 'college',
 }

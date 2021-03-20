@@ -11,7 +11,9 @@ export default function generateQuestion(question, generateds) {
   let details
   let choice
   let enounce
-  const expressions = generateds ? generateds.map((g) => g.expression) : null
+  let conditions
+
+  const expressions = generateds ? generateds.map((g) => g.expression) : []
   const regexExact = /#\{(.*?)\}/g
   const regexDecimal = /##\{(.*?)\}/g
   const regexExactLatex = /%\{(.*?)\}/g
@@ -48,7 +50,12 @@ export default function generateQuestion(question, generateds) {
 
   if (!question) return emptyQuestion
 
+  let count = 0
+  let doItAgain = false
+
   do {
+    count++
+    doItAgain = false
     // first select an expression
     choice = Math.floor(question.expressions.length * Math.random())
     expression = question.expressions[choice]
@@ -82,11 +89,30 @@ export default function generateQuestion(question, generateds) {
         const regex = new RegExp(name, 'g')
         expression = expression.replace(regex, variables[name])
       })
-    }
 
-    expression = expression.replace(regexDecimal, replacementDecimal)
-    expression = expression.replace(regexExact, replacementExact)
-  } while (expressions && expressions.includes(expression))
+      expression = expression.replace(regexDecimal, replacementDecimal)
+      expression = expression.replace(regexExact, replacementExact)
+      doItAgain = expressions.includes(expression)
+
+      if (!doItAgain && question.conditions) {
+        let condition =
+          question.conditions[question.conditions.length === 1 ? 0 : choice]
+        console.log('condition', condition)
+        Object.getOwnPropertyNames(variables).forEach((name) => {
+          const regex = new RegExp(name, 'g')
+          condition = condition.replace(regex, variables[name])
+        })
+
+        if (math(condition).eval().string === 'false') {
+          doItAgain = true
+        }
+      }
+    }
+  } while (doItAgain && count < 1000)
+
+  if (count >= 1000) {
+    throw new Error('limit max')
+  }
 
   if (question.solutions) {
     solutions = question.solutions[question.solutions.length === 1 ? 0 : choice]
@@ -133,12 +159,11 @@ export default function generateQuestion(question, generateds) {
 
       const regex = /^(.*)\?\?/
       const found = d.match(regex)
-     
 
       if (found) {
         //  console.log('found', found)
         const tests = found[1].split('&&')
-        console.log("tests", tests)
+        console.log('tests', tests)
         if (tests.every((t) => math(t).eval().string === 'true')) {
           // console.log('tests ok, replace ', d, ' with ', d.replace(found[0], ''))
           d = d.replace(found[0], '')
@@ -151,9 +176,8 @@ export default function generateQuestion(question, generateds) {
     }, [])
   }
 
-  if (question.enounce) {
-    enounce = question.enounce
-
+  if (question.enounces) {
+    enounce = question.enounces[question.enounces.length === 1 ? 0 : choice]
     Object.getOwnPropertyNames(variables).forEach((name) => {
       const regex = new RegExp(name, 'g')
 
