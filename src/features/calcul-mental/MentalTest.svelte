@@ -65,7 +65,6 @@
         (q) => questions.indexOf(q) + 1 === parseInt(level, 10),
       )
       const question = questions[0]
-      console.log("qestion", question)
       if (question.options && question.options.includes('exhaust')) {
         for (let i = 0; i < question.expressions.length; i++) {
           questions[i] = {

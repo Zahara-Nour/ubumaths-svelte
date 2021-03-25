@@ -27,8 +27,11 @@
       type: question.type,
       number: i + 1,
       points: question.points,
+      options:question.options
     }
   }
+
+  console.log('items', items)
 </script>
 
 <Button class="mt-2 mb-2" size="small" on:click="{toggleDetails}">

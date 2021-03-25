@@ -16,10 +16,26 @@ export default function generateQuestion(question, generateds) {
 
   const expressions = generateds ? generateds.map((g) => g.expression) : []
   const regexExact = /#\{(.*?)\}/g
+  const regexExactSigned = /#s\{(.*?)\}/g
   const regexDecimal = /##\{(.*?)\}/g
   const regexExactLatex = /%\{(.*?)\}/g
   const regexDecimalLatex = /%%\{(.*?)\}/g
 
+  const replacementExactSigned = (matched, p1) => {
+    let e = math(p1)
+    if (e.string === 'Error') {
+      console.log('matched', matched)
+      console.log('p1', p1)
+      console.log('****ERROR ', e)
+      return 'Error2'
+    }
+    e = e.eval()
+    if (!e.isOpposite()) {
+      e = e.positive()
+    }
+    return  e.toString({implicit:true})
+  }
+  
   const replacementExact = (matched, p1) => {
     const e = math(p1)
     if (e.string === 'Error') {
@@ -27,12 +43,12 @@ export default function generateQuestion(question, generateds) {
       console.log('p1', p1)
       console.log('****ERROR ', e)
     }
-    return e.string === 'Error' ? 'Error2' : math(p1).eval().string
+    return e.string === 'Error' ? 'Error2' : math(p1).eval().toString({implicit:true})
   }
 
   const replacementExactLatex = (matched, p1) => {
     const e = math(p1)
-    return e.string === 'Error' ? 'Error2' : math(p1).eval().latex
+    return e.string === 'Error' ? 'Error2' : math(p1).eval().toLatex({implicit:true})
   }
 
   const replacementDecimal = (matched, p1) => {
@@ -92,6 +108,7 @@ export default function generateQuestion(question, generateds) {
       })
 
       expression = expression.replace(regexDecimal, replacementDecimal)
+      expression = expression.replace(regexExactSigned, replacementExactSigned)
       expression = expression.replace(regexExact, replacementExact)
       doItAgain = expressions.includes(expression)
 
@@ -124,6 +141,7 @@ export default function generateQuestion(question, generateds) {
           solution = solution.replace(regex, variables[name])
         })
         solution = solution.replace(regexDecimal, replacementDecimal)
+        solution = solution.replace(regexExactSigned, replacementExactSigned)
         solution = solution.replace(regexExact, replacementExact)
         return solution
       }
@@ -205,6 +223,7 @@ export default function generateQuestion(question, generateds) {
     enounce = enounce.replace(regexExactLatex, replacementExactLatex)
     enounce = enounce.replace(regexExact, replacementExact)
   }
+  console.log("question", question)
 
   return {
     points: 1,

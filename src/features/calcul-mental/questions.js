@@ -1799,9 +1799,7 @@ export default {
               '&4': '$e[2;9]\\{cd(&2);cd(&3)}',
             },
           ],
-          conditions:[
-            "pgcd(&1+&2;&3)=1"
-          ],
+          conditions: ['pgcd(&1+&2;&3)=1'],
           type: 'result',
           details: [
             [
@@ -2047,35 +2045,171 @@ export default {
       ],
     },
   },
-  'Calcul littéral':{
-    'Calculs':{
-      'Par substitution':[
+  'Calcul littéral': {
+    Calculs: {
+      'Par substitution': [
         {
           description: 'Calculer en substituant les variables',
           subscription: 'Entiers naturels',
-          enounces:["Calculer $$&5$$ avec $$&1=&2$$"],
-          expressions: ['&5'],
+          enounces: [
+            'Calculer $$&3&1+&4$$ avec $$&1=&2$$',
+            'Calculer $$&4+&3&1$$ avec $$&1=&2$$',
+            'Calculer $$&4&5+&3&1$$ avec $$&1=&2$$ et $$&5=&6$$',
+          ],
+          expressions: ['&3&1+&4', '&4+&3&1', '&4&5+&3&1'],
           variables: [
             {
               '&1': '$l{a;b;c}',
               '&2': '$e[2;9]',
               '&3': '$e[2;9]',
               '&4': '$e[2;9]',
-              '&5': '&3&1+&4',
+              '&5': '$l{a;b;c}\\{&1}',
+              '&6': '$e[2;9]',
             },
           ],
           letters: [
             {
-              '&1':'&2'
-            }
+              '&1': '&2',
+              '&5': '&6',
+            },
           ],
           options: ['no-exp'],
           type: 'result',
-          details: [['&3 \\times &2+&4','#{&3*&2}+&4', '#{&3*&2+&4}']],
+          details: [
+            ['&3 \\times &2+&4', '#{&3*&2}+&4', '#{&3*&2+&4}'],
+            ['&4+&3 \\times &2', '&4+#{&3*&2}', '#{&3*&2+&4}'],
+            [
+              '&4 \\times &6+&3 \\times &2',
+              '#{&4*&6}+#{&3*&2}',
+              '#{&4*&6+&3*&2}',
+            ],
+          ],
           // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
           defaultDelay: 30,
         },
-      ]
-    }
-  }
+      ],
+    },
+    Transformation: {
+      Réduction: [
+        {
+          description: 'Réduire une expression simple',
+          subscription: 'Coefficients positifs',
+          enounces: ['Réduire :'],
+          expressions: ['#{&2&1}+#{&3&1}'],
+          variables: [
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9]',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+          details: [['(&2+&3) \\times &1']],
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Réduire une expression simple',
+          subscription: 'Coefficients relatifs',
+          enounces: ['Réduire :'],
+          expressions: ['#{&2&1}#s{&3&1}'],
+          variables: [
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$er[1;9]',
+              '&3': '$ers[1;9]',
+            },
+          ],
+          // solutions: [['#{&2-&3}&1'], ['#{-&2+&3}&1'],['#{-&2-&3}&1']],
+          type: 'result',
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Réduire une expression',
+          subscription: 'Coefficients positifs',
+          enounces: ['Réduire :'],
+          expressions: [
+            '&2&1+&3&1+&5&4+&6&4',
+            '&2&1+&5&4+&3&1+&6&4',
+            '&2&1+&5&4+&6&4+&3&1',
+          ],
+          variables: [
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+              '&4': '$l{a;b;c}\\{&1}',
+              '&5': '$e[2;9]',
+              '&6': '$e[2;9]',
+            },
+          ],
+          details: [['(&2+&3)&1+(&5+&6)&4']],
+          type: 'result',
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Réduire une expression',
+          subscription: 'Coefficients relatifs',
+          enounces: ['Réduire :'],
+          expressions: [
+            '#{&2&1}#s{&3&1}#s{&5&4}#s{&6&4}',
+            '#{&2&1}#s{&3&4}#s{&5&1}#s{&6&4}',
+            '#{&2&1}#s{&3&4}#s{&5&4}#s{&6&1}',
+          ],
+          variables: [
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$er[1;9]',
+              // '&3': '$l{+$e[2;9];-$e[2;9]}',
+              '&3': '$ers[1;9]',
+              '&4': '$l{a;b;c}\\{&1}',
+              '&5': '$ers[1;9]',
+              // '&5': '$l{+$e[2;9];-$e[2;9]}',
+              // '&6': '+$e[2;9]',
+              '&6': '$ers[1;9]',
+            },
+          ],
+          // solutions: [
+          //   ['#{(&2&3)&1}#s{(&5&6)&4}'],
+          //   ['#{(&2&5)&1}#s{(&3&6)&4}'],
+          //   ['#{(&2&6)&1}#s{(&3&5)&4}'],
+          
+          // ],
+          type: 'result',
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Réduire une expression',
+          subscription: 'Coefficients positifs, termes de degrés différents',
+          enounces: ['Réduire :'],
+          expressions: [
+            '#{&2&1^2}#s{&3&1}#s{&4}#s{&5&1^2}#s{&6&1}#s{&7}',
+            '#{&2&1}#s{&3&1^2}#s{&4}#s{&5&1^2}#s{&6&1}#s{&7}',
+            '#{&2&1}#s{&3}#s{&4^2}#s{&5&1^2}#s{&6&1}#s{&7}',
+         
+          ],
+          variables: [
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$er[1;9]',
+              '&3': '$ers[1;9]',
+              '&4': '$ers[1;9]',
+              '&5': '$ers[1;9]',
+              '&6': '$ers[1;9]',
+              '&7': '$ers[1;9]',
+              
+            },
+          ],
+    
+          type: 'result',
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+      ],
+    },
+  },
 }

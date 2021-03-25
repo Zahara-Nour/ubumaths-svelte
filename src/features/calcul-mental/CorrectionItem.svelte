@@ -7,10 +7,14 @@
   import { mdiCheckCircle } from '@mdi/js'
   import { mdiCloseCircle } from '@mdi/js'
 
+
   export let item
   export let addPoints
   export let details
 
+  console.log('item', item)
+  const options = item.options
+  console.log('options', options)
   const q_exp = math(item.question)
   const s_exp = 'sexp'
   const s_exps = item.solutions.map((solution) => math(solution))
@@ -58,14 +62,14 @@
           line = '$$\\begin{align*}' + q_exp.latex
           d_exps.forEach((detail, i) => {
             
-            if (detail !== s_exps[0].latex) {
+            if (detail !== s_exps[0].toLatex({implicit:options.includes('implicit')})) {
               if (i !== 0) line += ' \\\\ '
               line += '& =' + detail
             }
           })
           line +=
             ' \\\\ & =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-            s_exps[0].latex +
+            s_exps[0].toLatex({implicit:options.includes('implicit')}) +
             '}'
           line += '\\end{align*}$$'
           lines.push(line)
@@ -73,7 +77,7 @@
           // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
           line = '$$' + q_exp.latex
           if (empty) {
-            line += `=\\textcolor{green}{${s_exps[0].latex}}` + '$$'
+            line += `=\\textcolor{green}{${s_exps[0].toLatex({implicit:options.includes('implicit')})}}` + '$$'
 
             com = "(tu n'as rien répondu)"
           } else if (badExpression || !correct) {
@@ -81,7 +85,7 @@
               '=\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
               item.answer_latex +
               '}}\\text{  }\\textcolor{green}{' +
-              s_exps[0].latex +
+              s_exps[0].toLatex({implicit:options.includes('implicit')}) +
               '}$$'
           } else {
             line += '=\\textcolor{green}{' + item.answer_latex + '}$$'
