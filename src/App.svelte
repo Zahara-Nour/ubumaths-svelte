@@ -1,11 +1,11 @@
 <script>
   import gidouille from './assets/gidouille'
-  // import FlashCards from './features/flash-cards/FlashCards.svelte'
+  import FlashCards from './features/flash-cards/FlashCards.svelte'
   // import EditCards from './features/flash-cards/EditCards.svelte'
   import { Router, Link, Route } from 'svelte-routing'
   import Home from './routes/Home.svelte'
   // import About from './routes/About.svelte'
-  // import Diaporama from './features/flash-cards/Diaporama.svelte'
+  import Diaporama from './features/flash-cards/Diaporama.svelte'
   import { MaterialApp } from 'svelte-materialify'
   import NavBar from './components/NavBar.svelte'
   import Mental from './features/calcul-mental/Mental.svelte'
@@ -23,9 +23,9 @@
 </script>
 
 <svelte:head>
-	<title>UbuMaths</title>
-	<meta name="robots" content="noindex nofollow" />
-	<html lang="fr" />
+  <title>UbuMaths</title>
+  <meta name="robots" content="noindex nofollow" />
+  <html lang="fr"></html>
 </svelte:head>
 
 <MaterialApp theme="{theme}">
@@ -40,13 +40,13 @@
       <!-- <Route path="flash-cards/edit" let:location>
      
       <EditCards location="{location}" />
-    </Route>
-    <Route path="flash-cards/play" let:location>
-      <Diaporama location="{location}" />
-    </Route>
-    <Route path="flash-cards" let:location>
-      <FlashCards location="{location}" />
-    </Route> -->
+    </Route>-->
+      <Route path="flash-cards/play" let:location>
+        <Diaporama location="{location}" />
+      </Route>
+      <Route path="flash-cards" let:location>
+        <FlashCards location="{location}" />
+      </Route>
       <Route path="calcul-mental" let:location>
         <Mental location="{location}" />
       </Route>
@@ -62,7 +62,7 @@
         <a href="https://www.lyceevoltaire.org/">
           <img
             alt="logo voltaire"
-            src="./images/logo-voltaire.png"
+            src="/images/logo-voltaire.png"
             height="60px"
           />
         </a>

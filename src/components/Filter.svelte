@@ -1,12 +1,8 @@
 <script>
-  // import Select, { Option } from '@smui/select'
-  import { Select, Icon, Textfield } from 'svelte-materialify/src'
+  import { Select } from 'svelte-materialify/src'
   import Spinner from './Spinner.svelte'
-  // import List, { Item, Text } from '@smui/list'
   import { getCollection } from '../app/collections'
   import { cleanString, lexicoSort } from '../app/utils'
-  // import Textfield from '@smui/textfield'
-  // import Fab, { Icon } from '@smui/fab'
   import { saveDocument } from '../app/db'
   import { collections } from '../app/stores'
   import { navigate } from 'svelte-routing'
@@ -95,8 +91,12 @@
   function initValue(elements) {
     elements = elements.sort(sort)
     const names = elements.map((element) => element.name)
-    value = value && names.includes(value) ? value : names[0]
-    values = elements
+    // value = value && names.includes(value) ? value : names[0]
+    values = elements.map((element) => ({
+      name: element.name,
+      value: element.name,
+    }))
+    value = value && names.includes(value) ? value :values[0].name
   }
 
   function updateWithProps(collectionPath, filters) {
@@ -129,12 +129,11 @@
   {error}
 {:else if values}
   {#if values.length}
-    {#if value}
-      {#if type === 'select'}
-        <div class="filter">
-          {#if add && addNew}
+    {#if type === 'select'}
+      <div class="filter">
+        {#if add && addNew}
           toto
-            <!-- <Textfield
+          <!-- <Textfield
               use="{[focus]}"
               error="{!newValue || checkExists(newValue, values)}"
               bind:value="{newValue}"
@@ -143,18 +142,11 @@
               input$aria-describedby="helper-text-textarea"
               bind:this="{textField}"
             /> -->
-          {:else}
-          <Select items="{values}" bind:value="{theme}">Thème</Select>
-            <Select bind:value label="{label}" on:change="{onChange}">
-              {#each values as v}
-                <Option value="{v.name}" selected="{value === v.name}">
-                  {v.name}
-                </Option>
-              {/each}
-            </Select>
-          {/if}
+        {:else}
+          <Select class="mt-3 mb-3" items="{values}" bind:value>{label}</Select>
+        {/if}
 
-          <!-- {#if add}
+        <!-- {#if add}
             <Fab
               disabled="{disabled || (addNew && (!newValue || checkExists(newValue, values)))}"
               mini
@@ -170,18 +162,23 @@
               <Icon class="material-icons">add</Icon>
             </Fab>
           {/if} -->
-        </div>
-      {:else if custom}
-        <svelte:component this="{custom}" cards="{values}" bind:value {onChange}/>
-      {:else}
-        <List class="demo-list">
+      </div>
+    {:else if custom}
+      <svelte:component
+        this="{custom}"
+        cards="{values}"
+        bind:value
+        onChange="{onChange}"
+      />
+    {:else}
+      rien
+      <!-- <List class="demo-list">
           {#each values as v}
             <Item on:SMUI:action="{() => (value = v)}" value="{value === v}">
               <Text>{v}</Text>
             </Item>
           {/each}
-        </List>
-      {/if}
+        </List> -->
     {/if}
   {:else}Liste vide{/if}
 {:else}

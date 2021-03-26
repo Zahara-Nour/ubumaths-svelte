@@ -8,7 +8,8 @@
   import Spinner from '../../components/Spinner.svelte'
   import { afterUpdate } from 'svelte'
   import generate from './generateCard'
-  // import Button, { Label } from '@smui/button'
+  import { Button, Icon } from 'svelte-materialify/src'
+  import { mdiArrowRight, mdiReload, mdiRestart, mdiRestartOff } from '@mdi/js'
   import { flip } from 'svelte/animate'
   import { fly } from 'svelte/transition'
 
@@ -41,11 +42,9 @@
     if (cards.length > 1) {
       cards = [...cards.slice(1, cards.length)]
       console.log('cards', cards)
-    } else {
-      navigate(`/flash-cards?subject=${subject}&domain=${domain}`)
     }
 
-    // console.log('change card', card_i)
+    console.log('change card', card_i)
 
     // if (card_i == cards.length) {
     //   navigate(`/flash-cards?subject=${subject}&domain=${domain}`)
@@ -87,7 +86,7 @@
   $: getCards(filters)
 </script>
 
-<!-- {#if error}
+{#if error}
   <p style="color: red">{error}</p>
 {:else if !cards}
   <div class="center">
@@ -107,26 +106,46 @@
       {/each}
     </div>
   </div>
-  <Button
-    on:click="{nextCard}"
-    variant="raised"
-    class="button-shaped-round"
-    color="secondary"
-  >
-    <Label>{cards.length > 1 ? 'Question suivante' : 'Fin'}</Label>
-  </Button>
+  {#if cards.length > 1}
+    <Button fab size="small" class="blue white-text" on:click="{nextCard}">
+      <Icon path=" {mdiArrowRight}" />
+    </Button>
+  {:else}
+    <Button
+      fab
+      size="small"
+      class="blue white-text"
+      on:click="{() =>
+        navigate(`/flash-cards?subject=${subject}&domain=${domain}`)}"
+    >
+      <Icon path=" {mdiRestartOff}" />
+    </Button>
+    <Button
+      fab
+      size="small"
+      class="blue white-text"
+      on:click="{() =>
+        navigate(
+          `/flash-cards/play?subject=${subject}&domain=${domain}&theme=${theme}&level=${level}`,
+        )}"
+    >
+      <Icon path=" {mdiRestart}" />
+    </Button>
+  {/if}
 {:else}
   <p style="color: red">liste vide</p>
-{/if} -->
+{/if}
 
 <style>
   #cards-container {
-    /* padding-top: 50px; */
+    margin-top: 40px;
+    margin-bottom: 40px;
     position: relative;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    height: 90vh;
+    height: 500px;
+    max-height: 70vh;
     width: 100%;
   }
   #cards {
@@ -153,12 +172,12 @@
 
   @media (min-width: 768px) {
     #cards-container {
-      max-width: 800px;
-      min-width: 800px;
+      max-width: 600px;
+      min-width: 600px;
     }
     .card {
-      max-width: calc(800px - 8px);
-      min-width: calc(800px - 8px);
+      max-width: calc(600px - 8px);
+      min-width: calc(600px - 8px);
     }
   }
 </style>

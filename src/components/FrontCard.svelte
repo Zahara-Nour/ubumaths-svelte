@@ -1,11 +1,12 @@
 <script>
-  import { Button } from 'svelte-materialify/src'
+  import { Button, Icon } from 'svelte-materialify/src'
   import Fa from 'svelte-fa'
   import { faNewspaper } from '@fortawesome/free-solid-svg-icons'
   import Spinner from '../components/Spinner.svelte'
   import { getLocalUrl } from '../app/localUrl'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { onMount } from 'svelte'
+  import { mdiOrbitVariant } from '@mdi/js'
 
   export let toggleFlip = () => {}
   export let card
@@ -38,10 +39,10 @@
     {/await}
 
     <div class="buttons">
-      <Button
+      <Button fab  class="green white-text"
         on:click="{toggleFlip}"
       >
-       Voir la réponse
+      <Icon path="{mdiOrbitVariant}" />
       </Button>
     </div>
   </div>

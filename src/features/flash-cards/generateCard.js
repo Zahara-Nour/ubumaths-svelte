@@ -51,7 +51,7 @@ export default function generateCard(card) {
       })
   }
 
-  // const regex = /\*\*(.*?)\*\*/g
+  
   //expression to evaluate
   const regex = /#\{(.*?)\}/g
   const replacement = (matched, p1) => {

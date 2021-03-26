@@ -1,9 +1,10 @@
 <script>
-  import { Button } from 'svelte-materialify/src'
+  import { Button, Icon } from 'svelte-materialify/src'
   import { getLocalUrl } from '../app/localUrl'
   import Spinner from './Spinner.svelte'
   import { onMount, afterUpdate, onDestroy } from 'svelte'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
+import { mdiOrbitVariant } from '@mdi/js';
 
   export let card
   let localUrlP = card.imageAnswer
@@ -49,12 +50,11 @@
     </div>
   {/if}
   <div class="buttons">
-    <Button
-      on:click="{toggleFlip}"
-    >
-      Revoir la question
-    </Button>
-
+    <Button fab  class="blue white-text"
+        on:click="{toggleFlip}"
+      >
+      <Icon path="{mdiOrbitVariant}" />
+      </Button>
   </div>
 </div>
 

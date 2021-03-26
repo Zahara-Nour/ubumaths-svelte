@@ -2,10 +2,10 @@
   import { getCollection } from '../app/collections'
   import Spinner from './Spinner.svelte'
   import ThemeItem from './ThemeItem.svelte'
-  import Button, { Label } from '@smui/button'
   import { lexicoSort, isEmpty } from '../app/utils'
-  import Fab from '@smui/fab'
   import { navigate } from 'svelte-routing'
+  import { Button, Icon
+  } from 'svelte-materialify/src'
 
   export let filters
   export let grade
@@ -88,14 +88,9 @@
         <div slot="text">{theme}</div>
         <div slot="buttons">
           {#each findLevels(theme, grade) as level}
-            <span class="fab">
-              <Fab
-                mini
-                on:click="{() => navigate(`/flash-cards/play?subject=${subject}&domain=${domain}&theme=${theme}&level=${level}`)}"
-              >
+              <Button  fab size="x-small" class="ml-1 mr-1 orange white-text" on:click="{() => navigate(`/flash-cards/play?subject=${subject}&domain=${domain}&theme=${theme}&level=${level}`)}">
                 {level}
-              </Fab>
-            </span>
+              </Button>
           {/each}
         </div>
       </ThemeItem>
@@ -104,8 +99,5 @@
 {/await}
 
 <style>
-  .fab {
-    margin-left: 3px;
-    margin-right: 3px;
-  }
+
 </style>
