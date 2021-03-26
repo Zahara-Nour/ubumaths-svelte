@@ -2176,7 +2176,7 @@ export default {
           //   ['#{(&2&3)&1}#s{(&5&6)&4}'],
           //   ['#{(&2&5)&1}#s{(&3&6)&4}'],
           //   ['#{(&2&6)&1}#s{(&3&5)&4}'],
-          
+
           // ],
           type: 'result',
           defaultDelay: 30,
@@ -2184,13 +2184,12 @@ export default {
         },
         {
           description: 'Réduire une expression',
-          subscription: 'Coefficients positifs, termes de degrés différents',
+          subscription: 'Coefficients positifs, expression du second degré',
           enounces: ['Réduire :'],
           expressions: [
             '#{&2&1^2}#s{&3&1}#s{&4}#s{&5&1^2}#s{&6&1}#s{&7}',
             '#{&2&1}#s{&3&1^2}#s{&4}#s{&5&1^2}#s{&6&1}#s{&7}',
             '#{&2&1}#s{&3}#s{&4^2}#s{&5&1^2}#s{&6&1}#s{&7}',
-         
           ],
           variables: [
             {
@@ -2201,15 +2200,477 @@ export default {
               '&5': '$ers[1;9]',
               '&6': '$ers[1;9]',
               '&7': '$ers[1;9]',
-              
             },
           ],
-    
+
           type: 'result',
           defaultDelay: 30,
           options: ['implicit'],
         },
+        {
+          description: 'Réduire un produit',
+          subscription: 'Coefficients positifs',
+          enounces: ['Réduire :'],
+          expressions: [
+            '&1*&2*&3',
+            '&2*&1*&3',
+            '&3*&2*&1',
+            '&1*&2*&1',
+            '&1*&1*&2',
+            '&2*&1*&1',
+          ],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y;z}',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+          // details: [['(&2+&3) \\times &1']],
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Réduire un produit',
+          subscription: 'Coefficients relatifs',
+          enounces: ['Réduire :'],
+          expressions: [
+            '&1*(-&2)*&3',
+            '(-&2)*&1*&3',
+            '&3*(-&2)*&1',
+            '&1*&2*(-&3)',
+            '&2*&1*(-&3)',
+            '(-&3)*&2*&1',
+            '&1*(-&2)*(-&3)',
+            '(-&2)*&1*(-&3)',
+            '(-&3)*(-&2)*&1',
+            '(-&1)*(-&2)*&3',
+            '(-&2)*(-&1)*&3',
+            '&3*(-&2)*(-&1)',
+            '(-&1)*&2*(-&3)',
+            '&2*(-&1)*(-&3)',
+            '(-&3)*&2*(-&1)',
+            '(-&1)*(-&2)*(-&3)',
+            '(-&2)*(-&1)*(-&3)',
+            '(-&3)*(-&2)*(-&1)',
+          ],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y;z}',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+          // details: [['(&2+&3) \\times &1']],
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
       ],
+      'Simplification de parenthèses': [
+        {
+          description: 'Enlever les parenthèses',
+          subscription: 'Coefficients positifs',
+          enounces: ["Réécrire l'expression en enelevant les parenthèses :"],
+          expressions: ['#{&1&2}+(#{&3&4}&5)', '#{&1&2}-(#{&3&4}&5)'],
+          variables: [
+            {
+              '&1': '$er[1;9]',
+              '&2': '$l{a;b;c}',
+              '&3': '$er[1;9]',
+              '&4': '$l{a;b;c}\\{&1}',
+              '&5': '$ers[1;9]',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+          solutions: [['#{&1&2}#s{&3&4}&5'], ['#{&1&2}#s{-&3&4}#s{-&5}']],
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Réduire avec parenthèses',
+          enounces: ['Réduire:'],
+          expressions: [
+            '#{&1&2}+(#{&3&2}#s{&4})',
+            '#{&1&2}+(#{&4}#s{&3&2})',
+            '#{&1&2}-(#{&3&2}#s{&4})',
+            '#{&1&2}-(#{&4}#s{&3&2})',
+          ],
+          variables: [
+            {
+              '&1': '$er[1;9]',
+              '&2': '$l{a;b;c;x;y;z}',
+              '&3': '$ers[1;9]',
+              '&4': '$ers[1;9]',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+          //   solutions:[
+          //     ['#{&1&2}#s{&3&4}&5'],
+          //     ['#{&1&2}#s{-&3&4}#s{-&5}'],
+          // ],
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+      ],
+      Développement: [
+        {
+          description: 'Développer',
+          subscription: 'Coefficients positifs',
+          enounces: ['Développer et réduire :'],
+          expressions: [
+            '&1(&2+#{&3&4})',
+            '&1(#{&3&4}+&2)',
+            '(&2+#{&3&4})*&1',
+            '(#{&3&4}+&2)*&1',
+            '&4(&2+#{&3&4})',
+            '&4(#{&3&4}+&2)',
+            '(&2+#{&3&4})&4',
+            '(#{&3&4}+&2)&4',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9]',
+              '&4': '$l{a;b;c;x;y;z}',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+          solutions: [
+            ['#{&1*&2}+#{&1*&3&4}'],
+            ['#{&1*&3&4}+#{&1*&2}'],
+            ['#{&1*&2}+#{&1*&3&4}'],
+            ['#{&1*&3&4}+#{&1*&2}'],
+            ['#{&4*&2}+#{&4*&3&4}'],
+            ['#{&4*&3&4}+#{&4*&2}'],
+            ['#{&4*&2}+#{&4*&3&4}'],
+            ['#{&4*&3&4}+#{&4*&2}'],
+          ],
+
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Développer',
+          subscription: 'Coefficients relatifs',
+          enounces: ['Développer et réduire :'],
+          expressions: [
+            '&1(#{&2}#s{&3&4})',
+            '&1(#{&3&4}#s{&2})',
+            '-&1(#{&2}#s{&3&4})',
+            '-&1(#{&3&4}#s{&2})',
+            '(#{&2}#s{&3&4})*&1',
+            '(#{&3&4}#s{&2})*&1',
+            '(#{&2}#s{&3&4})*(-&1)',
+            '(#{&3&4}#s{&2})*(-&1)',
+            '&4(#{&2}#s{&3&4})',
+            '&4(#{&3&4}#s{&2})',
+            '(#{&2}#s{&3&4})&4',
+            '(#{&3&4}#s{&2})&4',
+            '-&4(#{&2}#s{&3&4})',
+            '-&4(#{&3&4}#s{&2})',
+            '(#{&2}#s{&3&4})*(-&4)',
+            '(#{&3&4}#s{&2})*(-&4)',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$er[1;9]',
+              '&3': '$er[1;9]',
+              '&4': '$l{a;b;c;x;y;z}',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+          solutions: [
+            ['#{&1*&2}#s{&1*&3&4}'],
+            ['#{&1*&3&4}#s{&1*&2}'],
+            ['#{-&1*&2}#s{-&1*&3&4}'],
+            ['#{-&1*&3&4}#s{-&1*&2}'],
+            ['#{&1*&2}#s{&1*&3&4}'],
+            ['#{&1*&3&4}#s{&1*&2}'],
+            ['#{-&1*&2}#s{-&1*&3&4}'],
+            ['#{-&1*&3&4}#s{-&1*&2}'],
+            ['#{&4*&2}#s{&4*&3&4}'],
+            ['#{&4*&3&4}#s{&4*&2}'],
+            ['#{&4*&2}#s{&4*&3&4}'],
+            ['#{&4*&3&4}#s{&4*&2}'],
+            ['#{-&4*&2}#s{-&4*&3&4}'],
+            ['#{-&4*&3&4}#s{-&4*&2}'],
+            ['#{-&4*&2}#s{-&4*&3&4}'],
+            ['#{-&4*&3&4}#s{-&4*&2}'],
+          ],
+
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Développer un double produit',
+          subscription: 'Coefficients positifs',
+          enounces: ['Développer et réduire :'],
+          expressions: [
+            '(&1+#{&2&3})(&4+#{&5&3})',
+            '(#{&2&3}+&1)(&4+#{&5&3})',
+            '(&1+#{&2&3})(#{&5&3}+&4)',
+            '(#{&2&3}+&1)(#{&5&3}+&4)',
+        ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$l{a;b;c;x;y;z}',
+              '&4': '$e[1;9]',
+              '&5': '$e[1;9]',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Développer un double produit',
+          subscription: 'Coefficients relatifs',
+          enounces: ['Développer et réduire :'],
+          expressions: [
+            '(#{&1}#s{&2&3})(#{&4}#s{&5&3})',
+            '(#{&2&3}#s{&1})(#{&4}#s{&5&3})',
+            '(#{&2&3}#s{&1})(#{&5&3}#s{&4})',
+            '(#{&1}#s{&2&3})(#{&5&3}#s{&4})',
+        ],
+          variables: [
+            {
+              '&1': '$er[1;9]',
+              '&2': '$er[1;9]',
+              '&3': '$l{a;b;c;x;y;z}',
+              '&4': '$er[1;9]',
+              '&5': '$er[1;9]',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Développer $$(a+b)^2$$',
+          subscription: 'Coefficients positifs',
+          enounces: ['Développer et réduire :'],
+          expressions: [
+            '(&1+#{&2&3})^2',
+            '(#{&2&3}+&1)^2',
+          
+        ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$l{a;b;c;x;y;z}',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Développer $$(a-b)^2$$',
+          subscription: 'Coefficients positifs',
+          enounces: ['Développer et réduire :'],
+          expressions: [
+            '(&1-#{&2&3})^2',
+            '(#{&2&3}-&1)^2',
+          
+        ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$l{a;b;c;x;y;z}',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Développer $$(a+b)(a-b)$$',
+          subscription: 'Coefficients positifs',
+          enounces: ['Développer et réduire :'],
+          expressions: [
+            '(&1+#{&2&3})(&1-#{&2&3})',
+            '(&1-#{&2&3})(&1+#{&2&3})',
+            '(#{&2&3}+&1)(#{&2&3}-&1)',
+            '(#{&2&3}-&1)(#{&2&3}+&1)',
+       
+          
+        ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$l{a;b;c;x;y;z}',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+      ],
+      Factorisation: [
+        {
+          description: 'Factoriser',
+          subdescription: 'Coefficients positifs',
+          enounces: ['Factoriser :'],
+          expressions: [
+            '&1&3+#{&1*&2}&4',
+            '#{&1*&2}&4+&1&3',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$l{x;y;z}',
+              '&4': '$l{x;y;z}\\{&3}',
+              '&5': 'pgcd(&1;&1*&2)',
+              '&6': '&1:&5',
+              '&7': '&1*&2:&5',
+            },
+          ],
+          solutions: [
+            ['#{&5}(#{&6*&3}+#{&7*&4})'],
+            ['#{&5}(#{&7*&4}+#{&6*&3})'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Factoriser',
+          subdescription: 'Coefficients positifs',
+          enounces: ['Factoriser :'],
+          expressions: [
+            '&1+#{&1*&2}&3',
+            '#{&1*&2}&3+&1',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$l{x;y;z}',
+              '&4': 'pgcd(&1;&1*&2)',
+              '&5': '&1:&4',
+              '&6': '&1*&2:&4',
+            },
+          ],
+          solutions: [
+            ['#{&4}(#{&5}+#{&6}&3)'],
+            ['#{&4}(#{&6}&3+#{&5})'],
+            // ['#{&5}*(#{&7*&4}+#{&6})'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Factoriser',
+          subdescription: 'Coefficients positifs',
+          enounces: ['Factoriser :'],
+          expressions: [
+            '#{&1*&2*&3^2}+#{&1*&3}',
+            '#{&1*&3^2}+#{&1*&2*&3}',
+            '#{&1*&2*&3}+#{&1*&3^2}',
+            '#{&1*&3}+#{&1*&2*&3^2}',
+            
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$l{x;y;z}',
+              
+            },
+          ],
+          solutions: [
+            ['#{&1&3}(#{&2*&3}+1)'],
+            ['#{&1&3}(&3+&2)'],
+            ['#{&1&3}(&2+&3)'],
+            ['#{&1&3}(1+#{&2*&3})'],
+            
+            
+          ],
+          type: 'result',
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Factoriser',
+          subdescription: 'Coefficients positifs',
+          enounces: ['Factoriser :'],
+          expressions: [
+            '#{&1*&2*&4^2}+#{&1*&3*&4}',
+            '#{&1*&2*&4}+#{&1*&3*&4^2}',
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9]\\{&2}',
+              '&4': '$l{x;y;z}',
+              '&5': 'pgcd(&1*&3;&1*&2)',
+              '&6': '&1*&2:&5',
+              '&7': '&1*&3:&5',
+            },
+          ],
+          solutions: [
+            ['#{&5&4}(#{&6*&4}+#{&7})'],
+            ['#{&5&4}(#{&6}+#{&7*&4})'],
+            
+          ],
+          type: 'result',
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+        {
+          description: 'Factoriser a^2-b^2',
+          enounces: ['Factoriser :'],
+          expressions: [
+            '#{&1^2}-&3^2',            
+            '&3^2-#{&1^2}',            
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$l{x;y;z}',
+              
+            },
+          ],
+          solutions: [
+            ['(&1+&3)(&1-&3)'],
+            ['(&3+&1)(&3-&1)'],
+            
+            
+          ],
+          type: 'result',
+          defaultDelay: 30,
+          options: ['implicit'],
+        },
+      ]
     },
   },
 }
