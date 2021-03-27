@@ -2,18 +2,18 @@
   import firebase from 'firebase/app'
   import 'firebase/auth'
   import { user } from '../app/stores'
-  import Fab, { Icon } from '@smui/fab'
-  import { onDestroy } from 'svelte'
+  import { onMount, onDestroy } from 'svelte'
+  import { Button, Icon } from 'svelte-materialify/src'
+  import { mdiLogin, mdiLogout } from '@mdi/js'
 
   // Keep track of script status ("idle", "loading", "ready", "error")
-  let status = 'loading'
+  let status = 'idle'
   $: loaded = status === 'ready'
   $: if (loaded) initAuth()
 
   function loadScript(src) {
     console.log('loading script')
     // Fetch existing script element by src
-    // It may have been added by another intance of this hook
     let script = document.querySelector(`script[src="${src}"]`)
 
     if (!script) {
@@ -22,6 +22,7 @@
       script.src = src
       script.async = true
       script.setAttribute('data-status', 'loading')
+      status = 'loading'
       // Add script to document body
       document.body.appendChild(script)
 
@@ -184,8 +185,6 @@
     console.log('error while logout', err)
   }
 
- 
-
   function onSignIn() {
     const options = {
       prompt: '',
@@ -195,22 +194,18 @@
 
   function onSignOut() {
     auth2.signOut().then(logoutSuccess).catch(logoutFailure)
-    firebase
-      .auth()
-      .signOut()
-      .then(logoutSuccess)
-      .catch(logoutFailure)
+    firebase.auth().signOut().then(logoutSuccess).catch(logoutFailure)
   }
 </script>
 
 {#if auth2}
   {#if isLoggedIn}
-    <Fab mini on:click="{onSignOut}">
-      <Icon class="material-icons">face</Icon>
-    </Fab>
+    <Button fab size="small" class="green white-text" on:click="{onSignOut}">
+      <Icon path=" {mdiLogout}" />
+    </Button>
   {:else}
-    <Fab mini on:click="{onSignIn}">
-      <Icon class="material-icons">login</Icon>
-    </Fab>
+    <Button fab size="small" class="red white-text" on:click="{onSignIn}">
+      <Icon path=" {mdiLogin}" />
+    </Button>
   {/if}
 {/if}

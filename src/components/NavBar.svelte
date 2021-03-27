@@ -1,5 +1,6 @@
 <script>
   import Gidouille from './Gidouille.svelte'
+  import AuthButton from './AuthButton.svelte'
   import { onMount } from 'svelte'
   import {
     AppBar,
@@ -66,6 +67,7 @@
       </div>
     {/if}
     <div style="flex-grow:1"></div>
+    <AuthButton/>
     {#if miniWindow}
       <Button class="mr-2" on:click="{toggleDrawer}" size="small" fab depressed>
         <Icon path="{mdiMenu}" />
