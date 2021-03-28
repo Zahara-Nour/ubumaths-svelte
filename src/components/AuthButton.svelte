@@ -5,6 +5,8 @@
   import { onMount, onDestroy } from 'svelte'
   import { Button, Icon } from 'svelte-materialify/src'
   import { mdiLogin, mdiLogout } from '@mdi/js'
+  import { getCollection } from '../app/collections'
+  import {db} from '../app/db'
 
   // Keep track of script status ("idle", "loading", "ready", "error")
   let status = 'idle'
@@ -77,7 +79,7 @@
     unsubscribeUser()
   })
 
-  const loginSuccess = (googleUser) => {
+  const loginSuccess = async (googleUser) => {
     console.log('Google Auth Response', googleUser)
     // We need to register an Observer on Firebase Auth to make sure auth is initialized.
     const profile = googleUser.getBasicProfile()
@@ -124,7 +126,7 @@
         }
       })
 
-    const userProfile = {
+    const googleProfile = {
       id: profile.getEmail(),
       googleId: profile.getId(),
       imageUrl: profile.getImageUrl(),
@@ -136,8 +138,11 @@
       tokenId: authResponse.id_token,
       accessToken: authResponse.access_token,
     }
-    console.log('user', userProfile)
-    user.set(userProfile)
+    console.log('user', googleProfile)
+  
+    const userDatas = await fetchUser(profile.getEmail())
+    user.set({...googleProfile, ...userDatas})
+    console.log('user', $user)
   }
 
   function isUserEqual(googleUser, firebaseUser) {
@@ -195,6 +200,23 @@
   function onSignOut() {
     auth2.signOut().then(logoutSuccess).catch(logoutFailure)
     firebase.auth().signOut().then(logoutSuccess).catch(logoutFailure)
+  }
+
+  function fetchUser(id) {
+    return db
+      .collection('Users')
+      .doc(id)
+      .get()
+      .then(function (doc) {
+        if (doc.exists) {
+          return doc.data()
+        } else {
+          console.log('No user', id)
+        }
+      })
+      .catch(function (error) {
+        console.error('Error loading document: ', error)
+      })
   }
 </script>
 
