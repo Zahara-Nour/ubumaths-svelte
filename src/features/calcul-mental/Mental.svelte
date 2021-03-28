@@ -15,7 +15,16 @@
   import ExpansionPanels, {
     ExpansionPanel,
   } from 'svelte-materialify/src/components/ExpansionPanels'
-  import { mdiCartArrowDown, mdiRocketLaunchOutline, mdiHelp } from '@mdi/js'
+  import {
+    mdiCartArrowDown,
+    mdiRocketLaunchOutline,
+    mdiHelp,
+    mdiBasketPlus,
+    mdiBasket,
+    mdiMicroSd,
+    mdiMinus,
+    mdiPlus,
+  } from '@mdi/js'
   import { navigate } from 'svelte-routing'
   import questions from './questions'
   import Question from './Question.svelte'
@@ -23,7 +32,7 @@
   import { user } from '../../app/stores'
 
   const themes = Object.keys(questions)
-
+  let basket = []
   let theme = themes[0]
   let themeIdx = 0
   let domain
@@ -34,6 +43,7 @@
   let levelsIdxs = []
   let generated
   let isLoggedIn
+  let showBasket = false
 
   for (let i = 0; i < themes.length; i++) {
     levelsIdxs[i] = 0
@@ -44,7 +54,7 @@
   domain = Object.keys(questions[theme])[0]
   type = Object.keys(questions[theme][domain])[0]
   level = 1
-  generateExemple()
+  generated = generateExemple()
 
   function onChangeDomain(e) {
     const idx = e.detail.index
@@ -55,7 +65,7 @@
     typeIdxs[themeIdx] = 0
     level = 1
     levelsIdxs[themeIdx] = 0
-    generateExemple()
+    generated = generateExemple()
   }
 
   function onChangeLevel(d, d_i, t, t_i, l) {
@@ -63,7 +73,7 @@
     typeIdxs[themeIdx] = t_i
     level = l + 1
     levelsIdxs[themeIdx] = l
-    generateExemple()
+    generated = generateExemple()
   }
 
   function launchTest() {
@@ -79,7 +89,7 @@
     // console.log('questions', qs)
     const q = qs[0]
     // console.log('question', q)
-    generated = generateQuestion(q)
+    return generateQuestion(q)
   }
 
   let active = false
@@ -90,13 +100,37 @@
     active = false
   }
 
+  function addToBasket() {
+    const qs = questions[theme][domain][type]
+    const q = qs.find((elt) => qs.indexOf(elt) + 1 === parseInt(level, 10))
+    basket.push({
+      question: q,
+      generated: generateExemple(),
+      count: 1,
+    })
+    console.log('baskt', basket)
+  }
+
+  function toggleBasket() {
+    showBasket = !showBasket
+  }
+
+  function addItem(i) {
+    basket[i].count++
+  }
+  function removeItem(i) {
+    if (basket[i].count > 0) {
+      basket[i].count--
+    }
+  }
+
   $: if (themeIdx >= 0) {
     theme = themes[themeIdx]
     console.log('changing theme', theme)
     domain = Object.keys(questions[theme])[domainIdxs[themeIdx]]
     type = Object.keys(questions[theme][domain])[typeIdxs[themeIdx]]
     level = levelsIdxs[themeIdx] + 1
-    generateExemple()
+    generated = generateExemple()
   }
 
   $: isLoggedIn = $user.id != 'guest'
@@ -125,61 +159,124 @@
   >
     <Icon path="{mdiCartArrowDown}" />
   </Button> -->
+  {#if isLoggedIn && $user.roles.includes('teacher')}
+    <Button disabled="{disable}" fab size="x-small" on:click="{addToBasket}">
+      <Icon path="{mdiBasketPlus}" />
+    </Button>
+    <Button
+      disabled="{disable}"
+      class="{showBasket ? 'orange white-text' : ''}"
+      fab
+      size="x-small"
+      on:click="{toggleBasket}"
+    >
+      <Icon path="{mdiBasket}" />
+    </Button>
+  {/if}
   <Button disabled="{disable}" fab size="x-small" on:click="{launchTest}">
     <Icon path="{mdiRocketLaunchOutline}" />
   </Button>
 </div>
 
-<Tabs centerActive class="orange-text" bind:value="{themeIdx}">
-  <div slot="tabs">
-    {#each themes as item}
-      <Tab>{item}</Tab>
-    {/each}
-  </div>
-
-  {#each themes as them, them_i}
-    <TabContent>
-      <ExpansionPanels
-        on:change="{onChangeDomain}"
-        bind:value="{domainIdxs[them_i]}"
-      >
-        {#each Object.keys(questions[them]) as d, d_i}
-          <ExpansionPanel>
-            <span slot="header" style="color:red">{d}</span>
-            <List style="width:100%;">
-              <div>
-                {#each Object.keys(questions[them][d]) as t, t_i}
-                  <div
-                    style="margin-top:5px; margin-bottom:5px;display:flex; align-items:center;"
-                  >
-                    <span style="margin-right:10px">{t}</span>
-                    <div>
-                      {#each questions[them][d][t] as _, i}
-                        <Button
-                          class="{d_i === domainIdxs[them_i][0] &&
-                          typeIdxs[them_i] === t_i &&
-                          levelsIdxs[them_i] === i
-                            ? 'red white-text'
-                            : ''}"
-                          fab
-                          size="x-small"
-                          depressed
-                          on:click="{() => onChangeLevel(d, d_i, t, t_i, i)}"
-                          >{i + 1}</Button
-                        >
-                      {/each}
-                    </div>
-                    <div style="flex-grow:1;"></div>
-                  </div>
-                {/each}
+{#if showBasket}
+  {#if basket.length}
+    <List>
+      {#each basket as item, i}
+        <div class="mt-2 mb-2 d-flex flex-row">
+          <Card  style="width:300px;max-width:80vh">
+            <CardTitle>{item.generated.description}</CardTitle>
+            {#if item.generated.subdescription}
+              <CardSubtitle>{item.generated.subdescription}</CardSubtitle>
+            {/if}
+            <CardText>
+              <Question question="{item.generated}" />
+            </CardText>
+          </Card>
+          <div class="d-flex flex-column">
+            <div class="ml-2 d-flex flex-row">
+              <Button
+                class="ml-1 mr-1"
+                disabled="{disable}"
+                fab
+                size="x-small"
+                on:click="{() => removeItem(i)}"
+              >
+                <Icon path="{mdiMinus}" />
+              </Button>
+              <Button
+                class="ml-1 mr-1"
+                disabled="{disable}"
+                fab
+                size="x-small"
+                on:click="{() => addItem(i)}"
+              >
+                <Icon path="{mdiPlus}" />
+              </Button>
+            </div>
+            <div class="d-flex flex-row justify-center">
+              <div class="mt-2">
+                {basket[i].count}
               </div>
-            </List>
-          </ExpansionPanel>
-        {/each}
-      </ExpansionPanels>
-    </TabContent>
-  {/each}
-</Tabs>
+            </div>
+          </div>
+        </div>
+      {/each}
+    </List>
+  {:else}
+    Le panier est vide.
+  {/if}
+{:else}
+  <Tabs centerActive class="orange-text" bind:value="{themeIdx}">
+    <div slot="tabs">
+      {#each themes as item}
+        <Tab>{item}</Tab>
+      {/each}
+    </div>
+
+    {#each themes as them, them_i}
+      <TabContent>
+        <ExpansionPanels
+          on:change="{onChangeDomain}"
+          bind:value="{domainIdxs[them_i]}"
+        >
+          {#each Object.keys(questions[them]) as d, d_i}
+            <ExpansionPanel>
+              <span slot="header" style="color:red">{d}</span>
+              <List style="width:100%;">
+                <div>
+                  {#each Object.keys(questions[them][d]) as t, t_i}
+                    <div
+                      style="margin-top:5px; margin-bottom:5px;display:flex; align-items:center;"
+                    >
+                      <span style="margin-right:10px">{t}</span>
+                      <div>
+                        {#each questions[them][d][t] as _, i}
+                          <Button
+                            class="{d_i === domainIdxs[them_i][0] &&
+                            typeIdxs[them_i] === t_i &&
+                            levelsIdxs[them_i] === i
+                              ? 'red white-text'
+                              : ''}"
+                            fab
+                            size="x-small"
+                            depressed
+                            on:click="{() => onChangeLevel(d, d_i, t, t_i, i)}"
+                            >{i + 1}</Button
+                          >
+                        {/each}
+                      </div>
+                      <div style="flex-grow:1;"></div>
+                    </div>
+                  {/each}
+                </div>
+              </List>
+            </ExpansionPanel>
+          {/each}
+        </ExpansionPanels>
+      </TabContent>
+    {/each}
+  </Tabs>
+{/if}
 
 <Dialog bind:active>
   <Card>

@@ -68,7 +68,7 @@
           })
           line +=
             ' \\\\ & =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-            s_exps[0].toLatex({implicit:options.includes('implicit')}) +
+            s_exps[0].toLatex({implicit}) +
             '}'
           line += '\\end{align*}$$'
           lines.push(line)
