@@ -8,6 +8,8 @@
   import qs from './questions'
   import queryString from 'query-string'
   import virtualKeyboard from './virtualKeyboard'
+  import { calculMentalTest } from './stores'
+  import { shuffle } from '../../app/utils'
 
   export let location
   console.log('location', location)
@@ -40,11 +42,13 @@
   }
 
   onMount(() => {
-    mf.setOptions({
-      virtualKeyboardMode: 'onfocus',
-      ...virtualKeyboard,
-    })
-    mf.focus()
+    if (mf) {
+      mf.setOptions({
+        virtualKeyboardMode: 'onfocus',
+        ...virtualKeyboard,
+      })
+      mf.focus()
+    }
   })
 
   onDestroy(() => {
@@ -59,25 +63,36 @@
     domain = queryParams.domain
     theme = queryParams.theme
     level = queryParams.level
+    questions = []
+
     if (theme && domain && type && level) {
-      questions = qs[theme][domain][type]
-      questions = questions.filter(
-        (q) => questions.indexOf(q) + 1 === parseInt(level, 10),
+      const question = qs[theme][domain][type].find(
+        (q) => qs[theme][domain][type].indexOf(q) + 1 === parseInt(level, 10),
       )
-      const question = questions[0]
+
       if (question.options && question.options.includes('exhaust')) {
         for (let i = 0; i < question.expressions.length; i++) {
           questions[i] = {
             ...question,
             expressions: [question.expressions[i]],
-            solutions: question.solutions ? [question.solutions[i]] : null
+            solutions: question.solutions ? [question.solutions[i]] : null,
           }
         }
       } else {
-        for (let i = 0; i < 9; i++) questions.push(question)
+        console.log('questions', questions)
+        for (let i = 0; i < 10; i++) questions.push(question)
+        console.log('questions', questions)
+
       }
-    } else {
-      questions = qs['Entiers']['Addition']['A trous']
+    } else if ($calculMentalTest.length) {
+      $calculMentalTest.forEach((element) => {
+      
+        for (let i = 0; i < element.count; i++) {
+          questions.push(element.question)
+        }
+      })
+      console.log('questions', questions)
+      shuffle(questions)
     }
     console.log('questions', questions)
   }
@@ -88,7 +103,7 @@
     }
   }
 
-  $: if (questions.length) {
+  $: if (questions && questions.length) {
     generateds = []
     change()
   }
@@ -133,7 +148,7 @@
     answers="{answers}"
     answers_latex="{answers_latex}"
   />
-{:else}
+{:else if generated}
   <div style="margin-top:10px;margin-bottom:10px">
     <CircularProgress
       number="{current + 1}"
@@ -151,7 +166,6 @@
     <math-field
       style="width:50%"
       virtual-keyboard-mode="onfocus"
-     
       virtual-keyboard-theme="apple"
       on:input="{onChangeMathField}"
       bind:this="{mf}"
@@ -164,6 +178,8 @@
   >
     <Button on:click="{change}">Valider</Button>
   </div>
+{:else}
+  Pas de questions
 {/if}
 
 <style>

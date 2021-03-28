@@ -30,6 +30,7 @@
   import Question from './Question.svelte'
   import generateQuestion from './generateQuestion'
   import { user } from '../../app/stores'
+  import { calculMentalTest } from './stores'
 
   const themes = Object.keys(questions)
   let basket = []
@@ -77,7 +78,14 @@
   }
 
   function launchTest() {
-    const url = `/mental-test?theme=${theme}&domain=${domain}&type=${type}&level=${level}`
+    let url
+    if (showBasket) {
+      calculMentalTest.set(basket)
+      url = '/mental-test'
+    } else {
+      url = `/mental-test?theme=${theme}&domain=${domain}&type=${type}&level=${level}`
+    }
+
     if (decodeURI(encodeURI(url)) !== url) warn('URI malformed', url)
     navigate(url)
   }
@@ -141,31 +149,32 @@
 <div
   style="margin-top:10px;margin-bottom:10px;display:flex;justify-content:flex-end"
 >
-  <Button
-    class="mr-2"
-    disabled="{disable}"
-    fab
-    size="x-small"
-    on:click="{open}"
-  >
-    <Icon path="{mdiHelp}" />
-  </Button>
-  <!-- <Button
-    class="mr-2"
-    disabled="{!level}"
-    fab
-    size="x-small"
-    on:click="{() => {}}"
-  >
-    <Icon path="{mdiCartArrowDown}" />
-  </Button> -->
-  {#if isLoggedIn && $user.roles.includes('teacher')}
-    <Button disabled="{disable}" fab size="x-small" on:click="{addToBasket}">
-      <Icon path="{mdiBasketPlus}" />
+  {#if !showBasket}
+    <Button
+      class="ml-2 mr-2"
+      disabled="{disable}"
+      fab
+      size="x-small"
+      on:click="{open}"
+    >
+      <Icon path="{mdiHelp}" />
     </Button>
+  {/if}
+  {#if isLoggedIn && $user.roles.includes('teacher')}
+    {#if !showBasket}
+      <Button
+        class="ml-2 mr-2"
+        disabled="{disable}"
+        fab
+        size="x-small"
+        on:click="{addToBasket}"
+      >
+        <Icon path="{mdiBasketPlus}" />
+      </Button>
+    {/if}
     <Button
       disabled="{disable}"
-      class="{showBasket ? 'orange white-text' : ''}"
+      class="{showBasket ? 'orange white-text' : ''} ml-2 mr-2"
       fab
       size="x-small"
       on:click="{toggleBasket}"
@@ -173,7 +182,13 @@
       <Icon path="{mdiBasket}" />
     </Button>
   {/if}
-  <Button disabled="{disable}" fab size="x-small" on:click="{launchTest}">
+  <Button
+    class="ml-2 mr-2"
+    disabled="{disable}"
+    fab
+    size="x-small"
+    on:click="{launchTest}"
+  >
     <Icon path="{mdiRocketLaunchOutline}" />
   </Button>
 </div>
@@ -183,7 +198,7 @@
     <List>
       {#each basket as item, i}
         <div class="mt-2 mb-2 d-flex flex-row">
-          <Card  style="width:300px;max-width:80vh">
+          <Card style="width:300px;max-width:80vh">
             <CardTitle>{item.generated.description}</CardTitle>
             {#if item.generated.subdescription}
               <CardSubtitle>{item.generated.subdescription}</CardSubtitle>
