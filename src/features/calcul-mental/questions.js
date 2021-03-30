@@ -1468,6 +1468,32 @@ export default {
           type: 'trou',
           defaultDelay: 20,
         },
+        {
+          description: 'Compléter une égalité de fractions',
+          subdescription: 'En utilisant le produit en croix',
+          expressions: [
+            '#{&1*&3}/#{&2*&3}=#{&1*&4}/?',
+            '#{&2*&3}/#{&1*&3}=?/#{&1*&4}',
+            '#{&1*&4}/?=#{&1*&3}/#{&2*&3}',
+            '?/#{&1*&4}=#{&2*&3}/#{&1*&3}',
+           
+          ],
+          variables: [
+            {
+              '&1': '$e[2;5]',
+              '&2': '$e[2;3]\\{m(&1);d(&1)}',
+              '&3': '$e[2;3]',
+              '&4': '$e[2;3]\\{&3}',
+            },
+          ],
+          solutions: [
+            ['#{&2*&4}'],
+       
+          ],
+          type: 'trou',
+          defaultDelay: 20,
+        },
+       
       ],
       Simplification: [
         {
