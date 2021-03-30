@@ -1378,16 +1378,95 @@ export default {
       'Egalité de fractions': [
         {
           description: 'Compléter une égalité de fractions',
+          subdescription:
+            'multiplier numérateur et dénominateur par le même nombre',
           expressions: [
             '&2/&1=?/#{&1*&3}',
             '&2/&1=#{&2*&3}/?',
             '?/#{&1*&3}=&2/&1',
             '#{&2*&3}/?=&2/&1',
           ],
-          variables: [{ '&1': '$e[2;9]', '&2': '$e[1;&1-1]', '&3': '$e[2;9]' }],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{m(&1);d(&1)}',
+              '&3': '$e[2;9]',
+            },
+          ],
           solutions: [['#{&2*&3}'], ['#{&1*&3}'], ['#{&2*&3}'], ['#{&1*&3}']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
+        },
+        {
+          description: 'Compléter une égalité de fractions',
+          subdescription:
+            'diviser numérateur et dénominateur par le même nombre',
+          expressions: [
+            '#{&2*&3}/#{&1*&3}=?/&1',
+            '#{&2*&3}/#{&1*&3}=&2/?',
+            '?/&1=#{&2*&3}/#{&1*&3}',
+            '&2/?=#{&2*&3}/#{&1*&3}',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{m(&1);d(&1)}',
+              '&3': '$e[2;9]',
+            },
+          ],
+          solutions: [['&2'], ['&1'], ['&2'], ['&1']],
+          type: 'trou',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Compléter une égalité de fractions',
+          subdescription: 'En utilisant le coefficient de proportionnalité',
+          expressions: [
+            '&1/#{&1*&3}=&2/?',
+            '&1/?=&2/#{&2*&3}',
+            '#{&1*&3}/&1=?/&2',
+            '?/&1=#{&2*&3}/&2'
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{m(&1);d(&1)}',
+              '&3': '$e[2;9]',
+            },
+          ],
+          solutions: [
+            ['#{&2*&3}'],
+            ['#{&1*&3}'],
+            ['#{&2*&3}'],
+            ['#{&1*&3}'],
+          ],
+          type: 'trou',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Compléter une égalité de fractions',
+          subdescription: 'En utilisant le coefficient de proportionnalité (2)',
+          expressions: [
+            '&1/#{&1*&3}=?/#{&2*&3}',
+            '?/#{&1*&3}=&2/#{&2*&3}',
+            '#{&1*&3}/&1=#{&2*&3}/?',
+            '#{&1*&3}/?=#{&2*&3}/&2'
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{m(&1);d(&1)}',
+              '&3': '$e[2;9]',
+            },
+          ],
+          solutions: [
+            ['&2'],
+            ['&1'],
+            ['&2'],
+            ['&1'],
+          ],
+          type: 'trou',
+          defaultDelay: 20,
         },
       ],
       Simplification: [
@@ -2420,7 +2499,7 @@ export default {
             '(#{&2&3}+&1)(&4+#{&5&3})',
             '(&1+#{&2&3})(#{&5&3}+&4)',
             '(#{&2&3}+&1)(#{&5&3}+&4)',
-        ],
+          ],
           variables: [
             {
               '&1': '$e[1;9]',
@@ -2445,7 +2524,7 @@ export default {
             '(#{&2&3}#s{&1})(#{&4}#s{&5&3})',
             '(#{&2&3}#s{&1})(#{&5&3}#s{&4})',
             '(#{&1}#s{&2&3})(#{&5&3}#s{&4})',
-        ],
+          ],
           variables: [
             {
               '&1': '$er[1;9]',
@@ -2465,11 +2544,7 @@ export default {
           description: 'Développer $$(a+b)^2$$',
           subscription: 'Coefficients positifs',
           enounces: ['Développer et réduire :'],
-          expressions: [
-            '(&1+#{&2&3})^2',
-            '(#{&2&3}+&1)^2',
-          
-        ],
+          expressions: ['(&1+#{&2&3})^2', '(#{&2&3}+&1)^2'],
           variables: [
             {
               '&1': '$e[1;9]',
@@ -2487,11 +2562,7 @@ export default {
           description: 'Développer $$(a-b)^2$$',
           subscription: 'Coefficients positifs',
           enounces: ['Développer et réduire :'],
-          expressions: [
-            '(&1-#{&2&3})^2',
-            '(#{&2&3}-&1)^2',
-          
-        ],
+          expressions: ['(&1-#{&2&3})^2', '(#{&2&3}-&1)^2'],
           variables: [
             {
               '&1': '$e[1;9]',
@@ -2514,9 +2585,7 @@ export default {
             '(&1-#{&2&3})(&1+#{&2&3})',
             '(#{&2&3}+&1)(#{&2&3}-&1)',
             '(#{&2&3}-&1)(#{&2&3}+&1)',
-       
-          
-        ],
+          ],
           variables: [
             {
               '&1': '$e[1;9]',
@@ -2536,10 +2605,7 @@ export default {
           description: 'Factoriser',
           subdescription: 'Coefficients positifs',
           enounces: ['Factoriser :'],
-          expressions: [
-            '&1&3+#{&1*&2}&4',
-            '#{&1*&2}&4+&1&3',
-          ],
+          expressions: ['&1&3+#{&1*&2}&4', '#{&1*&2}&4+&1&3'],
           variables: [
             {
               '&1': '$e[2;9]',
@@ -2563,10 +2629,7 @@ export default {
           description: 'Factoriser',
           subdescription: 'Coefficients positifs',
           enounces: ['Factoriser :'],
-          expressions: [
-            '&1+#{&1*&2}&3',
-            '#{&1*&2}&3+&1',
-          ],
+          expressions: ['&1+#{&1*&2}&3', '#{&1*&2}&3+&1'],
           variables: [
             {
               '&1': '$e[2;9]',
@@ -2595,14 +2658,12 @@ export default {
             '#{&1*&3^2}+#{&1*&2*&3}',
             '#{&1*&2*&3}+#{&1*&3^2}',
             '#{&1*&3}+#{&1*&2*&3^2}',
-            
           ],
           variables: [
             {
               '&1': '$e[1;9]',
               '&2': '$e[1;9]',
               '&3': '$l{x;y;z}',
-              
             },
           ],
           solutions: [
@@ -2610,8 +2671,6 @@ export default {
             ['#{&1&3}(&3+&2)'],
             ['#{&1&3}(&2+&3)'],
             ['#{&1&3}(1+#{&2*&3})'],
-            
-            
           ],
           type: 'result',
           defaultDelay: 30,
@@ -2636,11 +2695,7 @@ export default {
               '&7': '&1*&3:&5',
             },
           ],
-          solutions: [
-            ['#{&5&4}(#{&6*&4}+#{&7})'],
-            ['#{&5&4}(#{&6}+#{&7*&4})'],
-            
-          ],
+          solutions: [['#{&5&4}(#{&6*&4}+#{&7})'], ['#{&5&4}(#{&6}+#{&7*&4})']],
           type: 'result',
           defaultDelay: 30,
           options: ['implicit'],
@@ -2648,29 +2703,20 @@ export default {
         {
           description: 'Factoriser a^2-b^2',
           enounces: ['Factoriser :'],
-          expressions: [
-            '#{&1^2}-&3^2',            
-            '&3^2-#{&1^2}',            
-          ],
+          expressions: ['#{&1^2}-&3^2', '&3^2-#{&1^2}'],
           variables: [
             {
               '&1': '$e[1;9]',
               '&2': '$e[1;9]',
               '&3': '$l{x;y;z}',
-              
             },
           ],
-          solutions: [
-            ['(&1+&3)(&1-&3)'],
-            ['(&3+&1)(&3-&1)'],
-            
-            
-          ],
+          solutions: [['(&1+&3)(&1-&3)'], ['(&3+&1)(&3-&1)']],
           type: 'result',
           defaultDelay: 30,
           options: ['implicit'],
         },
-      ]
+      ],
     },
   },
 }
