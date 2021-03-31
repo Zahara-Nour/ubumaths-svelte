@@ -26,6 +26,8 @@
   <title>UbuMaths</title>
   <meta name="robots" content="noindex nofollow" />
   <html lang="fr"></html>
+  <link rel="stylesheet" href="css/reveal/reveal.css">
+    <link rel="stylesheet" href="css/reveal/theme/white.css">
 </svelte:head>
 
 <MaterialApp theme="{theme}">

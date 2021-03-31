@@ -1396,6 +1396,20 @@ export default {
           solutions: [['#{&2*&3}'], ['#{&1*&3}'], ['#{&2*&3}'], ['#{&1*&3}']],
           type: 'trou',
           defaultDelay: 20,
+          help:`<section>
+          <h3 class="orange-text">Compléter une égalité de fractions</h3>
+          <div class="r-stretch d-flex flex-column justify-center">
+            $$\\frac{5}{4}=\\frac{\\ldots}{12}$$
+          </div>
+          <p>Pour passer de 4 à 12, je multiplie par 3</p>
+        </section>
+        <section>
+          <h3 class="orange-text">Compléter une égalité de fractions</h3>
+          <div class="r-stretch d-flex flex-column justify-center">
+            $$\\frac{5}{4}=\\frac{\\textcolor{green}{15}}{12}$$
+          </div>
+          <p>Donc je multiplie également 5 par 4</p>
+        </section>`
         },
         {
           description: 'Compléter une égalité de fractions',
