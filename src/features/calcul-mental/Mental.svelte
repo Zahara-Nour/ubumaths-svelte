@@ -29,7 +29,7 @@
   import questions from './questions'
   import Question from './Question.svelte'
   import generateQuestion from './generateQuestion'
-  import { user } from '../../app/stores'
+  import { fontSize, user } from '../../app/stores'
   import { calculMentalTest } from './stores'
 
   const themes = Object.keys(questions)
@@ -145,10 +145,8 @@
   $: disable = !theme || !domain || !type || !(level >= 0)
 </script>
 
-<h4 style="margin-top:10px">Calcul mental</h4>
-<div
-  style="margin-top:10px;margin-bottom:10px;display:flex;justify-content:flex-end"
->
+<h4 class="mt-3">Calcul mental</h4>
+<div class="mt-3 mb-3 d-flex justify-end">
   {#if !showBasket}
     <Button
       class="ml-2 mr-2"
@@ -241,10 +239,10 @@
     Le panier est vide.
   {/if}
 {:else}
-  <Tabs centerActive class="orange-text" bind:value="{themeIdx}">
+  <Tabs centerActive class="orange-text" bind:value="{themeIdx}" style="font-size:{$fontSize}px;">
     <div slot="tabs">
       {#each themes as item}
-        <Tab>{item}</Tab>
+        <Tab><span style="font-size:{$fontSize}px;">{item}</span></Tab>
       {/each}
     </div>
 
@@ -256,14 +254,14 @@
         >
           {#each Object.keys(questions[them]) as d, d_i}
             <ExpansionPanel>
-              <span slot="header" style="color:red">{d}</span>
+              <span slot="header" style="font-size:{$fontSize}px;color:red">{d}</span>
               <List style="width:100%;">
-                <div>
+                <div style="font-size:{$fontSize}px;">
                   {#each Object.keys(questions[them][d]) as t, t_i}
                     <div
-                      style="margin-top:5px; margin-bottom:5px;display:flex; align-items:center;"
+                      class="mt-2 mb-2 d-flex align-center"
                     >
-                      <span style="margin-right:10px">{t}</span>
+                      <span class="mr-3">{t}</span>
                       <div>
                         {#each questions[them][d][t] as _, i}
                           <Button
@@ -271,12 +269,13 @@
                             typeIdxs[them_i] === t_i &&
                             levelsIdxs[them_i] === i
                               ? 'red white-text'
-                              : ''}"
+                              : ''} ma-1"
                             fab
                             size="x-small"
+                            
                             depressed
                             on:click="{() => onChangeLevel(d, d_i, t, t_i, i)}"
-                            >{i + 1}</Button
+                            ><span style="font-size:{$fontSize}px;">{i + 1}</span></Button
                           >
                         {/each}
                       </div>

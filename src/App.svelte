@@ -11,6 +11,7 @@
   import Mental from './features/calcul-mental/Mental.svelte'
   import MentalTest from './features/calcul-mental/MentalTest.svelte'
   import Footer from 'svelte-materialify/src/components/Footer'
+import { fontSize } from './app/stores'
 
   export let url = ''
 
@@ -20,6 +21,8 @@
     if (theme === 'light') theme = 'dark'
     else theme = 'light'
   }
+
+  $: console.log('fontSize', $fontSize)
 </script>
 
 <svelte:head>
@@ -35,7 +38,7 @@
     <!-- <button on:click="{toggleTheme}">Toggle Theme</button> -->
 
     <NavBar />
-    <div class="main">
+    <div class="main" style="font-size:{$fontSize}">
       <!-- <Route path="about/:id/:id2" let:params> -->
       <!-- <About {...params} /> -->
       <!-- </Route> -->

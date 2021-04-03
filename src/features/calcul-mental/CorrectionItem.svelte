@@ -6,7 +6,7 @@
 
   import { mdiCheckCircle } from '@mdi/js'
   import { mdiCloseCircle } from '@mdi/js'
-
+  import { fontSize } from '../../app/stores'
 
   export let item
   export let addPoints
@@ -60,15 +60,14 @@
         if (details) {
           line = '$$\\begin{align*}' + q_exp.latex
           d_exps.forEach((detail, i) => {
-            
-            if (detail !== s_exps[0].toLatex({implicit})) {
+            if (detail !== s_exps[0].toLatex({ implicit })) {
               if (i !== 0) line += ' \\\\ '
               line += '& =' + detail
             }
           })
           line +=
             ' \\\\ & =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-            s_exps[0].toLatex({implicit}) +
+            s_exps[0].toLatex({ implicit }) +
             '}'
           line += '\\end{align*}$$'
           lines.push(line)
@@ -76,7 +75,8 @@
           // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
           line = '$$' + q_exp.latex
           if (empty) {
-            line += `=\\textcolor{green}{${s_exps[0].toLatex({implicit})}}` + '$$'
+            line +=
+              `=\\textcolor{green}{${s_exps[0].toLatex({ implicit })}}` + '$$'
 
             com = "(tu n'as rien répondu)"
           } else if (badExpression || !correct) {
@@ -84,7 +84,7 @@
               '=\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
               item.answer_latex +
               '}}\\text{  }\\textcolor{green}{' +
-              s_exps[0].toLatex({implicit}) +
+              s_exps[0].toLatex({ implicit }) +
               '}$$'
           } else {
             line += '=\\textcolor{green}{' + item.answer_latex + '}$$'
@@ -106,26 +106,27 @@
           line = '$$\\begin{align*}'
           item.details.forEach((detail, i) => {
             if (i === 0) line += detail
-            if (i >1)   line +=' \\\\ '
+            if (i > 1) line += ' \\\\ '
             if (i === item.details.length - 1) {
               line +=
                 '& =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
                 s_exps[0].latex +
                 '}'
             } else {
-              line += '& ='+ detail
+              line += '& =' + detail
             }
             line += '\\end{align*}$$'
             lines.push(line)
           })
         } else {
-          line = '$$' +
-              q_exp.latex.replace(
-                /\\ldots/,
-                `\\textcolor{green}{${s_exps[0].latex}}`,
-              ) +
-              '$$'
-          
+          line =
+            '$$' +
+            q_exp.latex.replace(
+              /\\ldots/,
+              `\\textcolor{green}{${s_exps[0].latex}}`,
+            ) +
+            '$$'
+
           lines.push(line)
           if (empty) {
             com = "(tu n'as rien répondu)"
@@ -153,36 +154,46 @@
 
 <div id="correction">
   <ListItem selectable="{false}">
-    <div style="display:flex;justify-content:flex-start;align-items:center;">
+    <div class="d-flex justify-start align-center">
       <Button fab size="x-small" depressed class="blue white-text mr-2">
-        {item.number}
+        <span style="font-size:{$fontSize}px;">{item.number}</span>
       </Button>
 
       <!-- a div is necessary for the icon to center aligned -->
       <div>
         {#if correct}
-          <Icon class="mt-0 mb-0 mr-7 green-text" path="{mdiCheckCircle}" />
+          <Icon
+            class="mt-0 mb-0 mr-7 green-text"
+            style="font-size:{$fontSize}px;"
+            path="{mdiCheckCircle}"
+          />
         {:else}
-          <Icon class="mt-0 mb-0 mr-7 red-text" path="{mdiCloseCircle}" />
+          <Icon
+            class="mt-0 mb-0 mr-7 red-text"
+            style="font-size:{$fontSize}px;"
+            path="{mdiCloseCircle}"
+          />
         {/if}
       </div>
 
       <div style="display:flex;flex-direction:column">
         {#if details && item.details}
           {#each detailedCorrection as line}
-            <div class="ml-2 mr-2 mt-2 mb-2">
+            <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{$fontSize}px;">
               {line}
             </div>
           {/each}
         {:else}
           {#each correction as line}
-            <div class="ml-2 mr-2 mt-2 mb-2">
+            <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{$fontSize}px;">
               {line}
             </div>
           {/each}
 
           {#if com}
-            {com}
+            <div style="font-size:{$fontSize}px;">
+              {com}
+            </div>
           {/if}
         {/if}
       </div>

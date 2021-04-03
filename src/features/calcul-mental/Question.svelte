@@ -3,6 +3,7 @@
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { onMount, afterUpdate, onDestroy } from 'svelte'
   import { mdiConsoleNetworkOutline } from '@mdi/js'
+import { fontSize } from '../../app/stores';
   export let question
 
   let mf
@@ -41,10 +42,10 @@
   {#if !(question.options && question.options.includes('no-exp'))}
     <div
       id="expression"
-      style="display:flex; align-items:center;justify-content:center"
+      class="d-flex align-center justify-center"
     >
       <math-field
-        style="font-size:32px;display:inline-block"
+        style="font-size:{$fontSize+10}px;display:inline-block"
         read-only="true"
         bind:this="{mf}"></math-field>
     </div>

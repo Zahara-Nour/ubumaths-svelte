@@ -10,6 +10,7 @@
   import virtualKeyboard from './virtualKeyboard'
   import { calculMentalTest } from './stores'
   import { shuffle } from '../../app/utils'
+import { fontSize } from '../../app/stores';
 
   export let location
   console.log('location', location)
@@ -149,22 +150,22 @@
     answers_latex="{answers_latex}"
   />
 {:else if generated}
-  <div style="margin-top:10px;margin-bottom:10px">
+  <div class="mt-3 mb-3">
     <CircularProgress
       number="{current + 1}"
-      fontSize="{24}"
+      fontSize="{$fontSize+8}"
       strokeWidth="{5}"
       percentage="{percentage}"
     />
   </div>
-  <div style="margin-top:20px;margin-bottom:20px">
+  <div class="mt-5 mb-5">
     <Question question="{generated}" />
   </div>
   <!-- <div class:error> -->
-  <div style="display:flex;align-items:center">
-    <span style="margin-right:15px">Ta réponse:</span>
+  <div class="d-flex align-center">
+    <span class="mr-4" style="font-size:{$fontSize}px;">Ta réponse:</span>
     <math-field
-      style="width:50%"
+      style="width:50%;font-size:{$fontSize}px;"
       virtual-keyboard-mode="onfocus"
       virtual-keyboard-theme="apple"
       on:input="{onChangeMathField}"

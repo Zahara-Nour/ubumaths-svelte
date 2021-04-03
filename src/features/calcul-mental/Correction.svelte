@@ -83,7 +83,7 @@
 </script>
 
 <div
-  style="margin-top:10px;margin-bottom:10px;display:flex;justify-content:flex-end"
+  class="mt-3 mb-3 d-flex justify-end"
 >
   {#if help}
     <Button

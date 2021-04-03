@@ -14,7 +14,8 @@
     Overlay,
   } from 'svelte-materialify/src'
   import { navigate, Link } from 'svelte-routing'
-  import { mdiMenu } from '@mdi/js'
+  import { mdiFormatFontSizeDecrease, mdiFormatFontSizeIncrease, mdiMenu } from '@mdi/js'
+import { fontSize } from '../app/stores';
 
   let links = [
     {
@@ -44,6 +45,18 @@
     navigate(url)
     active= false
   }
+
+  function increaseFontSize() {
+    console.log('increase')
+    fontSize.update(size=>size+1)
+    console.log($fontSize)
+  }
+
+  function decreaseFontSize() {
+    fontSize.update(size=>size-1)
+    console.log($fontSize)
+  }
+
 </script>
 
 <svelte:window on:resize="{setMiniWindow}" />
@@ -67,6 +80,12 @@
       </div>
     {/if}
     <div style="flex-grow:1"></div>
+    <Button class="mr-1" on:click="{decreaseFontSize}" size="small" fab depressed>
+      <Icon path="{mdiFormatFontSizeDecrease}" />
+    </Button>
+    <Button class="mr-2" on:click="{increaseFontSize}" size="small" fab depressed>
+      <Icon path="{mdiFormatFontSizeIncrease}" />
+    </Button>
     <AuthButton/>
     {#if miniWindow}
       <Button class="mr-2" on:click="{toggleDrawer}" size="small" fab depressed>
