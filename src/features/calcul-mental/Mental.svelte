@@ -16,17 +16,15 @@
     Tooltip,
     Snackbar,
     Divider,
-  } from 'svelte-materialify/src'
-  import ExpansionPanels, {
+    ExpansionPanels,
     ExpansionPanel,
-  } from 'svelte-materialify/src/components/ExpansionPanels'
+  } from 'svelte-materialify/src'
+
   import {
-    mdiCartArrowDown,
     mdiRocketLaunchOutline,
     mdiHelp,
     mdiBasketPlus,
     mdiBasket,
-    mdiMicroSd,
     mdiMinus,
     mdiPlus,
     mdiCloudDownloadOutline,
@@ -40,8 +38,12 @@
   import { calculMentalTest } from './stores'
   import { getCollection } from '../../app/collections'
   import { saveDocument } from '../../app/db'
+  import queryString from 'query-string'
+
+  export let location
 
   const themes = Object.keys(questions)
+  let queryParams
   let basket = []
   let theme = themes[0]
   let themeIdx = 0
@@ -62,6 +64,7 @@
   let saveSuccess = false
   let saveFailure = false
   let displayAssessmentList = false
+  let displayDescription = false
   const titleRules = [
     (v) => !evalsTitles.includes(v) || "Titre d'évaluation déjà utilisé",
   ]
@@ -75,7 +78,6 @@
   domain = Object.keys(questions[theme])[0]
   subdomain = Object.keys(questions[theme][domain])[0]
   level = 1
-  generated = generateExemple(theme, domain, subdomain, level)
 
   function onChangeDomain(e) {
     const idx = e.detail.index
@@ -86,7 +88,6 @@
     subdomainsIdxs[themeIdx] = 0
     level = 1
     levelsIdxs[themeIdx] = 0
-    generated = generateExemple(theme, domain, subdomain, level)
   }
 
   function onChangeLevel(d, d_i, t, t_i, l) {
@@ -94,12 +95,11 @@
     subdomainsIdxs[themeIdx] = t_i
     level = l + 1
     levelsIdxs[themeIdx] = l
-    generated = generateExemple(theme, domain, subdomain, level)
   }
 
   function launchTest() {
     let url
-    if (showBasket) {
+    if (basket.length) {
       calculMentalTest.set(basket)
       url = '/mental-test'
     } else {
@@ -112,21 +112,12 @@
 
   function generateExemple(theme, domain, subdomain, level) {
     let qs = questions[theme][domain][subdomain]
-    // console.log('questions', qs)
     const q = qs.find((q) => qs.indexOf(q) + 1 === parseInt(level, 10))
-    // console.log('questions', qs)
-
-    // console.log('question', q)
     return generateQuestion(q)
   }
 
-  let displayDescription = false
-  function open() {
-    displayDescription = true
-  }
-  function close() {
-    displayDescription = false
-  }
+  const open = () => (displayDescription = true)
+  const close = () => (displayDescription = false)
 
   function addToBasket(theme, domain, subdomain, level, count) {
     let qs = questions[theme][domain][subdomain]
@@ -144,16 +135,11 @@
         ...q,
       },
     ]
-  
   }
 
-  function toggleBasket() {
-    showBasket = !showBasket
-  }
+  const toggleBasket = () => (showBasket = !showBasket)
+  const addItem = (i) => basket[i].count++
 
-  function addItem(i) {
-    basket[i].count++
-  }
   function removeItem(i) {
     if (basket[i].count > 0) {
       basket[i].count--
@@ -165,17 +151,20 @@
     const questions = []
     const document = {
       date: new Date().getTime(),
-      questions: basket.map(item => ({
-        count:item.count,
-        theme:item.theme,
-        domain:item.domain,
-        subdomain:item.subdomain,
-        level:item.level
+      questions: basket.map((item) => ({
+        count: item.count,
+        theme: item.theme,
+        domain: item.domain,
+        subdomain: item.subdomain,
+        level: item.level,
       })),
       title: evalTitle,
     }
+
     saving = true
+
     const assessment = await saveDocument({ path, document })
+
     if (assessment) {
       evals = [...evals, assessment]
       saveSuccess = true
@@ -185,9 +174,7 @@
     saving = false
   }
 
-  function load() {
-    displayAssessmentList = true
-  }
+  const load = () => (displayAssessmentList = true)
 
   async function fetchEvals() {
     evals = await getCollection({
@@ -198,47 +185,47 @@
 
   function loadAssessment(assessment) {
     basket = []
-   
     assessment.questions.forEach((q) => {
       addToBasket(q.theme, q.domain, q.subdomain, q.level, q.count)
     })
-
-  
     displayAssessmentList = false
+  }
+
+  $: {
+    queryParams = queryString.parse(location.search)
+    if (queryParams.theme) theme = queryParams.theme
+    if (queryParams.domain) domain = queryParams.domain
+    if (queryParams.subdomain) subdomain = queryParams.subdomain
+    if (queryParams.level) level = queryParams.level
   }
 
   $: if (themeIdx >= 0) {
     theme = themes[themeIdx]
- 
     domain = Object.keys(questions[theme])[domainIdxs[themeIdx]]
     subdomain = Object.keys(questions[theme][domain])[subdomainsIdxs[themeIdx]]
     level = levelsIdxs[themeIdx] + 1
-    generated = generateExemple(theme, domain, subdomain, level)
   }
 
   $: isLoggedIn = $user.id != 'guest'
   $: disable = !theme || !domain || !subdomain || !(level >= 0)
 
   $: if (showBasket && !evals) {
-
     fetchEvals()
   }
-  $: {
-  
-    if (evals) {
-      evalsTitles = evals.map((ev) => ev.title)
-    }
+  $: if (evals) {
+    evalsTitles = evals.map((ev) => ev.title)
   }
+
   $: disableSave = evalTitle === '' || evalsTitles.includes(evalTitle) || saving
+  $: generated = generateExemple(theme, domain, subdomain, level)
 </script>
 
-<h4 class="mt-3">Calcul mental</h4>
+<h4 class="mt-5 pa-3 mb-5 amber white-text">Calcul mental</h4>
 <div class="mt-3 mb-3 d-flex">
   {#if showBasket}
     <Tooltip bottom>
       <Button
-        class="ml-2 mr-2"
-        disabled="{disable}"
+        class="ml-2 mr-2 amber white-text darken-2"
         fab
         size="x-small"
         on:click="{load}"
@@ -247,9 +234,10 @@
       </Button>
       <span slot="tip">Charger</span>
     </Tooltip>
+
     <Tooltip bottom>
       <Button
-        class="ml-2 mr-2"
+        class="{disableSave ? '' : 'amber white-text darken-2'} ml-2 mr-2"
         disabled="{disableSave}"
         fab
         size="x-small"
@@ -263,7 +251,7 @@
   <div class="flex-grow-1"></div>
   {#if !showBasket}
     <Button
-      class="ml-2 mr-2"
+      class="ml-2 mr-2 amber darken-2 white-text"
       disabled="{disable}"
       fab
       size="x-small"
@@ -275,7 +263,7 @@
   {#if isLoggedIn && $user.roles.includes('teacher')}
     {#if !showBasket}
       <Button
-        class="ml-2 mr-2"
+        class="ml-2 mr-2 amber darken-2 white-text"
         disabled="{disable}"
         fab
         size="x-small"
@@ -286,7 +274,8 @@
     {/if}
     <Button
       disabled="{disable}"
-      class="{showBasket ? 'orange white-text' : ''} ml-2 mr-2"
+      class="amber white-text darken-2 ml-2 mr-2"
+      depressed="{showBasket}"
       fab
       size="x-small"
       on:click="{toggleBasket}"
@@ -295,7 +284,7 @@
     </Button>
   {/if}
   <Button
-    class="ml-2 mr-2"
+    class="ml-2 mr-2 amber darken-2 white-text"
     disabled="{disable}"
     fab
     size="x-small"
@@ -306,13 +295,15 @@
 </div>
 
 {#if showBasket}
-  <TextField filled bind:value="{evalTitle}" rules="{titleRules}">Titre</TextField>
-  
+  <TextField filled bind:value="{evalTitle}" rules="{titleRules}"
+    >Titre</TextField
+  >
+
   {#if basket.length}
     <List>
       {#each basket as item, i}
-        <div class="mt-2 mb-2 d-flex flex-row">
-          <Card style="width:300px;max-width:80vh">
+        <div class="mt-4 mb-4 d-flex flex-row">
+          <Card  style="width:300px;max-width:80vh">
             <CardTitle>{item.description}</CardTitle>
             {#if item.subdescription}
               <CardSubtitle>{item.subdescription}</CardSubtitle>

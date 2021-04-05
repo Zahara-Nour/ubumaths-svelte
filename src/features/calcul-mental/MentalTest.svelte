@@ -33,7 +33,7 @@
   let error = true
   let finish = false
   let queryParams
-  let type
+  let subdomain
   let domain
   let theme
   let level
@@ -60,15 +60,15 @@
   $: {
     queryParams = queryString.parse(location.search)
     // console.log('queryParams', queryParams)
-    type = queryParams.type
+    subdomain = queryParams.subdomain
     domain = queryParams.domain
     theme = queryParams.theme
     level = queryParams.level
     questions = []
 
-    if (theme && domain && type && level) {
-      const question = qs[theme][domain][type].find(
-        (q) => qs[theme][domain][type].indexOf(q) + 1 === parseInt(level, 10),
+    if (theme && domain && subdomain && level) {
+      const question = qs[theme][domain][subdomain].find(
+        (q) => qs[theme][domain][subdomain].indexOf(q) + 1 === parseInt(level, 10),
       )
 
       if (question.options && question.options.includes('exhaust')) {

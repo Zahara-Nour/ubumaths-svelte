@@ -14,9 +14,15 @@
     Overlay,
   } from 'svelte-materialify/src'
   import { navigate, Link } from 'svelte-routing'
-  import { mdiFormatFontSizeDecrease, mdiFormatFontSizeIncrease, mdiMenu } from '@mdi/js'
-import { fontSize } from '../app/stores';
+  import {
+    mdiFormatFontSizeDecrease,
+    mdiFormatFontSizeIncrease,
+    mdiMenu,
+  } from '@mdi/js'
+  import { fontSize } from '../app/stores'
 
+  let miniWindow = false
+  let active = false
   let links = [
     {
       name: 'Calcul mental',
@@ -28,48 +34,33 @@ import { fontSize } from '../app/stores';
     },
   ]
 
-  let miniWindow = false
-  let active = false
-
-  onMount(setMiniWindow)
-
-  function setMiniWindow() {
-    miniWindow = window.innerWidth < 720
-  }
-
-  const toggleDrawer = () => {
-    active = !active
-  }
+  const setMiniWindow = () => (miniWindow = window.innerWidth < 720)
+  const toggleDrawer = () => (active = !active)
+  const increaseFontSize = () => fontSize.update((size) => size + 1)
+  const decreaseFontSize = () => fontSize.update((size) => size - 1)
 
   function goTo(url) {
     navigate(url)
-    active= false
+    active = false
   }
 
-  function increaseFontSize() {
-    console.log('increase')
-    fontSize.update(size=>size+1)
-    console.log($fontSize)
-  }
-
-  function decreaseFontSize() {
-    fontSize.update(size=>size-1)
-    console.log($fontSize)
-  }
-
+  onMount(setMiniWindow)
 </script>
 
 <svelte:window on:resize="{setMiniWindow}" />
+
 <!-- Navbars should not use list -->
 <!--  https://css-tricks.com/navigation-in-lists-to-be-or-not-to-be/ -->
 <nav role="navigation">
   <AppBar dense flat>
     <div slot="icon">
-      <Button on:click={()=>goTo('/')} depressed>
+      <Button on:click="{() => goTo('/')}" depressed>
         <Gidouille />
       </Button>
     </div>
+
     <span class="title" slot="title">UbuMaths</span>
+
     {#if !miniWindow}
       <div class="links">
         <!-- <Link to="/">Home</Link> -->
@@ -79,31 +70,55 @@ import { fontSize } from '../app/stores';
         {/each}
       </div>
     {/if}
+
     <div style="flex-grow:1"></div>
-    <Button class="mr-1" on:click="{decreaseFontSize}" size="small" fab depressed>
+
+    <Button
+      class="mr-1"
+      on:click="{decreaseFontSize}"
+      size="small"
+      fab
+      depressed
+    >
       <Icon path="{mdiFormatFontSizeDecrease}" />
     </Button>
-    <Button class="mr-2" on:click="{increaseFontSize}" size="small" fab depressed>
+
+    <Button
+      class="mr-2"
+      on:click="{increaseFontSize}"
+      size="small"
+      fab
+      depressed
+    >
       <Icon path="{mdiFormatFontSizeIncrease}" />
     </Button>
-    <AuthButton/>
+
+    <AuthButton />
+
     {#if miniWindow}
       <Button class="mr-2" on:click="{toggleDrawer}" size="small" fab depressed>
         <Icon path="{mdiMenu}" />
       </Button>
     {/if}
   </AppBar>
-  <NavigationDrawer index={10} style="position: absolute" active="{active && miniWindow}">
+
+  <NavigationDrawer
+    index="{10}"
+    style="position: absolute"
+    active="{active && miniWindow}"
+  >
     <List nav dense>
       <ListItemGroup>
         {#each links as link}
-        <ListItem on:click="{() => goTo(link.url)}">
-          {link.name}
-        </ListItem>
+          <ListItem on:click="{() => goTo(link.url)}">
+            {link.name}
+          </ListItem>
         {/each}
       </ListItemGroup>
     </List>
+  
   </NavigationDrawer>
+  
   <Overlay
     active="{active && miniWindow}"
     absolute
