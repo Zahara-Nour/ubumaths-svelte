@@ -223,14 +223,17 @@ export default function generateQuestion(question, generateds) {
     enounce = enounce.replace(regexExactLatex, replacementExactLatex)
     enounce = enounce.replace(regexExact, replacementExact)
   }
-  console.log("question", question)
-
-  return {
+  
+  const generated = {
     points: 1,
     ...question,
     solutions,
     expression,
-    details,
-    enounce,
   }
+
+  if (details) generated.details = details
+  if (enounce) generated.enounce = enounce
+  console.log("GENERATED  question", generated)
+
+  return generated
 }

@@ -1,0 +1,1 @@
+export default ["contributor", "teacher", 'student', 'referent', 'admin', 'parent']

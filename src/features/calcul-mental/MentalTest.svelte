@@ -89,7 +89,7 @@ import { fontSize } from '../../app/stores';
       $calculMentalTest.forEach((element) => {
       
         for (let i = 0; i < element.count; i++) {
-          questions.push(element.question)
+          questions.push(element)
         }
       })
       console.log('questions', questions)
