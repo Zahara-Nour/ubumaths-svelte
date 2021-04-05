@@ -48,6 +48,7 @@
     "@sveltejs/svelte-virtual-list": "^3.0.1",
     "dropzone": "^5.7.2",
     "firebase": "^7.18.0",
+    "mathlive": "^0.59.0",
     "query-string": "^6.13.1",
     "remove": "^0.1.5",
     "reveal.js": "^4.1.0",

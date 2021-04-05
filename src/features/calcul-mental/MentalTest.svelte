@@ -10,10 +10,10 @@
   import virtualKeyboard from './virtualKeyboard'
   import { calculMentalTest } from './stores'
   import { shuffle } from '../../app/utils'
-import { fontSize } from '../../app/stores';
+  import { fontSize } from '../../app/stores'
 
   export let location
-  console.log('location', location)
+  // console.log('location', location)
 
   let question = {}
   let questions
@@ -59,7 +59,7 @@ import { fontSize } from '../../app/stores';
 
   $: {
     queryParams = queryString.parse(location.search)
-    console.log('queryParams', queryParams)
+    // console.log('queryParams', queryParams)
     type = queryParams.type
     domain = queryParams.domain
     theme = queryParams.theme
@@ -80,19 +80,15 @@ import { fontSize } from '../../app/stores';
           }
         }
       } else {
-        console.log('questions', questions)
         for (let i = 0; i < 10; i++) questions.push(question)
-        console.log('questions', questions)
-
       }
     } else if ($calculMentalTest.length) {
       $calculMentalTest.forEach((element) => {
-      
         for (let i = 0; i < element.count; i++) {
           questions.push(element)
         }
       })
-      console.log('questions', questions)
+
       shuffle(questions)
     }
     console.log('questions', questions)
@@ -153,7 +149,7 @@ import { fontSize } from '../../app/stores';
   <div class="mt-3 mb-3">
     <CircularProgress
       number="{current + 1}"
-      fontSize="{$fontSize+8}"
+      fontSize="{$fontSize + 8}"
       strokeWidth="{5}"
       percentage="{percentage}"
     />

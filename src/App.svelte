@@ -11,7 +11,7 @@
   import Mental from './features/calcul-mental/Mental.svelte'
   import MentalTest from './features/calcul-mental/MentalTest.svelte'
   import Footer from 'svelte-materialify/src/components/Footer'
-import { fontSize } from './app/stores'
+  import { fontSize } from './app/stores'
 
   export let url = ''
 
@@ -22,15 +22,14 @@ import { fontSize } from './app/stores'
     else theme = 'light'
   }
 
-  $: console.log('fontSize', $fontSize)
 </script>
 
 <svelte:head>
   <title>UbuMaths</title>
   <meta name="robots" content="noindex nofollow" />
   <html lang="fr"></html>
-  <link rel="stylesheet" href="css/reveal/reveal.css">
-    <link rel="stylesheet" href="css/reveal/theme/white.css">
+  <link rel="stylesheet" href="css/reveal/reveal.css" />
+  <link rel="stylesheet" href="css/reveal/theme/white.css" />
 </svelte:head>
 
 <MaterialApp theme="{theme}">

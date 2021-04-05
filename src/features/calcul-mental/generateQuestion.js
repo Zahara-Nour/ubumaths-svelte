@@ -1,7 +1,7 @@
 import { math } from 'tinycas/build/math/math'
 import emptyQuestion from './emptyQuestion'
 import { lexicoSort } from '../../app/utils'
-import { mdiLinkVariantRemove } from '@mdi/js'
+
 
 export default function generateQuestion(question, generateds) {
   // firestore returns objects with read-only properties
@@ -115,7 +115,7 @@ export default function generateQuestion(question, generateds) {
       if (!doItAgain && question.conditions) {
         let condition =
           question.conditions[question.conditions.length === 1 ? 0 : choice]
-        console.log('condition', condition)
+        // console.log('condition', condition)
         Object.getOwnPropertyNames(variables).forEach((name) => {
           const regex = new RegExp(name, 'g')
           condition = condition.replace(regex, variables[name])
@@ -152,7 +152,7 @@ export default function generateQuestion(question, generateds) {
 
     if (question.letters) {
       letters = question.letters[question.letters.length === 1 ? 0 : choice]
-      console.log('letters', letters)
+      // console.log('letters', letters)
 
       Object.getOwnPropertyNames(letters).forEach((letter) => {
         if (letter.startsWith('&')) {
@@ -164,7 +164,7 @@ export default function generateQuestion(question, generateds) {
           letters[letter] = variables[letters[letter]]
         }
       })
-      console.log('letters', letters)
+      // console.log('letters', letters)
       params = { ...params, ...letters }
     }
 
@@ -198,7 +198,7 @@ export default function generateQuestion(question, generateds) {
       if (found) {
         //  console.log('found', found)
         const tests = found[1].split('&&')
-        console.log('tests', tests)
+        // console.log('tests', tests)
         if (tests.every((t) => math(t).eval().string === 'true')) {
           // console.log('tests ok, replace ', d, ' with ', d.replace(found[0], ''))
           d = d.replace(found[0], '')
@@ -233,7 +233,7 @@ export default function generateQuestion(question, generateds) {
 
   if (details) generated.details = details
   if (enounce) generated.enounce = enounce
-  console.log("GENERATED  question", generated)
+  // console.log("GENERATED  question", generated)
 
   return generated
 }

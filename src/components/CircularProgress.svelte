@@ -13,7 +13,7 @@
   // Size of the enclosing square
   // SVG centers the stroke width on the radius, subtract out so circle fits in square
   //   const sqSize = sqSize
-  console.log('circular')
+  
   $: sqSize = fontSize * 1.8
 
   $: radius = (sqSize - strokeWidth) / 2

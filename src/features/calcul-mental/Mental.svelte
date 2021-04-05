@@ -144,7 +144,7 @@
         ...q,
       },
     ]
-    console.log('baskt', basket)
+  
   }
 
   function toggleBasket() {
@@ -165,7 +165,13 @@
     const questions = []
     const document = {
       date: new Date().getTime(),
-      questions: basket,
+      questions: basket.map(item => ({
+        count:item.count,
+        theme:item.theme,
+        domain:item.domain,
+        subdomain:item.subdomain,
+        level:item.level
+      })),
       title: evalTitle,
     }
     saving = true
@@ -192,18 +198,18 @@
 
   function loadAssessment(assessment) {
     basket = []
-    console.log('assessment', assessment)
+   
     assessment.questions.forEach((q) => {
       addToBasket(q.theme, q.domain, q.subdomain, q.level, q.count)
     })
 
-    console.log('baskt', basket)
+  
     displayAssessmentList = false
   }
 
   $: if (themeIdx >= 0) {
     theme = themes[themeIdx]
-    console.log('changing theme', theme)
+ 
     domain = Object.keys(questions[theme])[domainIdxs[themeIdx]]
     subdomain = Object.keys(questions[theme][domain])[subdomainsIdxs[themeIdx]]
     level = levelsIdxs[themeIdx] + 1
@@ -214,11 +220,11 @@
   $: disable = !theme || !domain || !subdomain || !(level >= 0)
 
   $: if (showBasket && !evals) {
-    console.log('fetch evals')
+
     fetchEvals()
   }
   $: {
-    console.log('evals', evals)
+  
     if (evals) {
       evalsTitles = evals.map((ev) => ev.title)
     }

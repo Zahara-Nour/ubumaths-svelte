@@ -14,7 +14,7 @@
   $: if (loaded) initAuth()
 
   function loadScript(src) {
-    console.log('loading script')
+    // console.log('loading script')
     // Fetch existing script element by src
     let script = document.querySelector(`script[src="${src}"]`)
 
@@ -30,7 +30,7 @@
 
       // Store status in attribute on script
       const setAttributeFromEvent = (event) => {
-        console.log('event', event.type)
+        // console.log('event', event.type)
         script.setAttribute(
           'data-status',
           event.type === 'load' ? 'ready' : 'error',
@@ -70,7 +70,7 @@
   let isLoggedIn
   const unsubscribeUser = user.subscribe((user) => {
     isLoggedIn = user.id !== 'guest'
-    console.log('user updated', user)
+    // console.log('user updated', user)
   })
   const removeScriptListeners = loadScript('https://apis.google.com/js/api.js')
 
@@ -80,7 +80,7 @@
   })
 
   const loginSuccess = async (googleUser) => {
-    console.log('Google Auth Response', googleUser)
+    // console.log('Google Auth Response', googleUser)
     // We need to register an Observer on Firebase Auth to make sure auth is initialized.
     const profile = googleUser.getBasicProfile()
     const authResponse = googleUser.getAuthResponse()
@@ -122,7 +122,7 @@
               console.error('error while authenticating in Firebase', error)
             })
         } else {
-          console.log('User already signed-in Firebase.')
+          // console.log('User already signed-in Firebase.')
         }
       })
 
@@ -138,11 +138,11 @@
       tokenId: authResponse.id_token,
       accessToken: authResponse.access_token,
     }
-    console.log('user', googleProfile)
+    console.log('user', googleProfile.email)
   
     const userDatas = await fetchUser(profile.getEmail())
     user.set({...googleProfile, ...userDatas})
-    console.log('user', $user)
+    // console.log('user', $user)
   }
 
   function isUserEqual(googleUser, firebaseUser) {
