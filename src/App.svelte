@@ -10,8 +10,8 @@
   import NavBar from './components/NavBar.svelte'
   import Mental from './features/calcul-mental/Mental.svelte'
   import MentalTest from './features/calcul-mental/MentalTest.svelte'
-  import Footer from 'svelte-materialify/src/components/Footer'
-  import { fontSize } from './app/stores'
+  import { fontSize, user } from './app/stores'
+  import { Snackbar, Footer, Button } from 'svelte-materialify/src'
 
   export let url = ''
 
@@ -22,6 +22,18 @@
     else theme = 'light'
   }
 
+  let assessmentsNotification = false
+  function activateAssessmentsNotification() {
+    assessmentsNotification = true
+  }
+
+  $: {
+  
+    if ($user.roles && $user.roles.includes('student') && $user.assessments.length) {
+      console.log('user', $user)
+      activateAssessmentsNotification()
+    }
+  }
 </script>
 
 <svelte:head>
@@ -76,6 +88,24 @@
     </Footer>
   </Router>
 </MaterialApp>
+
+<Snackbar
+  class="justify-space-between amber lighten-2"
+  bind:active="{assessmentsNotification}"
+  text
+  right
+  top
+  timeout="{6000}"
+>
+  Tu as des évaluations à faire !
+  <Button
+    text
+    on:click={() => {
+      assessmentsNotification = false;
+    }}>
+    Ok
+  </Button>
+</Snackbar>
 
 <style type="text/scss">
   @import 'style/_include-media';

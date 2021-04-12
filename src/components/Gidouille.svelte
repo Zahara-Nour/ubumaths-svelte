@@ -1,7 +1,7 @@
 <script>
   export let color = '#ffc100'
   export let size = '2em'
-  export let turning = false
+  export let spinning = false
   const style = {
     fill: 'none',
     fillRule: 'evenodd',
@@ -14,7 +14,7 @@
 </script>
 
 <svg
-  class:turning
+  class:spinning
   width="{size}"
   height="{size}"
   viewBox="0 0 24 24"
@@ -45,7 +45,7 @@
     }
   }
 
-  .turning {
+  .spinning {
     animation: spin infinite 2s linear;
   }
 </style>

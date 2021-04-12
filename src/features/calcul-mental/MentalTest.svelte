@@ -8,9 +8,10 @@
   import qs from './questions'
   import queryString from 'query-string'
   import virtualKeyboard from './virtualKeyboard'
-  import { calculMentalTest } from './stores'
+  import { calculMentalAssessment } from './stores'
   import { shuffle } from '../../app/utils'
-  import { fontSize } from '../../app/stores'
+  import { fontSize, user } from '../../app/stores'
+  import { getDocument } from '../../app/db'
 
   export let location
   // console.log('location', location)
@@ -37,6 +38,7 @@
   let domain
   let theme
   let level
+  let assessmentId
 
   function countDown() {
     elapsed = Date.now() - start
@@ -57,20 +59,26 @@
     if (timeout) clearTimeout(timeout)
   })
 
-  $: {
+  function getQuestion(theme, domain, subdomain, level) {
+    return qs[theme][domain][subdomain].find(
+      (q) =>
+        qs[theme][domain][subdomain].indexOf(q) + 1 === parseInt(level, 10),
+    )
+  }
+
+  function initTest(location) {
+    finish = false
     queryParams = queryString.parse(location.search)
-    // console.log('queryParams', queryParams)
+    console.log('queryParams', queryParams)
     subdomain = queryParams.subdomain
     domain = queryParams.domain
     theme = queryParams.theme
     level = queryParams.level
+    assessmentId = queryParams.assessmentId
     questions = []
 
     if (theme && domain && subdomain && level) {
-      const question = qs[theme][domain][subdomain].find(
-        (q) => qs[theme][domain][subdomain].indexOf(q) + 1 === parseInt(level, 10),
-      )
-
+      const question = getQuestion(theme, domain, subdomain, level)
       if (question.options && question.options.includes('exhaust')) {
         for (let i = 0; i < question.expressions.length; i++) {
           questions[i] = {
@@ -82,10 +90,17 @@
       } else {
         for (let i = 0; i < 10; i++) questions.push(question)
       }
-    } else if ($calculMentalTest.length) {
-      $calculMentalTest.forEach((element) => {
+    } else if ($calculMentalAssessment) {
+      $calculMentalAssessment.questions.forEach((element) => {
         for (let i = 0; i < element.count; i++) {
-          questions.push(element)
+          questions.push(
+            getQuestion(
+              element.theme,
+              element.domain,
+              element.subdomain,
+              element.level,
+            ),
+          )
         }
       })
 
@@ -94,15 +109,20 @@
     console.log('questions', questions)
   }
 
-  $: {
-    if (delay >= elapsed) {
+  $: initTest(location)
+
+  $: if (delay >= elapsed) {
       percentage = ((delay - elapsed) * 100) / delay
     }
-  }
+
 
   $: if (questions && questions.length) {
     generateds = []
     change()
+  }
+
+  $: if (finish) {
+
   }
 
   function onChangeMathField(e) {

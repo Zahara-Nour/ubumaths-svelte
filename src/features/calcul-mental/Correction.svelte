@@ -1,12 +1,14 @@
 <script>
   import CorrectionItem from './CorrectionItem.svelte'
   import { Button, Icon } from 'svelte-materialify/src'
-  import { mdiHelp, mdiLifebuoy, mdiScanHelper } from '@mdi/js'
+  import { mdiLifebuoy, mdiScanHelper } from '@mdi/js'
   import Reveal from 'reveal.js'
   import { onMount } from 'svelte'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
-  import { fade } from 'svelte/transition';
-
+  import { user } from '../../app/stores'
+  import { calculMentalAssessment } from './stores'
+  import { saveDocument } from '../../app/db'
+ 
 
   export let questions
   export let answers
@@ -18,6 +20,44 @@
   let details = false
   const items = []
   const toggleDetails = () => (details = !details)
+
+  onMount(async () => {
+    const assessment = $calculMentalAssessment
+    if (assessment) {
+      //on sauvegarde la note dans les données de l'élève
+      const result = {
+        mark: score,
+        total: total,
+      }
+      $user.results[assessment.id] = result
+
+      saveDocument({
+        path: 'Users',
+        document: {
+          id: $user.id,
+          [`results.${assessment.id}`]: result,
+        },
+      })
+
+      //puis dans les données du professeur
+      saveDocument({
+        path: `Users/${$user.teacher}/Results`,
+        document: {
+          id: assessment.id,
+          [`${$user.classroom}.${$user.id}`]: result,
+        },
+      })
+
+      //on enlève l'évaluation de la liste des évaluations
+      await saveDocument({
+        path: 'Users/',
+        document: {
+          id: $user.id,
+          assessments: firebase.firestore.FieldValue.arrayRemove(assessment.id),
+        },
+      })
+    }
+  })
 
   function addPoints(points) {
     score += points
@@ -82,9 +122,7 @@
   }
 </script>
 
-<div
-  class="mt-3 mb-3 d-flex justify-end"
->
+<div class="mt-3 mb-3 d-flex justify-end">
   {#if help}
     <Button
       class="{displayHelp ? 'orange white-text' : ''} ml-2 mr-2"
@@ -102,7 +140,7 @@
 </div>
 
 {#if displayHelp}
-  <div  class="container">
+  <div class="container">
     <div id="deck" class="reveal deck">
       <div id="slides" class="slides" bind:this="{slides}"></div>
     </div>
@@ -124,8 +162,8 @@
 
 <style>
   .container {
-    padding-top:15px;
-    padding-bottom:15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     width: 100%;
     height: 350px;
     border: 8px solid rgb(255, 215, 165);
@@ -135,6 +173,5 @@
   #deck {
     width: 100%;
     height: 100%;
-    
   }
 </style>

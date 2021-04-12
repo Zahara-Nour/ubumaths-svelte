@@ -18,6 +18,10 @@
     Divider,
     ExpansionPanels,
     ExpansionPanel,
+    Row,
+    Col,
+    Checkbox,
+    Select,
   } from 'svelte-materialify/src'
 
   import {
@@ -35,10 +39,11 @@
   import Question from './Question.svelte'
   import generateQuestion from './generateQuestion'
   import { fontSize, user } from '../../app/stores'
-  import { calculMentalTest } from './stores'
+  import { calculMentalAssessment } from './stores'
   import { getCollection } from '../../app/collections'
-  import { saveDocument } from '../../app/db'
+  import { saveDocument, getDocument } from '../../app/db'
   import queryString from 'query-string'
+  import Exemple from './Exemple.svelte'
 
   export let location
 
@@ -57,16 +62,26 @@
   let isLoggedIn
   let showBasket = false
   let evalTitle = 'toto'
-  let evals
-  let evalsTitles = []
+  let teacherAssessments
+  let studentAssessments
+  let teacherAssessmentsTitles = []
   let disableSave = true
   let saving = false
   let saveSuccess = false
   let saveFailure = false
   let displayAssessmentList = false
   let displayDescription = false
+  let classrooms
+  let isTeacher
+  let selectedClassrooms = []
+  let selectedClassroom
+  let selectedStudents = {}
+  let teacherAssessmentId
+
   const titleRules = [
-    (v) => !evalsTitles.includes(v) || "Titre d'évaluation déjà utilisé",
+    (v) =>
+      !teacherAssessmentsTitles.includes(v) ||
+      "Titre d'évaluation déjà utilisé",
   ]
 
   for (let i = 0; i < themes.length; i++) {
@@ -97,10 +112,16 @@
     levelsIdxs[themeIdx] = l
   }
 
-  function launchTest() {
+  function launchTest({ type, assessment }) {
     let url
-    if (basket.length) {
-      calculMentalTest.set(basket)
+    if (type === 'assessment') {
+      calculMentalAssessment.set(assessment)
+      url = `/mental-test`
+    } else if (type === 'practice') {
+      calculMentalAssessment.set(assessment)
+      url = `/mental-test?practice=true`
+    } else if (basket.length) {
+      calculMentalAssessment.set({ questions: basket })
       url = '/mental-test'
     } else {
       url = `/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
@@ -116,8 +137,7 @@
     return generateQuestion(q)
   }
 
-  const open = () => (displayDescription = true)
-  const close = () => (displayDescription = false)
+  const toggleHelp = () => (displayDescription = !displayDescription)
 
   function addToBasket(theme, domain, subdomain, level, count) {
     let qs = questions[theme][domain][subdomain]
@@ -165,8 +185,14 @@
 
     const assessment = await saveDocument({ path, document })
 
+    const results = await saveDocument({
+      path: `Users/${$user.id}/Results`,
+      document: { id: assessment.id },
+    })
+
     if (assessment) {
-      evals = [...evals, assessment]
+      teacherAssessments = [...teacherAssessments, assessment]
+      teacherAssessmentId = assessment.id
       saveSuccess = true
     } else {
       saveFailure = true
@@ -176,11 +202,37 @@
 
   const load = () => (displayAssessmentList = true)
 
-  async function fetchEvals() {
-    evals = await getCollection({
+  async function fetchTeacherAssessments() {
+    teacherAssessments = await getCollection({
       collectionPath: `Users/${$user.id}/Assessments`,
     }).catch((error) => console.log(error))
-    evalsTitles = evals.map((ev) => ev.title)
+    teacherAssessmentsTitles = teacherAssessments.map((ev) => ev.title)
+  }
+
+  async function fetchStudentAssessments() {
+    const promises = $user.assessments.map((assessmentId) =>
+      getDocument({
+        path: `Users/${$user.teacher}/Assessments`,
+        id: assessmentId,
+      }),
+    )
+
+    studentAssessments = await Promise.all(promises)
+    console.log('studentAssessments', studentAssessments)
+  }
+
+  async function fetchStudents() {
+    $user.students = {}
+    const school = await getDocument({
+      path: `Schools`,
+      id: `${$user.country}$${$user.city}$${$user.school}`,
+    }).catch((error) => console.log(error))
+    console.log('school', school)
+    $user.classrooms.forEach((classroom) => {
+      $user.students[classroom] = school.classrooms[classroom]
+      selectedStudents[classroom] = []
+    })
+    console.log('students', $user.students)
   }
 
   function loadAssessment(assessment) {
@@ -189,6 +241,65 @@
       addToBasket(q.theme, q.domain, q.subdomain, q.level, q.count)
     })
     displayAssessmentList = false
+  }
+
+  async function assign() {
+    if (!teacherAssessmentId) {
+      console.log('erreur : l evaluation doit etre sauvegardée')
+      return
+    }
+
+    const assignedStudents = []
+    selectedClassrooms.forEach((classroom) => {
+      $user.students[classroom].forEach((student) => {
+        assignedStudents.push(student.id)
+      })
+    })
+
+    Object.keys(selectedStudents).forEach((classroom) => {
+      selectedStudents[classroom].forEach((student) => {
+        if (!assignedStudents.includes(student)) {
+          assignedStudents.push(student)
+        }
+      })
+    })
+
+    assignedStudents.forEach(async (student) => {
+      const doc = await getDocument({
+        path: 'Users',
+        id: student,
+      }).catch((err) => console.log(err))
+
+      console.log('doc student', doc)
+
+      // if (!doc.assessments[teacherAssessmentId]) {
+      //   await saveDocument({
+      //     path: 'Users',
+      //     document: {
+      //       id: student,
+      //       [`assessments.${teacherAssessmentId}`]: {
+      //         status: 'pending',
+      //       },
+      //     },
+      //   })
+      // }
+      if (!doc.assessments) doc.assessments = []
+      if (!doc.assessments.includes(teacherAssessmentId)) {
+        await saveDocument({
+          path: 'Users',
+          document: {
+            id: student,
+            assessments: doc.assessments.concat([teacherAssessmentId]),
+          },
+        })
+      }
+    })
+
+    console.log('assignedStudents', assignedStudents)
+  }
+
+  function passAssessment(assessment) {
+    navigate()
   }
 
   $: {
@@ -207,22 +318,83 @@
   }
 
   $: isLoggedIn = $user.id != 'guest'
+  $: isTeacher = isLoggedIn && $user.roles.includes('teacher')
+  $: isStudent = isLoggedIn && $user.roles.includes('student')
+  $: gotAssessments = isStudent && $user.assessments.length
+  $: if (gotAssessments) {
+    fetchStudentAssessments()
+  }
+  $: if (isTeacher) classrooms = $user.classrooms
   $: disable = !theme || !domain || !subdomain || !(level >= 0)
 
-  $: if (showBasket && !evals) {
-    fetchEvals()
-  }
-  $: if (evals) {
-    evalsTitles = evals.map((ev) => ev.title)
+  $: if (showBasket && !teacherAssessments) {
+    fetchTeacherAssessments()
   }
 
-  $: disableSave = evalTitle === '' || evalsTitles.includes(evalTitle) || saving
+  $: if (isTeacher && showBasket && !$user.students) {
+    fetchStudents()
+  }
+  $: if (teacherAssessments) {
+    teacherAssessmentsTitles = teacherAssessments.map((ev) => ev.title)
+  }
+  $: {
+    if ($user.classrooms && !selectedClassroom) {
+      console.log('reset', $user.classrooms)
+      selectedClassroom = $user.classrooms[0]
+    }
+  }
+  $: disableSave =
+    evalTitle === '' || teacherAssessmentsTitles.includes(evalTitle) || saving
   $: generated = generateExemple(theme, domain, subdomain, level)
 </script>
 
 <h4 class="mt-5 pa-3 mb-5 amber white-text">Calcul mental</h4>
+
+{#if gotAssessments && studentAssessments}
+  <h5 class="amber-text font-weight-bold">Evaluations à faire</h5>
+
+  <div class="mt-3 grey lighten-4">
+    <div class="pa-2 pl-5" style="border-left: 5px solid red">
+      {#each studentAssessments as assessment}
+        <div class="mt-2 mb-2   d-flex align-center">
+          {assessment.title}
+          <!-- <Tooltip bottom> -->
+          <Button
+            on:click="{() => launchTest({ type: 'practice', assessment })}"
+            size="x-small"
+            class="ml-2 mr-2 amber lighten-2"
+          >
+            Entraînement
+          </Button>
+          <!-- <span slot="tip">Ce n'est pas noté !</span> -->
+          <!-- </Tooltip> -->
+
+          <!-- <Tooltip bottom> -->
+          <Button
+            class="ml-2 mr-2 white-text red lighten-1"
+            disabled="{disable}"
+            fab
+            size="x-small"
+            on:click="{() => launchTest({ type: 'assessment', assessment })}"
+          >
+            <Icon path="{mdiRocketLaunchOutline}" />
+          </Button>
+          <!-- <span slot="tip">Attention, c'est noté !</span>
+          </Tooltip> -->
+        </div>
+      {/each}
+    </div>
+  </div>
+{/if}
+
+{#if showBasket}
+  <h5 class="mt-8 amber-text font-weight-bold">Panier</h5>
+{:else}
+  <h5 class="mt-8 amber-text font-weight-bold">Entrainement libre</h5>
+{/if}
+
 <div class="mt-3 mb-3 d-flex">
-  {#if showBasket}
+  {#if isTeacher && showBasket}
     <Tooltip bottom>
       <Button
         class="ml-2 mr-2 amber white-text darken-2"
@@ -248,19 +420,22 @@
       <span slot="tip">Enregistrer</span>
     </Tooltip>
   {/if}
+
   <div class="flex-grow-1"></div>
+
   {#if !showBasket}
     <Button
       class="ml-2 mr-2 amber darken-2 white-text"
       disabled="{disable}"
       fab
       size="x-small"
-      on:click="{open}"
+      on:click="{toggleHelp}"
     >
       <Icon path="{mdiHelp}" />
     </Button>
   {/if}
-  {#if isLoggedIn && $user.roles.includes('teacher')}
+
+  {#if isTeacher}
     {#if !showBasket}
       <Button
         class="ml-2 mr-2 amber darken-2 white-text"
@@ -272,6 +447,7 @@
         <Icon path="{mdiBasketPlus}" />
       </Button>
     {/if}
+
     <Button
       disabled="{disable}"
       class="amber white-text darken-2 ml-2 mr-2"
@@ -283,6 +459,7 @@
       <Icon path="{mdiBasket}" />
     </Button>
   {/if}
+
   <Button
     class="ml-2 mr-2 amber darken-2 white-text"
     disabled="{disable}"
@@ -294,7 +471,7 @@
   </Button>
 </div>
 
-{#if showBasket}
+{#if isTeacher && showBasket}
   <TextField filled bind:value="{evalTitle}" rules="{titleRules}"
     >Titre</TextField
   >
@@ -303,7 +480,7 @@
     <List>
       {#each basket as item, i}
         <div class="mt-4 mb-4 d-flex flex-row">
-          <Card  style="width:300px;max-width:80vh">
+          <Card style="width:300px;max-width:80vh">
             <CardTitle>{item.description}</CardTitle>
             {#if item.subdescription}
               <CardSubtitle>{item.subdescription}</CardSubtitle>
@@ -323,6 +500,7 @@
               >
                 <Icon path="{mdiMinus}" />
               </Button>
+
               <Button
                 class="ml-1 mr-1"
                 disabled="{disable}"
@@ -345,6 +523,45 @@
   {:else}
     Le panier est vide.
   {/if}
+
+  <h5>Assigner à :</h5>
+  <Row class="align-start" noGutters style="height:150px">
+    <Col>
+      <List>
+        {#each classrooms as classroom}
+          <Checkbox
+            class="mt-2 mb-2"
+            bind:group="{selectedClassrooms}"
+            value="{classroom}">{classroom}</Checkbox
+          >
+        {/each}
+      </List>
+    </Col>
+    <Col>
+      <Select
+        items="{$user.classrooms.map((c) => ({ name: c, value: c }))}"
+        bind:value="{selectedClassroom}"
+      >
+        Classe
+      </Select>
+      {#if selectedClassroom && $user.students && $user.students[selectedClassroom]}
+        <List>
+          {#each $user.students[selectedClassroom] as student}
+            <Checkbox
+              class="mt-2 mb-2"
+              bind:group="{selectedStudents[selectedClassroom]}"
+              value="{student.id}"
+            >
+              {student.lastname}
+              {student.firstname}
+            </Checkbox>
+          {/each}
+        </List>
+      {/if}
+    </Col>
+  </Row>
+
+  <Button on:click="{assign}">Assigner</Button>
 {:else}
   <Tabs centerActive class="orange-text" bind:value="{themeIdx}">
     <div slot="tabs">
@@ -361,9 +578,13 @@
         >
           {#each Object.keys(questions[them]) as d, d_i}
             <ExpansionPanel>
-              <span slot="header" style="font-size:{$fontSize}px;color:red"
-                >{d}</span
+              <span
+                slot="header"
+                class="text-uppercase red-text"
+                style="font-size:{$fontSize}px"
               >
+                {d}
+              </span>
               <List style="width:100%;">
                 <div style="font-size:{$fontSize}px;">
                   {#each Object.keys(questions[them][d]) as t, t_i}
@@ -400,25 +621,27 @@
   </Tabs>
 {/if}
 
-<Dialog bind:active="{displayDescription}">
-  <Card>
-    <CardTitle>{generated.description}</CardTitle>
-    {#if generated.subdescription}
-      <CardSubtitle>{generated.subdescription}</CardSubtitle>
-    {/if}
-    <CardText>
-      <Question question="{generated}" />
-    </CardText>
-  </Card>
-</Dialog>
+<!-- <Dialog bind:active="{displayDescription}">
+  <Exemple question={generated}/>
+</Dialog> -->
+
+{#if displayDescription}
+  <div
+    class="grey lighten-2 pa-2 pt-5 pb-5"
+    style="{'position:sticky; bottom:0; z-index:2;'}"
+  >
+    <Exemple question="{generated}" />
+  </div>
+{/if}
 
 <Dialog bind:active="{displayAssessmentList}">
   <div class="d-flex justify-center mt-2 mb-2">
     <List class="elevation-2">
       <h6>Liste des évaluations</h6>
+
       <Divider />
 
-      {#each evals as assessment}
+      {#each teacherAssessments as assessment}
         <ListItem on:click="{() => loadAssessment(assessment)}">
           {assessment.title}
         </ListItem>

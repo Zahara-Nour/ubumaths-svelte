@@ -23,7 +23,7 @@ const storage = firebase.storage().ref()
 function fetchCollection({ path, filters }) {
   const { error, info, trace } = getLogger('fetchCollection', 'trace')
   trace(`  fetching ${path} with filters :`, filters)
- 
+
 
   const pathArray = path.split('/')
   let documents = []
@@ -35,7 +35,7 @@ function fetchCollection({ path, filters }) {
   }
 
   filters.forEach((filter) => {
-  
+
     const name = Object.getOwnPropertyNames(filter)[0]
     const value = filter[name]
     if (value) collectionRef = collectionRef.where(name, '==', value)
@@ -45,7 +45,7 @@ function fetchCollection({ path, filters }) {
     .get()
     .then((docs) => {
       docs.forEach((doc) => {
-    
+
         documents.push({ ...doc.data(), id: doc.id })
       })
       trace(`  fetched ${path} :`, documents)
@@ -55,11 +55,40 @@ function fetchCollection({ path, filters }) {
 }
 
 
-function saveDocument({ path, document }) {
-  console.log('saving doc :', document)
+function getDocument({ path, id }) {
+
+  const pathArray = path.split('/')
+  console.log('id', id)
+  console.log('pathArray', pathArray)
+  let collectionRef = db.collection(pathArray.shift())
+  while (pathArray.length > 0) {
+    collectionRef = collectionRef
+      .doc(pathArray.shift())
+      .collection(pathArray.shift())
+  }
+
+  return collectionRef.doc(id).get().then((doc) => {
+    if (doc.exists) {
+      const document = doc.data()
+      document.id = id
+      console.log("Document data:", document);
+      return document
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+      return null
+    }
+  }).catch((error) => {
+    console.log("Error getting document:", error);
+  })
+}
+
+async function  saveDocument({ path, document }) {
+  console.log('saving doc :', document, path)
   const pathArray = path.split('/')
   let collectionRef = db.collection(pathArray.shift())
   while (pathArray.length > 0) {
+    console.log('pathArray', pathArray)
     collectionRef = collectionRef
       .doc(pathArray.shift())
       .collection(pathArray.shift())
@@ -68,11 +97,14 @@ function saveDocument({ path, document }) {
   const { id, ...rest } = document
 
   if (id) {
-    
-    // just upfdate document
-    return collectionRef
-      .doc(id)
-      .update(rest)
+
+    // check if document exists
+    const exists = await getDocument({ path, id })
+    let promise = collectionRef.doc(id)
+
+    promise = exists ? promise.update(rest) : promise.set(rest)
+
+    promise = promise
       .then(() => {
         console.log(
           `Document ${id} successfully updated in collection ${path}`,
@@ -89,18 +121,19 @@ function saveDocument({ path, document }) {
           error,
         ),
       )
+    return promise
   } else {
     // we need to create a new document
     const doc = collectionRef.doc()
     return doc
-      .set(document)
+      .set(rest)
       .then(() => {
         console.log(
           `Document ${doc.id} successfully added in collection ${path}`,
           document,
         )
         // the new document  is returned  with his id to sync store
-        return {...document, id:doc.id}
+        return { ...document, id: doc.id }
       }
       )
       .catch((error) =>
@@ -113,4 +146,4 @@ function saveDocument({ path, document }) {
 }
 
 
-export { fetchCollection, storage, db, saveDocument }
+export { fetchCollection, storage, db, saveDocument, getDocument }

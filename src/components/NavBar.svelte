@@ -19,7 +19,8 @@
     mdiFormatFontSizeIncrease,
     mdiMenu,
   } from '@mdi/js'
-  import { fontSize } from '../app/stores'
+  import { fontSize, user } from '../app/stores'
+import { waiting } from '../features/calcul-mental/stores';
 
   let miniWindow = false
   let active = false
@@ -45,6 +46,8 @@
   }
 
   onMount(setMiniWindow)
+
+  $: isLoggedIn = $user.id !== 'guest'
 </script>
 
 <svelte:window on:resize="{setMiniWindow}" />
@@ -54,12 +57,12 @@
 <nav role="navigation">
   <AppBar dense flat>
     <div slot="icon">
-      <Button on:click="{() => goTo('/')}" depressed>
-        <Gidouille />
+      <Button class='gidouille' on:click="{() => goTo('/')}" depressed>
+        <Gidouille spinning={$waiting.length}/>
       </Button>
     </div>
 
-    <span class="title" slot="title">UbuMaths</span>
+    <span class="title" slot="title">{miniWindow ? '' : 'UbuMaths'}</span>
 
     {#if !miniWindow}
       <div class="links">
@@ -76,21 +79,21 @@
     <Button
       class="mr-1"
       on:click="{decreaseFontSize}"
-      size="small"
+      size="x-small"
       fab
       depressed
     >
-      <Icon path="{mdiFormatFontSizeDecrease}" />
+      <Icon size="{20}" path="{mdiFormatFontSizeDecrease}" />
     </Button>
 
     <Button
       class="mr-2"
       on:click="{increaseFontSize}"
-      size="small"
+      size="x-small"
       fab
       depressed
     >
-      <Icon path="{mdiFormatFontSizeIncrease}" />
+      <Icon size="{24}" path="{mdiFormatFontSizeIncrease}" />
     </Button>
 
     <AuthButton />
@@ -116,9 +119,8 @@
         {/each}
       </ListItemGroup>
     </List>
-  
   </NavigationDrawer>
-  
+
   <Overlay
     active="{active && miniWindow}"
     absolute
@@ -163,4 +165,19 @@
     margin-left: 10px;
     margin-right: 10px;
   }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .gidouille {
+    animation: infinite 2s linear spin;
+  }
+
 </style>

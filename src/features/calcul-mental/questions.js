@@ -1,11 +1,11 @@
 export default {
   Entiers: {
     Addition: {
-      Résultat: [
+      Somme: [
         {
           description: 'Calculer une somme',
           subdescription:
-            'Nombres entiers à 1 chiffre (résultat inférieur à 10)',
+            'Nombres entiers à 1 chiffre (sans retenue)',
           expressions: ['&1 + &2', '&1 + &2'],
           variables: [
             { '&1': '$e[5;7]', '&2': '$e[2;9-&1]' },
@@ -16,7 +16,7 @@ export default {
         },
         {
           description: 'Calculer une somme',
-          subdescription: 'Nombres entiers à 2 chiffre (sans retenue)',
+          subdescription: 'Nombres entiers à 2 chiffres (sans retenue)',
           expressions: [
             '#{&1*10 + &2} + #{&3*10 + &4}',
             '#{&1*10 + &2} + #{&3*10 + &4}',
@@ -54,7 +54,7 @@ export default {
         },
         {
           description: 'Calculer une somme',
-          subdescription: 'Nombres entiers à 3 chiffre (sans retenue)',
+          subdescription: 'Nombres entiers à 3 chiffres (sans retenue)',
           expressions: ['#{&1*100 + &2*10 + &3} + #{&4*100 + &5*10 + &6}'],
           variables: [
             {
@@ -72,11 +72,24 @@ export default {
         {
           description: 'Calculer une somme',
           subdescription:
-            'Nombres entiers à 1 chiffre (résultat supérieur à 10)',
+            'Nombres entiers à 1 chiffre (avec retenue)',
           expressions: ['&1 + &2'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[11-&1;9]' }],
           type: 'result',
           defaultDelay: 10,
+        },
+        {
+          description: 'Calculer une somme',
+          subdescription: 'Nombres entiers à 2 chiffres qui se marrient bien',
+          expressions: ['#{&2} +#{&1*10-&2}'],
+          variables: [
+            {
+              '&1': '$e[3;9]',
+              '&2': '$e[12;&1*10-12]',
+            },
+          ],
+          type: 'result',
+          defaultDelay: 15,
         },
         {
           description: 'Calculer une somme',
@@ -88,19 +101,6 @@ export default {
               '&3': '$e[1;8-&1]',
               '&2': '$e[2;9]',
               '&4': '$e[11-&2;9]',
-            },
-          ],
-          type: 'result',
-          defaultDelay: 15,
-        },
-        {
-          description: 'Calculer une somme',
-          subdescription: 'Nombres entiers à 2 chiffres qui se marrient bien',
-          expressions: ['#{&2} +#{&1*10-&2}'],
-          variables: [
-            {
-              '&1': '$e[3;9]',
-              '&2': '$e[12;&1*10-12]',
             },
           ],
           type: 'result',
@@ -124,7 +124,7 @@ export default {
           defaultDelay: 15,
         },
       ],
-      Compléments: [
+      Complément: [
         {
           description: 'Trouver le complément',
           subdescription: 'Complément à 10',
@@ -147,7 +147,7 @@ export default {
         },
         {
           description: 'Trouver le complément',
-          subdescription: "Complément d'un nombre de dizines",
+          subdescription: "Complément d'un nombre de dizaines",
           expressions: ['?+&2=#{&1*10}', '&2+?=#{&1*10}'],
           solutions: [['#{&1*10-&2}']],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;&1*10-2]' }],
@@ -165,7 +165,106 @@ export default {
           defaultDelay: 15,
         },
       ],
-      'A trous': [
+      'A trou': [
+        {
+          description: 'Calculer une somme',
+          subdescription:
+            'Nombres entiers à 1 chiffre (sans retenue)',
+          expressions: [
+            '&1+? = #{&1+&2}',
+            '&1+?= #{&1+&2}',
+            '?+&1= #{&1+&2}',
+            '?+&1= #{&1+&2}',
+          ],
+          variables: [
+            { '&1': '$e[5;7]', '&2': '$e[2;9-&1]' },
+            { '&1': '$e[2;4]', '&2': '$e[2;9-&1]' },
+            { '&1': '$e[5;7]', '&2': '$e[2;9-&1]' },
+            { '&1': '$e[2;4]', '&2': '$e[2;9-&1]' },
+          ],
+          type: 'trou',
+          solutions: [['&2']],
+          defaultDelay: 10,
+        },
+        {
+          description: 'Calculer une somme',
+          subdescription: 'Nombres entiers à 2 chiffres (sans retenue)',
+          expressions: [
+            '#{&5}+?=#{&5+&6}',
+            '#{&5}+?=#{&5+&6}',
+            '?+#{&5}=#{&5+&6}',
+            '?+#{&5}=#{&5+&6}',
+          ],
+          variables: [
+            {
+              '&1': '$e[5;7]',
+              '&3': '$e[2;9-&1]',
+              '&2': '$e[5;7]',
+              '&4': '$e[2;9-&2]',
+              '&5': '&1*10 + &2',
+              '&6': '&3*10 + &4',
+            },
+            {
+              '&1': '$e[2;4]',
+              '&3': '$e[2;9-&1]',
+              '&2': '$e[2;4]',
+              '&4': '$e[2;9-&2]',
+              '&5': '&1*10 + &2',
+              '&6': '&3*10 + &4',
+            },
+            {
+              '&1': '$e[5;7]',
+              '&3': '$e[2;9-&1]',
+              '&2': '$e[2;4]',
+              '&4': '$e[2;9-&2]',
+              '&5': '&1*10 + &2',
+              '&6': '&3*10 + &4',
+            },
+            {
+              '&1': '$e[2;4]',
+              '&3': '$e[2;9-&1]',
+              '&2': '$e[5;7]]',
+              '&4': '$e[2;9-&2]',
+              '&5': '&1*10 + &2',
+              '&6': '&3*10 + &4',
+            },
+          ],
+          type: 'trou',
+          solutions: [['#{&6}']],
+          defaultDelay: 10,
+        },
+        {
+          description: 'Calculer une somme',
+          subdescription: 'Nombres entiers à 3 chiffres (sans retenue)',
+          expressions: [
+            '#{&7} + ? = #{&7+&8}',
+            '? + #{&7} = #{&7+&8}'],
+          variables: [
+            {
+              '&1': '$e[1;8]',
+              '&4': '$e[1;9-&1]',
+              '&2': '$e[1;8]',
+              '&5': '$e[1;9-&2]',
+              '&3': '$e[1;8]',
+              '&6': '$e[1;9-&3]',
+              '&7': '&1*100 + &2*10 + &3',
+              '&8': '&4*100 + &5*10 + &6'
+            },
+            {
+              '&1': '$e[1;8]',
+              '&4': '$e[1;9-&1]',
+              '&2': '$e[1;8]',
+              '&5': '$e[1;9-&2]',
+              '&3': '$e[1;8]',
+              '&6': '$e[1;9-&3]',
+              '&7': '&1*100 + &2*10 + &3',
+              '&8': '&4*100 + &5*10 + &6'
+            }
+          ],
+          solutions: [['#{&8}']],
+          type: 'trou',
+          defaultDelay: 20,
+        },
         {
           description: 'Nombres à 1 chiffre',
           expressions: ['?+&1 = &2', '&1+? = &2'],
@@ -182,7 +281,7 @@ export default {
           variables: [{ '&1': '$e{2;2}', '&2': '$e[&1+12;&1+99]' }],
           details: [['&2-&1']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Nombres à 3 chiffres',
@@ -191,10 +290,39 @@ export default {
           variables: [{ '&1': '$e[101;897]', '&2': '$e[&1+102;999]' }],
           details: [['&2-&1']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 30,
         },
       ],
-      'Sommes astucieuses': [
+      'Somme astucieuse': [
+        {
+          description: 'Ajouter 19, 29, 39, ....',
+          expressions: [
+            '#{&4}+#{&5}',
+            '#{&5}+#{&4}',
+          ],
+          details: [
+            [
+              '#{&4}+\\textcolor{green}{#{&5}}',
+              '#{&4}+\\textcolor{green}{#{&5+1}-1}',
+              '#{&4+&5+1}-1', 
+            ],
+            [
+              '\\textcolor{green}{#{&5}}+#{&4}',
+              '\\textcolor{green}{#{&5+1}-1}+#{&4}',
+              '\\textcolor{orange}{#{&5+1}}-1+\\textcolor{orange}{#{&4}}',
+              '\\textcolor{orange}{#{&4+&5+1}}-1', 
+            ], 
+          ],
+          variables: [{ 
+            '&1': '$e[1;7]',
+            '&2': '$e[1;8-&1]',
+            '&3': '$e[1;8]',
+            '&4': '&2*10+&3',
+            '&5': '&1*10+9'
+           }],
+          type: 'result',
+          defaultDelay: 10,
+        },
         {
           description: 'Additionner par regroupements',
           subdescription: '5 Nombres à 1 chiffre',
@@ -296,7 +424,7 @@ export default {
       ],
     },
     Soustraction: {
-      Résultat: [
+      Différence: [
         {
           description: 'Calculer une différence (résultat positif)',
           subdescription: 'Nombres à 1 chiffre',
@@ -531,9 +659,35 @@ export default {
           defaultDelay: 20,
         },
       ],
+      'Différence astucieuse':[
+        {
+          description: 'Soustraire 9, 19, 29, ....',
+          expressions: [
+            '#{&4+&5}-#{&5}',
+          ],
+          details: [
+            [
+              '#{&4+&5}-\\textcolor{green}{#{&5}}',
+              '#{&4+&5}-\\textcolor{green}{\\left( #{&5+1}-1 \\right)}',
+              '#{&4+&5}-\\textcolor{green}{#{&5+1}+1}',
+              '#{&4-1}+1',
+              
+            ],
+          ],
+          variables: [{ 
+            '&1': '$e[0;7]',
+            '&2': '$e[1;8-&1]',
+            '&3': '$e[1;8]',
+            '&4': '&2*10+&3',
+            '&5': '&1*10+9'
+           }],
+          type: 'result',
+          defaultDelay: 10,
+        },
+      ]
     },
     Multiplication: {
-      Résultat: [
+      Produit: [
         {
           description: "Calculer un produit d'entiers",
           subdescription: 'Nombres à 1 chiffre',
@@ -1396,7 +1550,7 @@ export default {
           solutions: [['#{&2*&3}'], ['#{&1*&3}'], ['#{&2*&3}'], ['#{&1*&3}']],
           type: 'trou',
           defaultDelay: 20,
-          help:`<section>
+          help: `<section>
           <h3 class="orange-text">Compléter une égalité de fractions</h3>
           <div class="r-stretch d-flex flex-column justify-center">
             $$\\frac{5}{4}=\\frac{\\ldots}{12}$$
@@ -1490,7 +1644,7 @@ export default {
             '#{&2*&3}/#{&1*&3}=?/#{&1*&4}',
             '#{&1*&4}/?=#{&1*&3}/#{&2*&3}',
             '?/#{&1*&4}=#{&2*&3}/#{&1*&3}',
-           
+
           ],
           variables: [
             {
@@ -1502,12 +1656,12 @@ export default {
           ],
           solutions: [
             ['#{&2*&4}'],
-       
+
           ],
           type: 'trou',
           defaultDelay: 20,
         },
-       
+
       ],
       Simplification: [
         {

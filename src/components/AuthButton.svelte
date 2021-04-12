@@ -7,9 +7,11 @@
   import { mdiLogin, mdiLogout } from '@mdi/js'
   import { getCollection } from '../app/collections'
   import {db} from '../app/db'
+import { navigate } from 'svelte-routing';
 
   // Keep track of script status ("idle", "loading", "ready", "error")
   let status = 'idle'
+  let connecting =  false
   $: loaded = status === 'ready'
   $: if (loaded) initAuth()
 
@@ -127,7 +129,7 @@
       })
 
     const googleProfile = {
-      id: profile.getEmail(),
+      id: profile.getEmail().replace('.',':'),
       googleId: profile.getId(),
       imageUrl: profile.getImageUrl(),
       email: profile.getEmail(),
@@ -140,9 +142,10 @@
     }
     console.log('user', googleProfile.email)
   
-    const userDatas = await fetchUser(profile.getEmail())
+    const userDatas = await fetchUser(googleProfile.id)
     user.set({...googleProfile, ...userDatas})
-    // console.log('user', $user)
+    console.log('user', $user)
+    connecting = false
   }
 
   function isUserEqual(googleUser, firebaseUser) {
@@ -180,17 +183,22 @@
   function logoutSuccess() {
     console.log('logout success')
     user.set({ id: 'guest' })
+    connecting = false
+    navigate('/')
   }
 
   function loginFailure(err) {
     console.log('error while login', err)
+    connecting = false
   }
 
   function logoutFailure(err) {
     console.log('error while logout', err)
+    connecting = false
   }
 
   function onSignIn() {
+    connecting = true
     const options = {
       prompt: '',
     }
@@ -198,6 +206,7 @@
   }
 
   function onSignOut() {
+    connecting = true
     auth2.signOut().then(logoutSuccess).catch(logoutFailure)
     firebase.auth().signOut().then(logoutSuccess).catch(logoutFailure)
   }
@@ -222,11 +231,11 @@
 
 {#if auth2}
   {#if isLoggedIn}
-    <Button fab size="small" class="green white-text" on:click="{onSignOut}">
+    <Button disabled={connecting} fab size="small" class="green white-text" on:click="{onSignOut}">
       <Icon path=" {mdiLogout}" />
     </Button>
   {:else}
-    <Button fab size="small" class="red white-text" on:click="{onSignIn}">
+    <Button disabled={connecting} fab size="small" class="red white-text" on:click="{onSignIn}">
       <Icon path=" {mdiLogin}" />
     </Button>
   {/if}
