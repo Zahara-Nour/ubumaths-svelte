@@ -1011,10 +1011,9 @@ export default {
       'Produits astucieux': [
         {
           description: 'Calculer astucieusement un produit',
-          subdescription: 'Facteurs à 1 chiffre',
-          expressions: ['?*&1=#{&1*&2}', '&1*?=#{&1*&2}'],
-          variables: [{ '&1': '$e[2;9]', '&2': '$e[3;9]' }],
-          solutions: [['&2']],
+          subdescription: 'Utiiser 2 facteurs dont le produit est 100',
+          expressions: ['&1*#{&2}*&3', '#{&2}*&1*&3', '#{&2}*&3*&1', '&1*&3*#{&2}', '&3*&1*#{&2}', '&3*#{&2}*&1',],
+          variables: [{ '&1': '$l{20;25;50}', '&2': '100:&1', '&3': '$e[11;99]' }],
           type: 'result',
           defaultDelay: 10,
         },
@@ -1195,31 +1194,179 @@ export default {
       ],
     },
     'Priorités opératoires': {
-      'Parenthèses': [
+      'Avec parenthèses': [
         {
-          description: 'Calculer une expression avec parenthèse',
+          description: 'Calculer une expression avec parenthèses',
           subdescription: 'Un niveau de parenthèse',
           expressions: [
-            // '(&1+&2)*&3',
-            // '&3*(&1+&2)',
-            // '(&1-&2)*&3',
-            // '&3*(&1-&2)',
-            '(#{&1*&3+#{&2*&3}):&3',
+            '(&1+&2)*&3',
             '&3*(&1+&2)',
+            '(&1-&2)*&3',
+            '&3*(&1-&2)',
+            '(#{&1*&3}+#{&2*&3}):&3',
+            '(#{&1*&3}-#{&2*&3}):&3',
+            '#{&1*&2*&3}:(&1*&2)',
+            '#{&1+&2+&3}-(&1+&2)',
           ],
           variables: [
-            // { '&1': '$e[2;9]', '&2': '$e[2;11-&1]', '&3': '$e[2;9]' },
-            // { '&1': '$e[2;9]', '&2': '$e[2;11-&1]', '&3': '$e[2;9]' },
-            // { '&1': '$e[4;9]', '&2': '$e[2;&1-2]', '&3': '$e[2;9]' },
-            // { '&1': '$e[4;9]', '&2': '$e[2;&1-2]', '&3': '$e[2;9]' },
             { '&1': '$e[2;9]', '&2': '$e[2;11-&1]', '&3': '$e[2;9]' },
             { '&1': '$e[2;9]', '&2': '$e[2;11-&1]', '&3': '$e[2;9]' },
-            
+            { '&1': '$e[4;9]', '&2': '$e[2;&1-2]', '&3': '$e[2;9]' },
+            { '&1': '$e[4;9]', '&2': '$e[2;&1-2]', '&3': '$e[2;9]' },
+            { '&1': '$e[2;7]', '&2': '$e[2;9-&1]', '&3': '$e[2;9]' },
+            { '&1': '$e[4;9]', '&2': '$e[2;&1-2]', '&3': '$e[2;9]' },
+            { '&1': '$e[4;9]', '&2': '$e[2;&1-2]', '&3': '$e[2;9]' },
+            { '&1': '$l{2;3}', '&2': '$l{2;3}', '&3': '$e[2;9]' },
+            { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]' },
+
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
+        },
+        {
+          description: 'Calculer une expression avec parenthèses',
+          subdescription: '2 expressions parenthèsées (imbriquées ou non)',
+          expressions: [
+            '(&1+&2)*(&3+&4)',
+            '(&1-&2)*(&3+&4)',
+            '(&3+&4)*(&1-&2)',
+            '((#{&1*&3}+#{&2*&3}):&3)*&4'
+
+
+          ],
+          variables: [
+            { '&1': '$e[2;7]', '&2': '$e[2;9-&1]', '&3': '$e[2;7]', '&4': '$e[2;9-&3]' },
+            { '&1': '$e[4;9]', '&2': '$e[2;&1-2]', '&3': '$e[2;7]', '&4': '$e[2;9-&3]' },
+            { '&1': '$e[4;9]', '&2': '$e[2;&1-2]', '&3': '$e[2;7]', '&4': '$e[2;9-&3]' },
+            { '&1': '$e[2;7]', '&2': '$e[2;9-&1]', '&3': '$e[2;9]', '&4': '$e[2;9]' },
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+      ],
+      'Sans parenthèses': [
+        {
+          description: 'Calculer une expression sans parenthèses',
+          subdescription: "Priorité de la multiplication et de la division sur l'addition et la soustraction",
+          expressions: [
+            '&1+&2*&3',
+            '#{&1*&2+&3}-&1*&2',
+            '&1+#{&2*&3}:&3',
+            '#{&2+&4}-#{&2*&3}:&3',
+          ],
+          variables: [
+            { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]' },
+            { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]' },
+            { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]' },
+            { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]', '&4': '$e[2;9]' },
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Calculer une expression sans parenthèses',
+          subdescription: 'Même priorité',
+          expressions: [
+            '#{&1*&2}:&1*&3',
+            '&3-&1+&2',
+          ],
+          variables: [
+            { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]' },
+            { '&1': '$e[2;8]', '&2': '$e[2;9]', '&3': '$e[&1+1;9]' },
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Calculer une expression sans parenthèses',
+          subdescription: '',
+          expressions: [
+            '&1*&2+&3*&4',
+            '&1*&2+#{&3*&4}:&4',
+            '#{&3*&4}:&4+&1*&2',
+            '#{&3*&4}:&4+#{&1*&2}:&2',
+            '#{&1+1}*#{&2+1}-&1*&2',
+          ],
+          variables: [
+            { '&1': '$e[2;5]', '&2': '$e[2;9]', '&3': '$e[2;9]', '&4': '$e[2;9]' },
+            { '&1': '$e[2;5]', '&2': '$e[2;9]', '&3': '$e[2;9]', '&4': '$e[2;9]' },
+            { '&1': '$e[2;5]', '&2': '$e[2;9]', '&3': '$e[2;9]', '&4': '$e[2;9]' },
+            { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]', '&4': '$e[2;9]' },
+            { '&1': '$e[2;8]', '&2': '$e[2;8]', },
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
         },
       ]
+    },
+    Vocabulaire: {
+      Traduire: [
+        {
+          description: 'Traduire une phrase en expression mathématique',
+          enounces: [
+            'La somme de $$&1$$ et de $$&2$$',
+            'Le produit de $$&1$$ par $$&2$$',
+            'La différence entre $$&1$$ et $$&2$$',
+            'La quotient de $$&1$$ par de $$&2$$',
+
+          ],
+          options: ['no-exp'],
+          variables: [{
+            '&1': '$e[2;9]',
+            '&2': '$e[2;9]',
+          }
+          ],
+          expressions: [
+            '&1+&2',
+            '&1*&2',
+            '&1-&2',
+            '&1:&2',
+          ],
+          solutions: [
+            ['&1+&2'],
+            ['&1*&2'],
+            ['&1-&2'],
+            ['&1:&2'],
+          ],
+          type: 'enonce',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Traduire une phrase en expression mathématique',
+          enounces: [
+            'La somme du produit de $$&1$$ par $$&3$$ et de $$&2$$',
+            'Le produit de $$&1$$ par la différence  entre $$&2$$ et $$&3$$',
+            'La différence entre $$&1$$ et le quotient de $$&2$$ par $$&3$$',
+            'Le quotient de la somme $$&1$$ et de $$&3$$ par $$&2$$',
+
+          ],
+          options: ['no-exp'],
+          variables: [{
+            '&1': '$e[2;9]',
+            '&2': '$e[2;9]',
+            '&3': '$e[2;9]',
+          }
+          ],
+          expressions: [
+            '&1*&3+&2',
+            '&1*(&2-&3)',
+            '&1-&2:&3',
+            '(&1+&3):&2',
+          ],
+          solutions: [
+            ['&1*&3+&2'],
+            ['&1*(&2-&3)'],
+            ['&1-&2:&3'],
+            ['(&1+&3):&2'],
+          ],
+          type: 'enonce',
+          defaultDelay: 20,
+        },
+      ]
+
+
     }
   },
   Décimaux: {
