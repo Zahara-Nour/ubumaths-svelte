@@ -43,6 +43,33 @@
     let lines = []
 
     switch (item.type) {
+      case 'enonce':
+        lines.push(item.enounce)
+
+        if (empty) {
+          line = '$$'+`\\textcolor{green}{${s_exps[0].toLatex({ implicit })}}` + '$$'
+
+          com = "(tu n'as rien répondu)"
+        } else if (badExpression || !correct) {
+          line =
+            '$$\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
+            item.answer_latex +
+            '}}\\text{  }\\textcolor{green}{' +
+            s_exps[0].toLatex({ implicit }) +
+            '}$$'
+        } else {
+          line = '$$\\textcolor{green}{' + item.answer_latex + '}$$'
+
+          // if (!strictlyCorrect) {
+          //   line +=
+          //     '\\color{black}\\text{ mais }\\color{green}' +
+          //     s_exp.latex +
+          //     "\\color{black}\\text{ c'est encore mieux !}"
+          // }
+        }
+        lines.push(line)
+
+        break
       case 'decomposition':
         if (details) {
         } else {

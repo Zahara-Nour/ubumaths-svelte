@@ -76,6 +76,7 @@
       number: i + 1,
       points: question.points,
       options: question.options,
+      enounce: question.enounce
     }
   }
 
