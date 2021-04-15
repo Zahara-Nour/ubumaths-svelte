@@ -31,8 +31,11 @@ import { fontSize } from '../../app/stores';
     }
   }
 
-  $: if (mf) mf.setValue(math(question.expression).toLatex({addBrackets:true}))
+  $: if (mf) {
+    const exp = math(question.expression)
+    mf.setValue(exp.toLatex({addBrackets:true}))
   // $: console.log('enounce', question.enounce)
+  }
 </script>
 
 <div>

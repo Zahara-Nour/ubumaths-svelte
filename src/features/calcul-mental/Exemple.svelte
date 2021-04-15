@@ -9,6 +9,7 @@
   import Question from './Question.svelte'
 
   export let question
+
 </script>
 
 <Card>

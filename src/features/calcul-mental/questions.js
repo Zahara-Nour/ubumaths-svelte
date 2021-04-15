@@ -1679,6 +1679,24 @@ export default {
         },
       ],
     },
+    Unités:{
+      Conversion:[
+        {
+          description: 'Convertir dans une autre unité',
+          subdescription: "Conversion simple à partir de l'unité de référence",
+          variables: [
+            {
+              '&1': '$e[2;9]',
+            
+            },
+          ],
+          expressions: ['31 km = 3000 m'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 10,
+        },
+      ]
+    }
   },
   Relatifs: {
     Addition: {
