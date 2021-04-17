@@ -12,7 +12,7 @@ export default {
             { '&1': '$e[2;4]', '&2': '$e[2;9-&1]' },
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une somme',
@@ -50,7 +50,7 @@ export default {
             },
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une somme',
@@ -67,7 +67,7 @@ export default {
             },
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une somme',
@@ -76,7 +76,7 @@ export default {
           expressions: ['&1 + &2'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[11-&1;9]' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une somme',
@@ -133,7 +133,7 @@ export default {
           variables: [{ '&1': '$e[1;9]' }],
           type: 'trou',
           details: [['10-&1']],
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Trouver le complément',
@@ -143,7 +143,7 @@ export default {
           variables: [{ '&1': '$e[1;99]' }],
           details: [['100-&1']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Trouver le complément',
@@ -153,7 +153,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;&1*10-2]' }],
           details: [['#{&1*10}-&2']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Trouver le complément à 1000',
@@ -184,7 +184,7 @@ export default {
           ],
           type: 'trou',
           solutions: [['&2']],
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une somme',
@@ -231,7 +231,7 @@ export default {
           ],
           type: 'trou',
           solutions: [['#{&6}']],
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une somme',
@@ -272,7 +272,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[11;&1+9]' }],
           details: [['&2-&1']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Nombres à 2 chiffres',
@@ -321,7 +321,7 @@ export default {
             '&5': '&1*10+9'
           }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Additionner par regroupements',
@@ -357,7 +357,7 @@ export default {
           ],
           variables: [{ '&1': '$e{1}', '&2': '$e{1}', '&3': '$e{1}' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Additionner par regroupements',
@@ -393,7 +393,7 @@ export default {
             },
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Additionner par regroupements',
@@ -419,7 +419,7 @@ export default {
           ],
           variables: [{ '&1': '$e{3;3}', '&2': '$e{3;3}' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
     },
@@ -432,7 +432,7 @@ export default {
           variables: [{ '&1': '$e[5;9]', '&2': '$e[1;&1-1]' }],
           solutions: [['#{&1-&2}']],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une différence (résultat positif)',
@@ -528,7 +528,7 @@ export default {
           solutions: [['#{&1+&2}', '#{&1-&2}']],
           details: [['&1+&2'], ['&1-&2']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
@@ -719,7 +719,7 @@ export default {
             '&5': '&1*10+9'
           }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ]
     },
@@ -797,7 +797,7 @@ export default {
           expressions: ['&1*&2'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: "Calculer un produit d'entiers",
@@ -805,7 +805,7 @@ export default {
           expressions: ['&1*&2', '&2*&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[12;99]' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
 
 
@@ -815,7 +815,7 @@ export default {
           expressions: ['&1*&2', '&2*&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[102;999]' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       'Produits particuliers': [
@@ -836,7 +836,7 @@ export default {
             '8*15',
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
 
         {
@@ -858,7 +858,7 @@ export default {
             ],
           ],
           variables: [{ '&1': '$e[2;10]' }],
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: "Calculer un produit d'entiers",
@@ -879,7 +879,7 @@ export default {
             ],
           ],
           variables: [{ '&1': '$e[2;10]', '&2': '$e[1;3]' }],
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       'Multiples de 10': [
@@ -889,7 +889,7 @@ export default {
           expressions: ['&1*#{10^&2}'],
           variables: [{ '&1': '$e[2;99]', '&2': '$e[1;3]' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: "Calculer un produit d'entiers",
@@ -905,7 +905,7 @@ export default {
             },
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       'A trou': [
@@ -916,7 +916,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[3;9]' }],
           solutions: [['&2']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Compléter une multiplication à trou',
@@ -964,7 +964,7 @@ export default {
 
           options: ['exhaust'],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Compléter une multiplication à trou',
@@ -984,7 +984,7 @@ export default {
           ],
           solutions: [['#{&3*10^&4}']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
 
@@ -995,7 +995,7 @@ export default {
           expressions: ['&1^2'],
           variables: [{ '&1': '$e[2;15]' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Trouver une racine carré',
@@ -1004,7 +1004,7 @@ export default {
           variables: [{ '&1': '$e[2;15]' }],
           solutions: [['&1']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
 
@@ -1015,7 +1015,7 @@ export default {
           expressions: ['&1*#{&2}*&3', '#{&2}*&1*&3', '#{&2}*&3*&1', '&1*&3*#{&2}', '&3*&1*#{&2}', '&3*#{&2}*&1',],
           variables: [{ '&1': '$l{20;25;50}', '&2': '100:&1', '&3': '$e[11;99]' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       Distributivité: [
@@ -1026,7 +1026,7 @@ export default {
           variables: [{ '&1': '$e[12;40]' }],
           details: [['10 \\times &1 + &1', '#{10*&1} + &1']],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Utiliser la distributivité',
@@ -1035,7 +1035,7 @@ export default {
           variables: [{ '&1': '$e[15;40]' }],
           details: [['100 \\times &1 - &1', '#{100*&1} - &1']],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Utiliser la distributivité',
@@ -1044,7 +1044,7 @@ export default {
           variables: [{ '&1': '$e[13;40]' }],
           details: [['10 \\times &1 + 2 \\times &1', '#{10*&1} + #{2*&1}']],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Utiliser la distributivité',
@@ -1053,7 +1053,7 @@ export default {
           variables: [{ '&1': '$e[15;40]' }],
           details: [['100 \\times &1 - 2 \\times &1', '#{100*&1} - #{2*&1}']],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Utiliser la distributivité',
@@ -1088,7 +1088,7 @@ export default {
             ],
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       Décomposition: [
@@ -1140,7 +1140,7 @@ export default {
           options: ['multiples'],
           format: '$e[2;9]*$e[2;9]',
           type: 'decomposition',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
     },
@@ -1152,7 +1152,7 @@ export default {
           expressions: ['#{&1*&2}:&2'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       'A trou': [
@@ -1164,7 +1164,7 @@ export default {
           solutions: [['#{&1*&2}']],
           details: [['&1 \\times &2']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Compléter une division à trou ',
@@ -1174,7 +1174,7 @@ export default {
           solutions: [['&2']],
           details: [['#{&1*&2} \\div &1']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
 
       ],
@@ -1389,7 +1389,7 @@ export default {
           expressions: ['&3+&6'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une somme ',
@@ -1409,7 +1409,7 @@ export default {
           expressions: ['&3+&7', '&7+&3'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une somme ',
@@ -1428,7 +1428,7 @@ export default {
           expressions: ['&3+&6'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une somme ',
@@ -1447,7 +1447,7 @@ export default {
           expressions: ['&3+&6'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       'A trou': [
@@ -1469,7 +1469,7 @@ export default {
           type: 'trou',
           solutions: [['&6']],
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une somme ',
@@ -1490,7 +1490,7 @@ export default {
           solutions: [['&7']],
           type: 'trou',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une somme ',
@@ -1510,7 +1510,7 @@ export default {
           type: 'trou',
           solutions: [['&6']],
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer une somme ',
@@ -1530,7 +1530,7 @@ export default {
           solutions: [['&6']],
           type: 'trou',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
     },
@@ -1548,7 +1548,7 @@ export default {
           expressions: ['&3*&4', '&4*&3'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer un produit',
@@ -1562,7 +1562,7 @@ export default {
           expressions: ['&1*&2', '&2*&1'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer un produit',
@@ -1577,7 +1577,7 @@ export default {
           expressions: ['##{&3}*&2', '&1*&2'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer un produit',
@@ -1591,7 +1591,7 @@ export default {
           expressions: ['&1*##{&2}', '##{&2}*&1'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer un produit',
@@ -1607,7 +1607,7 @@ export default {
           expressions: ['##{&1*&2}*##{&3*&4}'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer un produit',
@@ -1626,7 +1626,7 @@ export default {
           solutions: [['##{&1*&3*&2}']],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
     },
@@ -1644,7 +1644,7 @@ export default {
           expressions: ['&1:&2'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer un quotient',
@@ -1659,7 +1659,7 @@ export default {
           expressions: ['##{&3}:##{&2}', '&1:##{&2}'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer un quotient',
@@ -1675,7 +1675,7 @@ export default {
           details: [['##{&1*&2}:##{&1}']],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
     },
@@ -1732,7 +1732,7 @@ export default {
           ],
           type: 'trou',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Convertir dans une autre unité',
@@ -2075,7 +2075,7 @@ export default {
 
           ],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
 
         {
@@ -2112,7 +2112,7 @@ export default {
 
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       'Unités composées':[
@@ -2170,7 +2170,7 @@ export default {
           ],
           type: 'trou',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
 
         {
@@ -2227,7 +2227,7 @@ export default {
           ],
           type: 'trou',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
 
       ]
@@ -2379,14 +2379,14 @@ export default {
           variables: [{ '&1': '$l{2;4;5;10}', '&2': '$e[1;&1+1]' }],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Déterminer la forme fractionnaire',
           expressions: ['##{&2/&1}'],
           variables: [{ '&1': '$l{2;4;5;10}', '&2': '$e[1;&1-1]' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       'Egalité de fractions': [
@@ -2530,7 +2530,7 @@ export default {
           expressions: ['#{&2*&3}/#{&1*&3}', '#{&1*&3}/#{&2*&3}'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[1;&1-1]', '&3': '$e[2;9]' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Simplifier une fraction',
@@ -2545,7 +2545,7 @@ export default {
           ],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[1;&1-1]', '&3': '$e[2;9]' }],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
     },
@@ -2560,7 +2560,7 @@ export default {
           solutions: [['&1/&2']],
           details: [['&1:&2']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       'Addition - Soustraction': [
@@ -2610,7 +2610,7 @@ export default {
           // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
           solutions: [['&1'], ['&3'], ['&2'], ['&3'], ['&1'], ['&2']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Compléter une égalité',
@@ -2633,7 +2633,7 @@ export default {
           // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
           solutions: [['&1'], ['&3'], ['&2'], ['&3'], ['&1'], ['&2']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       Multiplication: [
@@ -2657,7 +2657,7 @@ export default {
           // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
           solutions: [['&1'], ['&3'], ['&2'], ['&4']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Compléter une égalité',
@@ -2679,7 +2679,7 @@ export default {
           // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
           solutions: [['&1'], ['&3'], ['&2'], ['&4']],
           type: 'trou',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
     },
@@ -2738,7 +2738,7 @@ export default {
           ],
           type: 'result',
 
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Additionner ou soustraire',
@@ -2771,7 +2771,7 @@ export default {
           ],
           type: 'result',
 
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Additionner ou soustraire',
@@ -2886,7 +2886,7 @@ export default {
           ],
           type: 'result',
 
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Additionner ou soustraire',
@@ -2962,7 +2962,7 @@ export default {
           ],
           details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: "Calculer une fraction d'une quantité",
@@ -2972,7 +2972,7 @@ export default {
           ],
           details: [['\\frac{#{&1*&3}}{&3} \\times &2', '&1 \\times &2']],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: "Calculer une fraction d'une quantité",
@@ -2982,7 +2982,7 @@ export default {
           ],
           details: [['&2 \\times &1'], ['&1 \\times &2']],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       Multiplication: [
@@ -3000,7 +3000,7 @@ export default {
           ],
           details: [['\\frac{&1 \\times &2}{&3 \\times &4}']],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer un produit',
@@ -3023,7 +3023,7 @@ export default {
             ],
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer un produit',
@@ -3047,7 +3047,7 @@ export default {
             ],
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer un produit',
@@ -3103,7 +3103,7 @@ export default {
             ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       Inverse: [
@@ -3119,7 +3119,7 @@ export default {
           variables: [{ '&1': '$e[2;19]', '&2': '$e[2;19]\\{cd(&1)}' }],
           solutions: [['1/&1'], ['&1'], ['&2/&1']],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: "Calculer l'inverse d'un nombre",
@@ -3128,7 +3128,7 @@ export default {
           variables: [{ '&1': '$e[2;19]', '&2': '$e[2;19]\\{cd(&1)}' }],
           solutions: [['1/&1'], ['&1'], ['&2/&1']],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
       Division: [
@@ -3152,7 +3152,7 @@ export default {
             ],
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
         {
           description: 'Calculer un quotient',
@@ -3173,7 +3173,7 @@ export default {
             ],
           ],
           type: 'result',
-          defaultDelay: 10,
+          defaultDelay: 20,
         },
       ],
     },
