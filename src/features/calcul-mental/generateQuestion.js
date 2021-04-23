@@ -1,6 +1,7 @@
 import { math } from 'tinycas/build/math/math'
 import emptyQuestion from './emptyQuestion'
 import { lexicoSort } from '../../app/utils'
+import questions from './questions'
 
 
 export default function generateQuestion(question, generateds) {
@@ -135,6 +136,9 @@ export default function generateQuestion(question, generateds) {
 
   if (question.solutions) {
     solutions = question.solutions[question.solutions.length === 1 ? 0 : choice]
+    if (question.type === 'choice') {
+      solutions = solutions.map(solution => question.choices[solution])
+    }
     solutions = solutions.map((solution) => {
       if (question.variables) {
         Object.getOwnPropertyNames(variables).forEach((name) => {

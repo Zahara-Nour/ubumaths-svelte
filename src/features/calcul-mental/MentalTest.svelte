@@ -111,6 +111,7 @@
 
   function onChoice(choice) {
     answer = choice
+    answer_latex = choice
     change()
   }
 

@@ -18,16 +18,21 @@
   const q_latex = math(item.question).latex
   const correction_latex = item.correction
   const solutions_latex = item.solutions.map((solution) => {
-    const e = math(solution)
-    // console.log(solution)
-    // console.log('e.type', e.type)
-    return e.type === '!! Error !!' ? solution : e.toLatex({ implicit })
+    if (item.type === 'choice') {
+      return solution // Ce n'est pas du latex !
+    } else {
+      const e = math(solution)
+      // console.log(solution)
+      // console.log('e.type', e.type)
+      return e.type === '!! Error !!' ? solution : e.toLatex({ implicit })
+    }
   })
-  console.log('solutions', solutions_latex)
+
   const details_latex = item.details // details are in latex form
   const answer_latex = item.answer_latex
   const empty = !item.answer
-  const badExpression = item.answer.type === '!! Error !!'
+  const badExpression =
+    item.type !== 'choice' && item.answer.type === '!! Error !!'
   const correct =
     !badExpression && solutions_latex.some((e) => e === answer_latex)
   // const strictlyCorrect =
@@ -38,36 +43,31 @@
   const correction = createItem(false)
   const detailedCorrection = item.details ? createItem(true) : null
 
+  console.log('badExpressio', badExpression)
+  console.log('correct', correct)
+
   onMount(() => {
     Mathlive.renderMathInElement(`correction${number}`)
 
     if (correct) addPoints(item.points)
   })
 
-  afterUpdate(() => {
-    Mathlive.renderMathInElement(`correction${number}`)
-  })
-
-
-  const testlatex =
-    '$$3+\\frac{4}{5}$$'
   function createItem(details) {
     let line
     let lines = []
-    console.log('type', item.type)
+    
     switch (item.type) {
       case 'choice':
-        // // if (empty) {
-        console.log(correction_latex)
-        line = testlatex
-        // '$$' +
-        // correction_latex +
-        // ' \\textcolor{green}{' +
-        // solutions_latex[0] +
-        // '}'
-        // '$$'
-        com = "(tu n'as rien répondu)"
-        // }
+        
+          console.log(correction_latex)
+          line = correction_latex +
+            '<span class="green-text">' +
+            solutions_latex[0] +
+            '</span>'
+        
+            
+          com = "(tu n'as rien répondu)"
+        
         lines.push(line)
         break
 
@@ -234,8 +234,6 @@
         id="{`correction${number}`}"
         style="display:flex;flex-direction:column"
       >
-      <div>{testlatex}</div>
-      <div>{testlatex}</div>
         {#if details && item.details}
           {#each detailedCorrection as line}
             <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{$fontSize}px;">
@@ -243,14 +241,9 @@
             </div>
           {/each}
         {:else}
-          <div>{testlatex}</div>
-          <div>{testlatex}</div>
           {#each correction as line}
-            <div>{testlatex}</div>
-            <div>{testlatex}</div>
-
             <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{$fontSize}px;">
-              <!-- {line} -->
+              {@html line}
             </div>
           {/each}
 
