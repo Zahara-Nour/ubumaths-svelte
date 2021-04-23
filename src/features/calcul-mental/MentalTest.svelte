@@ -109,12 +109,16 @@
     console.log('questions', questions)
   }
 
+  function onChoice(choice) {
+    answer = choice
+    change()
+  }
+
   $: initTest(location)
 
   $: if (delay >= elapsed) {
-      percentage = ((delay - elapsed) * 100) / delay
-    }
-
+    percentage = ((delay - elapsed) * 100) / delay
+  }
 
   $: if (questions && questions.length) {
     generateds = []
@@ -122,7 +126,6 @@
   }
 
   $: if (finish) {
-
   }
 
   function onChangeMathField(e) {
@@ -178,23 +181,38 @@
     <Question question="{generated}" />
   </div>
   <!-- <div class:error> -->
+
   <div class="d-flex align-center">
-    <span class="mr-4" style="font-size:{$fontSize}px;">Ta réponse:</span>
-    <math-field
-      style="width:50%;font-size:{$fontSize}px;"
-      virtual-keyboard-mode="onfocus"
-      virtual-keyboard-theme="apple"
-      on:input="{onChangeMathField}"
-      bind:this="{mf}"
+    {#if generated.choices}
+      <div class="mt-3 d-flex justify-center" style='width:100%;'>
+        {#each generated.choices as choice}
+          <Button class='ml-3 mr-3' on:click="{() => onChoice(choice)}">
+            {choice}
+          </Button>
+        {/each}
+      </div>
+    {:else}
+      <span class="mr-4" style="font-size:{$fontSize}px;">Ta réponse:</span>
+      <math-field
+        style="width:50%;font-size:{$fontSize}px;"
+        virtual-keyboard-mode="onfocus"
+        virtual-keyboard-theme="apple"
+        on:input="{onChangeMathField}"
+        bind:this="{mf}"
+      >
+      </math-field>
+    {/if}
+  </div>
+
+  {#if !generated.choices}
+    <!-- </div> -->
+    <div
+      style="display:inline-block;margin-top:40px;margin-bottom:20px;right:20px;position:absolute"
     >
-    </math-field>
-  </div>
-  <!-- </div> -->
-  <div
-    style="display:inline-block;margin-top:40px;margin-bottom:20px;right:20px;position:absolute"
-  >
-    <Button on:click="{change}">Valider</Button>
-  </div>
+      <Button on:click="{change}">Valider</Button>
+    </div>
+  {/if}
+
 {:else}
   Pas de questions
 {/if}

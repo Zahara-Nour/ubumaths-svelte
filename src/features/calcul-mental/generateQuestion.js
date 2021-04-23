@@ -13,6 +13,7 @@ export default function generateQuestion(question, generateds) {
   let enounce
   let conditions
   let letters
+  let correction
 
   const expressions = generateds ? generateds.map((g) => g.expression) : []
   const regexExact = /#\{(.*?)\}/g
@@ -223,6 +224,19 @@ export default function generateQuestion(question, generateds) {
     enounce = enounce.replace(regexExactLatex, replacementExactLatex)
     enounce = enounce.replace(regexExact, replacementExact)
   }
+
+  if (question.corrections) {
+    correction = question.corrections[question.corrections.length === 1 ? 0 : choice]
+    Object.getOwnPropertyNames(variables).forEach((name) => {
+      const regex = new RegExp(name, 'g')
+
+      correction = correction.replace(regex, variables[name])
+    })
+    correction = correction.replace(regexDecimalLatex, replacementDecimalLatex)
+    correction = correction.replace(regexDecimal, replacementDecimal)
+    correction = correction.replace(regexExactLatex, replacementExactLatex)
+    correction = correction.replace(regexExact, replacementExact)
+  }
   
   const generated = {
     points: 1,
@@ -233,6 +247,7 @@ export default function generateQuestion(question, generateds) {
 
   if (details) generated.details = details
   if (enounce) generated.enounce = enounce
+  if (correction) generated.correction = correction
   // console.log("GENERATED  question", generated)
 
   return generated

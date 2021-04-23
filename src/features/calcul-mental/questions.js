@@ -67,7 +67,7 @@ export default {
             },
           ],
           type: 'result',
-          defaultDelay: 20,
+          defaultDelay: 30,
         },
         {
           description: 'Calculer une somme',
@@ -2241,8 +2241,12 @@ export default {
         {
           description: 'Calculer une somme ou une différence',
           subdescription: "A l'aide de la droite graduée",
-          expressions: ['(-&1)+&2', '(-&1)-&2', '&3-&1'],
-          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[1;&1-1]' }],
+          expressions: ['(-&1)+&2', '(-&1)-&2', '&2-&1'],
+          variables: [
+            { '&1': '$e[1;5]', '&2': '$e[1;3+&1]' },
+            { '&1': '$e[1;3]', '&2': '$e[1;4-&1]' },
+            { '&1': '$e[2;9]', '&2': '$e[1;&1-1]' },
+          ],
           type: 'result',
           defaultDelay: 20,
         },
@@ -2270,7 +2274,38 @@ export default {
           defaultDelay: 20,
         },
       ],
-      Résultat: [
+      'Sommes algébriques': [
+        {
+          description: "Trouver le signe d'une somme",
+          expressions: ['(-&1)+&2', '(-&2)+&1', '(-&1)+(-&2)', '&1+(-&2)', '&2+(-&1)'],
+          enounces: ['Quel est le signe de cette somme ?'],
+          variables: [
+            { '&1': '$e[30;99]', '&2': '$e[1;&1-1]' },
+            { '&1': '$e[30;99]', '&2': '$e[1;&1-1]' },
+            { '&1': '$e[30;99]', '&2': '$e[30;99]', },
+            { '&1': '$e[30;99]', '&2': '$e[1;&1-1]' },
+            { '&1': '$e[30;99]', '&2': '$e[1;&1-1]' },
+            
+          ],
+          choices:['positif', 'négatif'],
+          corrections:[
+            '\\text{Le résultat de }(-&1)+&2\\text{ est }',
+            '\\text{Le résultat de }(-&2)+&1\\text{ est }',
+            '\\text{Le résultat de }(-&1)+(-&2)\\text{ est }',
+            '\\text{Le résultat de }&1+(-&2)\\text{ est }',
+            '\\text{Le résultat de }&2+(-&1)\\text{ est }',
+          ],
+          solutions:[
+            ['\\text{négatif}'],
+            ['\\text{positif}'],
+            ['\\text{négatif}'],
+            ['\\text{positif}'],
+            ['\\text{négatif}'],
+          ],
+          type: 'choice',
+          defaultDelay: 20,
+
+        },
         {
           description: 'Calculer une somme',
           subdescription: 'Cas général',
@@ -2334,13 +2369,7 @@ export default {
           type: 'result',
           defaultDelay: 20,
         },
-        {
-          description: 'Multiplier',
-          expressions: ['(-&1)*&2', '(-&1)*(-&2)', '&1*(-&2)'],
-          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
-          type: 'result',
-          defaultDelay: 20,
-        },
+        
         {
           description: 'Diviser',
           expressions: [
@@ -2348,6 +2377,28 @@ export default {
             '(-#{&1*&2}):(-&2)',
             '#{&1*&2}:(-&2)',
           ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        
+      ],
+    },
+    'Multiplier':{
+      Produit:[
+        {
+          description: "Trouver le signe d'un produit",
+          expressions: ['(-&1)*&2', '(-&1)*(-&2)', '&1*(-&2)'],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          choix:['Positif', 'Négatif'],
+          solutions:[],
+          type: 'choice',
+          defaultDelay: 20,
+
+        },
+        {
+          description: 'Calculer un produit',
+          expressions: ['(-&1)*&2', '(-&1)*(-&2)', '&1*(-&2)'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
           defaultDelay: 20,
@@ -2367,8 +2418,9 @@ export default {
           type: 'trou',
           defaultDelay: 20,
         },
-      ],
-    },
+
+      ]
+    } 
   },
   Fractions: {
     'Différentes écritures': {

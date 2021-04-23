@@ -12,53 +12,81 @@
   export let addPoints
   export let details
 
+  const number = item.number
   const options = item.options
   const implicit = options && options.includes('implicit')
-  const q_exp = math(item.question)
-  const s_exp = 'sexp'
-  const s_exps = item.solutions.map((solution) => math(solution))
-  const d_exps = item.details // details are in latex form
-  const a_exp = math(item.answer)
+  const q_latex = math(item.question).latex
+  const correction_latex = item.correction
+  const solutions_latex = item.solutions.map((solution) => {
+    const e = math(solution)
+    // console.log(solution)
+    // console.log('e.type', e.type)
+    return e.type === '!! Error !!' ? solution : e.toLatex({ implicit })
+  })
+  console.log('solutions', solutions_latex)
+  const details_latex = item.details // details are in latex form
+  const answer_latex = item.answer_latex
   const empty = !item.answer
-  const badExpression = a_exp.type === '!! Error !!'
-  const correct = !badExpression && s_exps.some((e) => e.equals(a_exp))
-  const strictlyCorrect =
-    !badExpression && s_exps.some((e) => e.strictlyEquals(a_exp))
+  const badExpression = item.answer.type === '!! Error !!'
+  const correct =
+    !badExpression && solutions_latex.some((e) => e === answer_latex)
+  // const strictlyCorrect =
+  //   !badExpression &&
+  //   solutions_latex.some((e) => e.strictlyEquals(answer_latex))
   let com
 
   const correction = createItem(false)
   const detailedCorrection = item.details ? createItem(true) : null
 
   onMount(() => {
-    Mathlive.renderMathInDocument()
+    Mathlive.renderMathInElement(`correction${number}`)
+
     if (correct) addPoints(item.points)
   })
 
   afterUpdate(() => {
-    Mathlive.renderMathInDocument()
+    Mathlive.renderMathInElement(`correction${number}`)
   })
 
+
+  const testlatex =
+    '$$3+\\frac{4}{5}$$'
   function createItem(details) {
     let line
     let lines = []
-
+    console.log('type', item.type)
     switch (item.type) {
+      case 'choice':
+        // // if (empty) {
+        console.log(correction_latex)
+        line = testlatex
+        // '$$' +
+        // correction_latex +
+        // ' \\textcolor{green}{' +
+        // solutions_latex[0] +
+        // '}'
+        // '$$'
+        com = "(tu n'as rien répondu)"
+        // }
+        lines.push(line)
+        break
+
       case 'enonce':
         lines.push(item.enounce)
 
         if (empty) {
-          line = '$$'+`\\textcolor{green}{${s_exps[0].toLatex({ implicit })}}` + '$$'
+          line = '$$' + `\\textcolor{green}{${solutions_latex[0]}}` + '$$'
 
           com = "(tu n'as rien répondu)"
         } else if (badExpression || !correct) {
           line =
             '$$\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
-            item.answer_latex +
+            answer_latex +
             '}}\\text{  }\\textcolor{green}{' +
-            s_exps[0].toLatex({ implicit }) +
+            solutions_latex[0] +
             '}$$'
         } else {
-          line = '$$\\textcolor{green}{' + item.answer_latex + '}$$'
+          line = '$$\\textcolor{green}{' + answer_latex + '}$$'
 
           // if (!strictlyCorrect) {
           //   line +=
@@ -70,13 +98,14 @@
         lines.push(line)
 
         break
+
       case 'decomposition':
         if (details) {
         } else {
-          line = '$$\\begin{align*}' + q_exp.latex
-          s_exps.forEach((solution, i) => {
+          line = '$$\\begin{align*}' + q_latex
+          solutions_latex.forEach((solution, i) => {
             if (i !== 0) line += ' \\\\ '
-            line += '& =' + solution.latex
+            line += '& =' + solution
           })
           line += '\\end{align*}$$'
           lines.push(line)
@@ -85,36 +114,34 @@
 
       case 'result':
         if (details) {
-          line = '$$\\begin{align*}' + q_exp.latex
-          d_exps.forEach((detail, i) => {
-            if (detail !== s_exps[0].toLatex({ implicit })) {
+          line = '$$\\begin{align*}' + q_latex
+          details_latex.forEach((detail, i) => {
+            if (detail !== solutions_latex[0]) {
               if (i !== 0) line += ' \\\\ '
               line += '& =' + detail
             }
           })
           line +=
             ' \\\\ & =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-            s_exps[0].toLatex({ implicit }) +
+            solutions_latex[0] +
             '}'
           line += '\\end{align*}$$'
           lines.push(line)
         } else {
           // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
-          line = '$$' + q_exp.latex
+          line = '$$' + q_latex
           if (empty) {
-            line +=
-              `=\\textcolor{green}{${s_exps[0].toLatex({ implicit })}}` + '$$'
-
+            line += `=\\textcolor{green}{${solutions_latex[0]}}` + '$$'
             com = "(tu n'as rien répondu)"
           } else if (badExpression || !correct) {
             line +=
               '=\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
-              item.answer_latex +
+              answer_latex +
               '}}\\text{  }\\textcolor{green}{' +
-              s_exps[0].toLatex({ implicit }) +
+              solutions_latex[0] +
               '}$$'
           } else {
-            line += '=\\textcolor{green}{' + item.answer_latex + '}$$'
+            line += '=\\textcolor{green}{' + answer_latex + '}$$'
 
             // if (!strictlyCorrect) {
             //   line +=
@@ -137,7 +164,7 @@
             if (i === item.details.length - 1) {
               line +=
                 '& =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-                s_exps[0].latex +
+                solutions_latex[0] +
                 '}'
             } else {
               line += '& =' + detail
@@ -148,9 +175,9 @@
         } else {
           line =
             '$$' +
-            q_exp.latex.replace(
+            q_latex.replace(
               /\\ldots/,
-              `\\textcolor{green}{${s_exps[0].latex}}`,
+              `\\textcolor{green}{${solutions_latex[0]}}`,
             ) +
             '$$'
 
@@ -159,9 +186,9 @@
             com = "(tu n'as rien répondu)"
           } else if (badExpression || !correct) {
             com = '$$\\text{(ta réponse: }'
-            com += q_exp.latex.replace(
+            com += q_latex.replace(
               /\\ldots/,
-              `\\textcolor{red}{${item.answer_latex}}`,
+              `\\textcolor{red}{${answer_latex}}`,
             )
             com += '\\text{  )}$$'
           } else {
@@ -179,7 +206,7 @@
   }
 </script>
 
-<div id="correction">
+<div>
   <ListItem selectable="{false}">
     <div class="d-flex justify-start align-center">
       <Button fab size="x-small" depressed class="blue white-text mr-2">
@@ -203,7 +230,12 @@
         {/if}
       </div>
 
-      <div style="display:flex;flex-direction:column">
+      <div
+        id="{`correction${number}`}"
+        style="display:flex;flex-direction:column"
+      >
+      <div>{testlatex}</div>
+      <div>{testlatex}</div>
         {#if details && item.details}
           {#each detailedCorrection as line}
             <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{$fontSize}px;">
@@ -211,9 +243,14 @@
             </div>
           {/each}
         {:else}
+          <div>{testlatex}</div>
+          <div>{testlatex}</div>
           {#each correction as line}
+            <div>{testlatex}</div>
+            <div>{testlatex}</div>
+
             <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{$fontSize}px;">
-              {line}
+              <!-- {line} -->
             </div>
           {/each}
 

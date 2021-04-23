@@ -45,7 +45,7 @@ import { fontSize } from '../../app/stores';
   {#if !(question.options && question.options.includes('no-exp'))}
     <div
       id="expression"
-      class="d-flex align-center justify-center"
+      class="mt-4 d-flex align-center justify-center"
     >
       <math-field
         style="font-size:{$fontSize+10}px;display:inline-block"
