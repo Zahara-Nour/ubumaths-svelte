@@ -882,7 +882,7 @@ export default {
           defaultDelay: 20,
         },
       ],
-      'Multiples de 10': [
+      'Puissances de 10': [
         {
           description: "Calculer un produit d'entiers",
           subdescription: 'Multiplication par 10, 100 ou 1000',
@@ -1371,7 +1371,7 @@ export default {
   },
   Décimaux: {
     Addition: {
-      Résultat: [
+      Somme: [
         {
           description: 'Calculer une somme ',
           subdescription:
@@ -1465,7 +1465,7 @@ export default {
               '&6': '&4.&5',
             },
           ],
-          expressions: ['&3+?=##{&3+&6}'],
+          expressions: ['&3+?=##{&3+&6}', '?+&3=##{&3+&6}'],
           type: 'trou',
           solutions: [['&6']],
           'result-type': 'decimal',
@@ -1535,7 +1535,7 @@ export default {
       ],
     },
     Multiplication: {
-      Résultat: [
+      Produit: [
         {
           description: 'Calculer un produit',
           subdescription: 'Un des facteurs est un entier',
@@ -1545,7 +1545,7 @@ export default {
               '&2': '$d{1;1}',
             },
           ],
-          expressions: ['&3*&4', '&4*&3'],
+          expressions: ['&1*&2', '&2*&1'],
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
@@ -1564,6 +1564,48 @@ export default {
           'result-type': 'decimal',
           defaultDelay: 20,
         },
+        
+        
+        {
+          description: 'Calculer un produit',
+          subdescription: 'Multiplier deux nombres décimaux',
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$l{0.1;0.01}',
+              '&3': '$e[2;9]',
+              '&4': '$l{0.1;0.01}',
+            },
+          ],
+          expressions: ['##{&1*&2}*##{&3*&4}'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Calculer un produit',
+          subdescription: "Determiner un produit à partir d'un autre",
+          enounces:
+            [
+              'Sachant que $$%%{&1} \\times %%{&2}=%%{&1*&2}$$ combien vaut $$%%{&1*&3} \\times %%{&2}$$ ?',
+              'Sachant que $$%%{&2} \\times %%{&1}=%%{&1*&2}$$ combien vaut $$%%{&2} \\times %%{&1*&3}$$ ?',
+          ],
+          variables: [
+            {
+              '&1': '$d{$e[1;2];$e[0;2]}',
+              '&2': '$d{2;1}',
+              '&3': '$l{10;100;1000}',
+            },
+          ],
+          options: ['no-exp'],
+          expressions: ['##{&1*&3}* &2', '&2*##{&1*&3}'],
+          solutions: [['##{&1*&3*&2}']],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+        },
+      ],
+      'Puissances de 10': [
         {
           description: 'Calculer un produit',
           subdescription: 'Multiplier par 10, 100 ou 1000',
@@ -1593,42 +1635,8 @@ export default {
           'result-type': 'decimal',
           defaultDelay: 20,
         },
-        {
-          description: 'Calculer un produit',
-          subdescription: 'Multiplier deux nombres décimaux',
-          variables: [
-            {
-              '&1': '$e[2;9]',
-              '&2': '$l{0.1;0.01}',
-              '&3': '$e[2;9]',
-              '&4': '$l{0.1;0.01}',
-            },
-          ],
-          expressions: ['##{&1*&2}*##{&3*&4}'],
-          type: 'result',
-          'result-type': 'decimal',
-          defaultDelay: 20,
-        },
-        {
-          description: 'Calculer un produit',
-          subdescription: "Determiner un produit à partir d'un autre",
-          enounce:
-            'Sachant que $$%%{&1} \\times %%{&2}=%%{&1*&2}$$ combien vaut $$%%{&1*&3} \\times %%{&2}$$ ?',
-          variables: [
-            {
-              '&1': '$d{$e[1;2];$e[0;2]}',
-              '&2': '$d{2;1}',
-              '&3': '$l{10;100;1000}',
-            },
-          ],
-          options: ['no-exp'],
-          expressions: ['##{&1*&3}* &2'],
-          solutions: [['##{&1*&3*&2}']],
-          type: 'result',
-          'result-type': 'decimal',
-          defaultDelay: 20,
-        },
-      ],
+
+      ]
     },
     Division: {
       Résultat: [

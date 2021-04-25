@@ -8,7 +8,6 @@
   import { user } from '../../app/stores'
   import { calculMentalAssessment } from './stores'
   import { saveDocument } from '../../app/db'
- 
 
   export let questions
   export let answers
@@ -77,7 +76,7 @@
       points: question.points,
       options: question.options,
       enounce: question.enounce,
-      correction: question.correction
+      correction: question.correction,
     }
   }
 
@@ -148,10 +147,17 @@
     </div>
   </div>
 {/if}
-
-{#each items as item}
-  <CorrectionItem item="{item}" addPoints="{addPoints}" details="{details}" />
-{/each}
+<div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
+  <div>
+    {#each items as item}
+      <CorrectionItem
+        item="{item}"
+        addPoints="{addPoints}"
+        details="{details}"
+      />
+    {/each}
+  </div>
+</div>
 
 <div class="green d-flex align-center  justify-space-around">
   <span style="font-size:22px" class="white-text">

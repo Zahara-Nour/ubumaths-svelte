@@ -55,19 +55,18 @@
   function createItem(details) {
     let line
     let lines = []
-    
+
     switch (item.type) {
       case 'choice':
-        
-          console.log(correction_latex)
-          line = correction_latex +
-            '<span class="green-text">' +
-            solutions_latex[0] +
-            '</span>'
-        
-            
-          com = "(tu n'as rien répondu)"
-        
+        console.log(correction_latex)
+        line =
+          correction_latex +
+          '<span class="green-text">' +
+          solutions_latex[0] +
+          '</span>'
+
+        if (empty) com = "(tu n'as rien répondu)"
+
         lines.push(line)
         break
 
@@ -248,7 +247,7 @@
           {/each}
 
           {#if com}
-            <div style="font-size:{$fontSize}px;">
+            <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{$fontSize}px;">
               {com}
             </div>
           {/if}

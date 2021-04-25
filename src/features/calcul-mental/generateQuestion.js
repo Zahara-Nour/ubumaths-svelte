@@ -217,7 +217,10 @@ export default function generateQuestion(question, generateds) {
   }
 
   if (question.enounces) {
+    console.log('enouces', question.enounces)
+    console.log('choice', choice)
     enounce = question.enounces[question.enounces.length === 1 ? 0 : choice]
+    console.log('enounce', enounce)
     Object.getOwnPropertyNames(variables).forEach((name) => {
       const regex = new RegExp(name, 'g')
 

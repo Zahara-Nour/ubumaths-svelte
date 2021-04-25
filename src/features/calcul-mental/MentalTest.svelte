@@ -12,6 +12,7 @@
   import { shuffle } from '../../app/utils'
   import { fontSize, user } from '../../app/stores'
   import { getDocument } from '../../app/db'
+  import { tick } from 'svelte';
 
   export let location
   // console.log('location', location)
@@ -126,16 +127,29 @@
     change()
   }
 
-  $: if (finish) {
+ $: console.log('mf', mf)
+
+  function onKeystroke(e) {
+    // console.log('e', e)
+    const keystroke = e.detail.keystroke
+    answer_latex = mf.getValue()
+    answer = mf.getValue('ASCIIMath')
+    if (keystroke === '[Enter]' || keystroke==='[NumpadEnter]') {
+      answer_latex = mf.getValue()
+      answer = mf.getValue('ASCIIMath')
+      change()
+    }
+  
   }
 
   function onChangeMathField(e) {
     // utile dans le cas d'une expression mal formée
-    answer_latex = mf.getValue()
-    answer = mf.getValue('ASCIIMath')
+    // console.log('***change****')
+    // answer_latex = mf.getValue()
+    // answer = mf.getValue('ASCIIMath')
   }
 
-  function change() {
+  async function change() {
     if (timer) clearInterval(timer)
     if (timeout) clearTimeout(timeout)
     if (current >= 0) {
@@ -145,7 +159,7 @@
     if (current < questions.length - 1) {
       if (mf) {
         mf.setValue('')
-        mf.focus()
+        if (!mf.hasFocus()) mf.focus()
       }
       answer = ''
       current++
@@ -199,6 +213,8 @@
         virtual-keyboard-mode="onfocus"
         virtual-keyboard-theme="apple"
         on:input="{onChangeMathField}"
+        on:keystroke='{onKeystroke}'
+        on:blur='{()=>{console.log('onblur')}}'
         bind:this="{mf}"
       >
       </math-field>
