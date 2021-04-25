@@ -8,28 +8,15 @@ import { fontSize } from '../../app/stores';
 
   let mf
   let enounce
-
-  onMount(() => {
-    if (question.enounce) {
-      enounce = question.enounce.replace(regex, replacement)
-      if (document.getElementById('enounce')) {
-        document.getElementById('enounce').innerHTML = enounce
-        console.log('enouce', enounce)
-      }
-    }
-  })
-
   const regex = /\$\$(.*?)\$\$/g
   const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
 
-  $: {
-    if (question.enounce) {
-      enounce = question.enounce.replace(regex, replacement)
-      if (document.getElementById('enounce')) {
-        document.getElementById('enounce').innerHTML = enounce
-      }
-    }
-  }
+  
+
+
+  $:  enounce = question.enounce ? question.enounce.replace(regex, replacement) : null
+    
+  
 
   $: if (mf) {
     const exp = math(question.expression)
@@ -40,7 +27,7 @@ import { fontSize } from '../../app/stores';
 
 <div>
   {#if enounce}
-    <div id="enounce"></div>
+    <div id="enounce">{@html enounce}</div>
   {/if}
   {#if !(question.options && question.options.includes('no-exp'))}
     <div
