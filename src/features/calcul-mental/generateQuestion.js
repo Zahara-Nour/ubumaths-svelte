@@ -88,20 +88,20 @@ export default function generateQuestion(question, generateds) {
       Object.getOwnPropertyNames(variables)
         .sort(lexicoSort)
         .forEach((name, i) => {
-          // console.log('\n treating', name, variables[name])
+        
           let generated = variables[name]
-          // console.log("\n\n\nVariable",name,variables[name])
+     
 
           // replace the precedent variables by their generated value
           for (let j = 1; j < i + 1; j++) {
             const precedentName = `&${j}`
             const regex = new RegExp(precedentName, 'g')
             generated = generated.replace(regex, variables[precedentName])
-            // console.log("generated", generated)
+        
           }
           generated = math(generated).generate().string
           variables[name] = generated
-          // console.log("generated", generated)
+         
         })
 
       Object.getOwnPropertyNames(variables).forEach((name) => {
@@ -117,7 +117,7 @@ export default function generateQuestion(question, generateds) {
       if (!doItAgain && question.conditions) {
         let condition =
           question.conditions[question.conditions.length === 1 ? 0 : choice]
-        // console.log('condition', condition)
+    
         Object.getOwnPropertyNames(variables).forEach((name) => {
           const regex = new RegExp(name, 'g')
           condition = condition.replace(regex, variables[name])
@@ -152,12 +152,12 @@ export default function generateQuestion(question, generateds) {
       }
     })
   } else {
-    // console.log('eval', expression, math(expression).eval().latex)
+ 
     let params = { decimal: question['result-type'] === 'decimal' }
 
     if (question.letters) {
       letters = question.letters[question.letters.length === 1 ? 0 : choice]
-      // console.log('letters', letters)
+
 
       Object.getOwnPropertyNames(letters).forEach((letter) => {
         if (letter.startsWith('&')) {
@@ -169,7 +169,7 @@ export default function generateQuestion(question, generateds) {
           letters[letter] = variables[letters[letter]]
         }
       })
-      // console.log('letters', letters)
+  
       params = { ...params, ...letters }
     }
 
@@ -194,18 +194,17 @@ export default function generateQuestion(question, generateds) {
     })
 
     details = details.reduce((acc, d) => {
-      // console.log('d', d)
-      // console.log('acc', acc)
+
 
       const regex = /^(.*)\?\?/
       const found = d.match(regex)
 
       if (found) {
-        //  console.log('found', found)
+
         const tests = found[1].split('&&')
-        // console.log('tests', tests)
+     
         if (tests.every((t) => math(t).eval().string === 'true')) {
-          // console.log('tests ok, replace ', d, ' with ', d.replace(found[0], ''))
+  
           d = d.replace(found[0], '')
           acc.push(d)
         }
@@ -217,10 +216,9 @@ export default function generateQuestion(question, generateds) {
   }
 
   if (question.enounces) {
-    console.log('enouces', question.enounces)
-    console.log('choice', choice)
+
     enounce = question.enounces[question.enounces.length === 1 ? 0 : choice]
-    console.log('enounce', enounce)
+
     Object.getOwnPropertyNames(variables).forEach((name) => {
       const regex = new RegExp(name, 'g')
 
@@ -255,7 +253,7 @@ export default function generateQuestion(question, generateds) {
   if (details) generated.details = details
   if (enounce) generated.enounce = enounce
   if (correction) generated.correction = correction
-  // console.log("GENERATED  question", generated)
+
 
   return generated
 }

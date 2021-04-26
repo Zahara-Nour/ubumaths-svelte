@@ -70,7 +70,6 @@
   function initTest(location) {
     finish = false
     queryParams = queryString.parse(location.search)
-    console.log('queryParams', queryParams)
     subdomain = queryParams.subdomain
     domain = queryParams.domain
     theme = queryParams.theme
@@ -127,10 +126,8 @@
     change()
   }
 
- $: console.log('mf', mf)
-
   function onKeystroke(e) {
-    // console.log('e', e)
+
     const keystroke = e.detail.keystroke
     answer_latex = mf.getValue()
     answer = mf.getValue('ASCIIMath')
@@ -214,7 +211,6 @@
         virtual-keyboard-theme="apple"
         on:input="{onChangeMathField}"
         on:keystroke='{onKeystroke}'
-        on:blur='{()=>{console.log('onblur')}}'
         bind:this="{mf}"
       >
       </math-field>
