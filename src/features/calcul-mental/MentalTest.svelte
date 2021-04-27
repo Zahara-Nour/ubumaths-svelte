@@ -19,9 +19,9 @@
 
   let question = {}
   let questions
+  let current = -1
   let answer
   let answer_latex
-  let current = -1
   let answers = []
   let answers_latex = []
   let generated
@@ -129,11 +129,9 @@
   function onKeystroke(e) {
 
     const keystroke = e.detail.keystroke
-    answer_latex = mf.getValue()
-    answer = mf.getValue('ASCIIMath')
     if (keystroke === '[Enter]' || keystroke==='[NumpadEnter]') {
-      answer_latex = mf.getValue()
-      answer = mf.getValue('ASCIIMath')
+      // answer = mf.getValue('ASCIIMath')
+      // answer_latex = mf.getValue()
       change()
     }
   
@@ -142,8 +140,8 @@
   function onChangeMathField(e) {
     // utile dans le cas d'une expression mal formée
     // console.log('***change****')
-    // answer_latex = mf.getValue()
-    // answer = mf.getValue('ASCIIMath')
+    answer_latex = mf.getValue()
+    answer = mf.getValue('ASCIIMath')
   }
 
   async function change() {
@@ -158,7 +156,7 @@
         mf.setValue('')
         if (!mf.hasFocus()) mf.focus()
       }
-      answer = ''
+      answer=''
       current++
       question = questions[current]
       generated = generate(question, generateds)

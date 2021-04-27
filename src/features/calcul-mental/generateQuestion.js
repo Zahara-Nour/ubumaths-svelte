@@ -7,6 +7,7 @@ import questions from './questions'
 export default function generateQuestion(question, generateds) {
   // firestore returns objects with read-only properties
   let expression
+  let expression2
   let solutions
   let variables
   let details
@@ -215,6 +216,21 @@ export default function generateQuestion(question, generateds) {
     }, [])
   }
 
+  if (question.expressions2) {
+
+    expression2 = question.expressions2[question.expressions2.length === 1 ? 0 : choice]
+
+    Object.getOwnPropertyNames(variables).forEach((name) => {
+      const regex = new RegExp(name, 'g')
+
+      expression2 = expression2.replace(regex, variables[name])
+    })
+    expression2 = expression2.replace(regexDecimalLatex, replacementDecimalLatex)
+    expression2 = expression2.replace(regexDecimal, replacementDecimal)
+    expression2 = expression2.replace(regexExactLatex, replacementExactLatex)
+    expression2 = expression2.replace(regexExact, replacementExact)
+  }
+
   if (question.enounces) {
 
     enounce = question.enounces[question.enounces.length === 1 ? 0 : choice]
@@ -253,6 +269,7 @@ export default function generateQuestion(question, generateds) {
   if (details) generated.details = details
   if (enounce) generated.enounce = enounce
   if (correction) generated.correction = correction
+  if (expression2) generated.expression2 = expression2
 
 
   return generated
