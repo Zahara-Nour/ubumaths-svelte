@@ -20,6 +20,25 @@
   const items = []
   const toggleDetails = () => (details = !details)
 
+  let colorResult
+  let messageResult
+
+  $: percent = total ? score / total : null
+
+  $: if (percent === 1) {
+    colorResult = 'green'
+    messageResult = 'Perfect !'
+  } else if (percent >= 0.8) {
+    colorResult = 'green'
+    messageResult = 'Good Job !'
+  } else if (percent >= 0.5) {
+    colorResult = 'orange'
+    messageResult = 'Keep on !'
+  } else {
+    colorResult = 'red'
+    messageResult = 'Try again !'
+  }
+
   onMount(async () => {
     const assessment = $calculMentalAssessment
     if (assessment) {
@@ -159,16 +178,30 @@
   </div>
 </div>
 
-<div class="green d-flex align-center  justify-space-around">
-  <span style="font-size:22px" class="white-text">
-    Score : {score}/{total}
-  </span>
-  {#if score >= 0}
-    <img alt="Good job!" src="/images/good-job.png" width="25%" />
+<div class="{colorResult + ' d-flex align-center  justify-space-around'}">
+  <div class='d-flex flex-column align-center'>
+    <div class="mt-2 mb-2 white-text" style="font-family:'pacifico';font-size:34px">
+      {messageResult}
+    </div>
+    <div style="font-size:22px" class="mt-2 mb-2  white-text">
+      Score : {score}/{total}
+    </div>
+    
+  </div>
+  {#if percent === 1}
+    <img alt="Great!" src="/images/great-150.png" />
+  {:else if percent >= 0.8}
+    <img alt="Good job!" src="/images/good-job-150.png" />
+  {:else if percent >= 0.5}
+    <img alt="Keep on!" src="/images/keep-on-150.png" />
+  {:else}
+    <img alt="Try again!" src="/images/try-again-150.png" />
   {/if}
 </div>
 
 <style>
+  /* pacifico-regular - latin */
+  
   .container {
     padding-top: 15px;
     padding-bottom: 15px;

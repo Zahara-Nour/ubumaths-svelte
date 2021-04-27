@@ -28,6 +28,8 @@
     }
   })
 
+ 
+
   const details_latex = item.details // details are in latex form
   const answer_latex = item.answer_latex
   const empty = !item.answer
