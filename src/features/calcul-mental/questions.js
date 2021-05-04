@@ -1566,7 +1566,7 @@ export default {
         },
         {
           description: 'Placer la virgule dans le produit',
-          enounces:['La virgule a été oubliée dans le produit. Réécris le produit en rajoutant la virgule.'],
+          enounces: ['La virgule a été oubliée dans le produit. Réécris le produit en rajoutant la virgule.'],
           variables: [
             {
               '&1': '$e[2;4]',
@@ -1585,8 +1585,8 @@ export default {
           'result-type': 'decimal',
           defaultDelay: 20,
         },
-        
-        
+
+
         {
           description: 'Calculer un produit',
           subdescription: 'Multiplier deux nombres décimaux',
@@ -1610,7 +1610,7 @@ export default {
             [
               'Sachant que $$%%{&1} \\times %%{&2}=%%{&1*&2}$$ combien vaut $$%%{&1*&3} \\times %%{&2}$$ ?',
               'Sachant que $$%%{&2} \\times %%{&1}=%%{&1*&2}$$ combien vaut $$%%{&2} \\times %%{&1*&3}$$ ?',
-          ],
+            ],
           variables: [
             {
               '&1': '$d{$e[1;2];$e[0;2]}',
@@ -2144,7 +2144,7 @@ export default {
           defaultDelay: 20,
         },
       ],
-      'Unités composées':[
+      'Unités composées': [
         {
           description: 'Convertir dans une autre unité',
           subdescription: "Unités d'aire",
@@ -2188,14 +2188,14 @@ export default {
             ['##{&1*100}'],
             ['##{&1*100}'],
             ['##{&1*100}'],
-            
+
             ['##{&1*0.01}'],
             ['##{&1*0.01}'],
             ['##{&1*0.01}'],
             ['##{&1*0.01}'],
             ['##{&1*0.01}'],
             ['##{&1*0.01}'],
-            
+
           ],
           type: 'trou',
           'result-type': 'decimal',
@@ -2212,12 +2212,12 @@ export default {
             },
           ],
           expressions: [
-            
+
             '&1 hm^3 = ? m^3',
             '&1 dam^3 = ? m^3',
             '&1 dm^3 = ? m^3',
             '&1 cm^3 = ? m^3',
-            
+
 
             '&1 km^3 = ? hm^3',
             '&1 hm^3 = ? dam^3',
@@ -2233,26 +2233,26 @@ export default {
             '&1 hm^3 = ? km^3',
           ],
           solutions: [
-            
+
             ['##{&1*1000000}'],
             ['##{&1*1000}'],
             ['##{&1*0.001}'],
             ['##{&1*0.000001}'],
-            
+
 
             ['##{&1*1000}'],
             ['##{&1*1000}'],
             ['##{&1*1000}'],
             ['##{&1*1000}'],
             ['##{&1*1000}'],
-            
+
             ['##{&1*0.001}'],
             ['##{&1*0.001}'],
             ['##{&1*0.001}'],
             ['##{&1*0.001}'],
             ['##{&1*0.001}'],
             ['##{&1*0.001}'],
-            
+
           ],
           type: 'trou',
           'result-type': 'decimal',
@@ -2261,7 +2261,7 @@ export default {
 
       ]
 
-      
+
     }
   },
   Relatifs: {
@@ -2314,17 +2314,17 @@ export default {
             { '&1': '$e[30;99]', '&2': '$e[30;99]', },
             { '&1': '$e[30;99]', '&2': '$e[1;&1-1]' },
             { '&1': '$e[30;99]', '&2': '$e[1;&1-1]' },
-            
+
           ],
-          choices:['positif', 'négatif'],
-          corrections:[
+          choices: ['positif', 'négatif'],
+          corrections: [
             'Le résultat de $$(-&1)+&2$$ est ',
             'Le résultat de $$(-&2)+&1$$ est ',
             'Le résultat de $$(-&1)+(-&2)$$ est ',
             'Le résultat de $$&1+(-&2)$$ est ',
             'Le résultat de $$&2+(-&1)$$ est ',
           ],
-          solutions:[
+          solutions: [
             [1],
             [0],
             [1],
@@ -2398,7 +2398,7 @@ export default {
           type: 'result',
           defaultDelay: 20,
         },
-        
+
         {
           description: 'Diviser',
           expressions: [
@@ -2410,22 +2410,22 @@ export default {
           type: 'result',
           defaultDelay: 20,
         },
-        
+
       ],
     },
-    'Multiplier':{
-      Produit:[
+    'Multiplier': {
+      Produit: [
         {
           description: "Trouver le signe d'un produit",
           expressions: ['(-&1)*&2', '(-&1)*(-&2)', '&1*(-&2)'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
-          choices:['positif', 'négatif'],
-          corrections:[
+          choices: ['positif', 'négatif'],
+          corrections: [
             'Le résultat de $$(-&1) \\times &2$$ est ',
             'Le résultat de $$(-&1)  \\times (-&2)$$ est ',
             'Le résultat de $$&1  \\times (-&2)$$ est ',
           ],
-          solutions:[
+          solutions: [
             [1],
             [0],
             [1],
@@ -2458,13 +2458,23 @@ export default {
         },
 
       ]
-    } 
+    }
   },
   Fractions: {
     'Différentes écritures': {
       'Forme décimale': [
         {
           description: "Déterminer la forme décimale d'une fraction",
+          subdescription: "La forme décimale est un entier",
+          expressions: ['#{&2*&1}/&1'],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+        },
+        {
+          description: "Déterminer la forme décimale d'une fraction",
+          subdescription: "La forme décimale n'est pas entière",
           expressions: ['&2/&1'],
           variables: [{ '&1': '$l{2;4;5;10}', '&2': '$e[1;&1+1]' }],
           type: 'result',
@@ -2472,7 +2482,7 @@ export default {
           defaultDelay: 20,
         },
         {
-          description: 'Déterminer la forme fractionnaire',
+          description: 'Déterminer une forme fractionnaire',
           expressions: ['##{&2/&1}'],
           variables: [{ '&1': '$l{2;4;5;10}', '&2': '$e[1;&1-1]' }],
           type: 'result',
@@ -2616,20 +2626,73 @@ export default {
       Simplification: [
         {
           description: 'Simplifier une fraction',
-          enounce: 'Simplifier cette fraction',
-          expressions: ['#{&1*&3}/#{&2*&3}', '#{&2*&3}/#{&1*&3}' ],
-          variables: [{ 
-            '&1': '$e[2;9]',
-            '&2': '$e[2;9]\\{cd&1}',
-            '&3': '$e[2;9]\\{cd&1;cd&2}' }],
+          subdescription: 'Simplifier par 10; 100; 1000',
+          enounce: 'Simplifier le plus possible cette fraction',
+          expressions: ['#{&1*&3}/#{&2*&4}', '#{&1*&4}/#{&2*&3}'],
+          variables: [{
+            '&1': '$l{10;100;1000}',
+            '&2': '$l{10;100;1000}',
+            '&3': '$e[1;9]\\{cd&1}',
+            '&4': '$e[2;9]\\{cd&1;cd&3}'
+          },
+          {
+            '&1': '$l{10;100;1000}',
+            '&2': '$l{10;100;1000}',
+            '&3': '$e[2;9]\\{cd&1}',
+            '&4': '$e[2;9]\\{cd&1;cd&3}'
+          },
+          ],
           type: 'result',
           defaultDelay: 20,
         },
         {
           description: 'Simplifier une fraction',
+          subdescription: 'Simplifier par 2 ; 3 ou 5',
+          enounce: 'Simplifier cette fraction par 2 ; 3 ou 5',
+          expressions: ['#{&1*&2}/#{&1*&3}', '#{&1*&3}/#{&1*&2}'],
+          variables: [{
+            '&1': '$l{2;3;5}',
+            '&2': '$e[2;9]\\{cd&1}',
+            '&3': '$e[2;9]\\{cd&1;cd&2}'
+          },
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Simplifier une fraction',
+          subdescription: '1 seule simplification possible',
+          enounce: 'Simplifier cette fraction',
+          expressions: ['#{&1*&3}/#{&2*&3}', '#{&2*&3}/#{&1*&3}'],
+          variables: [{
+            '&1': '$e[2;9]',
+            '&2': '$e[2;9]\\{cd&1}',
+            '&3': '$e[2;9]\\{cd&1;cd&2}'
+          },
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Simplifier une fraction',
+          subdescription: 'La simplification peut se faire en plusieurs étapes',
           enounce: 'Simplifier le plus possible',
           expressions: ['#{&2*&3}/#{&1*&3}', '#{&1*&3}/#{&2*&3}'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[1;&1-1]', '&3': '$e[2;9]' }],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Simplifier une fraction',
+          enounce: 'Simplifier les signes',
+          expressions: [
+            '(-&1)/&2',
+            '&1/(-&2)',
+            '(-&1)/(-&2)',
+          ],
+          variables: [{ '&1': '$e[1;9]', '&2': '$e[2;9]\\{cd&1}' }],
           type: 'result',
           defaultDelay: 20,
         },
@@ -2788,7 +2851,7 @@ export default {
       'Addition et Soustraction': [
         {
           description: 'Additionner ou soustraire',
-          description:
+          subdescription:
             'Fractions de même dénominateur, nombres positifs, sans simplification',
           expressions: ['&1/&3+&2/&3', '&1/&3-&2/&3'],
           variables: [
@@ -2806,6 +2869,84 @@ export default {
           type: 'result',
           details: [['\\frac{&1+&2}{&3}'], ['\\frac{&1-&2}{&3}']],
           // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
+          defaultDelay: 30,
+        },
+        {
+          description: 'Additionner ou soustraire',
+          subdescription:
+            "Dénominateur multiple de l'autre, nombres positifs, sans simplification",
+          expressions: ['&1/&3+&2/#{&3*&4}', '&2/#{&3*&4}+&1/&3'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{cd(&1);cd(&2)}',
+              '&4': '$e[2;9]\\{cd(&2)}',
+            },
+          ],
+          conditions: ['pgcd(&1*&4+&2;&3*&4)=1'],
+          type: 'result',
+          details: [
+            [
+              '\\frac{&1\\times &4}{&3 \\times &4} + \\frac{&2}{#{&3*&4}}',
+              '\\frac{#{&1*&4}}{#{&3*&4}} + \\frac{&2}{#{&3*&4}}',
+              '\\frac{#{&1*&4}+&2}{#{&3*&4}}',
+            ],
+            [
+              '\\frac{&2}{#{&3*&4}} + \\frac{&1\\times &4}{&3 \\times &4}',
+              '\\frac{&2}{#{&3*&4}}+\\frac{#{&1*&4}}{#{&3*&4}}',
+              '\\frac{&2+#{&1*&4}}{#{&3*&4}}',
+            ],
+          ],
+          // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
+          defaultDelay: 30,
+        },
+        {
+          description: 'Additionner ou soustraire',
+          subdescription:
+            "Dénominateur multiple de l'autre, nombres positifs, simplification initiale",
+          enounce: "Calculer en simplifiant d'abord une des 2 fractions",
+          expressions: ['&1/&3+#{&2*&4}/#{&3*&4}', '#{&2*&4}/#{&3*&4}+&1/&3'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{cd(&1);cd(&2)}',
+              '&4': '$e[2;9]\\{cd(&2);cd(&3)}',
+            },
+          ],
+          conditions: ['pgcd(&1+&2;&3)=1'],
+          type: 'result',
+          details: [
+            [
+              '\\frac{&1}{&3}+\\frac{#{&2*&4}:&4}{#{&3*&4}:&4}',
+              '\\frac{&1}{&3}+\\frac{&2}{&3}',
+              '\\frac{&1+&2}{&3}',
+            ],
+
+            [
+              '\\frac{#{&2*&4}:&4}{#{&3*&4}:&4}+\\frac{&1}{&3}',
+              '\\frac{&2}{&3}+\\frac{&1}{&3}',
+              '\\frac{&2+&1}{&3}',
+            ],
+          ],
+          // solutions: [['#{&1+&3}/&2'], ['#{&1-&2}/&3']],
+          defaultDelay: 30,
+        },
+        {
+          description: 'Additionner ou soustraire',
+          subdescription:
+            "Un entier et une fraction",
+          expressions: ['&2/&1+&3', '&3+&2/&1'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{cd&1}',
+              '&3': '$e[2;9]',
+            },
+          ],
+          
+          type: 'result',
           defaultDelay: 30,
         },
         {
@@ -2989,73 +3130,12 @@ export default {
 
           defaultDelay: 20,
         },
-        {
-          description: 'Additionner ou soustraire',
-          description:
-            "Dénominateur multiple de l'autre, nombres positifs, sans simplification",
-          expressions: ['&1/&3+&2/#{&3*&4}', '&2/#{&3*&4}+&1/&3'],
-          variables: [
-            {
-              '&1': '$e[2;9]',
-              '&2': '$e[2;9]',
-              '&3': '$e[2;9]\\{cd(&1);cd(&2)}',
-              '&4': '$e[2;9]\\{cd(&2)}',
-            },
-          ],
-          conditions: ['pgcd(&1*&4+&2;&3*&4)=1'],
-          type: 'result',
-          details: [
-            [
-              '\\frac{&1\\times &4}{&3 \\times &4} + \\frac{&2}{#{&3*&4}}',
-              '\\frac{#{&1*&4}}{#{&3*&4}} + \\frac{&2}{#{&3*&4}}',
-              '\\frac{#{&1*&4}+&2}{#{&3*&4}}',
-            ],
-            [
-              '\\frac{&2}{#{&3*&4}} + \\frac{&1\\times &4}{&3 \\times &4}',
-              '\\frac{&2}{#{&3*&4}}+\\frac{#{&1*&4}}{#{&3*&4}}',
-              '\\frac{&2+#{&1*&4}}{#{&3*&4}}',
-            ],
-          ],
-          // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
-          defaultDelay: 30,
-        },
 
-        {
-          description: 'Additionner ou soustraire',
-          description:
-            "Dénominateur multiple de l'autre, nombres positifs, simplification initiale",
-          expressions: ['&1/&3+#{&2*&4}/#{&3*&4}', '#{&2*&4}/#{&3*&4}+&1/&3'],
-          variables: [
-            {
-              '&1': '$e[2;9]',
-              '&2': '$e[2;9]',
-              '&3': '$e[2;9]\\{cd(&1);cd(&2)}',
-              '&4': '$e[2;9]\\{cd(&2);cd(&3)}',
-            },
-          ],
-          conditions: ['pgcd(&1+&2;&3)=1'],
-          type: 'result',
-          details: [
-            [
-              '\\frac{&1}{&3}+\\frac{#{&2*&4}:&4}{#{&3*&4}:&4}',
-              '\\frac{&1}{&3}+\\frac{&2}{&3}',
-              '\\frac{&1+&2}{&3}',
-            ],
-
-            [
-              '\\frac{#{&2*&4}:&4}{#{&3*&4}:&4}+\\frac{&1}{&3}',
-              '\\frac{&2}{&3}+\\frac{&1}{&3}',
-              '\\frac{&2+&1}{&3}',
-            ],
-          ],
-          // solutions: [['#{&1+&3}/&2'], ['#{&1-&2}/&3']],
-          defaultDelay: 30,
-        },
       ],
       "Fraction d'une quantité": [
         {
           description: "Calculer une fraction d'une quantité",
-          enounce: 'Calculer $$\\frac{&2}{&3}$$ de $$%{&1*&3}$$',
+          enounces: ['Calculer $$\\frac{&2}{&3}$$ de $$%{&1*&3}$$'],
           expressions: ['(&2/&3)*#{&1*&3}'],
           options: ['no-exp'],
           variables: [
@@ -3067,6 +3147,7 @@ export default {
         },
         {
           description: "Calculer une fraction d'une quantité",
+          subdescription:"Dans les 2 sens",
           expressions: ['(&2/&3)*#{&1*&3}', '#{&1*&3}*(&2/&3)'],
           variables: [
             { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]\\{cd(&2)}' },
@@ -3077,6 +3158,7 @@ export default {
         },
         {
           description: "Calculer une fraction d'une quantité",
+          subdescription: "En prenant la forme décimale de la fraction",
           expressions: ['(#{&2*&3}/&3)*&1}', '&1*(#{&2*&3}/&3)'],
           variables: [
             { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]\\{cd(&1)}' },
@@ -3105,7 +3187,21 @@ export default {
         },
         {
           description: 'Calculer un produit',
-          subdescription: 'avec simplification',
+          subdescription: 'avec simplification simple',
+          expressions: ['(&1/&3)*(&2/&1)}'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{&1}',
+              '&3': '$e[2;9]\\{&1;cd&2}',
+            },
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Calculer un produit',
+          subdescription: 'avec simplification simple',
           expressions: ['(&1/&3)*(&2/&4)}'],
           variables: [
             {
