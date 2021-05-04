@@ -1564,6 +1564,27 @@ export default {
           'result-type': 'decimal',
           defaultDelay: 20,
         },
+        {
+          description: 'Placer la virgule dans le produit',
+          enounces:['La virgule a été oubliée dans le produit. Réécris le produit en rajoutant la virgule.'],
+          variables: [
+            {
+              '&1': '$e[2;4]',
+              '&2': '$e[2;4]',
+              '&3': '$e{&1;&1}\\{m10}',
+              '&4': '$e{&2;&2}\\{m10}',
+
+            },
+          ],
+          options: ['no-exp'],
+          expressions: ['##{&3:10^(&1-1)}*##{&4:10^(&2-1)}'],
+          expressions2: ['##{&3:10^(&1-1)}*##{&4:10^(&2-1)}=#{&3*&4}'],
+          conditions: ['mod(&3*&4;10)!=0'],
+          solutions: [['##{&3*&4:10^(&1+&2-2)}']],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+        },
         
         
         {
@@ -2398,8 +2419,17 @@ export default {
           description: "Trouver le signe d'un produit",
           expressions: ['(-&1)*&2', '(-&1)*(-&2)', '&1*(-&2)'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
-          choix:['Positif', 'Négatif'],
-          solutions:[],
+          choices:['positif', 'négatif'],
+          corrections:[
+            'Le résultat de $$(-&1) \\times &2$$ est ',
+            'Le résultat de $$(-&1)  \\times (-&2)$$ est ',
+            'Le résultat de $$&1  \\times (-&2)$$ est ',
+          ],
+          solutions:[
+            [1],
+            [0],
+            [1],
+          ],
           type: 'choice',
           defaultDelay: 20,
 
@@ -2584,6 +2614,17 @@ export default {
 
       ],
       Simplification: [
+        {
+          description: 'Simplifier une fraction',
+          enounce: 'Simplifier cette fraction',
+          expressions: ['#{&1*&3}/#{&2*&3}', '#{&2*&3}/#{&1*&3}' ],
+          variables: [{ 
+            '&1': '$e[2;9]',
+            '&2': '$e[2;9]\\{cd&1}',
+            '&3': '$e[2;9]\\{cd&1;cd&2}' }],
+          type: 'result',
+          defaultDelay: 20,
+        },
         {
           description: 'Simplifier une fraction',
           enounce: 'Simplifier le plus possible',
