@@ -1,8 +1,6 @@
 <script>
   import { math } from 'tinycas/build/math/math'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
-  import { onMount, afterUpdate, onDestroy } from 'svelte'
-  import { mdiConsoleNetworkOutline } from '@mdi/js'
   import { fontSize } from '../../app/stores'
   export let question
 
@@ -28,7 +26,8 @@
   {#if enounce}
     <div id="enounce">{@html enounce}</div>
   {/if}
-  {#if question.expression2 || !(question.options && question.options.includes('no-exp'))}
+  <!-- {#if question.expression2 || !(question.options && question.options.includes('no-exp'))} -->
+  {#if question.expression || question.expression2}
     <div id="expression" class="mt-4 d-flex align-center justify-center">
       <math-field
         style="font-size:{$fontSize + 10}px;display:inline-block"
@@ -40,7 +39,3 @@
   {/if}
 </div>
 
-<style>
-  #expression {
-  }
-</style>

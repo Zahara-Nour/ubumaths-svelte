@@ -12,6 +12,7 @@
   export let questions
   export let answers
   export let answers_latex
+  export let answers_choice
 
   const help = questions[0].help
   let score = 0
@@ -88,6 +89,7 @@
       question: question.expression,
       answer: answers[i],
       answer_latex: answers_latex[i],
+      answer_choice: answers_choice[i],
       solutions: question.solutions,
       details: question.details,
       type: question.type,

@@ -11,32 +11,37 @@
   export let item
   export let addPoints
   export let details
-
   const number = item.number
   const options = item.options
   const implicit = options && options.includes('implicit')
-  const q_latex = math(item.question).latex
+  const q_latex = item.question ? math(item.question).latex : null
   const correction_latex = item.correction
   const solutions_latex = item.solutions.map((solution) => {
     if (item.type === 'choice') {
       return solution // Ce n'est pas du latex !
     } else {
       const e = math(solution)
-      // console.log(solution)
-      // console.log('e.type', e.type)
       return e.type === '!! Error !!' ? solution : e.toLatex({ implicit })
     }
   })
-
- 
+  
 
   const details_latex = item.details // details are in latex form
   const answer_latex = item.answer_latex
   const empty = !item.answer
   const badExpression =
     item.type !== 'choice' && item.answer.type === '!! Error !!'
-  const correct =
-    !badExpression && solutions_latex.some((e) => e === answer_latex)
+  let correct = false
+
+  if (item.type === 'choice') {
+    correct = item.solutions.includes(item.answer_choice)
+  } else {
+    correct =
+      !badExpression &&
+      solutions_latex.some((e) => {
+        return e === answer_latex
+      })
+  }
   // const strictlyCorrect =
   //   !badExpression &&
   //   solutions_latex.some((e) => e.strictlyEquals(answer_latex))
@@ -60,7 +65,7 @@
 
     switch (item.type) {
       case 'choice':
-        console.log(correction_latex)
+       
         line =
           correction_latex +
           '<span class="green-text">' +

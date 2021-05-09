@@ -4,6 +4,7 @@ import { lexicoSort } from '../../app/utils'
 import questions from './questions'
 
 
+
 export default function generateQuestion(question, generateds) {
   // firestore returns objects with read-only properties
   let expression
@@ -11,13 +12,16 @@ export default function generateQuestion(question, generateds) {
   let solutions
   let variables
   let details
-  let choice
+  let choices
+  let i
   let enounce
   let conditions
   let letters
   let correction
 
-  const expressions = generateds ? generateds.map((g) => g.expression) : []
+  const generatedExpressions = generateds ? generateds.map((g) => g.expression) : []
+  const generatedEnounces = generateds ? generateds.map((g) => g.enounce) : []
+  const generatedChoices = generateds ? generateds.map((g) => g.choices) : []
   const regexExact = /#\{(.*?)\}/g
   const regexExactSigned = /#s\{(.*?)\}/g
   const regexDecimal = /##\{(.*?)\}/g
@@ -36,9 +40,9 @@ export default function generateQuestion(question, generateds) {
     if (!e.isOpposite()) {
       e = e.positive()
     }
-    return  e.toString({implicit:true})
+    return e.toString({ implicit: true })
   }
-  
+
   const replacementExact = (matched, p1) => {
     const e = math(p1)
     if (e.string === 'Error') {
@@ -46,12 +50,12 @@ export default function generateQuestion(question, generateds) {
       console.log('p1', p1)
       console.log('****ERROR ', e)
     }
-    return e.string === 'Error' ? 'Error2' : math(p1).eval().toString({implicit:true})
+    return e.string === 'Error' ? 'Error2' : math(p1).eval().toString({ implicit: true })
   }
 
   const replacementExactLatex = (matched, p1) => {
     const e = math(p1)
-    return e.string === 'Error' ? 'Error2' : math(p1).eval().toLatex({implicit:true})
+    return e.string === 'Error' ? 'Error2' : math(p1).eval().toLatex({ implicit: true })
   }
 
   const replacementDecimal = (matched, p1) => {
@@ -68,57 +72,112 @@ export default function generateQuestion(question, generateds) {
       : math(p1).eval({ decimal: true }).latex
   }
 
+
   if (!question) return emptyQuestion
 
   let count = 0
   let doItAgain = false
+  const n = Math.max(question.choices && question.choices.length || 0,
+    question.expressions && question.expressions.length || 0,
+    question.enounces && question.enounces.length || 0,
+    question.variables && question.variables.length || 0)
 
   do {
     count++
     doItAgain = false
+
     // first select an expression
-    choice = Math.floor(question.expressions.length * Math.random())
-    expression = question.expressions[choice]
+    i = Math.floor(n * Math.random())
+
+    if (question.expressions) {
+      expression = question.expressions[question.expressions.length === 1 ? 0 : i]
+    }
+
+    if (question.enounces) {
+      enounce = question.enounces[question.enounces.length === 1 ? 0 : i]
+    }
+
+    if (question.choices) {
+      choices = question.choices[question.choices.length === 1 ? 0 : i]
+    }
 
     // generate variables which can depend on precedent ones
     if (question.variables) {
       variables = {
-        ...question.variables[question.variables.length === 1 ? 0 : choice],
+        ...question.variables[question.variables.length === 1 ? 0 : i],
       }
 
       Object.getOwnPropertyNames(variables)
         .sort(lexicoSort)
         .forEach((name, i) => {
-        
+
           let generated = variables[name]
-     
+
 
           // replace the precedent variables by their generated value
           for (let j = 1; j < i + 1; j++) {
             const precedentName = `&${j}`
             const regex = new RegExp(precedentName, 'g')
             generated = generated.replace(regex, variables[precedentName])
-        
+
           }
           generated = math(generated).generate().string
           variables[name] = generated
-         
+
         })
 
       Object.getOwnPropertyNames(variables).forEach((name) => {
         const regex = new RegExp(name, 'g')
-        expression = expression.replace(regex, variables[name])
+        if (expression) {
+          expression = expression.replace(regex, variables[name])
+        }
+        if (enounce) {
+          enounce = enounce.replace(regex, variables[name])
+        }
+        if (choices) {
+
+          choices = choices.map(c => c.replace(regex, variables[name]))
+        }
       })
 
-      expression = expression.replace(regexDecimal, replacementDecimal)
-      expression = expression.replace(regexExactSigned, replacementExactSigned)
-      expression = expression.replace(regexExact, replacementExact)
-      doItAgain = expressions.includes(expression)
+      if (expression) {
+        expression = expression.replace(regexDecimal, replacementDecimal)
+        expression = expression.replace(regexExactSigned, replacementExactSigned)
+        expression = expression.replace(regexExact, replacementExact)
+        if (question.options && question.options.includes('shuffle-terms')) {
+          expression = math(expression).shuffleTerms().string
+        }
+      }
+
+      if (enounce) {
+        enounce = enounce.replace(regexDecimal, replacementDecimal)
+        enounce = enounce.replace(regexExactSigned, replacementExactSigned)
+        enounce = enounce.replace(regexExact, replacementExact)
+      }
+
+      if (choices) {
+        choices = choices.map(c => c.replace(regexDecimal, replacementDecimal))
+        choices = choices.map(c => c.replace(regexExactSigned, replacementExactSigned))
+        choices = choices.map(c => c.replace(regexExact, replacementExact))
+        choices = choices.map(c => c.replace(regexDecimalLatex, replacementDecimalLatex))
+        choices = choices.map(c => c.replace(regexExactLatex, replacementExactLatex))
+      }
+
+      if (expression) {
+        doItAgain = generatedExpressions.includes(expression)
+      }
+      else if (choices) {
+        doItAgain = generatedEnounces.includes(enounce) &&
+          generatedChoices.some(gcs => JSON.stringify(choices) == JSON.stringify(gcs))
+      }
+      else {
+        doItAgain = generatedEnounces.inclues(enounce)
+      }
 
       if (!doItAgain && question.conditions) {
         let condition =
-          question.conditions[question.conditions.length === 1 ? 0 : choice]
-    
+          question.conditions[question.conditions.length === 1 ? 0 : i]
+
         Object.getOwnPropertyNames(variables).forEach((name) => {
           const regex = new RegExp(name, 'g')
           condition = condition.replace(regex, variables[name])
@@ -136,28 +195,42 @@ export default function generateQuestion(question, generateds) {
   }
 
   if (question.solutions) {
-    solutions = question.solutions[question.solutions.length === 1 ? 0 : choice]
-    if (question.type === 'choice') {
-      solutions = solutions.map(solution => question.choices[solution])
-    }
+
+    solutions = question.solutions[question.solutions.length === 1 ? 0 : i]
     solutions = solutions.map((solution) => {
-      if (question.variables) {
+      if (typeof solution === 'string') {
+        let regex
         Object.getOwnPropertyNames(variables).forEach((name) => {
-          const regex = new RegExp(name, 'g')
+          regex = new RegExp(name, 'g')
           solution = solution.replace(regex, variables[name])
         })
         solution = solution.replace(regexDecimal, replacementDecimal)
         solution = solution.replace(regexExactSigned, replacementExactSigned)
         solution = solution.replace(regexExact, replacementExact)
+
+        regex = /(.*)\?\?(.*)::(.*)/
+        const found = solution.match(regex)
+        if (found) {
+          const test = math(found[1]).eval()
+          const success = math(found[2]).eval().value.toNumber()
+          const failure = math(found[3]).eval().value.toNumber()
+          solution = test.isTrue() ? success : failure
+        }
         return solution
       }
     })
-  } else {
- 
+    if (question.type === 'choice') {
+
+      solutions = solutions.map(solution => choices[solution])
+    }
+  }
+  // Il faut évaluer l'expression
+  else {
     let params = { decimal: question['result-type'] === 'decimal' }
 
+    // 
     if (question.letters) {
-      letters = question.letters[question.letters.length === 1 ? 0 : choice]
+      letters = question.letters[question.letters.length === 1 ? 0 : i]
 
 
       Object.getOwnPropertyNames(letters).forEach((letter) => {
@@ -170,7 +243,7 @@ export default function generateQuestion(question, generateds) {
           letters[letter] = variables[letters[letter]]
         }
       })
-  
+
       params = { ...params, ...letters }
     }
 
@@ -178,7 +251,7 @@ export default function generateQuestion(question, generateds) {
   }
 
   if (question.details) {
-    details = question.details[question.details.length === 1 ? 0 : choice]
+    details = question.details[question.details.length === 1 ? 0 : i]
 
     details = details.map((c) => {
       Object.getOwnPropertyNames(variables).forEach((name) => {
@@ -203,9 +276,9 @@ export default function generateQuestion(question, generateds) {
       if (found) {
 
         const tests = found[1].split('&&')
-     
+
         if (tests.every((t) => math(t).eval().string === 'true')) {
-  
+
           d = d.replace(found[0], '')
           acc.push(d)
         }
@@ -218,7 +291,7 @@ export default function generateQuestion(question, generateds) {
 
   if (question.expressions2) {
 
-    expression2 = question.expressions2[question.expressions2.length === 1 ? 0 : choice]
+    expression2 = question.expressions2[question.expressions2.length === 1 ? 0 : i]
 
     Object.getOwnPropertyNames(variables).forEach((name) => {
       const regex = new RegExp(name, 'g')
@@ -231,23 +304,9 @@ export default function generateQuestion(question, generateds) {
     expression2 = expression2.replace(regexExact, replacementExact)
   }
 
-  if (question.enounces) {
-
-    enounce = question.enounces[question.enounces.length === 1 ? 0 : choice]
-
-    Object.getOwnPropertyNames(variables).forEach((name) => {
-      const regex = new RegExp(name, 'g')
-
-      enounce = enounce.replace(regex, variables[name])
-    })
-    enounce = enounce.replace(regexDecimalLatex, replacementDecimalLatex)
-    enounce = enounce.replace(regexDecimal, replacementDecimal)
-    enounce = enounce.replace(regexExactLatex, replacementExactLatex)
-    enounce = enounce.replace(regexExact, replacementExact)
-  }
 
   if (question.corrections) {
-    correction = question.corrections[question.corrections.length === 1 ? 0 : choice]
+    correction = question.corrections[question.corrections.length === 1 ? 0 : i]
     Object.getOwnPropertyNames(variables).forEach((name) => {
       const regex = new RegExp(name, 'g')
 
@@ -258,13 +317,15 @@ export default function generateQuestion(question, generateds) {
     correction = correction.replace(regexExactLatex, replacementExactLatex)
     correction = correction.replace(regexExact, replacementExact)
   }
-  
+
   const generated = {
     points: 1,
     ...question,
     solutions,
     expression,
+    choices
   }
+
 
   if (details) generated.details = details
   if (enounce) generated.enounce = enounce

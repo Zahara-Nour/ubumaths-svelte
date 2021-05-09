@@ -3,7 +3,7 @@
   import generate from './generateQuestion'
   import CircularProgress from '../../components/CircularProgress.svelte'
   import { Button } from 'svelte-materialify/src'
-  import { onDestroy, onMount } from 'svelte'
+  import { onDestroy, onMount, afterUpdate } from 'svelte'
   import Correction from './Correction.svelte'
   import qs from './questions'
   import queryString from 'query-string'
@@ -12,7 +12,9 @@
   import { shuffle } from '../../app/utils'
   import { fontSize, user } from '../../app/stores'
   import { getDocument } from '../../app/db'
-  import { tick } from 'svelte';
+  import { tick } from 'svelte'
+  import Mathlive from 'mathlive/dist/mathlive.min.js'
+  
 
   export let location
   // console.log('location', location)
@@ -22,8 +24,10 @@
   let current = -1
   let answer
   let answer_latex
+  let answer_choice
   let answers = []
   let answers_latex = []
+  let answers_choice = []
   let generated
   let generateds = []
   let delay
@@ -40,6 +44,10 @@
   let theme
   let level
   let assessmentId
+  let choices
+
+  const regex = /\$\$(.*?)\$\$/g
+  const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
 
   function countDown() {
     elapsed = Date.now() - start
@@ -51,9 +59,10 @@
         virtualKeyboardMode: 'onfocus',
         ...virtualKeyboard,
       })
-      mf.focus()
+      if (!mf.hasFocus) mf.focus()
     }
   })
+
 
   onDestroy(() => {
     if (timer) clearInterval(timer)
@@ -112,6 +121,7 @@
   function onChoice(choice) {
     answer = choice
     answer_latex = choice
+    answer_choice  = choice
     change()
   }
 
@@ -126,15 +136,26 @@
     change()
   }
 
-  function onKeystroke(e) {
+  $: if (generated && mf && !mf.hasFocus()) {
+    
+    mf.focus()
+  }
 
+  $: if (generated && generated.choices) {
+    
+      choices = generated.choices.map((c) => c.replace(regex, replacement))
+  
+    } else {
+      choices = null
+    }
+
+  function onKeystroke(e) {
     const keystroke = e.detail.keystroke
-    if (keystroke === '[Enter]' || keystroke==='[NumpadEnter]') {
+    if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
       // answer = mf.getValue('ASCIIMath')
       // answer_latex = mf.getValue()
       change()
     }
-  
   }
 
   function onChangeMathField(e) {
@@ -150,13 +171,14 @@
     if (current >= 0) {
       answers[current] = answer
       answers_latex[current] = answer_latex
+      answers_choice[current] = answer_choice
     }
     if (current < questions.length - 1) {
       if (mf) {
         mf.setValue('')
         if (!mf.hasFocus()) mf.focus()
       }
-      answer=''
+      answer = ''
       current++
       question = questions[current]
       generated = generate(question, generateds)
@@ -177,6 +199,7 @@
     questions="{generateds}"
     answers="{answers}"
     answers_latex="{answers_latex}"
+    answers_choice="{answers_choice}"
   />
 {:else if generated}
   <div class="mt-3 mb-3">
@@ -193,11 +216,11 @@
   <!-- <div class:error> -->
 
   <div class="d-flex align-center">
-    {#if generated.choices}
-      <div class="mt-3 d-flex justify-center" style='width:100%;'>
-        {#each generated.choices as choice}
-          <Button class='ml-3 mr-3' on:click="{() => onChoice(choice)}">
-            {choice}
+    {#if choices}
+      <div class="mt-3 d-flex justify-center" style="width:100%;">
+        {#each choices as choice,i}
+          <Button class="ml-3 mr-3" on:click="{() => onChoice(generated.choices[i])}">
+            <div>{@html choice}</div>
           </Button>
         {/each}
       </div>
@@ -205,10 +228,9 @@
       <span class="mr-4" style="font-size:{$fontSize}px;">Ta réponse:</span>
       <math-field
         style="width:50%;font-size:{$fontSize}px;"
-        virtual-keyboard-mode="onfocus"
         virtual-keyboard-theme="apple"
         on:input="{onChangeMathField}"
-        on:keystroke='{onKeystroke}'
+        on:keystroke="{onKeystroke}"
         bind:this="{mf}"
       >
       </math-field>
@@ -223,7 +245,6 @@
       <Button on:click="{change}">Valider</Button>
     </div>
   {/if}
-
 {:else}
   Pas de questions
 {/if}
