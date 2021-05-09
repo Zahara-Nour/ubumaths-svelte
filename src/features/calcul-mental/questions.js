@@ -1,6 +1,6 @@
 export default {
   Entiers: {
-    Addition: {
+    Additionner: {
       Somme: [
         {
           description: 'Calculer une somme',
@@ -423,7 +423,7 @@ export default {
         },
       ],
     },
-    Soustraction: {
+    Soustraire: {
       Différence: [
         {
           description: 'Calculer une différence (résultat positif)',
@@ -723,7 +723,7 @@ export default {
         },
       ]
     },
-    Multiplication: {
+    Multiplier: {
       Tables: [
         {
           description: "Table de multiplication",
@@ -1144,7 +1144,7 @@ export default {
         },
       ],
     },
-    Division: {
+    Diviser: {
       Quotient: [
         {
           description: 'Calculer un quotient entier',
@@ -1370,7 +1370,118 @@ export default {
     }
   },
   Décimaux: {
-    Addition: {
+    Apprivoiser: {
+      'Ecriture fractionnaire': [
+        {
+          description: 'Traduire une fraction décimale en nombre décimal ',
+          subdescription:
+            'Simple',
+          variables: [
+            {
+              '&1': '$e[1;3]',
+              '&2': '$e{1;1};]'
+            },
+          ],
+          expressions: ['&2/#{10^&1}'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20
+        },
+        {
+          description: 'Traduire une fraction décimale en nombre décimal ',
+          subdescription:
+            'Simple',
+          variables: [
+            {
+              '&1': '$e[1;3]',
+              '&2': '$e{1;&1};]'
+            },
+          ],
+          expressions: ['&2/#{10^&1}'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20
+        },
+        {
+          description: 'Traduire une somme de fraction décimale en nombre décimal ',
+          subdescription:
+            'Simple',
+          variables: [
+            {
+              '&1': '$e{1;1}',
+              '&2': '$e{1;1}',
+              '&3': '$e{1;1}',
+              '&4': '$e{1;1}',
+            },
+          ],
+          expressions: ['&1+&2/10+&3/100+&4/1000'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20
+        },
+        {
+          description: 'Traduire une somme de fraction décimale en nombre décimal ',
+          subdescription:
+            'Simple',
+          variables: [
+            {
+              '&1': '$e{1;1}',
+              '&2': '$e{1;1}',
+              '&3': '$e{1;1}',
+              '&4': '$e{1;1}',
+            },
+          ],
+          expressions: [
+            '&1+&2/10+&3/100+&4/1000',
+          ],
+          options: ['shuffle-terms'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20
+        },
+      ],
+      'Comparer': [
+        {
+          description: "Comparer deux nombres décimaux",
+
+          subdescription: "",
+          enounces: ["Quel est le plus petit de ces 2 nombres ?"],
+          variables: [
+            {
+              '&1': '$e{3;3}',
+              '&2': '$e{1;3}',
+              '&3': '$e{1;3}',
+              '&4': '$e[1;9]',
+              '&5': '$e[1;9]',
+              '&6': '&1*1000+&2+&4/10',
+              '&7': '&1*1000+&3+&5/10',
+            },
+            {
+              '&1': '$e[1;3]',
+              '&2': '$e[1;3]',
+              '&3': '$e{&1;&1}',
+              '&4': '$e{&2;&2}',
+              '&5': '$e[1;9]',
+              '&6': '&5+&3/10^&1',
+              '&7': '&5+&4/10^&2',
+            },
+          ],
+          conditions: ['&6!=&7'],
+          choices: [
+            ['$$%%{&6}$$', '$$%%{&7}$$'],
+          ],
+          corrections: [
+            'Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est ',
+          ],
+          solutions: [
+            ['&6<&7 ?? 0 :: 1'],
+          ],
+          type: 'choice',
+          defaultDelay: 20,
+        },
+      ]
+    },
+    Additionner: {
       Somme: [
         {
           description: 'Calculer une somme ',
@@ -1534,7 +1645,7 @@ export default {
         },
       ],
     },
-    Multiplication: {
+    Multiplier: {
       Produit: [
         {
           description: 'Calculer un produit',
@@ -1659,7 +1770,7 @@ export default {
 
       ]
     },
-    Division: {
+    Diviser: {
       Résultat: [
         {
           description: 'Calculer un quotient',
@@ -2265,8 +2376,68 @@ export default {
     }
   },
   Relatifs: {
-    Addition: {
-      'Droite graduée': [
+    'Apprivoiser': {
+      "La définition d'un nombre négatif": [
+        {
+          description: "Nombre négatif défini par une soustraction",
+          enounces: ["Quel est le résultat de $$0-&1$$ ?", "Quel est la soustraction définissant le nombre $$-&1$$ ?"],
+          expressions: ['-&1', '0-&1'],
+          options: ['no-exp'],
+          variables: [
+            { '&1': '$e[2;20]' },
+          ],
+          solutions: [['-&1'], ['0-&1']],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
+          description: "Trouver l'opposé d'un nombre",
+          enounces: ["Quel est l'opposé du nombre $$&1$$ ?", "Quel est l'opposé du nombre $$-&1$$ ?"],
+          expressions: ['-&1', '-(-&1)'],
+          options: ['no-exp'],
+          variables: [
+            { '&1': '$e[1;20]' },
+          ],
+          solutions: [['-&1'], ['&1']],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
+          description: "Comparer dex nombres relatifs.",
+          subdescription: "Veleurs entières.",
+          enounces: ["Quel est le plus petit de ces 2 nombres ?"],
+          // expressions: ['-&1', '-(-&1)'],
+          options: ['no-exp'],
+          variables: [
+            { '&1': '$e[1;19]', '&2': '$e[&1+1;20]', },
+          ],
+          choices: [
+            ['$$-&1$$', '$$&2$$'],
+            ['$$&1$$', '$$-&2$$'],
+            ['$$-&1$$', '$$-&2$$'],
+            ['$$-&2$$', '$$-&1$$'],
+          ],
+          corrections: [
+            'Entre $$-&1$$ et $$&2$$, le plus petit est ',
+            'Entre $$&1$$ et $$-&2$$, le plus petit est ',
+            'Entre $$-&1$$ et $$-&2$$, le plus petit est ',
+            'Entre $$-&2$$ et $$-&1$$, le plus petit est ',
+          ],
+          solutions: [
+            [0],
+            [1],
+            [1],
+            [0],
+
+          ],
+          type: 'choice',
+          defaultDelay: 20,
+        },
+      ],
+    },
+    'Additionner et soustraire': {
+      'Sur la droite graduée': [
+
         {
           description: 'Calculer une somme ou une différence',
           subdescription: "A l'aide de la droite graduée",
@@ -2305,7 +2476,7 @@ export default {
       ],
       'Sommes algébriques': [
         {
-          description: "Trouver le signe d'une somme",
+          description: "Déterminer le signe d'une somme",
           expressions: ['(-&1)+&2', '(-&2)+&1', '(-&1)+(-&2)', '&1+(-&2)', '&2+(-&1)'],
           enounces: ['Quel est le signe de cette somme ?'],
           variables: [
@@ -2316,7 +2487,7 @@ export default {
             { '&1': '$e[30;99]', '&2': '$e[1;&1-1]' },
 
           ],
-          choices: ['positif', 'négatif'],
+          choices: [['positif', 'négatif']],
           corrections: [
             'Le résultat de $$(-&1)+&2$$ est ',
             'Le résultat de $$(-&2)+&1$$ est ',
@@ -2367,6 +2538,26 @@ export default {
           defaultDelay: 20,
         },
         {
+          description: "Transformer une soustraction en addition",
+          enounce:
+            'Réécris cette soustraction en une addition équivalente.',
+          expressions: [
+            '(-&1)-(-&2)',
+            '&1-(-&2)',
+            '&1-&2',
+            '(-&1)-&2',
+          ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          solutions: [
+            ['(-&1)+&2'],
+            ['&1+&2'],
+            ['&1+(-&2)'],
+            ['(-&1)+(-&2)'],
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
           description: "Simplifier l'écriture",
           enounce:
             'Simplifie cette expression en enlevant les doubles signes et les parenthèses inutiles',
@@ -2399,27 +2590,18 @@ export default {
           defaultDelay: 20,
         },
 
-        {
-          description: 'Diviser',
-          expressions: [
-            '(-#{&1*&2}):&2',
-            '(-#{&1*&2}):(-&2)',
-            '#{&1*&2}:(-&2)',
-          ],
-          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
-          type: 'result',
-          defaultDelay: 20,
-        },
+
 
       ],
     },
-    'Multiplier': {
+    'Multiplier et Diviser': {
       Produit: [
         {
-          description: "Trouver le signe d'un produit",
+          description: "Déterminer le signe d'un produit",
+          enounces: ['Quel est le signe de ce produit ?'],
           expressions: ['(-&1)*&2', '(-&1)*(-&2)', '&1*(-&2)'],
-          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
-          choices: ['positif', 'négatif'],
+          variables: [{ '&1': '$e[30;99]', '&2': '$e[30;99]' }],
+          choices: [['positif', 'négatif']],
           corrections: [
             'Le résultat de $$(-&1) \\times &2$$ est ',
             'Le résultat de $$(-&1)  \\times (-&2)$$ est ',
@@ -2434,6 +2616,46 @@ export default {
           defaultDelay: 20,
 
         },
+        {
+          description: "Déterminer le signe d'un facteur",
+          enounces: ['Quel est le signe du facteur manquant ?'],
+          expressions: [
+            '(-&1)*?=&2',
+            '(-&1)*?=-&2',
+            '&1*?=-&2',
+            '&1*?=&2',
+            '?*(-&1)=&2',
+            '?*(-&1)=-&2',
+            '?*&1=-&2',
+            '?*&1=&2'
+          ],
+          variables: [{ '&1': '$e[30;99]', '&2': '$e[30;99]' }],
+          choices: [['positif', 'négatif']],
+          corrections: [
+            "Dans l'égalité $$(-&1) \\times \\ldots=&2$$, le facteur manquant est ",
+            "Dans l'égalité $$(-&1) \\times \\ldots=-&2$$, le facteur manquant est ",
+            "Dans l'égalité $$&1 \\times \\ldots=-&2$$, le facteur manquant est ",
+            "Dans l'égalité $$&1 \\times \\ldots=&2$$, le facteur manquant est ",
+            "Dans l'égalité $$\\ldots \\times (-&1)  = &2$$, le facteur manquant est ",
+            "Dans l'égalité $$\\ldots \\times (-&1) = -&2$$, le facteur manquant est ",
+            "Dans l'égalité $$\\ldots \\times &1 = -&2$$, le facteur manquant est ",
+            "Dans l'égalité $$\\ldots \\times &1 = &2$$, le facteur manquant est ",
+          ],
+          solutions: [
+            [1],
+            [0],
+            [1],
+            [0],
+            [1],
+            [0],
+            [1],
+            [0],
+          ],
+          type: 'choice',
+          defaultDelay: 20,
+
+        },
+
         {
           description: 'Calculer un produit',
           expressions: ['(-&1)*&2', '(-&1)*(-&2)', '&1*(-&2)'],
@@ -2457,11 +2679,119 @@ export default {
           defaultDelay: 20,
         },
 
+      ],
+      'Quotient': [
+        {
+          description: "Déterminer le signe d'un quotient",
+          enounces: ['Quel est le signe de ce quotient ?'],
+          expressions: ['(-&1):&2', '(-&1):(-&2)', '&1:(-&2)'],
+          variables: [{ '&1': '$e[30;99]', '&2': '$e[30;99]' }],
+          choices: [['positif', 'négatif']],
+          corrections: [
+            'Le résultat de $$(-&1) \\div &2$$ est ',
+            'Le résultat de $$(-&1)  \\div (-&2)$$ est ',
+            'Le résultat de $$&1  \\div (-&2)$$ est ',
+          ],
+          solutions: [
+            [1],
+            [0],
+            [1],
+          ],
+          type: 'choice',
+          defaultDelay: 20,
+
+        },
+        {
+          description: "Déterminer le signe dans un quotient",
+          enounces: ['Quel est le signe du nombre manquant ?'],
+          expressions: [
+            '(-&1):?=&/2',
+            '(-&1):?=-&2',
+            '&1:?=-&2',
+            '&1:?=&2',
+            '?:(-&1)=&2',
+            '?:(-&1)=-&2',
+            '?:&1=-&2',
+            '?:&1=&2'
+          ],
+          variables: [{ '&1': '$e[30;99]', '&2': '$e[30;99]' }],
+          choices: [['positif', 'négatif']],
+          corrections: [
+            "Dans l'égalité $$(-&1) \\div \\ldots=&2$$, le facteur manquant est ",
+            "Dans l'égalité $$(-&1) \\div \\ldots=-&2$$, le facteur manquant est ",
+            "Dans l'égalité $$&1 \\div \\ldots=-&2$$, le facteur manquant est ",
+            "Dans l'égalité $$&1 \\div \\ldots=&2$$, le facteur manquant est ",
+            "Dans l'égalité $$\\ldots \\div (-&1)=&2$$, le facteur manquant est ",
+            "Dans l'égalité $$\\ldots \\div (-&1)=-&2$$, le facteur manquant est ",
+            "Dans l'égalité $$\\ldots \\div &1=-&2$$, le facteur manquant est ",
+            "Dans l'égalité $$\\ldots \\div &1=&2$$, le facteur manquant est ",
+          ],
+          solutions: [
+            [1],
+            [0],
+            [1],
+            [0],
+            [1],
+            [0],
+            [1],
+            [0],
+          ],
+          type: 'choice',
+          defaultDelay: 20,
+
+        },
+        {
+          description: 'Diviser',
+          expressions: [
+            '(-#{&1*&2}):&2',
+            '(-#{&1*&2}):(-&2)',
+            '#{&1*&2}:(-&2)',
+          ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          type: 'result',
+          defaultDelay: 20,
+        },
       ]
     }
   },
   Fractions: {
-    'Différentes écritures': {
+    'Apprivoiser': {
+      Définition: [
+        {
+          description: "Définition d'un quotient",
+          subdescription: "Compléter une multiplication à trou",
+          enounces:['Détermine le facteur manquant.'],
+          expressions: ['&2*?=#{&1*&2}', '?*&2=#{&1*&2}'],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
+          solutions: [['&1']],
+          type: 'trou',
+          defaultDelay: 20,
+        },
+        {
+          description: "Définition d'un quotient",
+          subdescription: "Quelle opération faire dans une multiplication à trou ?",
+          enounces:['Quelle opération te permet de trouver le facteur manquant ?'],
+          expressions: ['&2*?=&1', '?*&2=&1'],
+          variables: [{ '&1': '$e[2;19]', '&2': '$e[2;19]\\{cd(&1)}' }],
+          // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
+          solutions: [['&1:&2']],
+          type: 'trou',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Compléter une égalité',
+          subdescription: "Définition d'un quotient",
+          enounces:['Détermine le facteur manquant.'],
+          expressions: ['&2*?=&1', '?*&2=&1'],
+          variables: [{ '&1': '$e[2;19]', '&2': '$e[2;19]\\{cd(&1)}' }],
+          // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
+          solutions: [['&1/&2']],
+          details: [['&1:&2']],
+          type: 'trou',
+          defaultDelay: 20,
+        },
+      ],
       'Forme décimale': [
         {
           description: "Déterminer la forme décimale d'une fraction",
@@ -2712,21 +3042,100 @@ export default {
           defaultDelay: 20,
         },
       ],
-    },
-    'Egalité à compléter': {
-      Définition: [
+      Comparer: [
         {
-          description: 'Compléter une égalité',
-          subdescription: "Définition d'un quotient",
-          expressions: ['&2*?=&1', '?*&2=&1'],
-          variables: [{ '&1': '$e[2;19]', '&2': '$e[2;19]\\{cd(&1)}' }],
-          // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
-          solutions: [['&1/&2']],
-          details: [['&1:&2']],
-          type: 'trou',
+          description: "Comparer deux fractions",
+          subdescription: "Fractions de même dénominateur",
+          enounces: ["Quelle est la plus petite de ces 2 fractions ?"],
+          variables: [
+            {
+              '&1': '$e[8;19]',
+              '&2': '$e[1;&1-1]\\{&1}',
+              '&3': '$e[1;&1-1]\\{&1;&2}',
+              '&4': '&2/&1',
+              '&5': '&3/&1'      
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[&1+1;3*&1-1]\\{&1}',
+              '&3': '$e[&1+1;3*&1-1]\\{&1;&2}',
+              '&4': '&2/&1',
+              '&5': '&3/&1'      
+            },
+          ],
+          choices: [
+            ['$$\\frac{&2}{&1}$$', '$$\\frac{&3}{&1}$$'],
+          ],
+          corrections: [
+            'Entre $$\\frac{&2}{&1}$$ et $$\\frac{&3}{&1}$$ la plus petite fraction est  ',
+          ],
+          solutions: [
+            ['&4<&5 ?? 0 :: 1'],
+          ],
+          type: 'choice',
           defaultDelay: 20,
         },
-      ],
+        {
+          description: "Comparer deux fractions",
+          subdescription: "En comparant à 1",
+          enounces: ["Quelle est la plus petite de ces 2 fractions ?"],
+          variables: [
+            {
+              '&1': '$e[8;19]',
+              '&2': '$e[1;&1-1]',
+              '&3': '$e[8;19]\\{&1}',
+              '&4': '$e[&3+1;2*&3-1]',
+              '&5': '&2/&1',
+              '&6': '&4/&3'      
+            },
+            
+          ],
+          choices: [
+            ['$$\\frac{&2}{&1}$$', '$$\\frac{&4}{&3}$$'],
+            ['$$\\frac{&4}{&3}$$','$$\\frac{&2}{&1}$$' ],
+          ],
+          
+          corrections: [
+            'Entre $$\\frac{&2}{&1}$$ et $$\\frac{&4}{&3}$$ la plus petite fraction est  ',
+            'Entre $$\\frac{&4}{&3}$$ et $$\\frac{&2}{&1}$$ la plus petite fraction est  ',
+          ],
+          solutions: [
+            ['&5<&6 ?? 0 :: 1'],
+            ['&6<&5 ?? 0 :: 1'],
+          ],
+          type: 'choice',
+          defaultDelay: 20,
+        },
+        {
+          description: "Comparer deux fractions",
+          subdescription: "Fractions de dénominateurs multiples l'un de l'autre",
+          enounces: ["Quelle est la plus petite de ces 2 fractions ?"],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{&1}',
+              '&4': '$e[2;9]',
+              '&5': '&2/&1',
+              '&6': '(&3*&4)/(&1*&4)'      
+            },
+          ],
+          choices: [
+            ['$$\\frac{&2}{&1}$$', '$$\\frac{#{&3*&4}}{#{&4*&1}}$$'],
+          ],
+          corrections: [
+            'Entre $$\\frac{&2}{&1}$$ et $$\\frac{#{&3*&4}}{#{&4*&1}}$$ la plus petite fraction est  ',
+          ],
+          solutions: [
+            ['&5<&6 ?? 0 :: 1'],
+          ],
+          type: 'choice',
+          defaultDelay: 20,
+        },
+      ]
+    },
+    'Egalité à compléter': {
+      
       'Addition - Soustraction': [
         {
           description: 'Compléter une égalité',
@@ -2847,7 +3256,7 @@ export default {
         },
       ],
     },
-    Calcul: {
+    Calculer: {
       'Addition et Soustraction': [
         {
           description: 'Additionner ou soustraire',
@@ -2945,7 +3354,7 @@ export default {
               '&3': '$e[2;9]',
             },
           ],
-          
+
           type: 'result',
           defaultDelay: 30,
         },
@@ -3147,7 +3556,7 @@ export default {
         },
         {
           description: "Calculer une fraction d'une quantité",
-          subdescription:"Dans les 2 sens",
+          subdescription: "Dans les 2 sens",
           expressions: ['(&2/&3)*#{&1*&3}', '#{&1*&3}*(&2/&3)'],
           variables: [
             { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]\\{cd(&2)}' },
