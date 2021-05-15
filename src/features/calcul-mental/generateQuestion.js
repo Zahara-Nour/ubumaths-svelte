@@ -153,6 +153,8 @@ export default function generateQuestion(question, generateds) {
         enounce = enounce.replace(regexDecimal, replacementDecimal)
         enounce = enounce.replace(regexExactSigned, replacementExactSigned)
         enounce = enounce.replace(regexExact, replacementExact)
+        enounce = enounce.replace(regexDecimalLatex, replacementDecimalLatex)
+        enounce = enounce.replace(regexExactLatex, replacementExactLatex)
       }
 
       if (choices) {
@@ -171,7 +173,7 @@ export default function generateQuestion(question, generateds) {
           generatedChoices.some(gcs => JSON.stringify(choices) == JSON.stringify(gcs))
       }
       else {
-        doItAgain = generatedEnounces.inclues(enounce)
+        doItAgain = generatedEnounces.includes(enounce)
       }
 
       if (!doItAgain && question.conditions) {
@@ -200,13 +202,15 @@ export default function generateQuestion(question, generateds) {
     solutions = solutions.map((solution) => {
       if (typeof solution === 'string') {
         let regex
-        Object.getOwnPropertyNames(variables).forEach((name) => {
-          regex = new RegExp(name, 'g')
-          solution = solution.replace(regex, variables[name])
-        })
-        solution = solution.replace(regexDecimal, replacementDecimal)
-        solution = solution.replace(regexExactSigned, replacementExactSigned)
-        solution = solution.replace(regexExact, replacementExact)
+        if (question.variables) {
+          Object.getOwnPropertyNames(variables).forEach((name) => {
+            regex = new RegExp(name, 'g')
+            solution = solution.replace(regex, variables[name])
+          })
+          solution = solution.replace(regexDecimal, replacementDecimal)
+          solution = solution.replace(regexExactSigned, replacementExactSigned)
+          solution = solution.replace(regexExact, replacementExact)
+        }
 
         regex = /(.*)\?\?(.*)::(.*)/
         const found = solution.match(regex)

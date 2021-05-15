@@ -126,7 +126,8 @@ export default {
             class: 'separator w5',
           },
           {
-            class: 'separator w6',
+            class: 'latex',
+            latex:'\\,'
           },
           {
             class: 'separator w6',

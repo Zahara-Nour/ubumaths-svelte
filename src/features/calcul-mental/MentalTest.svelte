@@ -14,7 +14,7 @@
   import { getDocument } from '../../app/db'
   import { tick } from 'svelte'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
-  
+  import { math } from 'tinycas/build/math/math'
 
   export let location
   // console.log('location', location)
@@ -45,6 +45,7 @@
   let level
   let assessmentId
   let choices
+  let correct = false
 
   const regex = /\$\$(.*?)\$\$/g
   const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
@@ -56,13 +57,14 @@
   onMount(() => {
     if (mf) {
       mf.setOptions({
-        virtualKeyboardMode: 'onfocus',
+        // virtualKeyboardMode: 'onfocus',
+        virtualKeyboardMode: 'auto',
         ...virtualKeyboard,
+        onKeystroke,
       })
       if (!mf.hasFocus) mf.focus()
     }
   })
-
 
   onDestroy(() => {
     if (timer) clearInterval(timer)
@@ -121,7 +123,7 @@
   function onChoice(choice) {
     answer = choice
     answer_latex = choice
-    answer_choice  = choice
+    answer_choice = choice
     change()
   }
 
@@ -137,32 +139,82 @@
   }
 
   $: if (generated && mf && !mf.hasFocus()) {
-    
     mf.focus()
   }
 
   $: if (generated && generated.choices) {
-    
-      choices = generated.choices.map((c) => c.replace(regex, replacement))
-  
-    } else {
-      choices = null
-    }
+    choices = generated.choices.map((c) => c.replace(regex, replacement))
+  } else {
+    choices = null
+  }
 
-  function onKeystroke(e) {
-    const keystroke = e.detail.keystroke
+  $: {
+    console.log('answer', answer)
+    correct = math(answer).type !== '!! Error !!'
+  }
+
+  function onKeystroke(mathfield, keystroke, e) {
+    const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%'
+    console.log('answer_latex', answer_latex)
+    // const keystroke = e.detail.keystroke
+    console.log('keystrofe', keystroke)
+    console.log('e', e)
     if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
       // answer = mf.getValue('ASCIIMath')
       // answer_latex = mf.getValue()
       change()
+      return false
+    } else if (
+      keystroke === '[Space]' &&
+      !(
+        answer_latex.length >= 2 &&
+        answer_latex.slice(answer_latex.length - 3) === '\\, '
+      )
+    ) {
+      console.log(answer_latex.slice("'"+answer_latex.length - 3)+"'")
+      console.log(answer_latex.slice(answer_latex.length - 3) === '\\, ')
+      mf.insert('\\,')
+      return false
+    } else if (e.key === '*') {
+      mf.insert('\\times')
+      return false
+    } else if (e.key === ':') {
+      mf.insert('\\div')
+      return false
+    } else if (e.key === '<') {
+      mf.insert('<')
+      // prevent backslash
+      return false
     }
+    // else if (e.key === '^') {
+    //   mf.insert('^')
+    //   return true
+    // }
+    else if (
+      e.key === 'Backspace' ||
+      e.key === 'ArrowLeft' ||
+      e.key === 'ArrowRight' ||
+      e.key === 'ArrowDown' ||
+      e.key === 'ArrowUp'
+    ) {
+      return true
+    } else if (!allowed.includes(e.key)) {
+      return false
+    }
+    // deactivate command mode with '\'
+    // else if (keystroke ==='alt+shift+[Period]') {
+    // else if (e.key ==='\\') {
+    //   return false
+    // }
+    return true
   }
 
   function onChangeMathField(e) {
     // utile dans le cas d'une expression mal formée
-    // console.log('***change****')
+    
     answer_latex = mf.getValue()
-    answer = mf.getValue('ASCIIMath')
+    answer = mf.getValue('ASCIIMath').replace('xx', '*')
+    console.log('***change****', answer_latex)
   }
 
   async function change() {
@@ -218,22 +270,30 @@
   <div class="d-flex align-center">
     {#if choices}
       <div class="mt-3 d-flex justify-center" style="width:100%;">
-        {#each choices as choice,i}
-          <Button class="ml-3 mr-3" on:click="{() => onChoice(generated.choices[i])}">
-            <div>{@html choice}</div>
+        {#each choices as choice, i}
+          <Button
+            class="ml-3 mr-3"
+            on:click="{() => onChoice(generated.choices[i])}"
+          >
+            <div style="font-size:{$fontSize + 4}px;">{@html choice}</div>
           </Button>
         {/each}
       </div>
     {:else}
-      <span class="mr-4" style="font-size:{$fontSize}px;">Ta réponse:</span>
-      <math-field
-        style="width:50%;font-size:{$fontSize}px;"
-        virtual-keyboard-theme="apple"
-        on:input="{onChangeMathField}"
-        on:keystroke="{onKeystroke}"
-        bind:this="{mf}"
+      <div
+        class="mt-16 d-flex flex-row align-center justify-center"
+        style="width:100%;"
       >
-      </math-field>
+        <span class="mr-4" style="font-size:{$fontSize}px;">Ta réponse:</span>
+        <math-field
+          style="width:50%;font-size:{$fontSize}px;"
+          class="{correct ? 'light-green lighten-5' : 'deep-orange lighten-5'}"
+          virtual-keyboard-theme="apple"
+          on:input="{onChangeMathField}"
+          bind:this="{mf}"
+        >
+        </math-field>
+      </div>
     {/if}
   </div>
 

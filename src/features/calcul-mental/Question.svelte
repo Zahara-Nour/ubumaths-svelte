@@ -13,7 +13,7 @@
     ? question.enounce.replace(regex, replacement)
     : null
 
-  $: if (mf) {
+  $: if (mf && (question.expression || question.expression2)) {
     const exp = math(
       question.expression2 ? question.expression2 : question.expression,
     )
@@ -24,7 +24,7 @@
 
 <div>
   {#if enounce}
-    <div id="enounce">{@html enounce}</div>
+    <div id="enounce" class="text-center" style="font-size:{$fontSize+4}px;">{@html enounce}</div>
   {/if}
   <!-- {#if question.expression2 || !(question.options && question.options.includes('no-exp'))} -->
   {#if question.expression || question.expression2}
