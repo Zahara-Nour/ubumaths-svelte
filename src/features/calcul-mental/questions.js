@@ -1,11 +1,49 @@
+// OPTIONS
+// 
+// * espaces dans l'écriture des nombres
+// exp-no-spaces = false
+// answer-require-spaces = false
+// 
+// * produits implicites
+// answer-require-implicit-products = true
+// 
+// * parenthèses inutiles
+// answer-allow-unecessary-brackets = false
+// 
+// * zéros inutiles
+// answer-allow-unecessary-zeros = false
+// 
+// * signes inutiles
+// answer-allow-unecessary-signs = false
+// 
+// * permutation des termes et facteurs
+// answer-allow-terms-and-factors-permutation = true
+
+
+
+
+
 export default {
   Entiers: {
+    Apprivoiser: {
+      Ecriture: [{
+        description: 'Ecrire un grand nombre entier avec des espaces',
+        enounces: ["Réécris ce nombre  entiers  en rajoutant des espaces pour former des groupes de 3 chiffres."],
+        expressions: ['&2'],
+        variables: [
+          { '&1': '$e[4;10]', '&2': '$e{&1;&1}' },
+        ],
+        type: 'result',
+        defaultDelay: 20,
+      },]
+    },
     Additionner: {
       Somme: [
         {
           description: 'Calculer une somme',
           subdescription:
             'Nombres entiers à 1 chiffre (sans retenue)',
+          enounces: ["Calcule."],
           expressions: ['&1 + &2', '&1 + &2'],
           variables: [
             { '&1': '$e[5;7]', '&2': '$e[2;9-&1]' },
@@ -17,6 +55,7 @@ export default {
         {
           description: 'Calculer une somme',
           subdescription: 'Nombres entiers à 2 chiffres (sans retenue)',
+          enounces: ["Calcule."],
           expressions: [
             '#{&1*10 + &2} + #{&3*10 + &4}',
             '#{&1*10 + &2} + #{&3*10 + &4}',
@@ -55,6 +94,7 @@ export default {
         {
           description: 'Calculer une somme',
           subdescription: 'Nombres entiers à 3 chiffres (sans retenue)',
+          enounces: ["Calcule."],
           expressions: ['#{&1*100 + &2*10 + &3} + #{&4*100 + &5*10 + &6}'],
           variables: [
             {
@@ -73,6 +113,7 @@ export default {
           description: 'Calculer une somme',
           subdescription:
             'Nombres entiers à 1 chiffre (avec retenue)',
+          enounces: ["Calcule."],
           expressions: ['&1 + &2'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[11-&1;9]' }],
           type: 'result',
@@ -81,6 +122,7 @@ export default {
         {
           description: 'Calculer une somme',
           subdescription: 'Nombres entiers à 2 chiffres qui se marrient bien',
+          enounces: ["Calcule."],
           expressions: ['#{&2} +#{&1*10-&2}'],
           variables: [
             {
@@ -94,6 +136,7 @@ export default {
         {
           description: 'Calculer une somme',
           subdescription: 'Nombres entiers à 2 chiffres (avec retenue)',
+          enounces: ["Calcule."],
           expressions: ['#{&1*10 + &2} +#{&3*10+&4}'],
           variables: [
             {
@@ -109,6 +152,7 @@ export default {
         {
           description: 'Calculer une somme',
           subdescription: 'Nombres entiers à 3 chiffres (avec retenue)',
+          enounces: ["Calcule."],
           expressions: ['#{&1*100 + &2*10 + &3} +#{&4*100+&5*10+&6}'],
           variables: [
             {
@@ -128,6 +172,7 @@ export default {
         {
           description: 'Trouver le complément',
           subdescription: 'Complément à 10',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
           expressions: ['?+&1=10', '&1+?=10'],
           solutions: [['#{10-&1}']],
           variables: [{ '&1': '$e[1;9]' }],
@@ -138,6 +183,7 @@ export default {
         {
           description: 'Trouver le complément',
           subdescription: 'Complément à 100',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
           expressions: ['?+&1=100', '&1+?=100'],
           solutions: [['#{100-&1}']],
           variables: [{ '&1': '$e[1;99]' }],
@@ -148,6 +194,7 @@ export default {
         {
           description: 'Trouver le complément',
           subdescription: "Complément d'un nombre de dizaines",
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
           expressions: ['?+&2=#{&1*10}', '&2+?=#{&1*10}'],
           solutions: [['#{&1*10-&2}']],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;&1*10-2]' }],
@@ -156,7 +203,9 @@ export default {
           defaultDelay: 20,
         },
         {
-          description: 'Trouver le complément à 1000',
+          description: 'Trouver le complément',
+          subdescription: 'Complément à 1000',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
           expressions: ['?+&1=1000', '&1+?=1000'],
           solutions: [['#{1000-&1}']],
           variables: [{ '&1': '$e[1;999]' }],
@@ -167,9 +216,10 @@ export default {
       ],
       'A trou': [
         {
-          description: 'Calculer une somme',
+          description: 'Compléter une égalité',
           subdescription:
             'Nombres entiers à 1 chiffre (sans retenue)',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
           expressions: [
             '&1+? = #{&1+&2}',
             '&1+?= #{&1+&2}',
@@ -187,8 +237,9 @@ export default {
           defaultDelay: 20,
         },
         {
-          description: 'Calculer une somme',
+          description: 'Compléter une égalité',
           subdescription: 'Nombres entiers à 2 chiffres (sans retenue)',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
           expressions: [
             '#{&5}+?=#{&5+&6}',
             '#{&5}+?=#{&5+&6}',
@@ -234,8 +285,9 @@ export default {
           defaultDelay: 20,
         },
         {
-          description: 'Calculer une somme',
+          description: 'Compléter une égalité',
           subdescription: 'Nombres entiers à 3 chiffres (sans retenue)',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
           expressions: [
             '#{&7} + ? = #{&7+&8}',
             '? + #{&7} = #{&7+&8}'],
@@ -266,7 +318,9 @@ export default {
           defaultDelay: 20,
         },
         {
-          description: 'Nombres à 1 chiffre',
+          description: 'Compléter une égalité',
+          subdescription: 'Nombres à 1 chiffre',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
           expressions: ['?+&1 = &2', '&1+? = &2'],
           solutions: [['#{&2-&1}']],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[11;&1+9]' }],
@@ -275,7 +329,9 @@ export default {
           defaultDelay: 20,
         },
         {
-          description: 'Nombres à 2 chiffres',
+          description: 'Compléter une égalité',
+          subdescription: 'Nombres à 2 chiffres',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
           expressions: ['?+&1 = &2', '&1+? = &2'],
           solutions: [['#{&2-&1}']],
           variables: [{ '&1': '$e{2;2}', '&2': '$e[&1+12;&1+99]' }],
@@ -284,7 +340,9 @@ export default {
           defaultDelay: 20,
         },
         {
-          description: 'Nombres à 3 chiffres',
+          description: 'Compléter une  égalité',
+          subdescription: 'Nombres à 3 chiffres',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
           expressions: ['?+&1 = &2', '&1+? = &2'],
           solutions: [['#{&2-&1}', '#{&2-&1}']],
           variables: [{ '&1': '$e[101;897]', '&2': '$e[&1+102;999]' }],
@@ -296,6 +354,7 @@ export default {
       'Somme astucieuse': [
         {
           description: 'Ajouter 19, 29, 39, ....',
+          enounces: ['Calcule de manière astucieuse.'],
           expressions: [
             '#{&4}+#{&5}',
             '#{&5}+#{&4}',
@@ -326,6 +385,7 @@ export default {
         {
           description: 'Additionner par regroupements',
           subdescription: '5 Nombres à 1 chiffre',
+          enounces: ['Calcule de manière astucieuse.'],
           expressions: [
             '&1+#{10-&1}+&2+#{10-&2}+&3',
             '&1+#{10-&1}+&2+&3+#{10-&2}',
@@ -362,6 +422,7 @@ export default {
         {
           description: 'Additionner par regroupements',
           subdescription: '3 Nombres à 2 chiffres',
+          enounces: ['Calcule de manière astucieuse.'],
           details: [
             [
               '\\textcolor{green}{#{&6}}+\\textcolor{green}{#{&1*10-(&6)}}+#{&7}',
@@ -398,6 +459,7 @@ export default {
         {
           description: 'Additionner par regroupements',
           subdescription: 'Nombres à 3 chiffres',
+          enounces: ['Calcule de manière astucieuse.'],
           expressions: [
             '&1+#{1000-&1}+&2',
             '&1+&2+#{1000-&2}',
@@ -428,6 +490,7 @@ export default {
         {
           description: 'Calculer une différence (résultat positif)',
           subdescription: 'Nombres à 1 chiffre',
+          enounces: ['Calcule.'],
           expressions: ['&1-&2'],
           variables: [{ '&1': '$e[5;9]', '&2': '$e[1;&1-1]' }],
           solutions: [['#{&1-&2}']],
@@ -437,6 +500,7 @@ export default {
         {
           description: 'Calculer une différence (résultat positif)',
           subdescription: 'Nombres à 2 chiffres (sans retenue)',
+          enounces: ['Calcule.'],
           expressions: ['#{ &1*10 + &2 } - #{ &3*10 + &4 }'],
           variables: [
             {
@@ -453,6 +517,7 @@ export default {
         {
           description: 'Calculer une différence (résultat positif)',
           subdescription: 'Nombres à 3 chiffres (sans retenue)',
+          enounces: ['Calcule.'],
           expressions: ['#{ &1*100 + &2*10 + &3 } - #{ &4*100 + &5*10 + &6 }'],
           variables: [
             {
@@ -471,6 +536,7 @@ export default {
         {
           description: 'Calculer une différence (résultat positif)',
           subdescription: '2 nombres à 1 chiffres (avec retenue)',
+          enounces: ['Calcule.'],
           expressions: ['#{&1+&2} - &1'],
           variables: [
             {
@@ -484,6 +550,7 @@ export default {
         {
           description: 'Calculer une différence (résultat positif)',
           subdescription: 'Nombres à 2 chiffres (avec retenue)',
+          enounces: ['Calcule.'],
           expressions: ['#{ &1*10 + &4 } - #{ &3*10 + &2 }'],
           variables: [
             {
@@ -500,6 +567,7 @@ export default {
         {
           description: 'Calculer une différence (résultat positif)',
           subdescription: 'Nombres à 3 chiffres (avec retenue)',
+          enounces: ['Calcule.'],
           expressions: ['#{ &1*100 + &5*10 + &6 } - #{ &4*100 + &2*10 + &3 }'],
           variables: [
             {
@@ -520,6 +588,7 @@ export default {
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
           subdescription: 'Nombres à 1 chiffre',
+          enounces: ['Quel est le nombre manquant dans cette égalité ?'],
           expressions: ['?-&1=&2', '&1-?=&2'],
           variables: [
             { '&1': '$e[2;8]', '&2': '$e[1;9-&1]' },
@@ -533,6 +602,7 @@ export default {
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
           subdescription: 'Nombres à 2 chiffres sans retenue.',
+          enounces: ['Quel est le nombre manquant dans cette égalité ?'],
           expressions: [
             '#{ &1*10 + &2 } - ? =  #{ &3*10 + &4 }',
             '? - #{ &1*10 + &2 } =  #{ &3*10 + &4 }',
@@ -567,6 +637,7 @@ export default {
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
           subdescription: 'Nombres à 3 chiffres (sans retenue)',
+          enounces: ['Quel est le nombre manquant dans cette égalité ?'],
           expressions: [
             '#{ &1*100 + &2*10 + &3 } - ? = #{ &4*100 + &5*10 + &6 }',
             '? - #{ &1*100 + &2*10 + &3 } = #{ &4*100 + &5*10 + &6 }',
@@ -605,6 +676,7 @@ export default {
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
           subdescription: '2 nombres à 1 chiffres (avec retenue)',
+          enounces: ['Quel est le nombre manquant dans cette égalité ?'],
           expressions: [
             '#{&1+&2} - ?= &2',
             '?-&1= &2',
@@ -629,6 +701,7 @@ export default {
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
           subdescription: 'Nombres à 2 chiffres (avec retenue)',
+          enounces: ['Quel est le nombre manquant dans cette égalité ?'],
           expressions: [
             '#{ &1*10 + &4 } - ? =  #{ &3*10 + &2 }',
             '? - #{ &1*10 + &2 } =  #{ &3*10 + &4 }',
@@ -660,6 +733,7 @@ export default {
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
           subdescription: 'Nombres à 3 chiffres (avec retenue)',
+          enounces: ['Quel est le nombre manquant dans cette égalité ?'],
           expressions: [
             '#{ &1*100 + &5*10 + &6 } - ? =  #{ &4*100 + &2*10 + &3 }',
             '? - #{ &1*100 + &2*10 + &3 } =  #{ &4*100 + &5*10 + &6}',
@@ -702,6 +776,7 @@ export default {
           expressions: [
             '#{&4+&5}-#{&5}',
           ],
+          enounces: ['Calcule de manière astucieuse.'],
           details: [
             [
               '#{&4+&5}-\\textcolor{green}{#{&5}}',
@@ -728,6 +803,7 @@ export default {
         {
           description: "Table de multiplication",
           subdescription: 'Par 2',
+          enounces: ['Calcule.'],
           expressions: ['2*&1'],
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
@@ -736,6 +812,7 @@ export default {
         {
           description: "Table de multiplication",
           subdescription: 'Par 3',
+          enounces: ['Calcule.'],
           expressions: ['3*&1'],
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
@@ -744,6 +821,7 @@ export default {
         {
           description: "Table de multiplication",
           subdescription: 'Par 4',
+          enounces: ['Calcule.'],
           expressions: ['4*&1'],
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
@@ -752,6 +830,7 @@ export default {
         {
           description: "Table de multiplication",
           subdescription: 'Par 5',
+          enounces: ['Calcule.'],
           expressions: ['5*&1'],
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
@@ -760,6 +839,7 @@ export default {
         {
           description: "Table de multiplication",
           subdescription: 'Par 6',
+          enounces: ['Calcule.'],
           expressions: ['6*&1'],
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
@@ -768,6 +848,7 @@ export default {
         {
           description: "Table de multiplication",
           subdescription: 'Par 7',
+          enounces: ['Calcule.'],
           expressions: ['7*&1'],
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
@@ -776,6 +857,7 @@ export default {
         {
           description: "Table de multiplication",
           subdescription: 'Par 8',
+          enounces: ['Calcule.'],
           expressions: ['8*&1'],
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
@@ -784,6 +866,7 @@ export default {
         {
           description: "Table de multiplication",
           subdescription: 'Par 9',
+          enounces: ['Calcule.'],
           expressions: ['9*&1'],
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
@@ -794,6 +877,7 @@ export default {
         {
           description: "Calculer un produit d'entiers",
           subdescription: 'Nombres à 1 chiffre',
+          enounces: ['Calcule.'],
           expressions: ['&1*&2'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
@@ -802,6 +886,7 @@ export default {
         {
           description: "Calculer un produit d'entiers",
           subdescription: 'Un facteur à 2 chiffres',
+          enounces: ['Calcule.'],
           expressions: ['&1*&2', '&2*&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[12;99]' }],
           type: 'result',
@@ -812,6 +897,7 @@ export default {
         {
           description: "Calculer un produit d'entiers",
           subdescription: 'Un facteur à 3 chiffres',
+          enounces: ['Calcule.'],
           expressions: ['&1*&2', '&2*&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[102;999]' }],
           type: 'result',
@@ -822,6 +908,7 @@ export default {
         {
           description: "Calculer un produit d'entiers",
           subdescription: 'Produits à connaître par coeur',
+          enounces: ['Calcule.'],
           options: ['exhaust'],
           expressions: [
             '4*25',
@@ -842,6 +929,7 @@ export default {
         {
           description: "Calculer un produit d'entiers",
           subdescription: 'Multiplication par 50',
+          enounces: ['Calcule.'],
           expressions: ['#{&1*2+1}*50', '#{&1*2}*50'],
           type: 'result',
           details: [
@@ -863,6 +951,7 @@ export default {
         {
           description: "Calculer un produit d'entiers",
           subdescription: 'Multiplication par 25',
+          enounces: ['Calcule.'],
           expressions: ['#{&1*4+&2}*25', '#{&1*4}*25'],
           type: 'result',
           details: [
@@ -886,6 +975,7 @@ export default {
         {
           description: "Calculer un produit d'entiers",
           subdescription: 'Multiplication par 10, 100 ou 1000',
+          enounces: ['Calcule.'],
           expressions: ['&1*#{10^&2}'],
           variables: [{ '&1': '$e[2;99]', '&2': '$e[1;3]' }],
           type: 'result',
@@ -895,6 +985,7 @@ export default {
           description: "Calculer un produit d'entiers",
           subdescription:
             'Les 2 facteurs sont des multiples de 10, 100 ou 1000',
+          enounces: ['Calcule.'],
           expressions: ['#{&1*10^&2}*#{&3*10^&4}'],
           variables: [
             {
@@ -912,6 +1003,7 @@ export default {
         {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Facteurs à 1 chiffre',
+          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
           expressions: ['?*&1=#{&1*&2}', '&1*?=#{&1*&2}'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[3;9]' }],
           solutions: [['&2']],
@@ -921,6 +1013,7 @@ export default {
         {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Produits classiques',
+          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
           expressions: [
             '?*4=100',
             '?*5=100',
@@ -970,6 +1063,7 @@ export default {
           description: 'Compléter une multiplication à trou',
           subdescription:
             'Les 2 facteurs sont des multiples de 10, 100 ou 1000',
+          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
           expressions: [
             '#{&1*10^&2}*?= #{&1*10^&2*&3*10^&4}',
             '?*#{&1*10^&2}= #{&1*10^&2*&3*10^&4}',
@@ -992,6 +1086,7 @@ export default {
         {
           description: 'Calculer un carré',
           subdescription: 'Entier de 1 à 15',
+          enounces: ['Calcule.'],
           expressions: ['&1^2'],
           variables: [{ '&1': '$e[2;15]' }],
           type: 'result',
@@ -1000,6 +1095,7 @@ export default {
         {
           description: 'Trouver une racine carré',
           subdescription: 'Entier de 1 à 15',
+          enounces: ['Calcule.'],
           expressions: ['?^2=#{&1^2}'],
           variables: [{ '&1': '$e[2;15]' }],
           solutions: [['&1']],
@@ -1012,6 +1108,7 @@ export default {
         {
           description: 'Calculer astucieusement un produit',
           subdescription: 'Utiiser 2 facteurs dont le produit est 100',
+          enounces: ['Calcule de manière astucieuse.'],
           expressions: ['&1*#{&2}*&3', '#{&2}*&1*&3', '#{&2}*&3*&1', '&1*&3*#{&2}', '&3*&1*#{&2}', '&3*#{&2}*&1',],
           variables: [{ '&1': '$l{20;25;50}', '&2': '100:&1', '&3': '$e[11;99]' }],
           type: 'result',
@@ -1022,6 +1119,7 @@ export default {
         {
           description: 'Utiliser la distributivité',
           subdescription: 'Multiplication par 11',
+          enounces: ["Calcule  à l'aide d'un développement"],
           expressions: ['11*&1'],
           variables: [{ '&1': '$e[12;40]' }],
           details: [['10 \\times &1 + &1', '#{10*&1} + &1']],
@@ -1031,6 +1129,7 @@ export default {
         {
           description: 'Utiliser la distributivité',
           subdescription: 'Multiplication par 99',
+          enounces: ["Calcule  à l'aide d'un développement"],
           expressions: ['99*&1'],
           variables: [{ '&1': '$e[15;40]' }],
           details: [['100 \\times &1 - &1', '#{100*&1} - &1']],
@@ -1040,6 +1139,7 @@ export default {
         {
           description: 'Utiliser la distributivité',
           subdescription: 'Multiplication par 12',
+          enounces: ["Calcule  à l'aide d'un développement"],
           expressions: ['12*&1'],
           variables: [{ '&1': '$e[13;40]' }],
           details: [['10 \\times &1 + 2 \\times &1', '#{10*&1} + #{2*&1}']],
@@ -1048,6 +1148,7 @@ export default {
         },
         {
           description: 'Utiliser la distributivité',
+          enounces: ["Calcule  à l'aide d'un développement"],
           subdescription: 'Multiplication par 98',
           expressions: ['98*&1'],
           variables: [{ '&1': '$e[15;40]' }],
@@ -1058,6 +1159,7 @@ export default {
         {
           description: 'Utiliser la distributivité',
           subdescription: 'Factorisation pour obtenir 100',
+          enounces: ["Calcule  à l'aide d'une factorisation"],
           expressions: [
             '&2*&1+#{100-&2}*&1',
             '&1*&2+#{100-&2}*&1',
@@ -1095,6 +1197,7 @@ export default {
         {
           description: 'Décomposer un entier en produit',
           subdescription: 'Produit de deux nombres entiers',
+          enounces: ["Décompose ce nombre enun produit de 2 facteurs."],
           expressions: [
             '#{&1*&2}',
             '#{&1*4}',
@@ -1149,6 +1252,7 @@ export default {
         {
           description: 'Calculer un quotient entier',
           subdescription: 'Quotients associés aux tables de multiplication',
+          enounces: ["Calcule."],
           expressions: ['#{&1*&2}:&2'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
@@ -1159,6 +1263,7 @@ export default {
         {
           description: 'Compléter une division à trou ',
           subdescription: 'Trouver le dividende',
+          enounces: ["Quel est le nombre manquant dans cette égalité ?"],
           expressions: ['?:&2=&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           solutions: [['#{&1*&2}']],
@@ -1169,6 +1274,7 @@ export default {
         {
           description: 'Compléter une division à trou ',
           subdescription: 'Trouver le diviseur',
+          enounces: ["Quel est le nombre manquant dans cette égalité ?"],
           expressions: ['#{&1*&2}:?=&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           solutions: [['&2']],
@@ -1183,7 +1289,7 @@ export default {
           description: 'Effectuer une division euclidienne ',
           subdescription: '',
           enounces:
-            ["Ecrire l'égalité correspondant à la division euclidienne de $$#{&1*&2+&3}$$ par $$&2$$"],
+            ["Ecrire l'égalité correspondant à la division euclidienne de $$#{&1*&2+&3}$$ par $$&2$$."],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[1;&2-1]' }],
           expressions: ['#{&1*&2+&3}'],
           solutions: [['&1 * &2+&3']],
@@ -1198,6 +1304,7 @@ export default {
         {
           description: 'Calculer une expression avec parenthèses',
           subdescription: 'Un niveau de parenthèse',
+          enounces: ["Calcule."],
           expressions: [
             '(&1+&2)*&3',
             '&3*(&1+&2)',
@@ -1226,6 +1333,7 @@ export default {
         {
           description: 'Calculer une expression avec parenthèses',
           subdescription: '2 expressions parenthèsées (imbriquées ou non)',
+          enounces: ["Calcule."],
           expressions: [
             '(&1+&2)*(&3+&4)',
             '(&1-&2)*(&3+&4)',
@@ -1249,6 +1357,7 @@ export default {
         {
           description: 'Calculer une expression sans parenthèses',
           subdescription: "Priorité de la multiplication et de la division sur l'addition et la soustraction",
+          enounces: ["Calcule."],
           expressions: [
             '&1+&2*&3',
             '#{&1*&2+&3}-&1*&2',
@@ -1267,6 +1376,7 @@ export default {
         {
           description: 'Calculer une expression sans parenthèses',
           subdescription: 'Même priorité',
+          enounces: ["Calcule."],
           expressions: [
             '#{&1*&2}:&1*&3',
             '&3-&1+&2',
@@ -1280,7 +1390,8 @@ export default {
         },
         {
           description: 'Calculer une expression sans parenthèses',
-          subdescription: '',
+          subdescription: 'Cas général',
+          enounces: ["Calcule."],
           expressions: [
             '&1*&2+&3*&4',
             '&1*&2+#{&3*&4}:&4',
@@ -1306,10 +1417,10 @@ export default {
         {
           description: 'Traduire une phrase en expression mathématique',
           enounces: [
-            'La somme de $$&1$$ et de $$&2$$',
-            'Le produit de $$&1$$ par $$&2$$',
-            'La différence entre $$&1$$ et $$&2$$',
-            'La quotient de $$&1$$ par de $$&2$$',
+            'Traduis cette phrase par une expression mathématique : la somme de $$&1$$ et de $$&2$$',
+            'Traduis cette phrase par une expression mathématique : le produit de $$&1$$ par $$&2$$',
+            'Traduis cette phrase par une expression mathématique : la différence entre $$&1$$ et $$&2$$',
+            'Traduis cette phrase par une expression mathématique : le quotient de $$&1$$ par de $$&2$$',
 
           ],
           options: ['no-exp'],
@@ -1336,10 +1447,10 @@ export default {
         {
           description: 'Traduire une phrase en expression mathématique',
           enounces: [
-            'La somme du produit de $$&1$$ par $$&3$$ et de $$&2$$',
-            'Le produit de $$&1$$ par la différence  entre $$&2$$ et $$&3$$',
-            'La différence entre $$&1$$ et le quotient de $$&2$$ par $$&3$$',
-            'Le quotient de la somme $$&1$$ et de $$&3$$ par $$&2$$',
+            'Traduis cette phrase par une expression mathématique : la somme du produit de $$&1$$ par $$&3$$ et de $$&2$$',
+            'Traduis cette phrase par une expression mathématique : le produit de $$&1$$ par la différence  entre $$&2$$ et $$&3$$',
+            'Traduis cette phrase par une expression mathématique : la différence entre $$&1$$ et le quotient de $$&2$$ par $$&3$$',
+            'Traduis cette phrase par une expression mathématique : le quotient de la somme $$&1$$ et de $$&3$$ par $$&2$$',
 
           ],
           options: ['no-exp'],
@@ -1376,6 +1487,7 @@ export default {
           description: 'Traduire une fraction décimale en nombre décimal ',
           subdescription:
             'Simple',
+          enounces: ['Quelle est la forme décimale de cette fraction ?'],
           variables: [
             {
               '&1': '$e[1;3]',
@@ -1389,8 +1501,8 @@ export default {
         },
         {
           description: 'Traduire une fraction décimale en nombre décimal ',
-          subdescription:
-            'Simple',
+          subdescription: "Débordementsur l'unité supérieur",
+          enounces: ['Quelle est la forme décimale de cette fraction ?'],
           variables: [
             {
               '&1': '$e[1;3]',
@@ -1404,8 +1516,8 @@ export default {
         },
         {
           description: 'Traduire une somme de fraction décimale en nombre décimal ',
-          subdescription:
-            'Simple',
+          subdescription: 'Décomposition en fractions décimales vers nombre décimal',
+          enounces: ['Quel est le nombre décimal égal à cette expression ?'],
           variables: [
             {
               '&1': '$e{1;1}',
@@ -1420,9 +1532,9 @@ export default {
           defaultDelay: 20
         },
         {
-          description: 'Traduire une somme de fraction décimale en nombre décimal ',
-          subdescription:
-            'Simple',
+          description: 'Traduire une somme de fractions décimales en nombre décimal',
+          subdescription: 'Décomposition (mélangée) en fractions décimales vers nombre décimal',
+          enounces: ['Quel est le nombre décimal égal à cette expression ?'],
           variables: [
             {
               '&1': '$e{1;1}',
@@ -1443,7 +1555,6 @@ export default {
       'Comparer': [
         {
           description: "Comparer deux nombres décimaux",
-
           subdescription: "",
           enounces: ["Quel est le plus petit de ces 2 nombres ?"],
           variables: [
@@ -1487,6 +1598,7 @@ export default {
           description: 'Calculer une somme ',
           subdescription:
             'Partie entière et partie décimale à 1 chiffre (pas de retenue)',
+          enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$e[1;8]',
@@ -1506,6 +1618,7 @@ export default {
           description: 'Calculer une somme ',
           subdescription:
             'Parties décimales à 1 et 2 chiffres (pas de retenue)',
+          enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$e[1;8]',
@@ -1526,6 +1639,7 @@ export default {
           description: 'Calculer une somme ',
           subdescription:
             'Partie entière et partie décimale à 1 chiffre (avec retenue pour la partie decimale)',
+          enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$e[1;7]',
@@ -1545,6 +1659,7 @@ export default {
           description: 'Calculer une somme ',
           subdescription:
             'Partie entière et partie décimale à 1 chiffre (avec retenues)',
+          enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$e[1;9]',
@@ -1566,6 +1681,7 @@ export default {
           description: 'Compléter une addition à trou ',
           subdescription:
             'Partie entière et partie décimale à 1 chiffre (pas de retenue)',
+          enounces: ['Quel est le terme manquant dans cette égalité ?'],
           variables: [
             {
               '&1': '$e[1;8]',
@@ -1586,6 +1702,7 @@ export default {
           description: 'Calculer une somme ',
           subdescription:
             'Parties décimales à 1 et 2 chiffres (pas de retenue)',
+          enounces: ['Quel est le terme manquant dans cette égalité ?'],
           variables: [
             {
               '&1': '$e[1;8]',
@@ -1607,6 +1724,7 @@ export default {
           description: 'Calculer une somme ',
           subdescription:
             'Partie entière et partie décimale à 1 chiffre (avec retenue pour la partie decimale)',
+          enounces: ['Quel est le terme manquant dans cette égalité ?'],
           variables: [
             {
               '&1': '$e[1;7]',
@@ -1627,6 +1745,7 @@ export default {
           description: 'Calculer une somme ',
           subdescription:
             'Partie entière et partie décimale à 1 chiffre (avec retenues)',
+          enounces: ['Quel est le terme manquant dans cette égalité ?'],
           variables: [
             {
               '&1': '$e[1;9]',
@@ -1650,6 +1769,7 @@ export default {
         {
           description: 'Calculer un produit',
           subdescription: 'Un des facteurs est un entier',
+          enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$e[2;9]',
@@ -1664,6 +1784,7 @@ export default {
         {
           description: 'Calculer un produit',
           subdescription: 'Un des facteurs est un entier',
+          enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$e[2;9]',
@@ -1701,6 +1822,7 @@ export default {
         {
           description: 'Calculer un produit',
           subdescription: 'Multiplier deux nombres décimaux',
+          enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$e[2;9]',
@@ -1741,6 +1863,7 @@ export default {
         {
           description: 'Calculer un produit',
           subdescription: 'Multiplier par 10, 100 ou 1000',
+          enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$d{$e[1;2];$e[0;3]}',
@@ -1756,6 +1879,7 @@ export default {
         {
           description: 'Calculer un produit',
           subdescription: 'Multiplier par 0,1 ; 0,01 ou 0,001',
+          enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$d{$e[1;3];$e[0;2]}',
@@ -1771,10 +1895,11 @@ export default {
       ]
     },
     Diviser: {
-      Résultat: [
+      Quotient: [
         {
           description: 'Calculer un quotient',
           subdescription: 'Diviser par 10, 100 ou 1000',
+          enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$d{$e[1;3];$e[0;2]}',
@@ -1789,6 +1914,7 @@ export default {
         {
           description: 'Calculer un quotient',
           subdescription: 'Diviser par 0,1 ; 0,01 ou 0,001',
+          enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$d{$e[1;2];$e[0;3]}',
@@ -1803,6 +1929,7 @@ export default {
         },
         {
           description: 'Calculer un quotient',
+          enounces: ['Calcule.'],
           subdescription: 'Deux nombres décimaux',
           variables: [
             {
@@ -1824,6 +1951,7 @@ export default {
         {
           description: 'Convertir dans une autre unité',
           subdescription: "Conversion vers l'unité de référence",
+          enounces: ["Convertis dans l'unité demandée."],
           variables: [
             {
               '&1': '$e[1;9]',
@@ -1877,6 +2005,7 @@ export default {
         {
           description: 'Convertir dans une autre unité',
           subdescription: "Autres conversions",
+          enounces: ["Convertis dans l'unité demandée."],
           variables: [
             {
               '&1': '$e[1;9]',
@@ -2222,9 +2351,9 @@ export default {
           description: 'Calculer avec des unités',
           subdescription: "",
           enounces: [
-            " Caluler et donner le résutat en mètres (m)",
-            " Caluler et donner le résutat en mètres (g)",
-            " Caluler et donner le résutat en mètres (L)",
+            " Calcule et donne le résutat en mètres (m)",
+            " Calcule et donne le résutat en mètres (g)",
+            " Calcule et donne le résutat en mètres (L)",
           ],
           variables: [
             {
@@ -2259,6 +2388,7 @@ export default {
         {
           description: 'Convertir dans une autre unité',
           subdescription: "Unités d'aire",
+          enounces: ["Convertis dans l'unité demandée."],
           variables: [
             {
               '&1': '$e[1;9]',
@@ -2316,6 +2446,7 @@ export default {
         {
           description: 'Convertir dans une autre unité',
           subdescription: "Unités de volume",
+          enounces: ["Convertis dans l'unité demandée."],
           variables: [
             {
               '&1': '$e[1;9]',
@@ -2380,7 +2511,7 @@ export default {
       "La définition d'un nombre négatif": [
         {
           description: "Nombre négatif défini par une soustraction",
-          enounces: ["Quel est le résultat de $$0-&1$$ ?", "Quel est la soustraction définissant le nombre $$-&1$$ ?"],
+          enounces: ["Quel est le résultat de $$0-&1$$ ?", "Quelle est la soustraction définissant le nombre $$-&1$$ ?"],
           expressions: ['-&1', '0-&1'],
           options: ['no-exp'],
           variables: [
@@ -2403,7 +2534,7 @@ export default {
           defaultDelay: 20,
         },
         {
-          description: "Comparer dex nombres relatifs.",
+          description: "Comparer deux nombres relatifs.",
           subdescription: "Veleurs entières.",
           enounces: ["Quel est le plus petit de ces 2 nombres ?"],
           // expressions: ['-&1', '-(-&1)'],
@@ -2433,7 +2564,41 @@ export default {
           type: 'choice',
           defaultDelay: 20,
         },
+
       ],
+      Comparer: [
+        {
+          description: "Comparer deux nombres relatifs.",
+          subdescription: "Veleurs entières.",
+          enounces: ["Quel est le plus petit de ces 2 nombres ?"],
+          // expressions: ['-&1', '-(-&1)'],
+          options: ['no-exp'],
+          variables: [
+            { '&1': '$e[1;19]', '&2': '$e[&1+1;20]', },
+          ],
+          choices: [
+            ['$$-&1$$', '$$&2$$'],
+            ['$$&1$$', '$$-&2$$'],
+            ['$$-&1$$', '$$-&2$$'],
+            ['$$-&2$$', '$$-&1$$'],
+          ],
+          corrections: [
+            'Entre $$-&1$$ et $$&2$$, le plus petit est ',
+            'Entre $$&1$$ et $$-&2$$, le plus petit est ',
+            'Entre $$-&1$$ et $$-&2$$, le plus petit est ',
+            'Entre $$-&2$$ et $$-&1$$, le plus petit est ',
+          ],
+          solutions: [
+            [0],
+            [1],
+            [1],
+            [0],
+
+          ],
+          type: 'choice',
+          defaultDelay: 20,
+        },
+      ]
     },
     'Additionner et soustraire': {
       'Sur la droite graduée': [
@@ -2441,6 +2606,7 @@ export default {
         {
           description: 'Calculer une somme ou une différence',
           subdescription: "A l'aide de la droite graduée",
+          enounces: ['Calcule.'],
           expressions: ['(-&1)+&2', '(-&1)-&2', '&2-&1'],
           variables: [
             { '&1': '$e[1;5]', '&2': '$e[1;3+&1]' },
@@ -2453,6 +2619,7 @@ export default {
         {
           description: 'Compléter une égalité',
           subdescription: "A l'aide de la droite graduée",
+          enounces: ["Complète l'égalité avec le nombre manquant."],
           expressions: [
             '(-&1)+?=#{(-&1)+&2}',
             '(-&1)+?=#{(-&1)+(-&2)}',
@@ -2509,6 +2676,7 @@ export default {
         {
           description: 'Calculer une somme',
           subdescription: 'Cas général',
+          enounces: ["Calcule."],
           expressions: ['(-&1)+&2', '(-&1)+(-&2)', '&1+(-&2)'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
@@ -2517,6 +2685,7 @@ export default {
         {
           description: 'Compléter une égalité',
           subdescription: 'Cas général',
+          enounces: ["Complète l'égalité avec le nombre manquant."],
           expressions: [
             '(-&1)+?=#{(-&1)+&2}',
             '(-&1)+?=#{(-&1)+(-&2)}',
@@ -2539,8 +2708,8 @@ export default {
         },
         {
           description: "Transformer une soustraction en addition",
-          enounce:
-            'Réécris cette soustraction en une addition équivalente.',
+          enounces:
+            ['Réécris cette soustraction en une addition équivalente.'],
           expressions: [
             '(-&1)-(-&2)',
             '&1-(-&2)',
@@ -2559,8 +2728,8 @@ export default {
         },
         {
           description: "Simplifier l'écriture",
-          enounce:
-            'Simplifie cette expression en enlevant les doubles signes et les parenthèses inutiles',
+          enounces:
+            ['Simplifie cette expression en enlevant les doubles signes et les parenthèses inutiles.'],
           expressions: [
             '(-&1)+(-&2)',
             '(-&1)+&2',
@@ -2584,6 +2753,7 @@ export default {
         {
           description: 'Calculer',
           subdescription: 'Avec écriture simplifiée',
+          enounces: ["Calcule."],
           expressions: ['-&1+&2', '-&1-&2', '&3-&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[1;&1-1]' }],
           type: 'result',
@@ -2659,12 +2829,14 @@ export default {
         {
           description: 'Calculer un produit',
           expressions: ['(-&1)*&2', '(-&1)*(-&2)', '&1*(-&2)'],
+          enounces: ["Calcule."],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
           defaultDelay: 20,
         },
         {
           description: 'Multiplication à trou',
+          enounces: ["Détermine le facteur manquant."],
           expressions: [
             '(-&1)*?=#{-&1*&2}',
             '(-&1)*?=#{(-&1)*(-&2)}',
@@ -2742,6 +2914,7 @@ export default {
         },
         {
           description: 'Diviser',
+          enounces: ["Calcule."],
           expressions: [
             '(-#{&1*&2}):&2',
             '(-#{&1*&2}):(-&2)',
@@ -2760,7 +2933,7 @@ export default {
         {
           description: "Définition d'un quotient",
           subdescription: "Compléter une multiplication à trou",
-          enounces:['Détermine le facteur manquant.'],
+          enounces: ['Détermine le facteur manquant.'],
           expressions: ['&2*?=#{&1*&2}', '?*&2=#{&1*&2}'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
@@ -2771,7 +2944,7 @@ export default {
         {
           description: "Définition d'un quotient",
           subdescription: "Quelle opération faire dans une multiplication à trou ?",
-          enounces:['Quelle opération te permet de trouver le facteur manquant ?'],
+          enounces: ['Quelle opération te permet de trouver le facteur manquant ?'],
           expressions: ['&2*?=&1', '?*&2=&1'],
           variables: [{ '&1': '$e[2;19]', '&2': '$e[2;19]\\{cd(&1)}' }],
           // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
@@ -2780,9 +2953,9 @@ export default {
           defaultDelay: 20,
         },
         {
-          description: 'Compléter une égalité',
-          subdescription: "Définition d'un quotient",
-          enounces:['Détermine le facteur manquant.'],
+          description: "Définition d'un quotient",
+          subdescription: "Déterminer le facteur manquant",
+          enounces: ['Détermine le facteur manquant.'],
           expressions: ['&2*?=&1', '?*&2=&1'],
           variables: [{ '&1': '$e[2;19]', '&2': '$e[2;19]\\{cd(&1)}' }],
           // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
@@ -2796,6 +2969,7 @@ export default {
         {
           description: "Déterminer la forme décimale d'une fraction",
           subdescription: "La forme décimale est un entier",
+          enounces: ['Ecris la forme décimale de la fraction'],
           expressions: ['#{&2*&1}/&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
@@ -2805,6 +2979,7 @@ export default {
         {
           description: "Déterminer la forme décimale d'une fraction",
           subdescription: "La forme décimale n'est pas entière",
+          enounces: ['Ecris la forme décimale de la fraction'],
           expressions: ['&2/&1'],
           variables: [{ '&1': '$l{2;4;5;10}', '&2': '$e[1;&1+1]' }],
           type: 'result',
@@ -2813,6 +2988,7 @@ export default {
         },
         {
           description: 'Déterminer une forme fractionnaire',
+          enounces: ['Réécris ce nombre décimal sous forme fractionnaire.'],
           expressions: ['##{&2/&1}'],
           variables: [{ '&1': '$l{2;4;5;10}', '&2': '$e[1;&1-1]' }],
           type: 'result',
@@ -2823,7 +2999,8 @@ export default {
         {
           description: 'Compléter une égalité de fractions',
           subdescription:
-            'multiplier numérateur et dénominateur par le même nombre',
+            'Multiplier numérateur et dénominateur par le même nombre',
+          enounces: ['Complète avec le  nombre manquant.'],
           expressions: [
             '&2/&1=?/#{&1*&3}',
             '&2/&1=#{&2*&3}/?',
@@ -2858,7 +3035,8 @@ export default {
         {
           description: 'Compléter une égalité de fractions',
           subdescription:
-            'diviser numérateur et dénominateur par le même nombre',
+            'Diviser numérateur et dénominateur par le même nombre',
+          enounces: ['Complète avec le  nombre manquant.'],
           expressions: [
             '#{&2*&3}/#{&1*&3}=?/&1',
             '#{&2*&3}/#{&1*&3}=&2/?',
@@ -2879,6 +3057,7 @@ export default {
         {
           description: 'Compléter une égalité de fractions',
           subdescription: 'En utilisant le coefficient de proportionnalité',
+          enounces: ['Complète avec le  nombre manquant.'],
           expressions: [
             '&1/#{&1*&3}=&2/?',
             '&1/?=&2/#{&2*&3}',
@@ -2904,6 +3083,7 @@ export default {
         {
           description: 'Compléter une égalité de fractions',
           subdescription: 'En utilisant le coefficient de proportionnalité (2)',
+          enounces: ['Complète avec le  nombre manquant.'],
           expressions: [
             '&1/#{&1*&3}=?/#{&2*&3}',
             '?/#{&1*&3}=&2/#{&2*&3}',
@@ -2929,6 +3109,7 @@ export default {
         {
           description: 'Compléter une égalité de fractions',
           subdescription: 'En utilisant le produit en croix',
+          enounces: ['Complète avec le  nombre manquant.'],
           expressions: [
             '#{&1*&3}/#{&2*&3}=#{&1*&4}/?',
             '#{&2*&3}/#{&1*&3}=?/#{&1*&4}',
@@ -2957,7 +3138,7 @@ export default {
         {
           description: 'Simplifier une fraction',
           subdescription: 'Simplifier par 10; 100; 1000',
-          enounce: 'Simplifier le plus possible cette fraction',
+          enounces: ['Simplifie le plus possible cette fraction.'],
           expressions: ['#{&1*&3}/#{&2*&4}', '#{&1*&4}/#{&2*&3}'],
           variables: [{
             '&1': '$l{10;100;1000}',
@@ -2978,7 +3159,7 @@ export default {
         {
           description: 'Simplifier une fraction',
           subdescription: 'Simplifier par 2 ; 3 ou 5',
-          enounce: 'Simplifier cette fraction par 2 ; 3 ou 5',
+          enounces: ['Simplifie cette fraction par 2 ; 3 ou 5.'],
           expressions: ['#{&1*&2}/#{&1*&3}', '#{&1*&3}/#{&1*&2}'],
           variables: [{
             '&1': '$l{2;3;5}',
@@ -2993,7 +3174,7 @@ export default {
         {
           description: 'Simplifier une fraction',
           subdescription: '1 seule simplification possible',
-          enounce: 'Simplifier cette fraction',
+          enounces: ['Simplifie cette fraction.'],
           expressions: ['#{&1*&3}/#{&2*&3}', '#{&2*&3}/#{&1*&3}'],
           variables: [{
             '&1': '$e[2;9]',
@@ -3008,7 +3189,7 @@ export default {
         {
           description: 'Simplifier une fraction',
           subdescription: 'La simplification peut se faire en plusieurs étapes',
-          enounce: 'Simplifier le plus possible',
+          enounces: ['Simplifie le plus possible.'],
           expressions: ['#{&2*&3}/#{&1*&3}', '#{&1*&3}/#{&2*&3}'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[1;&1-1]', '&3': '$e[2;9]' }],
           type: 'result',
@@ -3016,7 +3197,7 @@ export default {
         },
         {
           description: 'Simplifier une fraction',
-          enounce: 'Simplifier les signes',
+          enounces: ['Simplifie les signes.'],
           expressions: [
             '(-&1)/&2',
             '&1/(-&2)',
@@ -3028,7 +3209,8 @@ export default {
         },
         {
           description: 'Simplifier une fraction',
-          enounce: 'Simplifier le plus possible (avec signes)',
+          subdescription: ['Simplifier le plus possible (avec signes)'],
+          enounces: ['Simplifie le plus possible.'],
           expressions: [
             '(-#{&2*&3})/#{&1*&3}',
             '(-#{&1*&3})/#{&2*&3}',
@@ -3053,14 +3235,14 @@ export default {
               '&2': '$e[1;&1-1]\\{&1}',
               '&3': '$e[1;&1-1]\\{&1;&2}',
               '&4': '&2/&1',
-              '&5': '&3/&1'      
+              '&5': '&3/&1'
             },
             {
               '&1': '$e[2;9]',
               '&2': '$e[&1+1;3*&1-1]\\{&1}',
               '&3': '$e[&1+1;3*&1-1]\\{&1;&2}',
               '&4': '&2/&1',
-              '&5': '&3/&1'      
+              '&5': '&3/&1'
             },
           ],
           choices: [
@@ -3086,15 +3268,15 @@ export default {
               '&3': '$e[8;19]\\{&1}',
               '&4': '$e[&3+1;2*&3-1]',
               '&5': '&2/&1',
-              '&6': '&4/&3'      
+              '&6': '&4/&3'
             },
-            
+
           ],
           choices: [
             ['$$\\frac{&2}{&1}$$', '$$\\frac{&4}{&3}$$'],
-            ['$$\\frac{&4}{&3}$$','$$\\frac{&2}{&1}$$' ],
+            ['$$\\frac{&4}{&3}$$', '$$\\frac{&2}{&1}$$'],
           ],
-          
+
           corrections: [
             'Entre $$\\frac{&2}{&1}$$ et $$\\frac{&4}{&3}$$ la plus petite fraction est  ',
             'Entre $$\\frac{&4}{&3}$$ et $$\\frac{&2}{&1}$$ la plus petite fraction est  ',
@@ -3117,7 +3299,7 @@ export default {
               '&3': '$e[2;9]\\{&1}',
               '&4': '$e[2;9]',
               '&5': '&2/&1',
-              '&6': '(&3*&4)/(&1*&4)'      
+              '&6': '(&3*&4)/(&1*&4)'
             },
           ],
           choices: [
@@ -3135,11 +3317,12 @@ export default {
       ]
     },
     'Egalité à compléter': {
-      
+
       'Addition - Soustraction': [
         {
           description: 'Compléter une égalité',
           subdescription: 'Addition ou soustraction',
+          enounces: ['Complète cette égalité avec le  nombre manquant.'],
           expressions: [
             '?/&3+&2/&3=#{&1+&2}/&3',
             '&1/?+&2/&3=#{&1+&2}/&3',
@@ -3188,6 +3371,7 @@ export default {
         {
           description: 'Compléter une égalité',
           subdescription: 'Addition ou soustraction, avec nombres relatifs',
+          enounces: ['Complète cette égalité avec le  nombre manquant.'],
           expressions: [
             '?/&3+&2/&3=#{&1+&2}/&3',
             '&1/?+&2/&3=#{&1+&2}/&3',
@@ -3213,6 +3397,7 @@ export default {
         {
           description: 'Compléter une égalité',
           subdescription: 'Multiplication',
+          enounces: ['Complète cette égalité avec le  nombre manquant.'],
           expressions: [
             '(?/&3)*(&2/&4)=#{&1*&2}/#{&3*&4}',
             '(&1/?)*(&2/&4)=#{&1*&2}/#{&3*&4}',
@@ -3235,6 +3420,7 @@ export default {
         {
           description: 'Compléter une égalité',
           subdescription: 'Multiplication avec nombres relatifs',
+          enounces: ['Complète cette égalité avec le  nombre manquant.'],
           expressions: [
             '(?/&3)*(&2/&4)=#{&1*&2}/#{&3*&4}',
             '(&1/?)*(&2/&4)=#{&1*&2}/#{&3*&4}',
@@ -3262,6 +3448,7 @@ export default {
           description: 'Additionner ou soustraire',
           subdescription:
             'Fractions de même dénominateur, nombres positifs, sans simplification',
+          enounces: ['Calcule.'],
           expressions: ['&1/&3+&2/&3', '&1/&3-&2/&3'],
           variables: [
             {
@@ -3284,6 +3471,7 @@ export default {
           description: 'Additionner ou soustraire',
           subdescription:
             "Dénominateur multiple de l'autre, nombres positifs, sans simplification",
+          enounces: ['Calcule.'],
           expressions: ['&1/&3+&2/#{&3*&4}', '&2/#{&3*&4}+&1/&3'],
           variables: [
             {
@@ -3314,7 +3502,7 @@ export default {
           description: 'Additionner ou soustraire',
           subdescription:
             "Dénominateur multiple de l'autre, nombres positifs, simplification initiale",
-          enounce: "Calculer en simplifiant d'abord une des 2 fractions",
+          enounces: ["Calcule en simplifiant d'abord une des 2 fractions"],
           expressions: ['&1/&3+#{&2*&4}/#{&3*&4}', '#{&2*&4}/#{&3*&4}+&1/&3'],
           variables: [
             {
@@ -3346,6 +3534,7 @@ export default {
           description: 'Additionner ou soustraire',
           subdescription:
             "Un entier et une fraction",
+          enounces: ['Calcule.'],
           expressions: ['&2/&1+&3', '&3+&2/&1'],
           variables: [
             {
@@ -3362,6 +3551,7 @@ export default {
           description: 'Additionner ou soustraire',
           subdescription:
             'Fractions de même dénominateur, nombres positifs, simplification intermediaire possible, simplification finale',
+          enounces: ['Calcule.'],
           expressions: [
             '#{&2*&4}/#{&1*&3}+#{(&1-&2)*&4}/#{&1*&3}',
             '#{&1*&4}/#{&2*&3}-#{(&1-&2)*&4}/#{&2*&3}',
@@ -3395,6 +3585,7 @@ export default {
           description: 'Additionner ou soustraire',
           subdescription:
             'Fractions de même dénominateur, nombres positifs, pas de simplification intermediaire, simplification finale',
+          enounces: ['Calcule.'],
           expressions: [
             '#{&2*&4}/#{&1*&3}+#{(&1-&2)*&4}/#{&1*&3}',
             '#{&1*&4}/#{&2*&3}-#{(&1-&2)*&4}/#{&2*&3}',
@@ -3428,6 +3619,7 @@ export default {
           description: 'Additionner ou soustraire',
           subdescription:
             'Fractions de même dénominateur, nombres relatifs, simplification intermediaire possible, simplification finale',
+          enounces: ['Calcule.'],
           expressions: [
             '(-&1)/&3+(-&2)/&3',
             '(-&1)/&3+&2/&3',
@@ -3610,7 +3802,8 @@ export default {
         },
         {
           description: 'Calculer un produit',
-          subdescription: 'avec simplification simple',
+          subdescription: 'avec peut-être une simplification simple',
+          enounces: [''],
           expressions: ['(&1/&3)*(&2/&4)}'],
           variables: [
             {
