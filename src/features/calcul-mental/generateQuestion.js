@@ -144,6 +144,9 @@ export default function generateQuestion(question, generateds) {
         expression = expression.replace(regexDecimal, replacementDecimal)
         expression = expression.replace(regexExactSigned, replacementExactSigned)
         expression = expression.replace(regexExact, replacementExact)
+        if (question.options && question.options.includes('remove-null-terms')) {
+          expression = math(expression).removeNullTerms().string
+        }
         if (question.options && question.options.includes('shuffle-terms')) {
           expression = math(expression).shuffleTerms().string
         }
@@ -322,11 +325,21 @@ export default function generateQuestion(question, generateds) {
     correction = correction.replace(regexExact, replacementExact)
   }
 
+  let expression_latex
+  if (expression) {
+    expression_latex = math(expression).toLatex({
+      addSpaces: !(question.options && question.options.includes('exp-no-spaces')),
+      keepUnecessaryZeros: question.options && question.options.includes('exp-allow-unecessary-zeros')
+
+    })
+  }
+
   const generated = {
     points: 1,
     ...question,
     solutions,
     expression,
+    expression_latex,
     choices
   }
 

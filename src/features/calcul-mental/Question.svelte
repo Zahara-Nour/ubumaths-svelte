@@ -13,22 +13,26 @@
     ? question.enounce.replace(regex, replacement)
     : null
 
-  $: if (mf && (question.expression || question.expression2)) {
-    const exp = math(
-      question.expression2 ? question.expression2 : question.expression,
-    )
-    mf.setValue(exp.toLatex({ addBrackets: true }))
+  $: if (mf && (question.expression_latex || question.expression2)) {
+    const exp = question.expression2 ? math(question.expression2).latex : question.expression_latex
+    mf.setValue(exp)
     // $: console.log('enounce', question.enounce)
   }
 </script>
 
-<div>
+<div class="d-flex flex-column align-center">
   {#if enounce}
-    <div id="enounce" class="text-center" style="font-size:{$fontSize+4}px;">{@html enounce}</div>
+    <div
+      id="enounce"
+      class="mt-4 text-center"
+      style="font-size:{$fontSize + 4}px;max-width:500px;"
+    >
+      {@html enounce}
+    </div>
   {/if}
   <!-- {#if question.expression2 || !(question.options && question.options.includes('no-exp'))} -->
   {#if question.expression || question.expression2}
-    <div id="expression" class="mt-4 d-flex align-center justify-center">
+    <div id="expression" class="mt-12 d-flex align-center justify-center">
       <math-field
         style="font-size:{$fontSize + 10}px;display:inline-block"
         read-only="true"
@@ -38,4 +42,3 @@
     </div>
   {/if}
 </div>
-

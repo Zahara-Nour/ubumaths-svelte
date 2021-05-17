@@ -4,3 +4,22 @@
     font-weight: 400;
     src: url('fonts/pacifico.woff2') format('woff2'); /* Super Modern Browsers */
   }
+
+  /* @font-face {
+    font-family: 'Handlee', cursive;
+    font-style: normal;
+    font-weight: 400;
+    src: url('https://fonts.googleapis.com/css2?family=Handlee&display=swap')
+  } */
+
+
+  
+
+  /* @font-face {
+    font-family: 'WG Legacy Edition';
+    src: url('fonts/WGLegacyEdition.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+} */
+

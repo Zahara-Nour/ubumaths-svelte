@@ -155,10 +155,7 @@
 
   function onKeystroke(mathfield, keystroke, e) {
     const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%'
-    console.log('answer_latex', answer_latex)
-    // const keystroke = e.detail.keystroke
-    console.log('keystrofe', keystroke)
-    console.log('e', e)
+    
     if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
       // answer = mf.getValue('ASCIIMath')
       // answer_latex = mf.getValue()
@@ -168,11 +165,10 @@
       keystroke === '[Space]' &&
       !(
         answer_latex.length >= 2 &&
-        answer_latex.slice(answer_latex.length - 3) === '\\, '
+        // answer_latex.slice(answer_latex.length - 3) === '\\, '
+        answer_latex.slice(answer_latex.length - 2) === '\\,'
       )
     ) {
-      console.log(answer_latex.slice("'"+answer_latex.length - 3)+"'")
-      console.log(answer_latex.slice(answer_latex.length - 3) === '\\, ')
       mf.insert('\\,')
       return false
     } else if (e.key === '*') {
@@ -211,9 +207,10 @@
 
   function onChangeMathField(e) {
     // utile dans le cas d'une expression mal formée
+
     
-    answer_latex = mf.getValue()
-    answer = mf.getValue('ASCIIMath').replace('xx', '*')
+    answer_latex = mf.getValue().replace(/\s/g,'') // Mathlive rajoute ' ' après \,
+    answer = mf.getValue('ASCIIMath').replace(/xx/g, '*')
     console.log('***change****', answer_latex)
   }
 
@@ -254,7 +251,7 @@
     answers_choice="{answers_choice}"
   />
 {:else if generated}
-  <div class="mt-3 mb-3">
+  <div class="mt-6 mb-6">
     <CircularProgress
       number="{current + 1}"
       fontSize="{$fontSize + 8}"
@@ -267,7 +264,7 @@
   </div>
   <!-- <div class:error> -->
 
-  <div class="d-flex align-center">
+  <div class="d-flex align-center justify-center">
     {#if choices}
       <div class="mt-3 d-flex justify-center" style="width:100%;">
         {#each choices as choice, i}
@@ -282,17 +279,21 @@
     {:else}
       <div
         class="mt-16 d-flex flex-row align-center justify-center"
-        style="width:100%;"
+        style="max-width:500px;width:100%"
       >
         <span class="mr-4" style="font-size:{$fontSize}px;">Ta réponse:</span>
-        <math-field
-          style="width:50%;font-size:{$fontSize}px;"
-          class="{correct ? 'light-green lighten-5' : 'deep-orange lighten-5'}"
-          virtual-keyboard-theme="apple"
-          on:input="{onChangeMathField}"
-          bind:this="{mf}"
-        >
-        </math-field>
+        <div class='flex-grow-1'>
+          <math-field
+            style="width:100%;font-size:{$fontSize}px;"
+            class="{correct
+              ? 'pa-2 light-green lighten-5'
+              : 'pa-2 deep-orange lighten-5'}"
+            virtual-keyboard-theme="apple"
+            on:input="{onChangeMathField}"
+            bind:this="{mf}"
+          >
+          </math-field>
+        </div>
       </div>
     {/if}
   </div>

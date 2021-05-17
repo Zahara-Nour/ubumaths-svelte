@@ -86,7 +86,8 @@
     const question = questions[i]
     total += question.points
     items[i] = {
-      question: question.expression,
+      qexp: question.expression,
+      qexp_latex: question.expression_latex,
       answer: answers[i],
       answer_latex: answers_latex[i],
       answer_choice: answers_choice[i],

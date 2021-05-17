@@ -14,8 +14,12 @@
   const number = item.number
   const options = item.options
   const implicit = options && options.includes('implicit')
-  const q_latex = item.question ? math(item.question).latex : null
+  // l'expression de départ doit être envoyé en latex également
+  const qexp = item.qexp
+  const qexp_latex = item.qexp_latex
   const correction_latex = item.correction
+  // less solutions doivent être envoyées en Latex
+  const solutions = item.solutions
   const solutions_latex = item.solutions.map((solution) => {
     if (item.type === 'choice') {
       return solution // Ce n'est pas du latex !
@@ -24,34 +28,80 @@
       return e.type === '!! Error !!' ? solution : e.toLatex({ implicit })
     }
   })
-  
 
   const details_latex = item.details // details are in latex form
+  const answer = item.answer
   const answer_latex = item.answer_latex
   const empty = !item.answer
   const badExpression =
-    item.type !== 'choice' && item.answer.type === '!! Error !!'
+    item.type !== 'choice' && math(answer).type === '!! Error !!'
+  const seemsCorrect = // réponse équivalente à la solution
+    item.type !== 'choice' &&
+    !empty &&
+    !badExpression &&
+    item.solutions.some((solution) => math(answer).equals(math(solution)))
+
   let correct = false
+
+  const validateSpaces = checkSpaces()
+  const validateBrackets = checkBrackets()
+  const validateZeros = checkZeros()
+  const validateSigns = checkSigns()
+  const validateOrder = checkOrder()
+  const validateAnswer = checkAnswer()
 
   if (item.type === 'choice') {
     correct = item.solutions.includes(item.answer_choice)
   } else {
     correct =
-      !badExpression &&
-      solutions_latex.some((e) => {
-        return e === answer_latex
-      })
+      seemsCorrect &&
+      validateZeros &&
+      validateBrackets &&
+      validateSigns &&
+      validateOrder &&
+      validateSpaces &&
+      validateAnswer
   }
   // const strictlyCorrect =
   //   !badExpression &&
   //   solutions_latex.some((e) => e.strictlyEquals(answer_latex))
-  let com
+  let coms = []
 
-  const correction = createItem(false)
-  const detailedCorrection = item.details ? createItem(true) : null
+  const correction = createCorrection(false)
+  const detailedCorrection = item.details ? createCorrection(true) : null
 
-  console.log('badExpressio', badExpression)
-  console.log('correct', correct)
+  // console.log('badExpressio', badExpression)
+  // console.log('correct', correct)
+  // console.log('empty', empty)
+  // console.log('validateSpaces', validateSpaces)
+
+  const EMPTY_ANSWER = "Tu n'as rien répondu."
+  const ZEROS = 'Ta réponse contient des des zéros inutiles.'
+  const BRACKETS = 'Il y a des des parenthèses inutiles.'
+  const SPACES = 'Les chiffres sont mal espacés.'
+  const SIGNS = 'Tu peux faire des simplifications de signes.'
+  const BAD = "Ton expression n'est pas mathématiquement correcte."
+  const FORM = "Ta réponse  n'est pas écrite sous la bonne forme."
+
+  if (empty) {
+    coms.push(EMPTY_ANSWER)
+  }
+
+  if (!empty && badExpression) {
+    coms.push(BAD)
+  }
+
+  if (seemsCorrect && !validateSpaces) {
+    coms.push(SPACES)
+  }
+
+  if (seemsCorrect && !validateZeros) {
+    coms.push(ZEROS)
+  }
+
+  if (seemsCorrect && !validateAnswer) {
+    coms.push(FORM)
+  }
 
   onMount(() => {
     Mathlive.renderMathInElement(`correction${number}`)
@@ -59,20 +109,145 @@
     if (correct) addPoints(item.points)
   })
 
-  function createItem(details) {
+  function checkAnswer() {
+    let e = math(answer)
+    let sols = solutions.map(solution => math(solution))
+
+    if (
+      !(
+        options &&
+        options.includes('answer-disallow-removing-null-terms')
+      )
+    ) {
+      e = e.removeNullTerms()
+      sols = sols.map((solution) => solution.removeNullTerms())
+    }
+
+    if (
+      !(
+        options &&
+        options.includes('answer-disallow-removing-factors-one')
+      )
+    ) {
+      e = e.removeFactorsOne()
+      sols = sols.map((solution) => solution.removeFactorsOne())
+    }
+
+    if (options && options.includes('answer-allow-unecessary-brackets')) {
+      e = e.removeUnecessaryBrackets()
+      sols = sols.map((solution) => solution.removeUnecessaryBrackets())
+    }
+
+    if (
+      !(
+        options &&
+        options.includes('answer-disallow-terms-and-factors-permutation')
+      )
+    ) {
+      e = e.sortTermsAndFactors()
+      sols = sols.map((solution) => solution.sortTermsAndFactors())
+    }
+
+    return sols.some((sol) => sol.strictlyEquals(e))
+  }
+
+  function checkBrackets() {
+    return true
+  }
+
+  function checkSigns() {
+    return true
+  }
+
+  // retourne true si la vérification est OK
+  function checkSpaces() {
+    //  TODO: a Remplacer par searchMisplacedSpaces
+    if (!empty && options && options.includes('answer-require-spaces')) {
+      const a = answer_latex.replace(/\\,/g, ' ').replace(',', '.')
+      const regex = /\d+[\d\s]*(\.[\d\s]*\d+)?/g
+      const matches = a.match(regex)
+
+      if (matches) {
+        const regexsInt = [
+          /\d{4}/,
+          /\s$/,
+          /\s\d{2}$/,
+          /\s\d{2}\s/,
+          /\s\d$/,
+          /\s\d\s/,
+        ]
+
+        const regexsDec = [
+          /\d{4}/,
+          /^\s/,
+          /^\d{2}\s/,
+          /\s\d{2}\s/,
+          /^\d\s/,
+          /\s\d\s/,
+        ]
+        return !matches.some((match) => {
+          let [int, dec] = match.split('.')
+
+          return (
+            regexsInt.some((regex) => int.match(regex)) ||
+            (dec && regexsDec.some((regex) => dec.match(regex)))
+          )
+        })
+      }
+    }
+    return true
+  }
+
+  function checkOrder() {
+    return true
+  }
+
+  // retourne true si la vérification est OK
+  function checkZeros() {
+    if (
+      !empty &&
+      !(options && options.includes('answer-allow-unecessary-zeros'))
+    ) {
+      console.log('check zeros')
+      return !math(answer).searchUnecessaryZeros()
+    }
+    return true
+  }
+
+  function createCorrection(details) {
     let line
     let lines = []
 
     switch (item.type) {
+      case 'rewrite': {
+        if (details) {
+        } else {
+          // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
+          line = `$$\\begin{align*}  ${qexp_latex}`
+          if (empty) {
+            line +=
+              `=\\textcolor{green}{${solutions_latex[0]}}` + '\\end{align*}$$'
+          } else if (!seemsCorrect) {
+            line +=
+              `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
+              `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
+          } else if (!correct) {
+            line +=
+              `&= ${answer_latex}` +
+              `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
+          } else {
+            line += `=\\textcolor{green}{${answer_latex}}$$`
+          }
+          lines.push(line)
+        }
+        break
+      }
       case 'choice':
-       
         line =
           correction_latex +
           '<span class="green-text">' +
           solutions_latex[0] +
           '</span>'
-
-        if (empty) com = "(tu n'as rien répondu)"
 
         lines.push(line)
         break
@@ -82,8 +257,6 @@
 
         if (empty) {
           line = '$$' + `\\textcolor{green}{${solutions_latex[0]}}` + '$$'
-
-          com = "(tu n'as rien répondu)"
         } else if (badExpression || !correct) {
           line =
             '$$\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
@@ -108,7 +281,7 @@
       case 'decomposition':
         if (details) {
         } else {
-          line = '$$\\begin{align*}' + q_latex
+          line = '$$\\begin{align*}' + qexp_latex
           solutions_latex.forEach((solution, i) => {
             if (i !== 0) line += ' \\\\ '
             line += '& =' + solution
@@ -120,7 +293,7 @@
 
       case 'result':
         if (details) {
-          line = '$$\\begin{align*}' + q_latex
+          line = '$$\\begin{align*}' + qexp_latex
           details_latex.forEach((detail, i) => {
             if (detail !== solutions_latex[0]) {
               if (i !== 0) line += ' \\\\ '
@@ -135,10 +308,9 @@
           lines.push(line)
         } else {
           // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
-          line = '$$' + q_latex
+          line = '$$' + qexp_latex
           if (empty) {
             line += `=\\textcolor{green}{${solutions_latex[0]}}` + '$$'
-            com = "(tu n'as rien répondu)"
           } else if (badExpression || !correct) {
             line +=
               '=\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
@@ -181,18 +353,16 @@
         } else {
           line =
             '$$' +
-            q_latex.replace(
+            qexp_latex.replace(
               /\\ldots/,
               `\\textcolor{green}{${solutions_latex[0]}}`,
             ) +
             '$$'
 
           lines.push(line)
-          if (empty) {
-            com = "(tu n'as rien répondu)"
-          } else if (badExpression || !correct) {
+          if (badExpression || !correct) {
             com = '$$\\text{(ta réponse: }'
-            com += q_latex.replace(
+            com += qexp_latex.replace(
               /\\ldots/,
               `\\textcolor{red}{${answer_latex}}`,
             )
@@ -210,30 +380,40 @@
     }
     return lines
   }
+
+  console.log('item', item)
 </script>
 
 <div>
   <ListItem selectable="{false}">
-    <div class="d-flex justify-start align-center">
-      <Button fab size="x-small" depressed class="blue white-text mr-2">
-        <span style="font-size:{$fontSize}px;">{item.number}</span>
-      </Button>
+    <div class="d-flex justify-start align-start">
+      <div class="mr-4 d-flex  flex-column align-center justify-start">
+        <Button
+          fab
+          size="x-small"
+          depressed
+          class="{correct ? 'green white-text' : 'red white-text'}"
+        >
+          <span style="font-size:{$fontSize}px;">{item.number}</span>
+        </Button>
 
-      <!-- a div is necessary for the icon to center aligned -->
-      <div>
-        {#if correct}
-          <Icon
-            class="mt-0 mb-0 mr-7 green-text"
-            style="font-size:{$fontSize}px;"
-            path="{mdiCheckCircle}"
-          />
-        {:else}
-          <Icon
-            class="mt-0 mb-0 mr-7 red-text"
-            style="font-size:{$fontSize}px;"
-            path="{mdiCloseCircle}"
-          />
-        {/if}
+        <!-- a div is necessary for the icon to center aligned -->
+        <!-- <div>
+          {#if correct}
+            <Icon
+              class="mt-2 green-text"
+              style="font-size:{$fontSize}px;"
+              path="{mdiCheckCircle}"
+            />
+          {:else}
+            <Icon
+              class="mt-2 red-text"
+              style="font-size:{$fontSize}px;"
+              path="{mdiCloseCircle}"
+            />
+          {/if}
+        </div> -->
+        <div class="flex-grow-1"></div>
       </div>
 
       <div
@@ -253,10 +433,15 @@
             </div>
           {/each}
 
-          {#if com}
-            <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{$fontSize}px;">
-              {com}
-            </div>
+          {#if coms.length}
+            {#each coms as com}
+              <div
+                class="ml-2 mr-2 mt-2 mb-2"
+                style="font-size:{$fontSize}px;font-family: 'Handlee', cursive;"
+              >
+                {com}
+              </div>
+            {/each}
           {/if}
         {/if}
       </div>

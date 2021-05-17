@@ -1,6 +1,7 @@
 // OPTIONS
 // 
 // * espaces dans l'écriture des nombres
+// enounce-no-spaces = false
 // exp-no-spaces = false
 // answer-require-spaces = false
 // 
@@ -12,12 +13,18 @@
 // 
 // * zéros inutiles
 // answer-allow-unecessary-zeros = false
+// exp-allow-unecessary-zeros = false
 // 
 // * signes inutiles
 // answer-allow-unecessary-signs = false
 // 
 // * permutation des termes et facteurs
-// answer-allow-terms-and-factors-permutation = true
+// 
+// * termes nuls
+// answer-disallow-removing-null-terms = false
+// 
+// * facteurs égaux à 1
+// answer-disallow-removing-factors-one = false
 
 
 
@@ -33,9 +40,124 @@ export default {
         variables: [
           { '&1': '$e[4;10]', '&2': '$e{&1;&1}' },
         ],
-        type: 'result',
+        options: ['exp-no-spaces', 'answer-require-spaces'],
+        type: 'rewrite',
         defaultDelay: 20,
-      },]
+      },
+      {
+        description: 'Ecrire un grand nombre entier sans les zéros inutiles',
+        enounces: ["Réécris ce nombre entiers en enlevant les zéros inuiles."],
+        expressions: [
+          '00&1&2&3&4',
+          '00&1&2&3&40',
+          '00&1&2&3&400',
+          '0&1&2&3&4',
+          '0&1&2&3&40',
+          '0&1&2&3&400',
+        ],
+        variables: [
+          { '&1': '$e[1;9]', '&2': '$l{0;$e[1;9]}', '&3': '$l{0;$e[1;9]}', '&4': '$e[1;9]' },
+        ],
+        options: ['exp-allow-unecessary-zeros'],
+        type: 'rewrite',
+        defaultDelay: 20,
+      },
+
+
+      ],
+      Décomposition: [
+        {
+          description: "Décomposition décimale -> nombre entier",
+          enounces: ["Réécris cette expression sous la forme d'un nombre entier."],
+          expressions: [
+            '(&1*10000) +  (&2*1000) + (&3*100) + (&4*10) + &5',
+          ],
+          variables: [
+            {
+              '&1': '$e[0;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[0;9]',
+              '&5': '$e[0;9]',
+            },
+          ],
+          options: ['remove-null-terms'],
+          type: 'rewrite',
+          defaultDelay: 20,
+        },
+        {
+          description: "Décomposition décimale -> nombre entier",
+          description: "Termes mélangés",
+          enounces: ["Réécris cette expression sous la forme d'un nombre entier."],
+          expressions: [
+            '(&1*10000) +  (&2*1000) + (&3*100) + (&4*10) + &5',
+          ],
+          variables: [
+            {
+              '&1': '$e[0;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[0;9]',
+              '&5': '$e[0;9]',
+            },
+          ],
+          options: ['remove-null-terms', 'shuffle-terms'],
+          type: 'rewrite',
+          defaultDelay: 20,
+        },
+        {
+          description: "Nombre entier -> décomposition décimale",
+          enounces: ["Donne la décomposition décimale de ce nombre. Exemple : $$345 = (3 \\times 100) +(4 \\times 10) + 5$$."],
+          expressions: [
+            '#{&2*100 + &3*10 + &4}',
+            // '#{(&1*1000) +  (&2*100) + (&3*10) + &4}',
+          ],
+          variables: [
+            {
+              '&1': '$e[0;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[0;9]',
+            },
+          ],
+          solutions: [['&2*100 + &3*10 + &4']],
+          // solutions:[['&1*1000 +  &2*100 + &3*10 + &4']],
+          options: ['answer-allow-unecessary-brackets'],
+          type: 'rewrite',
+          defaultDelay: 20,
+        },
+      ],
+      Comparer: [
+        {
+          description: "Comparer deux nombres entiers",
+          enounces: ["Quel est le plus petit de ces 2 nombres ?"],
+          variables: [
+            {
+              '&1': '$e[1;4]',
+              '&2': '$e{&1;&1}',
+              '&3': '$e{&1;&1}',
+              '&4': '$e{5-&1;5-&1}',
+              '&5': '&2+&4*10^&1',
+              '&6': '&3+&4*10^&1',
+              
+            },
+           
+          ],
+          conditions: ['&5!=&6'],
+          choices: [
+            ['$$%%{&5}$$', '$$%%{&6}$$'],
+          ],
+          corrections: [
+            'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
+          ],
+          solutions: [
+            ['&5<&6 ?? 0 :: 1'],
+          ],
+          type: 'choice',
+          defaultDelay: 20,
+        },
+      ]
+
     },
     Additionner: {
       Somme: [
