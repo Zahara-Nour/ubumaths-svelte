@@ -91,4 +91,9 @@ const cleanString = (str) =>
     .replace(/\s/g, '')
     .toLowerCase()
 
+
+export function isTouchScreendevice() {
+      return 'ontouchstart' in window || navigator.maxTouchPoints;      
+  };
+
 export { getLogger, shuffle, isEmpty, getPropertyName, lexicoSort, cleanString }
