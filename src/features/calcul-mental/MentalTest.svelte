@@ -61,6 +61,8 @@
         virtualKeyboardMode: 'auto',
         ...virtualKeyboard,
         onKeystroke,
+        'keypress-sound': 'none',
+        'keypress-vibration': false,
       })
       if (!mf.hasFocus) mf.focus()
     }
@@ -127,43 +129,30 @@
     change()
   }
 
-  $: initTest(location)
-
-  $: if (delay >= elapsed) {
-    percentage = ((delay - elapsed) * 100) / delay
+  function recordAnswer() {
+    answer_latex = mf
+      .getValue()
+      .replace(/\s/g, '')
+      .replace(/(\\,){2,}/g, '\\,') // Mathlive rajoute ' ' après \,
+    answer = mf.getValue('ASCIIMath').replace(/xx/g, '*')
+    // console.log(`answer-latex "${answer_latex}"`)
   }
 
-  $: if (questions && questions.length) {
-    generateds = []
+  function commit() {
+    recordAnswer()
     change()
-  }
-
-  $: if (generated && mf && !mf.hasFocus()) {
-    mf.focus()
-  }
-
-  $: if (generated && generated.choices) {
-    choices = generated.choices.map((c) => c.replace(regex, replacement))
-  } else {
-    choices = null
-  }
-
-  $: {
-    console.log('answer', answer)
-    correct = math(answer).type !== '!! Error !!'
   }
 
   function onKeystroke(mathfield, keystroke, e) {
     const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%'
-    
+
     if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
-      // answer = mf.getValue('ASCIIMath')
-      // answer_latex = mf.getValue()
-      change()
+      commit()
       return false
     } else if (
       keystroke === '[Space]' &&
       !(
+        answer_latex &&
         answer_latex.length >= 2 &&
         // answer_latex.slice(answer_latex.length - 3) === '\\, '
         answer_latex.slice(answer_latex.length - 2) === '\\,'
@@ -207,11 +196,7 @@
 
   function onChangeMathField(e) {
     // utile dans le cas d'une expression mal formée
-
-    
-    answer_latex = mf.getValue().replace(/\s/g,'') // Mathlive rajoute ' ' après \,
-    answer = mf.getValue('ASCIIMath').replace(/xx/g, '*')
-    console.log('***change****', answer_latex)
+    recordAnswer()
   }
 
   async function change() {
@@ -240,6 +225,32 @@
     } else {
       finish = true
     }
+  }
+
+  $: initTest(location)
+
+  $: if (delay >= elapsed) {
+    percentage = ((delay - elapsed) * 100) / delay
+  }
+
+  $: if (questions && questions.length) {
+    generateds = []
+    change()
+  }
+
+  $: if (generated && mf && !mf.hasFocus()) {
+    mf.focus()
+  }
+
+  $: if (generated && generated.choices) {
+    choices = generated.choices.map((c) => c.replace(regex, replacement))
+  } else {
+    choices = null
+  }
+
+  $: {
+    console.log('answer', answer)
+    correct = math(answer).type !== '!! Error !!'
   }
 </script>
 
@@ -282,7 +293,7 @@
         style="max-width:500px;width:100%"
       >
         <span class="mr-4" style="font-size:{$fontSize}px;">Ta réponse:</span>
-        <div class='flex-grow-1'>
+        <div class="flex-grow-1">
           <math-field
             style="width:100%;font-size:{$fontSize}px;"
             class="{correct
@@ -290,6 +301,7 @@
               : 'pa-2 deep-orange lighten-5'}"
             virtual-keyboard-theme="apple"
             on:input="{onChangeMathField}"
+            on:change="{commit}"
             bind:this="{mf}"
           >
           </math-field>
@@ -297,15 +309,6 @@
       </div>
     {/if}
   </div>
-
-  {#if !generated.choices && isTouchScreendevice()}
-    <!-- </div> -->
-    <div
-      style="display:inline-block;margin-top:40px;margin-bottom:20px;right:20px;position:absolute"
-    >
-      <Button on:click="{change}">Valider</Button>
-    </div>
-  {/if}
 {:else}
   Pas de questions
 {/if}

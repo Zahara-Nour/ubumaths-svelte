@@ -127,10 +127,15 @@ export default {
           },
           {
             class: 'latex',
-            latex:'\\,'
+            label: '<b>\u2423</b>',
+            insert: '\\,',
+            // latex:'\\,'
           },
+         
           {
-            class: 'separator w6',
+            class: 'action font-glyph bottom right',
+            command: ['performWithFeedback', 'deleteBackward'],
+            label: '<b>&#x232b;</b>',
           },
           {
             class: 'separator w6',
@@ -179,9 +184,9 @@ export default {
             label:"<svg><use xlink:href='#svg-arrow-right' /></svg>"
           },
           {
-            class: 'action font-glyph bottom right',
-            command: ['performWithFeedback', 'deleteBackward'],
-            label: '&#x232b;',
+            class: 'action',
+            label: '<b>\u23ce</b>',
+            command: ["performWithFeedback", "commit"]
           },
         ],
       ],
