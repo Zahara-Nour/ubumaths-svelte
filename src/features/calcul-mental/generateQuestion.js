@@ -223,13 +223,14 @@ export default function generateQuestion(question, generateds) {
           const failure = math(found[3]).eval().value.toNumber()
           solution = test.isTrue() ? success : failure
         }
-        return solution
-      }
-    })
-    if (question.type === 'choice') {
 
-      solutions = solutions.map(solution => choices[solution])
-    }
+      }
+      if (question.type === 'choice' && typeof solution === 'number') {
+        solution = choices[solution]
+      }
+      return solution
+    })
+
   }
   // Il faut évaluer l'expression
   else {
