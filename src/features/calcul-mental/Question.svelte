@@ -9,16 +9,16 @@
   const regex = /\$\$(.*?)\$\$/g
   const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
 
+  $: showExp =
+    (question.expression_latex &&
+      !(question.options && question.options.includes('no-exp'))) ||
+    question.expression2
+
   $: enounce = question.enounce
     ? question.enounce.replace(regex, replacement)
     : null
 
-  $: if (
-    mf &&
-    ((question.expression_latex &&
-      !(question.options && question.options.includes('no-exp'))) ||
-      question.expression2)
-  ) {
+  $: if (mf && showExp) {
     const exp = question.expression2
       ? math(question.expression2).latex
       : question.expression_latex
@@ -38,7 +38,7 @@
     </div>
   {/if}
   <!-- {#if question.expression2 || !(question.options && question.options.includes('no-exp'))} -->
-  {#if question.expression || question.expression2}
+  {#if showExp}
     <div id="expression" class="mt-12 d-flex align-center justify-center">
       <math-field
         style="font-size:{$fontSize + 10}px;display:inline-block"
