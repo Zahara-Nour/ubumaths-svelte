@@ -28,8 +28,11 @@
   }
 
   $: {
-  
-    if ($user.roles && $user.roles.includes('student') && $user.assessments.length) {
+    if (
+      $user.roles &&
+      $user.roles.includes('student') &&
+      $user.assessments.length
+    ) {
       console.log('user', $user)
       activateAssessmentsNotification()
     }
@@ -49,32 +52,32 @@
     <!-- <button on:click="{toggleTheme}">Toggle Theme</button> -->
 
     <NavBar />
-    <div class="main" style="font-size:{$fontSize}">
-      <!-- <Route path="about/:id/:id2" let:params> -->
-      <!-- <About {...params} /> -->
-      <!-- </Route> -->
-      <!-- <Route path="flash-cards/edit" let:location>
-     
-      <EditCards location="{location}" />
-    </Route>-->
-      <Route path="flash-cards/play" let:location>
-        <Diaporama location="{location}" />
-      </Route>
-      <Route path="flash-cards" let:location>
-        <FlashCards location="{location}" />
-      </Route>
-      <Route path="calcul-mental" let:location>
-        <Mental location="{location}" />
-      </Route>
-      <Route path="mental-test" let:location>
-        <MentalTest location="{location}" />
-      </Route>
-      <Route path="/">
-        <Home />
-      </Route>
+    <div
+      class="main"
+      style="margin:auto; max-width:1024px;font-size:{$fontSize}"
+    >
+    
+      
+        <Route path="flash-cards/play" let:location>
+          <Diaporama location="{location}" />
+        </Route>
+        <Route path="flash-cards" let:location>
+          <FlashCards location="{location}" />
+        </Route>
+        <Route path="calcul-mental" let:location>
+          <Mental location="{location}" />
+        </Route>
+        <Route path="mental-test" let:location>
+          <MentalTest location="{location}" />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      
+      
     </div>
     <Footer>
-      <div class="d-flex align-center" style="width:100%">
+      <div class="d-flex align-center" >
         <a href="https://www.lyceevoltaire.org/">
           <img
             alt="logo voltaire"
@@ -100,9 +103,10 @@
   Tu as des évaluations à faire !
   <Button
     text
-    on:click={() => {
-      assessmentsNotification = false;
-    }}>
+    on:click="{() => {
+      assessmentsNotification = false
+    }}"
+  >
     Ok
   </Button>
 </Snackbar>

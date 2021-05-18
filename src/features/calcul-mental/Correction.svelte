@@ -145,66 +145,70 @@
   }
 </script>
 
-<div class="mt-3 mb-3 d-flex justify-end">
-  {#if help}
-    <Button
-      class="{displayHelp ? 'orange white-text' : ''} ml-2 mr-2"
-      fab
-      size="x-small"
-      on:click="{toggleDisplayHelp}"
-    >
-      <Icon path="{mdiLifebuoy}" />
+<div>
+  <div class="mt-3 mb-3 d-flex justify-end">
+    {#if help}
+      <Button
+        class="{displayHelp ? 'orange white-text' : ''} ml-2 mr-2"
+        fab
+        size="x-small"
+        on:click="{toggleDisplayHelp}"
+      >
+        <Icon path="{mdiLifebuoy}" />
+      </Button>
+    {/if}
+
+    <Button class="ml-2 mr-2" fab size="x-small" on:click="{toggleDetails}">
+      <Icon path="{mdiScanHelper}" />
     </Button>
+  </div>
+
+  {#if displayHelp}
+    <div class="container">
+      <div id="deck" class="reveal deck">
+        <div id="slides" class="slides" bind:this="{slides}"></div>
+      </div>
+    </div>
   {/if}
-
-  <Button class="ml-2 mr-2" fab size="x-small" on:click="{toggleDetails}">
-    <Icon path="{mdiScanHelper}" />
-  </Button>
-</div>
-
-{#if displayHelp}
-  <div class="container">
-    <div id="deck" class="reveal deck">
-      <div id="slides" class="slides" bind:this="{slides}"></div>
+  <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
+    <div>
+      {#each items as item}
+        <CorrectionItem
+          item="{item}"
+          addPoints="{addPoints}"
+          details="{details}"
+        />
+      {/each}
     </div>
   </div>
-{/if}
-<div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
-  <div>
-    {#each items as item}
-      <CorrectionItem
-        item="{item}"
-        addPoints="{addPoints}"
-        details="{details}"
-      />
-    {/each}
-  </div>
-</div>
 
-<div class="{colorResult + ' d-flex align-center  justify-space-around'}">
-  <div class='d-flex flex-column align-center'>
-    <div class="mt-2 mb-2 white-text" style="font-family:'pacifico';font-size:34px">
-      {messageResult}
+  <div class="{colorResult + ' d-flex align-center  justify-space-around'}">
+    <div class="d-flex flex-column align-center">
+      <div
+        class="mt-2 mb-2 white-text"
+        style="font-family:'pacifico';font-size:34px"
+      >
+        {messageResult}
+      </div>
+      <div style="font-size:22px" class="mt-2 mb-2  white-text">
+        Score : {score}/{total}
+      </div>
     </div>
-    <div style="font-size:22px" class="mt-2 mb-2  white-text">
-      Score : {score}/{total}
-    </div>
-    
+    {#if percent === 1}
+      <img alt="Great!" src="/images/great-150.png" />
+    {:else if percent >= 0.8}
+      <img alt="Good job!" src="/images/good-job-150.png" />
+    {:else if percent >= 0.5}
+      <img alt="Keep on!" src="/images/keep-on-150.png" />
+    {:else}
+      <img alt="Try again!" src="/images/try-again-150.png" />
+    {/if}
   </div>
-  {#if percent === 1}
-    <img alt="Great!" src="/images/great-150.png" />
-  {:else if percent >= 0.8}
-    <img alt="Good job!" src="/images/good-job-150.png" />
-  {:else if percent >= 0.5}
-    <img alt="Keep on!" src="/images/keep-on-150.png" />
-  {:else}
-    <img alt="Try again!" src="/images/try-again-150.png" />
-  {/if}
 </div>
 
 <style>
   /* pacifico-regular - latin */
-  
+
   .container {
     padding-top: 15px;
     padding-bottom: 15px;

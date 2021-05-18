@@ -13,8 +13,15 @@
     ? question.enounce.replace(regex, replacement)
     : null
 
-  $: if (mf && (question.expression_latex || question.expression2)) {
-    const exp = question.expression2 ? math(question.expression2).latex : question.expression_latex
+  $: if (
+    mf &&
+    ((question.expression_latex &&
+      !(question.options && question.options.includes('no-exp'))) ||
+      question.expression2)
+  ) {
+    const exp = question.expression2
+      ? math(question.expression2).latex
+      : question.expression_latex
     mf.setValue(exp)
     // $: console.log('enounce', question.enounce)
   }

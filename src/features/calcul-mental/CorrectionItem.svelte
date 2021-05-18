@@ -35,7 +35,7 @@
   const empty = !item.answer
   const badExpression =
     item.type !== 'choice' && math(answer).type === '!! Error !!'
-  const seemsCorrect = // réponse équivalente à la solution
+  const seemsCorrect = // réponse équivalente à la solution mais la forme n'est peut être pas satisfaisante
     item.type !== 'choice' &&
     !empty &&
     !badExpression &&
@@ -77,11 +77,11 @@
 
   const EMPTY_ANSWER = "Tu n'as rien répondu."
   const ZEROS = 'Ta réponse contient des des zéros inutiles.'
-  const BRACKETS = 'Il y a des des parenthèses inutiles.'
+  const BRACKETS = 'Ton expression contient des parenthèses inutiles.'
   const SPACES = 'Les chiffres sont mal espacés.'
   const SIGNS = 'Tu peux faire des simplifications de signes.'
   const BAD = "Ton expression n'est pas mathématiquement correcte."
-  const FORM = "Ta réponse  n'est pas écrite sous la bonne forme."
+  const FORM = "<span class='orange-text'>Ta réponse</span> n'est pas écrite sous la bonne demandée."
 
   if (empty) {
     coms.push(EMPTY_ANSWER)
@@ -99,6 +99,10 @@
     coms.push(ZEROS)
   }
 
+  if (seemsCorrect && !validateBrackets) {
+    coms.push(BRACKETS)
+  }
+
   if (seemsCorrect && !validateAnswer) {
     coms.push(FORM)
   }
@@ -111,32 +115,26 @@
 
   function checkAnswer() {
     let e = math(answer)
-    let sols = solutions.map(solution => math(solution))
+    console.log('e', e)
+    let sols = solutions.map((solution) => math(solution))
 
-    if (
-      !(
-        options &&
-        options.includes('answer-disallow-removing-null-terms')
-      )
-    ) {
+    if (!(options && options.includes('answer-disallow-removing-null-terms'))) {
       e = e.removeNullTerms()
       sols = sols.map((solution) => solution.removeNullTerms())
     }
 
     if (
-      !(
-        options &&
-        options.includes('answer-disallow-removing-factors-one')
-      )
+      !(options && options.includes('answer-disallow-removing-factors-one'))
     ) {
       e = e.removeFactorsOne()
       sols = sols.map((solution) => solution.removeFactorsOne())
     }
 
-    if (options && options.includes('answer-allow-unecessary-brackets')) {
-      e = e.removeUnecessaryBrackets()
-      sols = sols.map((solution) => solution.removeUnecessaryBrackets())
-    }
+    // if (options && options.includes('answer-allow-unecessary-brackets')) {
+    // le test des parenthèses a été fait avant, on les enlève pour comparer à la solution
+    e = e.removeUnecessaryBrackets()
+    sols = sols.map((solution) => solution.removeUnecessaryBrackets())
+    // }
 
     if (
       !(
@@ -147,11 +145,18 @@
       e = e.sortTermsAndFactors()
       sols = sols.map((solution) => solution.sortTermsAndFactors())
     }
-
+    console.log('e', e)
     return sols.some((sol) => sol.strictlyEquals(e))
   }
 
   function checkBrackets() {
+    if (
+      !empty &&
+      !(options && options.includes('answer-allow-unecessary-brackets'))
+    ) {
+      const e = math(answer)
+      return e.removeUnecessaryBrackets().string === e.string
+    }
     return true
   }
 
@@ -219,6 +224,7 @@
     let lines = []
 
     switch (item.type) {
+      case 'result':
       case 'rewrite': {
         if (details) {
         } else {
@@ -233,7 +239,7 @@
               `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
           } else if (!correct) {
             line +=
-              `&= ${answer_latex}` +
+              `&= \\textcolor{orange}{${answer_latex}}` +
               `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
           } else {
             line += `=\\textcolor{green}{${answer_latex}}$$`
@@ -282,56 +288,68 @@
         if (details) {
         } else {
           line = '$$\\begin{align*}' + qexp_latex
-          solutions_latex.forEach((solution, i) => {
-            if (i !== 0) line += ' \\\\ '
-            line += '& =' + solution
-          })
-          line += '\\end{align*}$$'
-          lines.push(line)
-        }
-        break
-
-      case 'result':
-        if (details) {
-          line = '$$\\begin{align*}' + qexp_latex
-          details_latex.forEach((detail, i) => {
-            if (detail !== solutions_latex[0]) {
-              if (i !== 0) line += ' \\\\ '
-              line += '& =' + detail
-            }
-          })
-          line +=
-            ' \\\\ & =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-            solutions_latex[0] +
-            '}'
-          line += '\\end{align*}$$'
-          lines.push(line)
-        } else {
-          // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
-          line = '$$' + qexp_latex
           if (empty) {
-            line += `=\\textcolor{green}{${solutions_latex[0]}}` + '$$'
-          } else if (badExpression || !correct) {
-            line +=
-              '=\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
-              answer_latex +
-              '}}\\text{  }\\textcolor{green}{' +
-              solutions_latex[0] +
-              '}$$'
+            solutions_latex.forEach((solution, i) => {
+              if (i !== 0) line += '\\\\'
+              line += ' &=\\textcolor{green}{' + solution + '}'
+            })
+            line += '\\end{align*}$$'
+          } else if (!seemsCorrect) {
+            line = '$$\\begin{align*}' + qexp_latex
+            line += `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}`
+            solutions_latex.forEach((solution, i) => {
+              line += '\\\\ &=\\textcolor{green}{' + solution + '}'
+            })
+            line += '\\end{align*}$$'
+          } else if (!correct) {
+            line = '$$\\begin{align*}' + qexp_latex
+            line += `&=\\textcolor{orange}{${answer_latex}}`
+            solutions_latex.forEach((solution, i) => {
+              line += '\\\\ &=\\textcolor{green}{' + solution + '}'
+            })
+            line += '\\end{align*}$$'
           } else {
-            line += '=\\textcolor{green}{' + answer_latex + '}$$'
-
-            // if (!strictlyCorrect) {
-            //   line +=
-            //     '\\color{black}\\text{ mais }\\color{green}' +
-            //     s_exp.latex +
-            //     "\\color{black}\\text{ c'est encore mieux !}"
-            // }
+            line += `=\\textcolor{green}{${answer_latex}}$$`
           }
           lines.push(line)
         }
-
         break
+
+      // case 'result':
+      //   if (details) {
+      //     line = '$$\\begin{align*}' + qexp_latex
+      //     details_latex.forEach((detail, i) => {
+      //       if (detail !== solutions_latex[0]) {
+      //         if (i !== 0) line += ' \\\\ '
+      //         line += '& =' + detail
+      //       }
+      //     })
+      //     line +=
+      //       ' \\\\ & =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
+      //       solutions_latex[0] +
+      //       '}'
+      //     line += '\\end{align*}$$'
+      //     lines.push(line)
+      //   } else {
+      //     // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
+      //     line = '$$' + qexp_latex
+      //     if (empty) {
+      //       line += `=\\textcolor{green}{${solutions_latex[0]}}` + '$$'
+      //     } else if (badExpression || !correct) {
+      //       line +=
+      //         '=\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
+      //         answer_latex +
+      //         '}}\\text{  }\\textcolor{green}{' +
+      //         solutions_latex[0] +
+      //         '}$$'
+      //     } else {
+      //       line += '=\\textcolor{green}{' + answer_latex + '}$$'
+
+      //     }
+      //     lines.push(line)
+      //   }
+
+      // break
 
       case 'trou':
         if (details) {
@@ -360,21 +378,15 @@
             '$$'
 
           lines.push(line)
-          if (badExpression || !correct) {
-            com = '$$\\text{(ta réponse: }'
-            com += qexp_latex.replace(
-              /\\ldots/,
-              `\\textcolor{red}{${answer_latex}}`,
+          if (!empty && !correct) {
+            coms.push(
+              'Ta réponse : $$' +
+                qexp_latex.replace(
+                  /\\ldots/,
+                  `\\textcolor{red}{${answer_latex}}`,
+                ) +
+                '$$',
             )
-            com += '\\text{  )}$$'
-          } else {
-            // line += '\\color{green}' + item.answer_latex
-            // if (!strictlyCorrect) {
-            //   line +=
-            //     '\\color{black}\\text{ mais }\\color{green}' +
-            //     s_exp.latex +
-            //     "\\color{black}\\text{ c'est encore mieux !}"
-            // }
           }
         }
     }
@@ -439,7 +451,7 @@
                 class="ml-2 mr-2 mt-2 mb-2"
                 style="font-size:{$fontSize}px;font-family: 'Handlee', cursive;"
               >
-                {com}
+                {@html com}
               </div>
             {/each}
           {/if}

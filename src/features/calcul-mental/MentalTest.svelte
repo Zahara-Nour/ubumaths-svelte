@@ -9,7 +9,7 @@
   import queryString from 'query-string'
   import virtualKeyboard from './virtualKeyboard'
   import { calculMentalAssessment } from './stores'
-  import { shuffle } from '../../app/utils'
+  import { isTouchScreendevice, shuffle } from '../../app/utils'
   import { fontSize, user } from '../../app/stores'
   import { getDocument } from '../../app/db'
   import { tick } from 'svelte'
@@ -298,7 +298,7 @@
     {/if}
   </div>
 
-  {#if !generated.choices}
+  {#if !generated.choices && isTouchScreendevice()}
     <!-- </div> -->
     <div
       style="display:inline-block;margin-top:40px;margin-bottom:20px;right:20px;position:absolute"
