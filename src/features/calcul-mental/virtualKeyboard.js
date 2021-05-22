@@ -29,7 +29,7 @@ export default {
           },
           {
             class: 'keycap',
-            latex: '\\div',
+            latex: '\\div ',
           },
           {
             class: 'separator w5',
@@ -77,7 +77,7 @@ export default {
           },
           {
             class: 'keycap',
-            latex: '\\times',
+            latex: '\\times ',
           },
           {
             class: 'separator w5',

@@ -65,8 +65,8 @@
       virtualKeyboardMode: 'auto',
       ...virtualKeyboard,
       onKeystroke,
-      'keypress-sound': 'none',
-      'keypress-vibration': false,
+      // 'keypress-sound': 'none',
+      // 'keypress-vibration': false,
     })
     if (!mf.hasFocus) mf.focus()
   }
@@ -94,13 +94,22 @@
     if (theme && domain && subdomain && level) {
       const question = getQuestion(theme, domain, subdomain, level)
       if (question.options && question.options.includes('exhaust')) {
-        for (let i = 0; i < question.expressions.length; i++) {
+        const n = Math.min(question.expressions.length, 10)
+        const indices = []
+        question.expressions.forEach((_,i)=> {
+          indices.push(i)
+        })
+        shuffle(indices)
+
+        for (let i = 0; i < n; i++) {
+          const indice = indices.pop()
           questions[i] = {
             ...question,
-            expressions: [question.expressions[i]],
-            solutions: question.solutions ? [question.solutions[i]] : null,
+            expressions: [question.expressions[indice]],
+            solutions: question.solutions ? [question.solutions[indice]] : null,
           }
         }
+        console.log('exhaust', questions)
       } else {
         for (let i = 0; i < 10; i++) questions.push(question)
       }
@@ -134,8 +143,8 @@
   function recordAnswer() {
     answer_latex = mf
       .getValue()
-      .replace(/\s/g, '')
-      .replace(/(\\,){2,}/g, '\\,') // Mathlive rajoute ' ' après \,
+      .replace(/(\\,){2,}/g, '\\,')
+      .trim()
     answer = mf
       .getValue('ASCIIMath')
       .replace(/xx/g, '*')
@@ -144,6 +153,7 @@
       .replace(/\(([a-z])\)\//g, (_, p1) => p1 + '/')
       .replace(/\/\((\d+(,\d+)*)\)/g, (_, p1) => '/' + p1)
       .replace(/\/\(([a-z])\)/g, (_, p1) => '/' + p1)
+      .trim()
     // console.log(`answer-latex "${answer_latex}"`)
   }
 
@@ -171,10 +181,10 @@
       mf.insert('\\,')
       return false
     } else if (e.key === '*') {
-      mf.insert('\\times')
+      mf.insert('\\times ')
       return false
     } else if (e.key === ':') {
-      mf.insert('\\div')
+      mf.insert('\\div ')
       return false
     } else if (e.key === '<') {
       mf.insert('<')
@@ -213,8 +223,8 @@
     if (timer) clearInterval(timer)
     if (timeout) clearTimeout(timeout)
     if (current >= 0) {
-      answers[current] = answer
-      answers_latex[current] = answer_latex
+      answers[current] = answer.trim()
+      answers_latex[current] = answer_latex.trim()
       answers_choice[current] = answer_choice
     }
     if (current < questions.length - 1) {
