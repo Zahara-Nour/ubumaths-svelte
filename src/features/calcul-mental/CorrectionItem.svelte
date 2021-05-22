@@ -81,7 +81,7 @@
   const SPACES = 'Les chiffres sont mal espacés.'
   const SIGNS = 'Tu peux faire des simplifications de signes.'
   const BAD = "Ton expression n'est pas mathématiquement correcte."
-  const FORM = "<span class='orange-text'>Ta réponse</span> n'est pas écrite sous la bonne demandée."
+  const FORM = "<span class='orange-text'>Ta réponse</span> n'est pas écrite sous la forme demandée."
 
   if (empty) {
     coms.push(EMPTY_ANSWER)
@@ -115,7 +115,7 @@
 
   function checkAnswer() {
     let e = math(answer)
-    console.log('e', e)
+  
     let sols = solutions.map((solution) => math(solution))
 
     if (!(options && options.includes('answer-disallow-removing-null-terms'))) {
@@ -145,7 +145,7 @@
       e = e.sortTermsAndFactors()
       sols = sols.map((solution) => solution.sortTermsAndFactors())
     }
-    console.log('e', e)
+   
     return sols.some((sol) => sol.strictlyEquals(e))
   }
 
@@ -393,7 +393,7 @@
     return lines
   }
 
-  console.log('item', item)
+  // console.log('item', item)
 </script>
 
 <div>

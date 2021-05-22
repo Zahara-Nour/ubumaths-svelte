@@ -1,19 +1,21 @@
 <script>
   import CorrectionItem from './CorrectionItem.svelte'
   import { Button, Icon } from 'svelte-materialify/src'
-  import { mdiLifebuoy, mdiScanHelper } from '@mdi/js'
+  import { mdiCloudDownloadOutline, mdiHome, mdiLifebuoy, mdiReload, mdiScanHelper } from '@mdi/js'
   import Reveal from 'reveal.js'
   import { onMount } from 'svelte'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { user } from '../../app/stores'
   import { calculMentalAssessment } from './stores'
   import { saveDocument } from '../../app/db'
+import { navigate } from 'svelte-routing';
 
   export let questions
   export let answers
   export let answers_latex
   export let answers_choice
-
+  export let restart
+  export let query
   const help = questions[0].help
   let score = 0
   let total = 0
@@ -183,6 +185,24 @@
   </div>
 
   <div class="{colorResult + ' d-flex align-center  justify-space-around'}">
+    <div class="d-flex flex-column align-center">
+      <Button
+        class="ma-2 white"
+        fab
+        size="x-small"
+        on:click="{() => restart = true}"
+      >
+        <Icon path="{mdiReload}" />
+      </Button>
+      <Button
+        class="ma-2 white"
+        fab
+        size="x-small"
+        on:click="{() => navigate('/calcul-mental'+query)}"
+      >
+        <Icon path="{mdiHome}" />
+      </Button>
+    </div>
     <div class="d-flex flex-column align-center">
       <div
         class="mt-2 mb-2 white-text"

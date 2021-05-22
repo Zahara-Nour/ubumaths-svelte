@@ -50,13 +50,16 @@
   const themes = Object.keys(questions)
   let queryParams
   let basket = []
-  let theme = themes[0]
-  let themeIdx = 0
+  let theme
+  let themeIdx
   let domain
-  let domainIdxs = []
+  let domainIdx
+  let domainsdxs = []
   let subdomain
+  let subdomainIdx
   let subdomainsIdxs = []
   let level
+  let levelIdx
   let levelsIdxs = []
   let generated
   let isLoggedIn
@@ -78,38 +81,79 @@
   let selectedStudents = {}
   let teacherAssessmentId
 
+  for (let theme_i = 0; theme_i < themes.length; theme_i++) {
+    Object.keys(questions).forEach((th, th_i) => {
+      domainsdxs[th_i] = 0
+      subdomainsIdxs[th_i] = []
+      levelsIdxs[th_i] = []
+
+      Object.keys(questions[th]).forEach((dom, dom_i) => {
+        subdomainsIdxs[th_i][dom_i] = 0
+        levelsIdxs[th_i][dom_i] = []
+
+        Object.keys(questions[th][dom]).forEach((subdom, subdom_i) => {
+          levelsIdxs[th_i][dom_i][subdom_i] = 0
+        })
+      })
+    })
+  }
+
+  if (location.search) {
+    queryParams = queryString.parse(location.search)
+    theme = queryParams.theme
+    themeIdx = Object.keys(questions).indexOf(theme)
+    domain = queryParams.domain
+    domainIdx = Object.keys(questions[theme]).indexOf(domain)
+    subdomain = queryParams.subdomain
+    subdomainIdx = Object.keys(questions[theme][domain]).indexOf(subdomain)
+    level = queryParams.level
+    levelIdx = level - 1
+  
+  } else {
+    themeIdx = 0
+    theme = themes[0]
+    domainIdx = 0
+    domain = Object.keys(questions[theme])[0]
+    subdomainIdx = 0
+    subdomain = Object.keys(questions[theme][domain])[0]
+    levelIdx = 0
+    level = 1
+  }
+
   const titleRules = [
     (v) =>
       !teacherAssessmentsTitles.includes(v) ||
       "Titre d'évaluation déjà utilisé",
   ]
 
-  for (let i = 0; i < themes.length; i++) {
-    levelsIdxs[i] = 0
-    subdomainsIdxs[i] = 0
-    domainIdxs[i] = [0]
+  function onChangeTheme(e) {
+    themeIdx = e.detail
+    theme = themes[themeIdx]
+    domainIdx = domainsdxs[themeIdx]
+    domain = Object.keys(questions[theme])[domainIdx]
+    subdomainIdx = subdomainsIdxs[themeIdx][domainIdx]
+    subdomain = Object.keys(questions[theme][domain])[subdomainIdx]
+    levelIdx = levelsIdxs[themeIdx][domainIdx][subdomainIdx]
+    level = levelIdx + 1
   }
-
-  domain = Object.keys(questions[theme])[0]
-  subdomain = Object.keys(questions[theme][domain])[0]
-  level = 1
 
   function onChangeDomain(e) {
-    const idx = e.detail.index
-    domainIdxs[themeIdx] = [idx]
-    domain = Object.keys(questions[theme])[idx]
-    const subdomains = Object.keys(questions[theme][domain])
-    subdomain = subdomains[0]
-    subdomainsIdxs[themeIdx] = 0
-    level = 1
-    levelsIdxs[themeIdx] = 0
+    domainIdx = e.detail.index
+    domainsdxs[themeIdx] = domainIdx
+    domain = Object.keys(questions[theme])[domainIdx]
+    subdomainIdx = subdomainsIdxs[themeIdx][domainIdx]
+    subdomain = Object.keys(questions[theme][domain])[subdomainIdx]
+    levelIdx = levelsIdxs[themeIdx][domainIdx][subdomainIdx]
+    level = levelIdx + 1
   }
 
-  function onChangeLevel(d, d_i, t, t_i, l) {
+  function onChangeLevel(t, t_i, l) {
+    subdomainIdx = t_i
     subdomain = t
-    subdomainsIdxs[themeIdx] = t_i
+    subdomainsIdxs[themeIdx][domainIdx] = subdomainIdx
+    levelIdx = l
     level = l + 1
-    levelsIdxs[themeIdx] = l
+    levelsIdxs[themeIdx][domainIdx][subdomainIdx] = l
   }
 
   function launchTest({ type, assessment }) {
@@ -298,24 +342,6 @@
     console.log('assignedStudents', assignedStudents)
   }
 
-  function passAssessment(assessment) {
-    navigate()
-  }
-
-  $: {
-    queryParams = queryString.parse(location.search)
-    if (queryParams.theme) theme = queryParams.theme
-    if (queryParams.domain) domain = queryParams.domain
-    if (queryParams.subdomain) subdomain = queryParams.subdomain
-    if (queryParams.level) level = queryParams.level
-  }
-
-  $: if (themeIdx >= 0) {
-    theme = themes[themeIdx]
-    domain = Object.keys(questions[theme])[domainIdxs[themeIdx]]
-    subdomain = Object.keys(questions[theme][domain])[subdomainsIdxs[themeIdx]]
-    level = levelsIdxs[themeIdx] + 1
-  }
 
   $: isLoggedIn = $user.id != 'guest'
   $: isTeacher = isLoggedIn && $user.roles.includes('teacher')
@@ -563,7 +589,12 @@
 
   <Button on:click="{assign}">Assigner</Button>
 {:else}
-  <Tabs centerActive class="orange-text" bind:value="{themeIdx}">
+  <Tabs
+    centerActive
+    class="orange-text"
+    value="{themeIdx}"
+    on:change="{onChangeTheme}"
+  >
     <div slot="tabs">
       {#each themes as item}
         <Tab><span style="font-size:{$fontSize}px;">{item}</span></Tab>
@@ -572,10 +603,7 @@
 
     {#each themes as them, them_i}
       <TabContent>
-        <ExpansionPanels
-          on:change="{onChangeDomain}"
-          bind:value="{domainIdxs[them_i]}"
-        >
+        <ExpansionPanels on:change="{onChangeDomain}" value="{[domainIdx]}">
           {#each Object.keys(questions[them]) as d, d_i}
             <ExpansionPanel>
               <span
@@ -593,15 +621,13 @@
                       <div>
                         {#each questions[them][d][t] as _, i}
                           <Button
-                            class="{d_i === domainIdxs[them_i][0] &&
-                            subdomainsIdxs[them_i] === t_i &&
-                            levelsIdxs[them_i] === i
+                            class="{subdomainIdx === t_i && levelIdx === i
                               ? 'red white-text'
                               : ''} ma-1"
                             fab
                             size="x-small"
                             depressed
-                            on:click="{() => onChangeLevel(d, d_i, t, t_i, i)}"
+                            on:click="{() => onChangeLevel(t, t_i, i)}"
                             ><span style="font-size:{$fontSize}px;"
                               >{i + 1}</span
                             ></Button

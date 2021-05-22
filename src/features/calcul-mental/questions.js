@@ -87,7 +87,7 @@ export default {
         },
         {
           description: "Décomposition décimale -> nombre entier",
-          description: "Termes mélangés",
+          subdescription: "Termes mélangés",
           enounces: ["Réécris cette expression sous la forme d'un nombre entier."],
           expressions: [
             '(&1*10000) +  (&2*1000) + (&3*100) + (&4*10) + &5',
@@ -1319,7 +1319,7 @@ export default {
         {
           description: 'Décomposer un entier en produit',
           subdescription: 'Produit de deux nombres entiers',
-          enounces: ["Décompose ce nombre enun produit de 2 facteurs."],
+          enounces: ["Décompose ce nombre en un produit de 2 facteurs (1 n'est un facteur autorisé)."],
           expressions: [
             '#{&1*&2}',
             '#{&1*4}',
@@ -1411,13 +1411,13 @@ export default {
           description: 'Effectuer une division euclidienne ',
           subdescription: '',
           enounces:
-            ["Ecrire l'égalité correspondant à la division euclidienne de $$#{&1*&2+&3}$$ par $$&2$$."],
+            ["Ecris l'expression correspondant à la division euclidienne de $$#{&1*&2+&3}$$ par $$&2$$."],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[1;&2-1]' }],
           expressions: ['#{&1*&2+&3}'],
           solutions: [['&1 * &2+&3']],
           options: ['no-exp'],
-          type: 'result',
-          defaultDelay: 20,
+          type: 'decomposition',
+          defaultDelay: 30,
         },
       ],
     },
@@ -1485,12 +1485,16 @@ export default {
             '#{&1*&2+&3}-&1*&2',
             '&1+#{&2*&3}:&3',
             '#{&2+&4}-#{&2*&3}:&3',
+            '&2*&3+&1',
+            '#{&2*&3}:&3+&1',
           ],
           variables: [
             { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]' },
             { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]' },
             { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]' },
             { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]', '&4': '$e[2;9]' },
+            { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]' },
+            { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]' },
           ],
           type: 'result',
           defaultDelay: 20,
@@ -1561,7 +1565,7 @@ export default {
             ['&1+&2'],
             ['&1*&2'],
             ['&1-&2'],
-            ['&1:&2'],
+            ['&1:&2', '&1/&2'],
           ],
           type: 'enonce',
           defaultDelay: 20,
@@ -1980,6 +1984,35 @@ export default {
           'result-type': 'decimal',
           defaultDelay: 20,
         },
+      ],
+      'Produit particulier': [
+        {
+          description: 'Multiplier par 1,5',
+          enounces: ['Calcule.'],
+          variables: [
+            {
+              '&1': '$e[2;20]',
+            },
+          ],
+          expressions: ['&1*1,5', '1,5*&1'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Multiplier par 2,5',
+          enounces: ['Calcule.'],
+          variables: [
+            {
+              '&1': '$e[2;20]',
+            },
+          ],
+          expressions: ['&1*2,5', '2,5*&1'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+        },
+        
       ],
       'Puissances de 10': [
         {
@@ -3103,7 +3136,7 @@ export default {
           subdescription: "La forme décimale n'est pas entière",
           enounces: ['Ecris la forme décimale de la fraction'],
           expressions: ['&2/&1'],
-          variables: [{ '&1': '$l{2;4;5;10}', '&2': '$e[1;&1+1]' }],
+          variables: [{ '&1': '$l{2;4;5;10}', '&2': '$e[1;&1+1]\\{&1}' }],
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
@@ -3911,7 +3944,7 @@ export default {
         {
           description: 'Calculer un produit',
           subdescription: 'avec simplification simple',
-          expressions: ['(&1/&3)*(&2/&1)}'],
+          expressions: ['(&1/&3)*(&2/&1)}', '(&3/&1)*(&1/&2)}'],
           variables: [
             {
               '&1': '$e[2;9]',
@@ -4341,7 +4374,7 @@ export default {
           ],
           // solutions: [['#{&2+&3}&1']],
           type: 'result',
-          solutions: [['#{&1&2}#s{&3&4}&5'], ['#{&1&2}#s{-&3&4}#s{-&5}']],
+          solutions: [['#{&1&2}#s{&3&4}&5'], ['#{&1&2}#s{-(&3&4)}#s{-(&5)}']],
           defaultDelay: 30,
           options: ['implicit'],
         },
@@ -4375,7 +4408,7 @@ export default {
       Développement: [
         {
           description: 'Développer',
-          subscription: 'Coefficients positifs',
+          subdescription: 'Coefficients positifs',
           enounces: ['Développer et réduire :'],
           expressions: [
             '&1(&2+#{&3&4})',
@@ -4397,23 +4430,23 @@ export default {
           ],
           // solutions: [['#{&2+&3}&1']],
           type: 'result',
-          solutions: [
-            ['#{&1*&2}+#{&1*&3&4}'],
-            ['#{&1*&3&4}+#{&1*&2}'],
-            ['#{&1*&2}+#{&1*&3&4}'],
-            ['#{&1*&3&4}+#{&1*&2}'],
-            ['#{&4*&2}+#{&4*&3&4}'],
-            ['#{&4*&3&4}+#{&4*&2}'],
-            ['#{&4*&2}+#{&4*&3&4}'],
-            ['#{&4*&3&4}+#{&4*&2}'],
-          ],
+          // solutions: [
+          //   ['#{&1*&2}+#{&1*&3&4}'],
+          //   ['#{&1*&3&4}+#{&1*&2}'],
+          //   ['#{&1*&2}+#{&1*&3&4}'],
+          //   ['#{&1*&3&4}+#{&1*&2}'],
+          //   ['#{&4*&2}+#{&4*&3&4}'],
+          //   ['#{&4*&3&4}+#{&4*&2}'],
+          //   ['#{&4*&2}+#{&4*&3&4}'],
+          //   ['#{&4*&3&4}+#{&4*&2}'],
+          // ],
 
           defaultDelay: 30,
           options: ['implicit'],
         },
         {
           description: 'Développer',
-          subscription: 'Coefficients relatifs',
+          subdescription: 'Coefficients relatifs',
           enounces: ['Développer et réduire :'],
           expressions: [
             '&1(#{&2}#s{&3&4})',
@@ -4443,31 +4476,31 @@ export default {
           ],
           // solutions: [['#{&2+&3}&1']],
           type: 'result',
-          solutions: [
-            ['#{&1*&2}#s{&1*&3&4}'],
-            ['#{&1*&3&4}#s{&1*&2}'],
-            ['#{-&1*&2}#s{-&1*&3&4}'],
-            ['#{-&1*&3&4}#s{-&1*&2}'],
-            ['#{&1*&2}#s{&1*&3&4}'],
-            ['#{&1*&3&4}#s{&1*&2}'],
-            ['#{-&1*&2}#s{-&1*&3&4}'],
-            ['#{-&1*&3&4}#s{-&1*&2}'],
-            ['#{&4*&2}#s{&4*&3&4}'],
-            ['#{&4*&3&4}#s{&4*&2}'],
-            ['#{&4*&2}#s{&4*&3&4}'],
-            ['#{&4*&3&4}#s{&4*&2}'],
-            ['#{-&4*&2}#s{-&4*&3&4}'],
-            ['#{-&4*&3&4}#s{-&4*&2}'],
-            ['#{-&4*&2}#s{-&4*&3&4}'],
-            ['#{-&4*&3&4}#s{-&4*&2}'],
-          ],
+          // solutions: [
+          //   ['#{&1*(&2)}#s{&1*(&3)&4}'], // (&2) à cause du signe
+          //   ['#{&1*(&3)&4}#s{&1*(&2)}'],
+          //   ['#{-&1*(&2)}#s{-&1*(&3)&4}'],
+          //   ['#{-&1*(&3)&4}#s{-&1*(&2)}'],
+          //   ['#{&1*(&2)}#s{&1*(&3)&4}'],
+          //   ['#{&1*(&3)&4}#s{&1*(&2)}'],
+          //   ['#{-&1*(&2)}#s{-&1*(&3)&4}'],
+          //   ['#{-&1*(&3)&4}#s{-&1*(&2)}'],
+          //   ['#{&4*(&2)}#s{&4*(&3)&4}'],
+          //   ['#{&4*(&3)&4}#s{&4*(&2)}'],
+          //   ['#{&4*(&2)}#s{&4*(&3)&4}'],
+          //   ['#{&4*(&3)&4}#s{&4*(&2)}'],
+          //   ['#{-&4*(&2)}#s{-&4*(&3)&4}'],
+          //   ['#{-&4*(&3)&4}#s{-&4*(&2)}'],
+          //   ['#{-&4*(&2)}#s{-&4*(&3)&4}'],
+          //   ['#{-&4*(&3)&4}#s{-&4*(&2)}'],
+          // ],
 
           defaultDelay: 30,
           options: ['implicit'],
         },
         {
           description: 'Développer un double produit',
-          subscription: 'Coefficients positifs',
+          subdescription: 'Coefficients positifs',
           enounces: ['Développer et réduire :'],
           expressions: [
             '(&1+#{&2&3})(&4+#{&5&3})',
@@ -4492,7 +4525,7 @@ export default {
         },
         {
           description: 'Développer un double produit',
-          subscription: 'Coefficients relatifs',
+          subdescription: 'Coefficients relatifs',
           enounces: ['Développer et réduire :'],
           expressions: [
             '(#{&1}#s{&2&3})(#{&4}#s{&5&3})',
@@ -4512,12 +4545,12 @@ export default {
           // solutions: [['#{&2+&3}&1']],
           type: 'result',
 
-          defaultDelay: 30,
+          defaultDelay: 40,
           options: ['implicit'],
         },
         {
           description: 'Développer $$(a+b)^2$$',
-          subscription: 'Coefficients positifs',
+       
           enounces: ['Développer et réduire :'],
           expressions: ['(&1+#{&2&3})^2', '(#{&2&3}+&1)^2'],
           variables: [
@@ -4535,7 +4568,7 @@ export default {
         },
         {
           description: 'Développer $$(a-b)^2$$',
-          subscription: 'Coefficients positifs',
+          
           enounces: ['Développer et réduire :'],
           expressions: ['(&1-#{&2&3})^2', '(#{&2&3}-&1)^2'],
           variables: [
@@ -4553,7 +4586,7 @@ export default {
         },
         {
           description: 'Développer $$(a+b)(a-b)$$',
-          subscription: 'Coefficients positifs',
+          subdescription: 'Coefficients positifs',
           enounces: ['Développer et réduire :'],
           expressions: [
             '(&1+#{&2&3})(&1-#{&2&3})',

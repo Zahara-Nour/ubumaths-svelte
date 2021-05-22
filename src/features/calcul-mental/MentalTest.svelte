@@ -17,7 +17,6 @@
   import { math } from 'tinycas/build/math/math'
 
   export let location
-  // console.log('location', location)
 
   let question = {}
   let questions
@@ -46,6 +45,7 @@
   let assessmentId
   let choices
   let correct = false
+  let restart = false
 
   const regex = /\$\$(.*?)\$\$/g
   const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
@@ -54,24 +54,22 @@
     elapsed = Date.now() - start
   }
 
-  onMount(() => {
-    if (mf) {
-      mf.setOptions({
-        // virtualKeyboardMode: 'onfocus',
-        virtualKeyboardMode: 'auto',
-        ...virtualKeyboard,
-        onKeystroke,
-        'keypress-sound': 'none',
-        'keypress-vibration': false,
-      })
-      if (!mf.hasFocus) mf.focus()
-    }
-  })
-
   onDestroy(() => {
     if (timer) clearInterval(timer)
     if (timeout) clearTimeout(timeout)
   })
+
+  function initMathField() {
+    mf.setOptions({
+      // virtualKeyboardMode: 'onfocus',
+      virtualKeyboardMode: 'auto',
+      ...virtualKeyboard,
+      onKeystroke,
+      'keypress-sound': 'none',
+      'keypress-vibration': false,
+    })
+    if (!mf.hasFocus) mf.focus()
+  }
 
   function getQuestion(theme, domain, subdomain, level) {
     return qs[theme][domain][subdomain].find(
@@ -80,8 +78,11 @@
     )
   }
 
-  function initTest(location) {
+  function initTest() {
+    restart = false
+    current = -1
     finish = false
+    generateds = []
     queryParams = queryString.parse(location.search)
     subdomain = queryParams.subdomain
     domain = queryParams.domain
@@ -119,6 +120,7 @@
 
       shuffle(questions)
     }
+    change()
     console.log('questions', questions)
   }
 
@@ -134,7 +136,14 @@
       .getValue()
       .replace(/\s/g, '')
       .replace(/(\\,){2,}/g, '\\,') // Mathlive rajoute ' ' après \,
-    answer = mf.getValue('ASCIIMath').replace(/xx/g, '*')
+    answer = mf
+      .getValue('ASCIIMath')
+      .replace(/xx/g, '*')
+      .replace(/÷/g, ':')
+      .replace(/\((\d+(,\d+)*)\)\//g, (_, p1) => p1 + '/')
+      .replace(/\(([a-z])\)\//g, (_, p1) => p1 + '/')
+      .replace(/\/\((\d+(,\d+)*)\)/g, (_, p1) => '/' + p1)
+      .replace(/\/\(([a-z])\)/g, (_, p1) => '/' + p1)
     // console.log(`answer-latex "${answer_latex}"`)
   }
 
@@ -145,8 +154,9 @@
 
   function onKeystroke(mathfield, keystroke, e) {
     const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%'
-
+   
     if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
+ 
       commit()
       return false
     } else if (
@@ -227,15 +237,18 @@
     }
   }
 
-  $: initTest(location)
+  $: initTest()
+
+  $: if (restart) {
+    initTest()
+  }
+
+  $: if (mf) {
+    initMathField()
+  }
 
   $: if (delay >= elapsed) {
     percentage = ((delay - elapsed) * 100) / delay
-  }
-
-  $: if (questions && questions.length) {
-    generateds = []
-    change()
   }
 
   $: if (generated && mf && !mf.hasFocus()) {
@@ -260,6 +273,9 @@
     answers="{answers}"
     answers_latex="{answers_latex}"
     answers_choice="{answers_choice}"
+    query={location.search}
+    bind:restart
+
   />
 {:else if generated}
   <div class="mt-6 mb-6">
