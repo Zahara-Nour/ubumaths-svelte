@@ -223,8 +223,8 @@
     if (timer) clearInterval(timer)
     if (timeout) clearTimeout(timeout)
     if (current >= 0) {
-      answers[current] = answer.trim()
-      answers_latex[current] = answer_latex.trim()
+      answers[current] = answer
+      answers_latex[current] = answer_latex
       answers_choice[current] = answer_choice
     }
     if (current < questions.length - 1) {
