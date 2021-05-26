@@ -29,10 +29,10 @@ import { waiting } from '../features/calcul-mental/stores';
       name: 'Calcul mental',
       url: 'calcul-mental',
     },
-    // {
-    //   name: 'Flash cards',
-    //   url: 'flash-cards',
-    // },
+    {
+      name: 'Flash cards',
+      url: 'flash-cards',
+    },
   ]
 
   const setMiniWindow = () => (miniWindow = window.innerWidth < 720)

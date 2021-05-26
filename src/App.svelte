@@ -56,28 +56,24 @@
       class="main"
       style="margin:auto; max-width:1024px;font-size:{$fontSize}"
     >
-    
-      
-        <Route path="flash-cards/play" let:location>
-          <Diaporama location="{location}" />
-        </Route>
-        <Route path="flash-cards" let:location>
-          <FlashCards location="{location}" />
-        </Route>
-        <Route path="calcul-mental" let:location>
-          <Mental location="{location}" />
-        </Route>
-        <Route path="mental-test" let:location>
-          <MentalTest location="{location}" />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      
-      
+      <Route path="flash-cards/play" let:location>
+        <Diaporama location="{location}" />
+      </Route>
+      <Route path="flash-cards" let:location>
+        <FlashCards location="{location}" />
+      </Route>
+      <Route path="calcul-mental" let:location>
+        <Mental location="{location}" />
+      </Route>
+      <Route path="mental-test" let:location>
+        <MentalTest location="{location}" />
+      </Route>
+      <Route path="/">
+        <Home />
+      </Route>
     </div>
     <Footer>
-      <div class="d-flex align-center" >
+      <div class="d-flex align-center">
         <a href="https://www.lyceevoltaire.org/">
           <img
             alt="logo voltaire"
@@ -85,7 +81,7 @@
             height="60px"
           />
         </a>
-        <div class="flex-grow-1"></div>
+        <div class="flex-grow-1"/>
         <div class="text-body-2">D. Le Jolly</div>
       </div>
     </Footer>

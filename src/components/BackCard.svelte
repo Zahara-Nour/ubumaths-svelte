@@ -12,11 +12,9 @@ import { mdiOrbitVariant } from '@mdi/js';
           : Promise.resolve('none')
   export let toggleFlip = () => {}
  
+  const regex = /\$\$(.*?)\$\$/g
+  const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
 
-
-  onMount(() => {
-    Mathlive.renderMathInElement('back' + card.id)
-  })
 
   if (card.imageAnswer && !localUrlP) {
     localUrp = getLocalUrl(card.imageAnswer)
@@ -24,9 +22,10 @@ import { mdiOrbitVariant } from '@mdi/js';
 </script>
 
 <div class="card" id="{'back' + card.id}">
-  <div class="title-answer">Réponse</div>
+  <div class="title-answer green-text">Réponse</div>
+  <div class="flex-grow-1"/>
   <div class="answer textmath">
-    {@html card.answer}
+    {@html card.answer.replace(regex, replacement)}
   </div>
   {#if localUrlP}
     {#await localUrlP}
@@ -39,18 +38,19 @@ import { mdiOrbitVariant } from '@mdi/js';
       <p style="color: red">{error.message}</p>
     {/await}
   {/if}
+  <div class="flex-grow-1"/>
   {#if card.explanation}
-    <div class="textmath">
-      {@html card.explanation}
+    <div>
+      {@html card.explanation.replace(regex, replacement)}
     </div>
   {/if}
   {#if card.warning}
-    <div class="textmath">
-      {@html card.warning}
+    <div >
+      {@html card.warning.replace(regex, replacement)}
     </div>
   {/if}
   <div class="buttons">
-    <Button fab  class="blue white-text"
+    <Button fab  class="green white-text"
         on:click="{toggleFlip}"
       >
       <Icon path="{mdiOrbitVariant}" />
@@ -77,7 +77,7 @@ import { mdiOrbitVariant } from '@mdi/js';
   .title-answer {
     // color: $mdc-theme-secondary;
     font-size: 1.2em;
-    margin-bottom: 2em;
+   
   }
   .answer {
     font-size: 1.3em;
@@ -96,9 +96,5 @@ import { mdiOrbitVariant } from '@mdi/js';
   }
 
 
-  .textmath {
-    display: inline-block;
-    margin-top: 15px;
-    margin-bottom: 15px;
-  }
+  
 </style>

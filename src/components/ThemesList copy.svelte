@@ -1,8 +1,8 @@
 <script>
-  import { getCollection } from '../app/collections'
+  import { getCollection } from '../../../app/collections'
   import Spinner from './Spinner.svelte'
   import ThemeItem from './ThemeItem.svelte'
-  import { lexicoSort, isEmpty } from '../app/utils'
+  import { lexicoSort, isEmpty } from '../../../app/utils'
   import { navigate } from 'svelte-routing'
   import { Button, Icon
   } from 'svelte-materialify/src'

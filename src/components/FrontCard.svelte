@@ -5,16 +5,18 @@
   import Spinner from '../components/Spinner.svelte'
   import { getLocalUrl } from '../app/localUrl'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
-  import { onMount } from 'svelte'
+  import { onMount, afterUpdate } from 'svelte'
   import { mdiOrbitVariant } from '@mdi/js'
 
   export let toggleFlip = () => {}
   export let card
   let localUrlP = card.image ? getLocalUrl(card.image) : Promise.resolve('none')
 
-  onMount(() => {
-    Mathlive.renderMathInElement('front' + card.id)
-  })
+  
+
+  const regex = /\$\$(.*?)\$\$/g
+  const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
+
   
 </script>
 
@@ -24,8 +26,9 @@
     {card.theme}
   </div>
   <div class="content">
-    <div class="textmath">
-      {@html card.enounce}
+    <div class="flex-grow-1"/>
+    <div class="text-center">
+      {@html card.enounce.replace(regex, replacement)}
     </div>
 
     {#await localUrlP}
@@ -37,9 +40,9 @@
     {:catch error}
       <p style="color: red">{error.message}</p>
     {/await}
-
+    <div class="flex-grow-1"/>
     <div class="buttons">
-      <Button fab  class="green white-text"
+      <Button fab  class="blue white-text"
         on:click="{toggleFlip}"
       >
       <Icon path="{mdiOrbitVariant}" />
@@ -71,10 +74,7 @@
     margin-top: 2em;
   }
 
-  .textmath {
-    display: block;
-    margin-bottom: 0.8em;
-  }
+
   .content {
     // flex: 1;
     // max-height:400px;
@@ -87,7 +87,7 @@
     // -ms-flex-direction: column;
     flex-direction: column;
     // -ms-flex-pack: distribute;
-    justify-content: space-around;
+    justify-content: space-between;
     // -webkit-box-align: center;
     // -ms-flex-align: center;
     align-items: center;

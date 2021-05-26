@@ -4706,7 +4706,7 @@ export default {
           options: ['implicit'],
         },
         {
-          description: 'Factoriser a^2-b^2',
+          description: 'Factoriser $$a^2-b^2$$',
           enounces: ['Factoriser :'],
           expressions: ['#{&1^2}-&3^2', '&3^2-#{&1^2}'],
           variables: [

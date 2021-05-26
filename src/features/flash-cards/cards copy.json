@@ -1,0 +1,3350 @@
+{
+  "Nombres et calculs": {
+    "Calcul littéral": [
+      {
+        "enounce": "Réduire $$&1a+&2+&3a+&4$$",
+        "explanation": "$$\\textcolor{orange}{&1a}+\\textcolor{green}{&2}+\\textcolor{orange}{&3a}+\\textcolor{green}{&4}=\\textcolor{orange}{(&1+&3)a}+\\textcolor{green}{&2+&4}=\\textcolor{orange}{#{&1+&3}a}+\\textcolor{green}{#{&2+&4}}$$",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[3;9]",
+          "&2": "$e[3;9]",
+          "&4": "$e[3;9]"
+        },
+        "name": "Réduction - nombres positifs (2)",
+        "grade": "5ème",
+        "level": "5",
+        "answer": "$$#{&1+&3}a+#{&2+&4}$$"
+      },
+      {
+        "enounce": "Simplifier l'expression $$(&3\\times y + &2) \\times &1$$",
+        "name": "Simplification (8)",
+        "variables": {
+          "&3": "$e[2;9]",
+          "&2": "$e[2;20]",
+          "&1": "$e[2;20]"
+        },
+        "answer": " $$&1(&3y + &2)$$",
+        "level": "2",
+        "grade": "5ème"
+      },
+      {
+        "answer": "$$&1a+&2b+&3c$$",
+        "enounce": "Réduire $$&1a+&2b+&3c$$",
+        "grade": "5ème",
+        "level": "5",
+        "name": "Réduction - nombres positifs (4)",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[3;9]",
+          "&2": "$e[3;9]"
+        },
+        "explanation": "On peut pas réduire car on ne peut mettre ensemble des $$a$$, des $$b$$ et des $$c$$."
+      },
+      {
+        "grade": "5ème",
+        "answer": "$$a^2$$",
+        "name": "Simplification (15)",
+        "enounce": "Simplifier l'expression $$a \\times a $$",
+        "level": "2"
+      },
+      {
+        "level": "1",
+        "name": "Calcul sans simplification d'écriture - nombres positifs - bis",
+        "enounce": "Calculer $$&1 \\times a+&2$$ avec $$a=&3$$",
+        "explanation": "$$&1 \\times \\textcolor{orange}{a}+&2 = &1 \\times \\textcolor{orange}{&3}+&2=#{&1*&3}+&2=#{&1*&3+&2}$$ ",
+        "grade": "5ème",
+        "answer": "$$#{&1*&3+&2}$$",
+        "variables": {
+          "&1": "$e[3;9]",
+          "&2": "$e[2;9]",
+          "&3": "$e[2;9]"
+        }
+      },
+      {
+        "name": "Simplification (18)",
+        "answer": "$$#{&1*&2}a^2$$",
+        "grade": "5ème",
+        "enounce": "Simplifier l'expression $$a \\times &1 \\times a \\times &2$$",
+        "level": "2",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        }
+      },
+      {
+        "level": "8",
+        "variables": {
+          "&1": "$e[3;9]",
+          "&3": "$e[3;9]"
+        },
+        "name": "Développement - nombres positifs (6)",
+        "explanation": "$$\\textcolor{orange}{&1}\\times (x-&3)=\\textcolor{orange}{&1}\\times x-\\textcolor{orange}{&1} \\times &3$$",
+        "enounce": "Développer  $$&1\\times (x-&3)$$",
+        "answer": "$$&1\\times x-&1 \\times &3$$",
+        "grade": "5ème"
+      },
+      {
+        "grade": "5ème",
+        "variables": {
+          "&2": "$e[3;9]",
+          "&3": "$e[2;${&1*&2}]",
+          "&1": "$e[3;9]"
+        },
+        "name": "Calcul - nombres positifs (2)",
+        "explanation": "$$&1\\textcolor{orange}{a}-&3 = &1 \\times \\textcolor{orange}{&2}-&3=#{&1*&2}-&3=#{&1*&2-&3}$$ ",
+        "enounce": "Calculer $$&1a-&3$$ avec $$a=&2$$",
+        "answer": "$$#{&1*&2-&3}$$",
+        "level": "3"
+      },
+      {
+        "enounce": "Simplifier l'expression $$x \\times x \\times x$$",
+        "level": "2",
+        "name": "Simplification (16)",
+        "grade": "5ème",
+        "answer": "$$x^3$$"
+      },
+      {
+        "enounce": "Simplifier l'expression $$&1\\times x$$",
+        "grade": "5ème",
+        "variables": {
+          "&1": "$e[2;20]"
+        },
+        "name": "Simplification",
+        "level": "2",
+        "answer": "$$&1x$$"
+      },
+      {
+        "enounce": "Développer  $$&1\\times (a+&3)$$",
+        "name": "Développement - nombres positifs (5)",
+        "level": "8",
+        "grade": "5ème",
+        "explanation": "$$\\textcolor{orange}{&1}\\times (a+&3)=\\textcolor{orange}{&1}\\times a+\\textcolor{orange}{&1} \\times &3$$",
+        "variables": {
+          "&1": "$e[3;9]",
+          "&3": "$e[3;9]"
+        },
+        "answer": "$$&1\\times a+&1 \\times &3$$"
+      },
+      {
+        "level": "2",
+        "grade": "5ème",
+        "enounce": "Simplifier l'expression $$&1\\times (&3\\times y + &2)$$",
+        "answer": " $$&1(&3y + &2)$$",
+        "name": "Simplification (9)",
+        "variables": {
+          "&2": "$e[2;20]",
+          "&1": "$e[2;20]",
+          "&3": "$e[2;9]"
+        }
+      },
+      {
+        "enounce": "Que signifie l'écriture $$&1b$$ ?",
+        "warning": "On enlève le symbole de l'opération seulement si c'est une multiplication.",
+        "grade": "5ème",
+        "level": "2",
+        "answer": "$$&1 \\times b$$",
+        "variables": {
+          "&1": "$e[2;9]"
+        },
+        "name": "Notation",
+        "explanation": "Une absence de d'opération signifie une multiplication.",
+        "domain": "Nombres et calculs"
+      },
+      {
+        "answer": "Si $$a$$ désigne le nombre choisi, le résultat du programme de calcul est $$ (a+&1)\\times &2 - &3 $$.",
+        "grade": "5ème",
+        "enounce": "Traduire ce programme de calcul par une expression littérale :\n<ol>\n<li>Choisir un nombre</li>\n<li>Ajouter $$&1$$</li>\n<li>Multiplier le résultat par $$&2$$ </li>\n<li>Enlever $$&3$$</li>\n</ol>",
+        "name": "Traduire encore par une expression littérale",
+        "level": "7",
+        "variables": {
+          "&1": "$e[20;29]",
+          "&3": "$e[10;19]",
+          "&2": "$e[2;9]"
+        }
+      },
+      {
+        "enounce": "Comment écrire l'entier qui précède l'entier $$n$$?",
+        "grade": "5ème",
+        "name": "Traduire par une expression littérale (5)",
+        "level": "6",
+        "answer": "$$ n-1 $$"
+      },
+      {
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[3;9]",
+          "&2": "$e[3;9]"
+        },
+        "explanation": "$$\\textcolor{orange}{&1}\\times (&2+&3)=\\textcolor{orange}{&1}\\times &2+\\textcolor{orange}{&1} \\times &3$$",
+        "answer": "$$&1\\times &2+&1 \\times &3$$",
+        "level": "8",
+        "enounce": "Développer  $$&1\\times (&2+&3)$$",
+        "name": "Développement - nombres positifs",
+        "grade": "5ème"
+      },
+      {
+        "name": "Calcul sans simplification d'écriture - nombres positifs - bis (5)",
+        "grade": "5ème",
+        "level": "1",
+        "answer": "#{&1*&2}",
+        "enounce": "Calculer $$x\\times y$$ avec $$x=&1$$ et $$y=&2$$",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "explanation": "$$\\textcolor{orange}{x} \\times \\textcolor{green}{y} = \\textcolor{orange}{&1} \\times \\textcolor{green}{&2}=#{&1*&2}$$"
+      },
+      {
+        "grade": "5ème",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[20;29]",
+          "&3": "$e[10;19]"
+        },
+        "enounce": "Traduire ce programme de calcul par une expression littérale :\n<ol>\n<li>Choisir un nombre</li>\n<li>Ajouter $$&1$$</li>\n<li>Multiplier par $$&2$$ </li>\n<li>Enlever $$&3$$</li>\n<li>Enlever le double du nombre choisi au départ</li>\n</ol>",
+        "answer": "Si $$a$$ désigne le nombre choisi, le résultat du programme de calcul est $$ (a+&1)\\times &2 - &3-2a $$.",
+        "level": "7",
+        "name": "Traduire encore par une expression littérale (5)"
+      },
+      {
+        "level": "8",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[3;9]",
+          "&2": "$e[3;9]"
+        },
+        "name": "Développement - nombres positifs (3)",
+        "answer": "$$&2\\times &1+&3 \\times &1$$",
+        "grade": "5ème",
+        "enounce": "Développer  $$ (&2+&3) \\times &1$$",
+        "explanation": "$$ (&2+&3) \\times \\textcolor{orange}{&1}=&2 \\times \\textcolor{orange}{&1} + &3 \\times \\textcolor{orange}{&1} $$"
+      },
+      {
+        "answer": "Non",
+        "enounce": "Est-ce que $$10 \\div d$$  signifie la même chose que $$10d$$ ?",
+        "name": "Notation (4)",
+        "explanation": "$$10d$$ signifie $$10 \\times d$$",
+        "level": "2",
+        "grade": "5ème"
+      },
+      {
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[3;9]"
+        },
+        "explanation": "$$ (y-&3) \\times \\textcolor{orange}{&1}=y \\times \\textcolor{orange}{&1} - &3 \\times \\textcolor{orange}{&1} $$",
+        "level": "8",
+        "enounce": "Développer  $$ (y-&3) \\times &1$$",
+        "answer": "$$y \\times &1-&3 \\times &1$$",
+        "grade": "5ème",
+        "name": "Développement - nombres positifs (8)"
+      },
+      {
+        "level": "9",
+        "grade": "5ème",
+        "name": "Développement et simplification - nombres positifs (2)",
+        "explanation": "$$\\textcolor{orange}{&1}\\times (x-&3)=\\textcolor{orange}{&1}\\times x-\\textcolor{orange}{&1} \\times &3=&1x-#{&1 * &3} $$",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[3;9]"
+        },
+        "answer": "$$ &1x-#{&1 * &3} $$",
+        "enounce": "Développer  $$&1(x-&3)$$"
+      },
+      {
+        "answer": "#{&1*&2-&3*&4}",
+        "level": "1",
+        "enounce": "Calculer $$&1 \\times x-&3\\times y$$ avec $$x=&2$$ et $$y=&4$$",
+        "grade": "5ème",
+        "name": "Calcul sans simplification d'écriture - nombres positifs (4)",
+        "variables": {
+          "&3": "$e[2;&1]",
+          "&2": "$e[2;9]",
+          "&4": "$e[2;&3]",
+          "&1": "$e[3;9]"
+        },
+        "explanation": "$$&1 \\times \\textcolor{orange}{x}-&3 \\times  \\textcolor{green}{y} = &1 \\times \\textcolor{orange}{&2}-&3 \\times \\textcolor{green}{&4}=#{&1*&2}-#{&3*&4}=#{&1*&2-&3*&4}$$ "
+      },
+      {
+        "answer": "$$#{&1-&3}a+#{&2-&4}b$$",
+        "variables": {
+          "&2": "$e[5;9]",
+          "&1": "$e[6;9]",
+          "&4": "$e[2;&2-2]",
+          "&3": "$e[3;&1-2]"
+        },
+        "level": "5",
+        "name": "Réduction - nombres positifs (3)",
+        "enounce": "Réduire $$&1a+ &2b-&3a-&4b$$",
+        "explanation": "$$\\textcolor{orange}{&1a}+\\textcolor{green}{&2b}-\\textcolor{orange}{&3a}-\\textcolor{green}{&4b}=\\textcolor{orange}{(&1-&3)a}+\\textcolor{green}{(&2-&4)b}=\\textcolor{orange}{#{&1-&3}a}+\\textcolor{green}{#{&2-&4}b}$$",
+        "grade": "5ème"
+      },
+      {
+        "enounce": "Développer  $$&1 (a+&3)$$",
+        "answer": "$$&1a+#{&1* &3}$$",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[3;9]"
+        },
+        "name": "Développement et simplification - nombres positifs",
+        "level": "9",
+        "explanation": "$$\\textcolor{orange}{&1}\\times (a+&3)=\\textcolor{orange}{&1}\\times a+\\textcolor{orange}{&1} \\times &3=&1a+#{&1* &3}$$",
+        "grade": "5ème"
+      },
+      {
+        "answer": "$$&1y - #{&3 * &1} $$",
+        "level": "9",
+        "enounce": "Développer  $$ (y-&3) \\times &1$$",
+        "explanation": "$$ (y-&3) \\times \\textcolor{orange}{&1}=y \\times \\textcolor{orange}{&1} - &3 \\times \\textcolor{orange}{&1} = &1y - #{&3 * &1} $$",
+        "name": "Développement et simplification - nombres positifs (4)",
+        "grade": "5ème",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[3;9]"
+        }
+      },
+      {
+        "image": "",
+        "answer": "$$&1a^2$$",
+        "variables": {
+          "&1": "$e[2;9]"
+        },
+        "level": "2",
+        "name": "Simplification (17)",
+        "grade": "5ème",
+        "enounce": "Simplifier l'expression $$a \\times &1 \\times a $$"
+      },
+      {
+        "answer": "$$#{&1*&2}b$$",
+        "enounce": "Simplifier l'expression $$&1 \\times b  \\times &2 $$",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "level": "2",
+        "grade": "5ème",
+        "name": "Simplification (14)"
+      },
+      {
+        "answer": "$$#{&1+&3}a+#{&2+&4}b$$",
+        "name": "Réduction - nombres positifs",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&2": "$e[3;9]",
+          "&4": "$e[3;9]",
+          "&1": "$e[3;9]"
+        },
+        "explanation": "$$\\textcolor{orange}{&1a}+\\textcolor{green}{&2b}+\\textcolor{orange}{&3a}+\\textcolor{green}{&4b}=\\textcolor{orange}{(&1+&3)a}+\\textcolor{green}{(&2+&4)b}=\\textcolor{orange}{#{&1+&3}a}+\\textcolor{green}{#{&2+&4}b}$$",
+        "grade": "5ème",
+        "enounce": "Réduire $$&1a+&2b+&3a+&4b$$",
+        "level": "5"
+      },
+      {
+        "name": "Calcul sans simplification d'écriture - nombres positifs - bis (4)",
+        "level": "1",
+        "enounce": "Calculer $$&1 \\times x-&3\\times y$$ avec $$x=&2$$ et $$y=&4$$",
+        "variables": {
+          "&1": "$e[3;9]",
+          "&4": "$e[2;&3]",
+          "&3": "$e[2;&1]",
+          "&2": "$e[2;9]"
+        },
+        "explanation": "$$&1 \\times \\textcolor{orange}{x}-&3 \\times  \\textcolor{green}{y} = &1 \\times \\textcolor{orange}{&2}-&3 \\times \\textcolor{green}{&4}=#{&1*&2}-#{&3*&4}=#{&1*&2-&3*&4}$$ ",
+        "grade": "5ème",
+        "answer": "#{&1*&2-&3*&4}"
+      },
+      {
+        "answer": " $$&1(x + &2)$$",
+        "enounce": "Simplifier l'expression $$(x + &2) \\times &1$$",
+        "name": "Simplification (4)",
+        "variables": {
+          "&2": "$e[2;20]",
+          "&1": "$e[2;20]"
+        },
+        "level": "2",
+        "grade": "5ème"
+      },
+      {
+        "name": "Notation (2)",
+        "grade": "5ème",
+        "answer": "Non",
+        "enounce": "Est-ce que $$6+a$$  signifie la même chose que $$6a$$?",
+        "explanation": "$$6a$$ signifie $$6 \\times a$$",
+        "level": "2"
+      },
+      {
+        "enounce": "Que signifie la notation $$a^2$$ ?",
+        "level": "2",
+        "name": "Notation (6)",
+        "answer": "$$a \\times a$$",
+        "grade": "5ème"
+      },
+      {
+        "explanation": "Une absence de d'opération signifie une multiplication.",
+        "warning": "On enlève le symbole de l'opération seulement si c'est une multiplication.",
+        "answer": "$$a \\times b$$",
+        "grade": "5ème",
+        "name": "Notation (8)",
+        "enounce": "Que signifie l'écriture $$ab$$ ?",
+        "level": "2"
+      },
+      {
+        "answer": "Non",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "level": "10",
+        "name": "Test d'égalité (2)",
+        "explanation": "Pour $$a=0$$ et $$b=1$$, on obtient &2 pour le membre de gauche, et 0 pour le membre de droite.",
+        "grade": "5ème",
+        "enounce": "L'égalité $$&1a+&2b=#{&1+&2}ab$$ est-elle vraie ?"
+      },
+      {
+        "grade": "5ème",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[3;9]"
+        },
+        "level": "8",
+        "answer": "$$b\\times &1+&3 \\times &1$$",
+        "explanation": "$$ (b+&3) \\times \\textcolor{orange}{&1}=b \\times \\textcolor{orange}{&1} + &3 \\times \\textcolor{orange}{&1} $$",
+        "name": "Développement - nombres positifs (7)",
+        "enounce": "Développer  $$ (b+&3) \\times &1$$"
+      },
+      {
+        "name": "Traduire par une expression littérale (3)",
+        "level": "6",
+        "grade": "5ème",
+        "enounce": "Comment exprimer l'ensemble des nombres pairs par une expression littérale ?",
+        "answer": "Les nombres pairs sont de la forme $$2n$$ où le nombre $$n$$ est un entier."
+      },
+      {
+        "name": "Réduction simple - nombres positifs (8)",
+        "grade": "5ème",
+        "enounce": "Réduire $$&1x+&2$$",
+        "warning": "Surtout ne pas dire que c'est égal à $$#{&1+&2}x$$ !",
+        "answer": "$$&1x+&2$$",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "explanation": "On ne peut pas réduire car on ne peut pas mettre ensemble des $$x$$ avec des nombres sans lettre. Comme le disait ma grand-mère, \"on ne mélange pas les torchons avec les serviettes !\"  ",
+        "level": "4"
+      },
+      {
+        "grade": "5ème",
+        "explanation": "car $$a=1a$$ et $$1+&2=#{1+&2}$$",
+        "name": "Réduction simple - nombres positifs (3)",
+        "enounce": "Réduire $$a+&2a$$",
+        "answer": "$$#{1+&2}a$$",
+        "variables": {
+          "&2": "$e[2;9]"
+        },
+        "level": "4"
+      },
+      {
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "explanation": "$$\\textcolor{orange}{a} \\textcolor{green}{b} = \\textcolor{orange}{a} \\times \\textcolor{green}{b} = \\textcolor{orange}{&1} \\times \\textcolor{green}{&2}=#{&1*&2}$$",
+        "level": "3",
+        "name": "Calcul - nombres positifs (5)",
+        "grade": "5ème",
+        "enounce": "Calculer $$ab$$ avec $$a=&1$$ et $$b=&2$$",
+        "answer": "$$#{&1*&2}$$",
+        "warning": "La réponse n'est pas $$&1&2$$ !"
+      },
+      {
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "explanation": "$$\\textcolor{orange}{a} \\textcolor{green}{b} = \\textcolor{orange}{a} \\times \\textcolor{green}{b} = \\textcolor{orange}{&1} \\times \\textcolor{green}{&2}=#{&1*&2}$$",
+        "level": "3",
+        "name": "Calcul - nombres positifs (5)",
+        "grade": "5ème",
+        "enounce": "Calculer $$ab$$ avec $$a=&1$$ et $$b=&2$$",
+        "answer": "$$#{&1*&2}$$",
+        "warning": "La réponse n'est pas $$&1&2$$ !"
+      },
+      {
+        "level": "6",
+        "variables": {
+          "&1": "$e[3;5]"
+        },
+        "grade": "5ème",
+        "name": "Traduire par une expression littérale",
+        "enounce": "Comment exprimer l'ensemble des multiples de $$&1$$ par une expression littérale ?",
+        "answer": "Les multiples de $$&1$$ sont de la forme $$&1n$$ où le nombre $$n$$ est un entier."
+      },
+      {
+        "name": "Traduire par une expression littérale (7)",
+        "level": "6",
+        "enounce": "Comment écrire la moitié du nombre $$x$$ ?",
+        "grade": "5ème",
+        "answer": "$$ x \\div 2 $$ ou $$ \\frac{x}{2} $$"
+      },
+      {
+        "name": "Simplification (5)",
+        "variables": {
+          "&1": "$e[2;20]"
+        },
+        "grade": "5ème",
+        "level": "2",
+        "answer": "$$x$$",
+        "enounce": "Simplifier l'expression $$1 \\times x$$"
+      },
+      {
+        "answer": "#{&1*&2}",
+        "name": "Calcul sans simplification d'écriture - nombres positifs (5)",
+        "level": "1",
+        "explanation": "$$\\textcolor{orange}{a} \\times \\textcolor{green}{b} = \\textcolor{orange}{&1} \\times \\textcolor{green}{&2}=#{&1*&2}$$",
+        "enounce": "Calculer $$a \\times b$$ avec $$a=&1$$ et $$b=&2$$",
+        "grade": "5ème",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        }
+      },
+      {
+        "answer": " $$&1x + &2y$$",
+        "enounce": "Simplifier l'expression $$x \\times &1 + &2 \\times y$$",
+        "name": "Simplification (7)",
+        "grade": "5ème",
+        "variables": {
+          "&2": "$e[2;20]",
+          "&1": "$e[2;20]"
+        },
+        "level": "2"
+      },
+      {
+        "grade": "5ème",
+        "explanation": "$$\\textcolor{orange}{a}\\times \\textcolor{green}{&1} \\times \\textcolor{orange}{b} \\times \\textcolor{green}{&2} = \\textcolor{green}{&1\\times &2} \\times \\textcolor{orange}{a \\times b}=\\textcolor{green}{#{&1*&2}} \\times \\textcolor{orange}{ab}$$",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "enounce": "Simplifier l'expression $$a\\times &1 \\times b \\times &2 $$",
+        "name": "Simplification (12)",
+        "answer": "$$#{&1*&2}ab$$",
+        "level": "2"
+      },
+      {
+        "explanation": "car $$&1+&2=#{&1+&2}$$",
+        "answer": "$$#{&1+&2}x$$",
+        "name": "Réduction simple - nombres positifs - bis",
+        "enounce": "Réduire $$&1x+&2x$$",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[3;9]"
+        },
+        "grade": "5ème",
+        "level": "4"
+      },
+      {
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "answer": "$$#{&1*&2}y^3$$",
+        "enounce": "Simplifier l'expression $$y \\times &1 \\times y \\times &2 \\times y$$",
+        "grade": "5ème",
+        "level": "2",
+        "name": "Simplification (19)"
+      },
+      {
+        "variables": {
+          "&2": "$e[6;13]",
+          "&1": "$e[3;9]",
+          "&3": "$e[2;${&1*&2}]"
+        },
+        "enounce": "Calculer $$&1a-&3$$ avec $$a=&2$$",
+        "explanation": "$$&1\\textcolor{orange}{a}-&3 = &1 \\times \\textcolor{orange}{&2}-&3=#{&1*&2}-&3=#{&1*&2-&3}$$ ",
+        "grade": "5ème",
+        "answer": "$$#{&1*&2-&3}$$",
+        "name": "Calcul - nombres positifs - bis (2)",
+        "level": "3"
+      },
+      {
+        "variables": {
+          "&3": "$e[6;9]",
+          "&1": "$e[2;5]",
+          "&2": "$e[10;19]"
+        },
+        "level": "7",
+        "name": "Traduire encore par une expression littérale (3)",
+        "enounce": "Traduire ce programme de calcul par une expression littérale :\n<ol>\n<li>Choisir un nombre</li>\n<li>Le multiplier par $$&1$$</li>\n<li>Ajouter $$&2$$ </li>\n<li>Diviser le résultat par $$&3$$</li>\n</ol>",
+        "answer": "Si $$a$$ désigne le nombre choisi, le résultat du programme de calcul est $$ \\frac{&1a+&2}{&3} $$.",
+        "grade": "5ème"
+      },
+      {
+        "variables": {
+          "&2": "$e[2;&1-2]",
+          "&1": "$e[4;9]"
+        },
+        "grade": "5ème",
+        "level": "4",
+        "explanation": "car $$&1-&2=#{&1-&2}$$",
+        "name": "Réduction simple - nombres positifs (2)",
+        "enounce": "Réduire $$&1a-&2a$$",
+        "answer": "$$#{&1-&2}a$$"
+      },
+      {
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "level": "10",
+        "enounce": "L'égalité $$&1(&2+a)=#{&1*&2}+&1a$$ est-elle vraie ?",
+        "explanation": "On passe du membre de gauche au membre de droite par un développement , donc l'égalité est bien vérifiée pour n'importe quelle valeur de $$a$$",
+        "grade": "5ème",
+        "answer": "Oui",
+        "name": "Test d'égalité (4)"
+      },
+      {
+        "explanation": "$$&1\\textcolor{orange}{x}-&3\\textcolor{green}{y} = &1 \\times \\textcolor{orange}{&2}-&3 \\times \\textcolor{green}{&4}=#{&1*&2}-#{&3*&4}=#{&1*&2-&3*&4}$$ ",
+        "grade": "5ème",
+        "enounce": "Calculer $$&1x-&3y$$ avec $$x=&2$$ et $$y=&4$$",
+        "level": "3",
+        "variables": {
+          "&3": "$e[2;&1]",
+          "&2": "$e[2;9]",
+          "&1": "$e[3;9]",
+          "&4": "$e[2;&3]"
+        },
+        "name": "Calcul - nombres positifs - bis (4)",
+        "answer": "$$ #{&1*&2-&3*&4} $$"
+      },
+      {
+        "enounce": "Calculer $$&1 \\times x+&2\\times y$$ avec $$x=&3$$ et $$y=&4$$",
+        "grade": "5ème",
+        "explanation": "$$&1 \\times \\textcolor{orange}{x}+&2 \\times  \\textcolor{green}{y} = &1 \\times \\textcolor{orange}{&3}+&2 \\times \\textcolor{green}{&4}=#{&1*&3}+#{&2*&4}=#{&1*&3+&2*&4}$$ ",
+        "answer": "#{&1*&3+&2*&4}",
+        "name": "Calcul sans simplification d'écriture - nombres positifs (3)",
+        "level": "1",
+        "imageAnswer": "",
+        "variables": {
+          "&4": "$e[2;9]",
+          "&2": "$e[2;9]",
+          "&3": "$e[3;9]",
+          "&1": "$e[3;9]"
+        }
+      },
+      {
+        "answer": "$$ a \\div 3 $$ ou $$ \\frac{a}{3} $$",
+        "level": "6",
+        "name": "Traduire par une expression littérale (9)",
+        "enounce": "Comment écrire le tiers du nombre $$a$$ ?",
+        "grade": "5ème"
+      },
+      {
+        "variables": {
+          "&1": "$e[3;9]",
+          "&3": "$e[2;${&1*&2}]",
+          "&2": "$e[6;13]"
+        },
+        "level": "1",
+        "answer": "$$#{&1*&2-&3}$$",
+        "enounce": "Calculer $$&1 \\times a-&3$$ avec $$a=&2$$",
+        "name": "Calcul sans simplification d'écriture - nombres positifs - bis (2)",
+        "explanation": "$$&1 \\times \\textcolor{orange}{a}-&3 = &1 \\times \\textcolor{orange}{&2}-&3=#{&1*&2}-&3=#{&1*&2-&3}$$ ",
+        "grade": "5ème"
+      },
+      {
+        "enounce": "Développer  $$ (b+&3) \\times &1$$",
+        "grade": "5ème",
+        "answer": "$$ &1b+#{&3 * &1} $$",
+        "level": "9",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[3;9]"
+        },
+        "explanation": "$$ (b+&3) \\times \\textcolor{orange}{&1}=b \\times \\textcolor{orange}{&1} + &3 \\times \\textcolor{orange}{&1} = &1b+#{&3 * &1}  $$",
+        "name": "Développement et simplification - nombres positifs (3)"
+      },
+      {
+        "enounce": "L'égalité $$&1x+&2x=#{&1+&2}x$$ est-elle vraie ?",
+        "grade": "5ème",
+        "explanation": "On passe du membre de gauche au membre de droite par une réduction , donc l'égalité est bien vérifiée pour n'importe quelle valeur de $$x$$.",
+        "name": "Test d'égalité (5)",
+        "answer": "Oui",
+        "level": "10",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        }
+      },
+      {
+        "level": "4",
+        "name": "Réduction simple - nombres positifs - bis (2)",
+        "explanation": "car $$&1-&2=#{&1-&2}$$",
+        "enounce": "Réduire $$&1x-&2x$$ ",
+        "variables": {
+          "&2": "$e[2;&1-2]",
+          "&1": "$e[4;9]"
+        },
+        "grade": "5ème",
+        "answer": "$$#{&1-&2}x$$"
+      },
+      {
+        "answer": "$$#{&2*&3+&1}$$",
+        "enounce": "Calculer $$&1+&2y$$ avec $$y=&3$$",
+        "level": "3",
+        "name": "Calcul - nombres positifs (6)",
+        "explanation": "$$&1+&2\\textcolor{orange}{y}= &1+&2 \\times \\textcolor{orange}{&3}=&1+#{&2*&3}=#{&1+&3*&2}$$ ",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[3;9]",
+          "&3": "$e[2;9]"
+        },
+        "grade": "5ème"
+      },
+      {
+        "grade": "5ème",
+        "explanation": "$$8f$$ signifie $$8 \\times f$$",
+        "level": "2",
+        "answer": "Non",
+        "name": "Notation (5)",
+        "enounce": "Est-ce que $$8-f$$  signifie la même chose que $$8f$$ ?"
+      },
+      {
+        "answer": "$$#{&1*&3+&2*&4}$$",
+        "level": "3",
+        "name": "Calcul - nombres positifs (3)",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&2": "$e[2;9]",
+          "&1": "$e[3;9]",
+          "&4": "$e[2;9]"
+        },
+        "enounce": "Calculer $$&1x+&2y$$ avec $$x=&3$$ et $$y=&4$$",
+        "explanation": "$$&1\\textcolor{orange}{x}+&2\\textcolor{green}{y} = &1 \\times \\textcolor{orange}{&3}+&2 \\times \\textcolor{green}{&4}=#{&1*&3}+#{&2*&4}=#{&1*&3+&2*&4}$$ ",
+        "grade": "5ème"
+      },
+      {
+        "grade": "5ème",
+        "name": "Réduction simple - nombres positifs (5)",
+        "enounce": "Réduire $$&1a-a$$",
+        "variables": {
+          "&1": "$e[4;9]"
+        },
+        "answer": "$$#{&1-1}a$$",
+        "explanation": "car $$a=1a$$ et $$&1-1=#{&1-1}$$",
+        "level": "4"
+      },
+      {
+        "level": "3",
+        "explanation": "$$&1\\textcolor{orange}{x}+&2\\textcolor{green}{y} = &1 \\times \\textcolor{orange}{&3}+&2 \\times \\textcolor{green}{&4}=#{&1*&3}+#{&2*&4}=#{&1*&3+&2*&4}$$ ",
+        "enounce": "Calculer $$&1x+&2y$$ avec $$x=&3$$ et $$y=&4$$",
+        "answer": "#{&1*&3+&2*&4}",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&4": "$e[2;9]",
+          "&1": "$e[3;9]",
+          "&3": "$e[3;9]"
+        },
+        "name": "Calcul - nombres positifs - bis (3)",
+        "grade": "5ème"
+      },
+      {
+        "name": "Simplification (13)",
+        "grade": "5ème",
+        "answer": "$$#{&1*&2}a$$",
+        "level": "2",
+        "enounce": "Simplifier l'expression $$&1 \\times &2  \\times  a$$",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        }
+      },
+      {
+        "grade": "5ème",
+        "variables": {
+          "&1": "$e[3;9]",
+          "&3": "$e[2;&1]",
+          "&4": "$e[2;&3]",
+          "&2": "$e[2;9]"
+        },
+        "level": "3",
+        "explanation": "$$&1\\textcolor{orange}{x}-&3\\textcolor{green}{y} = &1 \\times \\textcolor{orange}{&2}-&3 \\times \\textcolor{green}{&4}=#{&1*&2}-#{&3*&4}=#{&1*&2-&3*&4}$$ ",
+        "answer": "$$#{&1*&2-&3*&4}$$",
+        "enounce": "Calculer $$&1x-&3y$$ avec $$x=&2$$ et $$y=&4$$",
+        "name": "Calcul - nombres positifs (4)"
+      },
+      {
+        "variables": {
+          "&1": "$e[20;29]",
+          "&3": "$e[10;19]",
+          "&2": "$e[2;9]"
+        },
+        "name": "Traduire encore par une expression littérale (4)",
+        "enounce": "Traduire ce programme de calcul par une expression littérale :\n<ol>\n<li>Choisir un nombre</li>\n<li>Ajouter $$&1$$</li>\n<li>Multiplier le résultat par $$&2$$ </li>\n<li>Enlever $$&3$$</li>\n</ol>",
+        "level": "7",
+        "grade": "5ème",
+        "answer": "Si $$a$$ désigne le nombre choisi, le résultat du programme de calcul est $$ (a+&1)\\times &2 - &3 $$."
+      },
+      {
+        "enounce": "Comment écrire l'entier qui suit l'entier $$n$$?",
+        "grade": "5ème",
+        "level": "6",
+        "name": "Traduire par une expression littérale (4)",
+        "answer": "$$ n+1 $$"
+      },
+      {
+        "variables": {
+          "&1": "$e[6;9]"
+        },
+        "enounce": "Comment exprimer l'ensemble des multiples de $$&1$$ par une expression littérale ?",
+        "answer": "Les multiples de $$&1$$ sont de la forme $$&1n$$ où le nombre $$n$$ est un entier.",
+        "name": "Traduire par une expression littérale (2)",
+        "grade": "5ème",
+        "level": "6"
+      },
+      {
+        "enounce": "Réduire $$&1a+&2b+&3c$$",
+        "level": "5",
+        "answer": "$$&1a+&2b+&3c$$",
+        "grade": "5ème",
+        "name": "Réduction - nombres positifs (4) (copie)",
+        "explanation": "On peut pas réduire car on ne peut mettre ensemble des $$a$$, des $$b$$ et des $$c$$.",
+        "variables": {
+          "&2": "$e[3;9]",
+          "&1": "$e[3;9]",
+          "&3": "$e[3;9]"
+        }
+      },
+      {
+        "enounce": "Développer  $$&1\\times (&2-&3)$$",
+        "explanation": "$$\\textcolor{orange}{&1}\\times (&2-&3)=\\textcolor{orange}{&1}\\times &2-\\textcolor{orange}{&1} \\times &3$$",
+        "grade": "5ème",
+        "level": "8",
+        "answer": "$$&1\\times &2-&1 \\times &3$$",
+        "variables": {
+          "&1": "$e[3;9]",
+          "&2": "$e[3;9]",
+          "&3": "$e[3;9]"
+        },
+        "name": "Développement - nombres positifs (2)"
+      },
+      {
+        "grade": "5ème",
+        "enounce": "Simplifier l'expression $$a\\times &1 \\times b$$",
+        "answer": "$$&1ab$$",
+        "name": "Simplification (11)",
+        "level": "2",
+        "variables": {
+          "&1": "$e[2;9]"
+        }
+      },
+      {
+        "explanation": "car $$&1-&1=0$$ et $$0x=x$$",
+        "enounce": "Réduire $$&1x-&1x$$",
+        "level": "4",
+        "grade": "5ème",
+        "answer": "$$0$$",
+        "name": "Réduction simple - nombres positifs (7)",
+        "variables": {
+          "&1": "$e[4;9]"
+        }
+      },
+      {
+        "answer": "Oui",
+        "grade": "5ème",
+        "level": "2",
+        "enounce": "Est-ce que $$3\\times c$$  signifie la même chose que $$3c$$?",
+        "name": "Notation (3)"
+      },
+      {
+        "enounce": "Calculer $$xy$$ avec $$x=&1$$ et $$y=&2$$",
+        "name": "Calcul - nombres positifs - bis (5)",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "explanation": "$$\\textcolor{orange}{x} \\textcolor{green}{y} = \\textcolor{orange}{x} \\times \\textcolor{green}{y} = \\textcolor{orange}{&1} \\times \\textcolor{green}{&2}=#{&1*&2}$$",
+        "level": "3",
+        "answer": "$$#{&1*&2}$$",
+        "grade": "5ème",
+        "warning": "La réponse n'est pas $$&1&2$$ !"
+      },
+      {
+        "answer": "$$#{&1*&3+&2}$$",
+        "enounce": "Calculer $$&1a+&2$$ avec $$a=&3$$",
+        "name": "Calcul - nombres positifs - bis",
+        "explanation": "$$&1\\textcolor{orange}{a}+&2 = &1 \\times \\textcolor{orange}{&3}+&2=#{&1*&3}+&2=#{&1*&3+&2}$$ ",
+        "grade": "5ème",
+        "variables": {
+          "&1": "$e[3;9]",
+          "&2": "$e[2;9]",
+          "&3": "$e[2;9]"
+        },
+        "level": "3"
+      },
+      {
+        "enounce": "Réduire $$x+x$$",
+        "grade": "5ème",
+        "answer": "$$2x$$",
+        "level": "4",
+        "name": "Réduction simple - nombres positifs (4)",
+        "explanation": "car $$x=1x$$ et $$1+1=2$$"
+      },
+      {
+        "explanation": "$$&1 \\times \\textcolor{orange}{x}+&2 \\times  \\textcolor{green}{y} = &1 \\times \\textcolor{orange}{&3}+&2 \\times \\textcolor{green}{&4}=#{&1*&3}+#{&2*&4}=#{&1*&3+&2*&4}$$ ",
+        "level": "1",
+        "grade": "5ème",
+        "name": "Calcul sans simplification d'écriture - nombres positifs - bis (3)",
+        "variables": {
+          "&1": "$e[3;9]",
+          "&3": "$e[3;9]",
+          "&2": "$e[2;9]",
+          "&4": "$e[2;9]"
+        },
+        "enounce": "Calculer $$&1 \\times x+&2\\times y$$ avec $$x=&3$$ et $$y=&4$$",
+        "answer": "#{&1*&3+&2*&4}"
+      },
+      {
+        "enounce": "Comment écrire le triple du nombre $$b$$ ?",
+        "level": "6",
+        "name": "Traduire par une expression littérale (8)",
+        "grade": "5ème",
+        "answer": "$$ 3b $$"
+      },
+      {
+        "warning": "Surtout ne pas dire que c'est égal à $$ #{&1-&2}x $$ !",
+        "level": "4",
+        "variables": {
+          "&2": "$e[2;&1]",
+          "&1": "$e[5;9]"
+        },
+        "explanation": "On ne peut pas réduire car on ne peut pas mettre ensemble des $$x$$ avec des nombres sans lettre. Comme le disait ma grand-mère, \"on ne mélange pas les torchons avec les serviettes !\" ",
+        "answer": "$$ &1x-&2 $$",
+        "grade": "5ème",
+        "enounce": "Réduire $$ &1x-&2 $$",
+        "name": "Réduction simple - nombres positifs - bis (8)"
+      },
+      {
+        "enounce": "Traduire ce programme de calcul par une expression littérale :\n<ol>\n<li>Choisir un nombre</li>\n<li>Enlever $$&1$$</li>\n<li>Diviser le résultat par $$&2$$ </li>\n<li>Ajouter $$&3$$</li>\n</ol>",
+        "grade": "5ème",
+        "name": "Traduire encore par une expression littérale (2)",
+        "answer": "Si $$a$$ désigne le nombre choisi, le résultat du programme de calcul est $$ \\frac{a-&1}{&2} + &3 $$.",
+        "level": "7",
+        "variables": {
+          "&3": "$e[10;19]",
+          "&2": "$e[2;9]",
+          "&1": "$e[20;29]"
+        },
+        "explanation": ""
+      },
+      {
+        "name": "Réduction simple - nombres positifs",
+        "explanation": "car $$&1+&2=#{&1+&2}$$",
+        "enounce": "Réduire $$&1a+&2a$$",
+        "answer": "$$#{&1+&2}a$$",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[3;9]"
+        },
+        "grade": "5ème",
+        "level": "4"
+      },
+      {
+        "answer": "$$&1a$$",
+        "variables": {
+          "&1": "$e[2;20]"
+        },
+        "enounce": "Simplifier l'expression $$a\\times &1$$",
+        "name": "Simplification (2)",
+        "grade": "5ème",
+        "level": "2"
+      },
+      {
+        "enounce": "L'égalité $$&1a+&2b=#{&1+&2}(a+b)$$ est-elle vraie ?",
+        "answer": "Non",
+        "explanation": "Pour $$a=0$$ et $$b=1$$, on obtient &2 pour le membre de gauche, et $$#{&1+&2}$$ pour le membre de droite.",
+        "name": "Test d'égalité (3)",
+        "grade": "5ème",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "level": "10"
+      },
+      {
+        "answer": "Non",
+        "variables": {
+          "&3": "$e[2;9]",
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "level": "10",
+        "enounce": "L'égalité $$&1a+&2=&3a$$ est-elle vraie ?",
+        "name": "Test d'égalité",
+        "explanation": "Pour $$x=0$$, on obtient &2 pour le membre de gauche, et 0 pour le membre de droite.",
+        "grade": "5ème"
+      },
+      {
+        "name": "Réduction simple - nombres positifs (6)",
+        "enounce": "Réduire $$&1a-&2a$$",
+        "grade": "5ème",
+        "answer": "$$a$$",
+        "level": "4",
+        "explanation": "car $$&1-&2=#{&1-&2}$$ et $$1a=a$$",
+        "variables": {
+          "&1": "$e[4;9]",
+          "&2": "${&1-1}"
+        }
+      },
+      {
+        "answer": "$$y \\times y \\times y$$ ",
+        "name": "Notation (7)",
+        "enounce": "Que signifie la notation $$y^3$$ ?",
+        "grade": "5ème",
+        "level": "2"
+      },
+      {
+        "answer": " $$&1(a + &2)$$",
+        "level": "2",
+        "grade": "5ème",
+        "enounce": "Simplifier l'expression $$&1 \\times (a + &2)$$",
+        "name": "Simplification (3)",
+        "variables": {
+          "&2": "$e[2;20]",
+          "&1": "$e[2;20]"
+        }
+      },
+      {
+        "variables": {
+          "&3": "$e[3;9]",
+          "&2": "$e[3;9]",
+          "&1": "$e[3;9]"
+        },
+        "answer": "$$&2\\times &1-&3 \\times &1$$",
+        "enounce": "Développer  $$ (&2-&3) \\times &1$$",
+        "level": "8",
+        "name": "Développement - nombres positifs (4)",
+        "grade": "5ème",
+        "explanation": "$$ (&2-&3) \\times \\textcolor{orange}{&1}=&2 \\times \\textcolor{orange}{&1} - &3 \\times \\textcolor{orange}{&1} $$"
+      },
+      {
+        "level": "2",
+        "grade": "5ème",
+        "enounce": "Simplifier l'expression $$a\\times b$$",
+        "answer": "$$ab$$",
+        "name": "Simplification (10)"
+      },
+      {
+        "enounce": "Calculer $$&1a+&2$$ avec $$a=&3$$",
+        "explanation": "$$&1\\textcolor{orange}{a}+&2 = &1 \\times \\textcolor{orange}{&3}+&2=#{&1*&3}+&2=#{&1*&3+&2}$$ ",
+        "answer": "$$#{&1*&3+&2}$$",
+        "grade": "5ème",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[3;9]",
+          "&3": "$e[2;9]"
+        },
+        "level": "3",
+        "name": "Calcul - nombres positifs"
+      },
+      {
+        "grade": "5ème",
+        "variables": {
+          "&1": "$e[2;20]",
+          "&2": "$e[2;20]"
+        },
+        "enounce": "Simplifier l'expression $$&1 \\times a + &2 \\times b$$",
+        "answer": " $$&1a + &2b$$",
+        "level": "2",
+        "name": "Simplification (6)"
+      },
+      {
+        "answer": "$$ 2a $$",
+        "grade": "5ème",
+        "name": "Traduire par une expression littérale (6)",
+        "enounce": "Comment écrire le double du nombre $$a$$ ?",
+        "level": "6"
+      },
+      {
+        "explanation": "$$&1 \\times \\textcolor{orange}{a}-&3 = &1 \\times \\textcolor{orange}{&2}-&3=#{&1*&2}-&3=#{&1*&2-&3}$$ ",
+        "grade": "5ème",
+        "enounce": "Calculer $$&1 \\times a-&3$$ avec $$a=&2$$",
+        "name": "Calcul sans simplification d'écriture - nombres positifs (2)",
+        "level": "1",
+        "answer": "$$#{&1*&2-&3}$$",
+        "variables": {
+          "&2": "$e[6;13]",
+          "&3": "$e[2;${&1*&2}]",
+          "&1": "$e[3;9]"
+        }
+      },
+      {
+        "level": "10",
+        "answer": "Non",
+        "variables": {
+          "&3": "$e[2;9]",
+          "&2": "$e[2;5]",
+          "&4": "$e[6;9]",
+          "&1": "$e[2;9]"
+        },
+        "enounce": "L'égalité $$&1x+&2=&3x+&4$$ est-elle vraie ?",
+        "name": "Test d'égalité (6)",
+        "explanation": "Pour $$x=0$$, on obtient $$&2$$ pour le membre de gauche, et $$&4$$ pour le membre de droite.",
+        "grade": "5ème"
+      }
+    ]
+  },
+  "Géométrie": {
+    "Thalès": [
+      {
+        "answer": "En faisant le produit en croix $$AD=\\frac{7 \\times 5}{3}$$",
+        "enounce": "On a  obtenu cette égalité grâce à la relation de Thalès : </br>\n$$\\frac{7}{3}=\\frac{AD}{5}$$\n<\\br>\nComment calculer la longueur $$AD$$ ?",
+        "level": "7",
+        "grade": "4ème",
+        "name": "Calcul de la 4ème longueur (3)"
+      },
+      {
+        "explanation": "Le triangle obtenu est déformé par rapport au premier.",
+        "image": "flashcards-img/agrandissement.png",
+        "enounce": "Si j'ajoute le même nombre à toutes les longueurs d'un triangle, est-ce que j'obtiens un triangle qui ressemble au premier ?",
+        "grade": "4ème",
+        "answer": "Non",
+        "level": "2",
+        "name": "Agrandissement d'un triangle (7)"
+      },
+      {
+        "answer": "$$\\frac{2}{7}$$",
+        "explanation": "On fait $$2 \\div 7=\\frac{2}{7}$$",
+        "name": "Division à trou (3)",
+        "enounce": "Quelle est la solution de l'équation $$7x=2$$ ?",
+        "grade": "4ème",
+        "level": "1"
+      },
+      {
+        "answer": "En faisant le produit en croix $$AB=\\frac{3 \\times 8}{4}$$",
+        "enounce": "On a  obtenu cette égalité grâce à la relation de Thalès : </br>\n$$\\frac{AB}{8}=\\frac{3}{4}$$\n<\\br>\nComment calculer la longueur $$AB$$ ?",
+        "grade": "4ème",
+        "name": "Calcul de la 4ème longueur",
+        "level": "7"
+      },
+      {
+        "explanation": "Les 2 triangles ont la même forme car le côté $$[GH]$$ est parallèle au côté $$[IJ]$$.",
+        "enounce": "Le triangle $$FGH$$ est-il un agrandissement du triangle $$FJI$$ (sachant que $$[GH]//[IJ]$$)  ?",
+        "answer": "Oui",
+        "grade": "4ème",
+        "image": "flashcards-img/imbriques 2-800px.png",
+        "level": "5",
+        "name": "Triangles imbriqués (2)"
+      },
+      {
+        "level": "6",
+        "grade": "4ème",
+        "answer": "$$\\frac{FH}{FI}=\\frac{HG}{IJ}=\\frac{FG}{FJ}$$",
+        "enounce": "Sachant que le côté $$[IJ]$$ est parallèle au côté $$[GH]$$, quelle relation de Thalès peut-on écrire dans cette situation ?",
+        "image": "flashcards-img/imbriques 2-800px.png",
+        "name": "Relation de Thalès (2)"
+      },
+      {
+        "enounce": "Peut-on appliquer le théorème de Thalès dans cette configuration ?",
+        "level": "6",
+        "answer": "Non",
+        "explanation": "Le côté $$[ED]$$ n'est pas parallèle au côté $$[CF]$$.",
+        "variables": {
+          "&1": ""
+        },
+        "name": "Cas d'application du théorème de Thalès (2)",
+        "grade": "4ème"
+      },
+      {
+        "explanation": "On fait $$4 \\div 3=\\frac{4}{3}$$",
+        "enounce": "Quelle est la solution de l'équation $$3x=4$$ ?",
+        "level": "1",
+        "answer": "$$\\frac{4}{3}$$",
+        "grade": "4ème",
+        "name": "Division à trou"
+      },
+      {
+        "grade": "4ème",
+        "image": "flashcards-img/imbriques 4-800px.png",
+        "name": "Relation de Thalès (4)",
+        "enounce": "Quelle relation de Thalès peut-on écrire dans cette situation ?",
+        "level": "6",
+        "answer": "Aucune",
+        "explanation": "car le côté $$[ED]$$ n'est <strong>pas</strong> parallèle au côté $$[FC]$$."
+      },
+      {
+        "enounce": "Le triangle $$FKH$$ est-il un agrandissement du triangle $$FJI$$ ?",
+        "name": "Triangles imbriqués (3)",
+        "level": "5",
+        "explanation": "Les 2 triangles n'ont <strong>pas</strong> la même forme car le côté $$[HK]$$ n'est pas parallèle au côté $$[IJ]$$.",
+        "grade": "4ème",
+        "answer": "Non",
+        "image": "flashcards-img/imbriques 3-800px.png"
+      },
+      {
+        "enounce": "Sachant que le côté $$[ED]$$ est parallèle au côté $$[CB]$$, quelle relation de Thalès peut-on écrire dans cette situation ?",
+        "answer": "$$\\frac{AC}{AE}=\\frac{CF}{ED}=\\frac{AF}{AD}$$",
+        "grade": "4ème",
+        "level": "6",
+        "image": "flashcards-img/imbriques 1-800px.png",
+        "name": "Relation de Thalès"
+      },
+      {
+        "explanation": "Le côté $$[HK]$$ n'est pas parallèle au côté $$[IK]$$.",
+        "level": "6",
+        "answer": "Non",
+        "grade": "4ème",
+        "enounce": "Peut-on utiliser le théorème de Thalès dans cette configuration ?",
+        "name": "Cas d'application du théorème de Thalès",
+        "image": "flashcards-img/imbriques 3-800px.png"
+      },
+      {
+        "level": "2",
+        "answer": "J'ai <strong>doublé</strong> la longueur du premier côté donc je dois <strong>doubler</strong> les longueurs des 2 autres côtés.",
+        "name": "Agrandissement d'un triangle (2)",
+        "enounce": "Je veux faire un agrandissement d'un triangle pour que le coté qui mesurait 3 cm mesure  maintenant 6 cm. Quelle opération dois-je faire avec les autres longueurs ?",
+        "grade": "4ème"
+      },
+      {
+        "name": "Triangles imbriqués",
+        "level": "5",
+        "image": "flashcards-img/imbriques 1-800px.png",
+        "grade": "4ème",
+        "enounce": "Le triangle $$ACB$$ est-il un agrandissement du triangle $$AED$$ (sachant que $$[ED]//[BC]$$) ?",
+        "explanation": "Les 2 triangles ont la même forme car le côté $$[CB]$$ est parallèle au côté $$[ED]$$.",
+        "answer": "Oui"
+      },
+      {
+        "level": "2",
+        "enounce": "Je veux faire un agrandissement d'un triangle pour que le coté qui mesurait 6 cm mesure  maintenant 30 cm. Quelle opération dois-je faire avec les autres longueurs ?",
+        "grade": "4ème",
+        "name": "Agrandissement d'un triangle (4)",
+        "answer": "$$6 \\times \\textcolor{orange}{5} = 30$$. J'ai <strong>multiplié par 5</strong> la longueur du premier côté donc je dois <strong>multiplier par 5 </strong> les longueurs des 2 autres côtés."
+      },
+      {
+        "grade": "4ème",
+        "level": "7",
+        "name": "Calcul de la 4ème longueur (4)",
+        "answer": "En faisant le produit en croix $$EF=\\frac{3 \\times 5}{7}$$",
+        "enounce": "On a  obtenu cette égalité grâce à la relation de Thalès : </br>\n$$\\frac{7}{3}=\\frac{5}{EF}$$\n<\\br>\nComment calculer la longueur $$EF$$ ?"
+      },
+      {
+        "explanation": "Les côtés du triangles de droite sont plus grands que ceux du triangle du gauche, mais le triangle de droite <strong>n'a pas la même forme</strong> que le triangle de gauche (les angles ne sont pa le mêmes).",
+        "image": "flashcards-img/agrandissement.png",
+        "level": "2",
+        "answer": "Non",
+        "name": "Agrandissement d'un triangle (6)",
+        "grade": "4ème",
+        "enounce": "Le triangle de droite est-il un agrandissement du triangle de gauche ?"
+      },
+      {
+        "answer": "Oui",
+        "grade": "4ème",
+        "name": "Cas d'application du théorème de Thalès (4)",
+        "enounce": "Peut-on appliquer le théorème de Thalès dans cette configuration (sachant que $$[GH]//[IJ]$$)  ?",
+        "level": "6",
+        "image": "flashcards-img/imbriques 2-800px.png",
+        "explanation": "car le côté $$[GH]$$ est parallèle au côté $$[IJ]$$."
+      },
+      {
+        "grade": "4ème",
+        "enounce": "Quelle est la solution de l'équation $$9x=11$$ ?",
+        "explanation": "On fait $$11 \\div 9=\\frac{11}{9}$$",
+        "answer": "$$\\frac{11}{9}$$",
+        "level": "1",
+        "name": "Division à trou (4)"
+      },
+      {
+        "answer": "Non",
+        "level": "2",
+        "grade": "4ème",
+        "explanation": "Il faut <strong>multiplier</strong> par un même nombre et non pas ajouter le même nombre.",
+        "image": "flashcards-img/agrandissement.png",
+        "enounce": "Pour faire un agrandissement d'un triangle j'ai ajouté 2 cm à tous les côtés. Est-ce que j'obtiens bien un agrandissement du triangle ?",
+        "name": "Agrandissement d'un triangle (5)"
+      },
+      {
+        "grade": "4ème",
+        "imageAnswer": "flashcards-img/agrandissement 3 - correcion-800px.png",
+        "level": "3",
+        "enounce": "Le triangle de droite est un agrandissement du triangle de gauche. Quels sont les longueurs de ses 2 autres côtés ?",
+        "image": "flashcards-img/agrandissement 3-800px.png",
+        "explanation": "$$5\\times \\textcolor{orange}{7}=35$$, donc on multiplie toutes les longueurs par 7.",
+        "name": "Longueurs de l'agrandissement (3)"
+      },
+      {
+        "grade": "4ème",
+        "answer": "J'ai <strong>triplé</strong> la longueur du premier côté donc je dois <strong>triplé</strong> les longueurs des 2 autres côtés.",
+        "enounce": "Je veux faire un agrandissement d'un triangle pour que le coté qui mesurait 4 cm mesure  maintenant 12 cm. Quelle opération dois-je faire avec les autres longueurs ?",
+        "level": "2",
+        "name": "Agrandissement d'un triangle (3)"
+      },
+      {
+        "explanation": "$$5\\times \\textcolor{orange}{3}=15$$, donc on multiplie toutes les longueurs par 3.",
+        "level": "3",
+        "image": "flashcards-img/agrandissement 2-800px.png",
+        "name": "Longueurs de l'agrandissement (2)",
+        "imageAnswer": "flashcards-img/agrandissement 2 - correction-800px.png",
+        "enounce": "Le triangle de droite est un agrandissement du triangle de gauche. Quels sont les longueurs de ses 2 autres côtés ?",
+        "grade": "4ème"
+      },
+      {
+        "grade": "4ème",
+        "answer": "$$\\frac{5}{6}$$",
+        "level": "1",
+        "name": "Division à trou (2)",
+        "explanation": "On fait $$5 \\div 6=\\frac{5}{6}$$",
+        "enounce": "Quelle est la solution de l'équation $$6x=5$$ ?"
+      },
+      {
+        "explanation": "car le côté $$[BC]$$ est parallèle au côté $$[ED]$$.",
+        "answer": "Oui",
+        "image": "flashcards-img/imbriques 1-800px.png",
+        "level": "6",
+        "name": "Cas d'application du théorème de Thalès (3)",
+        "enounce": "Peut-on appliquer le théorème de Pythagore dans cette configuration  (sachant que $$[ED]//[BC]$$) ?",
+        "grade": "4ème"
+      },
+      {
+        "grade": "4ème",
+        "answer": "Les longueurs des côtés du triangle $$A'B'C'$$ sont proportionnelles aux longueurs des côtés du triangle $$ABC$$.",
+        "level": "4",
+        "name": "Proportionnalité entre les côtés",
+        "enounce": "Comment traduire par de la proportionnalité le fait que le triangle $$A'B'C'$$ est un agrandissement du triangle $$ABC$$ ?",
+        "explanation": "Comme on a agrandissement, on a multiplié les les longueurs des côtés du triangle $$ABC$$ par un même nombre, on a donc un tableau de proportionnalité :\n</br>\n<table border=\"1\" cellpadding=\"6\">\n\t<tbody>\n\t\t<tr>\n\t\t\t<td>$$AB$$</td>\n\t\t\t<td>$$BC$$</td>\n\t\t\t<td>$$AC$$</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>$$A'B'$$</td>\n\t\t\t<td>$$B'C'$$</td>\n\t\t\t<td>$$A'C'$$</td>\n\t\t</tr>\n\t</tbody>\n</table>"
+      },
+      {
+        "grade": "4ème",
+        "name": "Agrandissement d'un triangle",
+        "enounce": "Je veux faire un agrandissement d'un triangle. Que dois-je faire sur les longueurs du triangle ?",
+        "answer": "Il faut multiplier les longueurs par un <strong>même</strong> nombre.",
+        "level": "2"
+      },
+      {
+        "name": "Relation de Thalès (3)",
+        "image": "flashcards-img/imbriques 3-800px.png",
+        "enounce": "Quelle relation de Thalès peut-on écrire dans cette situation ?",
+        "explanation": "car le côté $$[IJ]$$ n'est <strong>pas</strong> parallèle au côté $$[KH]$$.",
+        "grade": "4ème",
+        "level": "6"
+      },
+      {
+        "enounce": "A quoi sert le théorème de Thalès ?",
+        "name": "Intérêt du théorème de Thalès",
+        "image": "flashcards-img/imbriques 1-800px.png",
+        "level": "6",
+        "grade": "4ème",
+        "answer": "A calculer des longueurs dans un triangle  à partir d'autres longueurs connues."
+      },
+      {
+        "enounce": "On a  obtenu cette égalité grâce à la relation de Thalès : </br>\n$$\\frac{8}{BC}=\\frac{3}{4}$$\n<\\br>\nComment calculer la longueur $$BC$$ ?",
+        "grade": "4ème",
+        "level": "7",
+        "answer": "En faisant le produit en croix $$AB=\\frac{4 \\times 8}{3}$$",
+        "name": "Calcul de la 4ème longueur (2)"
+      },
+      {
+        "grade": "4ème",
+        "name": "Longueurs de l'agrandissement",
+        "image": "flashcards-img/agrandissement 1-800px.png",
+        "enounce": "Le triangle de droite est un agrandissement du triangle de gauche. Quels sont les longueurs de ses 2 autres côtés ?",
+        "explanation": "$$5\\times \\textcolor{orange}{2}=10$$, donc on multiplie toutes les longueurs par 2.",
+        "level": "3",
+        "imageAnswer": "flashcards-img/agrandissement 1 - correction-800px.png"
+      },
+      {
+        "grade": "4ème",
+        "enounce": "Si je multiplie toutes les longueurs d'un triangle par le même nombre, est-ce que j'obtiens un triangle qui ressemble au premier ?",
+        "answer": "Oui",
+        "level": "2",
+        "name": "Agrandissement d'un triangle (8)",
+        "explanation": "Le triangle obtenu est plus grand mais  il a la même forme que le premier triangle. C'est un <strong>agrandissement</strong>."
+      },
+      {
+        "enounce": "Comment traduire par des égalités le fait que le triangle $$A'B'C'$$ est un agrandissement du triangle $$ABC$$ ?",
+        "explanation": "Dire que l'on multiplie les longueurs des côtés du triangle ABC par le même nombre revient à dire que les rapports entre les longueurs des cotés du triangle $$A'B'C'$$ et les longueurs des côtés du triangle $$ABC$$ sont égaux.",
+        "grade": "4ème",
+        "answer": "$$\\frac{A'B'}{AB}=\\frac{B'C'}{BC}=\\frac{A'C'}{AC}$$",
+        "name": "Rapports égaux",
+        "level": "4"
+      },
+      {
+        "level": "5",
+        "image": "flashcards-img/imbriques 4-800px.png",
+        "name": "Triangles imbriqués (4)",
+        "grade": "4ème",
+        "answer": "Non",
+        "explanation": "Les 2 triangles n'ont <strong>pas</strong> la même forme car le côté $$[ED]$$ n'est pas parallèle au côté $$[CF]$$.",
+        "enounce": "Le triangle $$ACF$$ est-il un agrandissement du triangle $$AED$$ ?"
+      }
+    ],
+    "Pythagore": [
+      {
+        "enounce": "Quelle est la particularité de l'hypoténuse ?",
+        "name": "Hypoténuse (2)",
+        "level": "1",
+        "grade": "4ème",
+        "answer": "C'est le côté le plus grand dans un triangle rectangle"
+      },
+      {
+        "answer": "$$ST^2+TU^2=SU^2$$",
+        "image": "flashcards-img/relation-pythagore.png",
+        "name": "Relation de Pythagore (2)",
+        "level": "2",
+        "enounce": "Dans ce triangle, quelle relation de Pythagore peux-tu écrire ?",
+        "grade": "4ème"
+      },
+      {
+        "enounce": "DEF est un  triangle rectangle en F. Quelle relation de Pythagore peux-tu écrire ?",
+        "answer": "$$DF^2+FE^2=DE^2$$",
+        "level": "2",
+        "name": "Relation de Pythagore",
+        "grade": "4ème"
+      },
+      {
+        "name": "Calcul d'une longueur (2)",
+        "answer": "6 cm",
+        "grade": "4ème",
+        "level": "3",
+        "explanation": "$$DF^2=DE^2+EF^2=10^2-8^2=100-6'=36$$ donc $$DF^2=36$$ et $$DF=5 cm$$.",
+        "enounce": "Calcule la longueur DF.",
+        "image": "flashcards-img/calcul-pythagore2.png"
+      },
+      {
+        "name": "Calcul d'une longueur",
+        "image": "flashcards-img/calcul-pythagore1.png",
+        "answer": "5 cm",
+        "enounce": "Calcule la longueur SU.",
+        "explanation": "$$SU^2=ST^2+TU^2=3^2+4^2=9+16=25$$ donc $$SU^2=25$$ et $$SU=5$$ cm.",
+        "level": "3",
+        "grade": "4ème"
+      },
+      {
+        "level": "1",
+        "name": "Besoins du théorème",
+        "enounce": "Qu'a-t-on besoin de connaître dans un triangle rectangle pour pouvoir utiliser le théorème de Pythagore ?",
+        "grade": "4ème",
+        "answer": "Les longueurs de 2 côtés"
+      },
+      {
+        "enounce": "Calcule la longueur BC.",
+        "explanation": "$$BC^2=BA^2-AC^2=10^2-6^2=100-36=64$$ donc $$BC^2=64$$ et $$BC=8$$ cm.",
+        "image": "flashcards-img/calcul-pythagore3.png",
+        "name": "Calcul d'une longueur (3)",
+        "answer": "8 cm",
+        "grade": "4ème",
+        "level": "3"
+      },
+      {
+        "name": "Non applicable",
+        "image": "flashcards-img/pythagore-inapplicable.png",
+        "answer": "Non",
+        "level": "1",
+        "explanation": "Le triangle n'est pas rectangle.",
+        "grade": "4ème",
+        "enounce": "Dans ce triangle,  peut-on utiliser le théorème de Pythagore pour calculer la longueur ST ? "
+      },
+      {
+        "answer": "Dans un triangle rectangle",
+        "enounce": "Dans quel polygone peut-on utiliser le théorème de Pythagore ?",
+        "grade": "4ème",
+        "level": "1",
+        "name": "Cas d'application"
+      },
+      {
+        "level": "1",
+        "name": "Hypothénuse",
+        "grade": "4ème",
+        "enounce": "Dans un triangle rectangle, comment s'appelle le côté opposé à l'angle droit ?",
+        "answer": "L'hypothénuse"
+      },
+      {
+        "name": "Utilité du théorème de Pythagore",
+        "level": "1",
+        "answer": "A calculer la longueur d'un côté d'un triangle rectangle",
+        "grade": "4ème",
+        "enounce": "A quoi sert le théorème de Pythagore ?"
+      }
+    ]
+  },
+  "Suites": {
+    "Suites (généralités)": [
+      {
+        "level": "1",
+        "name": "Deviner le terme général (4)",
+        "grade": "2nde",
+        "answer": "$$u_n = 2n+5$$",
+        "enounce": "Quel semble être le terme général de la suite $$(u_n)$$ dont les premiers termes sont $$5$$ ;$$7$$ ; $$9$$ ; $$11$$ ; $$13$$ \n ;  ... ?"
+      },
+      {
+        "answer": "$$0$$",
+        "enounce": "Quelle est la limite de la suite de terme général $$$u_n = 0,2^n$$ ?",
+        "grade": "2nde",
+        "explanation": "car $$0,2<1$$",
+        "name": "Limite de suites  (7)",
+        "level": "1"
+      },
+      {
+        "grade": "2nde",
+        "enounce": "Soit $$(u_n)$$ la suite de terme général $$u_n=3n+4$$. Calcule $$u_5$$.",
+        "answer": "$$u_5=19$$",
+        "level": "1",
+        "name": "Calculer un terme (3)",
+        "explanation": "$$u_\\textcolor{orange}{5}=3 \\times \\textcolor{orange}{5} + 4=19$$"
+      },
+      {
+        "level": "1",
+        "answer": "$$u_n =2^n$$",
+        "grade": "2nde",
+        "name": "Deviner le terme général (3)",
+        "explanation": "",
+        "enounce": "Quel semble être le terme général de la suite $$(u_n)$$ dont les premiers termes sont $$2$$ ;$$4$$ ; $$8$$ ; $$16$$ ; $$32$$ \n ;  ... ?"
+      },
+      {
+        "explanation": "$$u_\\textcolor{orange}{1}=3 \\times 2^\\textcolor{orange}{1}=3 \\times 2 = 6$$",
+        "answer": "$$u_1=6$$",
+        "level": "1",
+        "enounce": "Soit $$(u_n)$$ la suite de terme général $$u_n=3 \\times 2^n$$. Calcule $$u_1$$.",
+        "name": "Calculer un terme (5)",
+        "grade": "2nde"
+      },
+      
+      {
+        "enounce": "Quelle est la limite de la suite de terme général $$$u_n = 4^n$$ ?",
+        "grade": "2nde",
+        "answer": "$$+\\infty$$",
+        "explanation": "car $$4>1$$",
+        "name": "Limite de suites  (6)",
+        "level": "1"
+      },
+      {
+        "enounce": "Quelle est la limite de la suite de terme général $$$u_n = n^2$$?",
+        "answer": "$$+\\infty$$",
+        "name": "Limite de suites  (3)",
+        "level": "1",
+        "grade": "2nde"
+      },
+      {
+        "grade": "2nde",
+        "name": "Deviner le terme général",
+        "answer": "$$u_n =2n$$",
+        "enounce": "Quel semble être le terme général de la suite $$(u_n)$$ dont les premiers termes sont $$0$$ ;$$2$$ ; $$4$$ ; $$6$$ ; $$8$$ \n ;  ... ?",
+        "level": "1"
+      },
+      {
+        "grade": "2nde",
+        "answer": "$$u_1=7$$",
+        "level": "1",
+        "enounce": "Soit $$(u_n)$$ la suite de terme général $$u_n=3n+4$$. Calcule $$u_1$$.",
+        "explanation": "$$u_\\textcolor{orange}{1}=3 \\times \\textcolor{orange}{1} + 4=7$$",
+        "name": "Calculer un terme (2)"
+      },
+      {
+        "grade": "2nde",
+        "enounce": "Quelle est la limite de la suite de terme général $$$u_n = 3$$?",
+        "level": "1",
+        "name": "Limite de suites ",
+        "answer": "$$3$$"
+      },
+      {
+        "answer": "$$u_0=3$$",
+        "enounce": "Soit $$(u_n)$$ la suite de terme général $$u_n=3 \\times 2^n$$. Calcule $$u_0$$.",
+        "grade": "2nde",
+        "level": "1",
+        "name": "Calculer un terme (4)",
+        "explanation": "$$u_\\textcolor{orange}{0}=3 \\times 2^\\textcolor{orange}{0}=3 \\times 1 = 3$$"
+      },
+      {
+        "grade": "2nde",
+        "name": "Calculer un terme (6)",
+        "enounce": "Soit $$(u_n)$$ la suite de terme général $$u_n=3 \\times 2^n$$. Calcule $$u_3$$.",
+        "level": "1",
+        "explanation": "$$u_\\textcolor{orange}{3}=3 \\times 2^\\textcolor{orange}{3}=3 \\times 8 = 24$$",
+        "answer": "$$u_1=24$$"
+      },
+      {
+        "answer": "$$u_4=1$$",
+        "grade": "2nde",
+        "enounce": "Soit $$(u_n)$$ la suite de terme général $$u_n=(-1)^n$$. Calcule $$u_4$$.",
+        "explanation": "$$u_\\textcolor{orange}{4}=(-1)^\\textcolor{orange}{4}=1$$ car $$4$$ est un nombre pair.",
+        "level": "1",
+        "name": "Calculer un terme (8)"
+      },
+      {
+        "level": "1",
+        "enounce": "Quelle est la limite de la suite de terme général $$$u_n = n$$?",
+        "answer": "$$+\\infty$$",
+        "grade": "2nde",
+        "name": "Limite de suites  (2)"
+      },
+      {
+        "answer": "$$+\\infty$$",
+        "grade": "2nde",
+        "level": "1",
+        "name": "Limite de suites  (4)",
+        "enounce": "Quelle est la limite de la suite de terme général $$$u_n = \\sqrt{n}$$ ?"
+      },
+      {
+        "level": "1",
+        "name": "Calculer un terme (7)",
+        "explanation": "$$u_\\textcolor{orange}{0}=(-1)^\\textcolor{orange}{0}=1$$",
+        "answer": "$$u_0=1$$",
+        "enounce": "Soit $$(u_n)$$ la suite de terme général $$u_n=(-1)^n$$. Calcule $$u_0$$.",
+        "grade": "2nde"
+      },
+      {
+        "grade": "2nde",
+        "answer": "$$u_n = 2n+1$$",
+        "enounce": "Quel semble être le terme général de la suite $$(u_n)$$ dont les premiers termes sont $$1$$ ;$$3$$ ; $$5$$ ; $$7$$ ; $$9$$ \n ;  ... ?",
+        "level": "1",
+        "name": "Deviner le terme général (2)"
+      },
+      {
+        "level": "1",
+        "explanation": "$$u_\\textcolor{orange}{0}=3 \\times \\textcolor{orange}{0} + 4=4$$",
+        "grade": "2nde",
+        "name": "Calculer un terme",
+        "answer": "$$u_0=4$$",
+        "enounce": "Soit $$(u_n)$$ la suite de terme général $$u_n=3n+4$$. Calcule $$u_0$$."
+      },
+      {
+        "answer": "$$u_n = \\frac{1}{2^n}$$",
+        "level": "1",
+        "enounce": "Quel semble être le terme général de la suite $$(u_n)$$ dont les premiers termes sont $$1$$ ;$$\\frac{1}{2}$$ ; $$\\frac{1}{4}$$ ; $$\\frac{1}{8}$$ ; $$\\frac{1}{16}$$ \n ;  ... ?",
+        "name": "Deviner le terme général (6)",
+        "grade": "2nde"
+      },
+      {
+        "grade": "2nde",
+        "answer": "$$u_n = (-1)^n$$",
+        "name": "Deviner le terme général (5)",
+        "level": "1",
+        "enounce": "Quel semble être le terme général de la suite $$(u_n)$$ dont les premiers termes sont $$1$$ ;$$-1$$ ; $$1$$ ; $$-1$$ ; $$1$$ \n ;  ... ?"
+      },
+      {
+        "level": "1",
+        "enounce": "Quelle est la limite de la suite de terme général $$$u_n = \\dfrac{1}{n}$$ ?",
+        "name": "Limite de suites  (5)",
+        "answer": "$$0$$",
+        "grade": "2nde"
+      }
+    ],
+    "Suites géométriques": [
+      {
+        "variables": {
+          "&3": "$e[2;9]",
+          "&2": "$e[2;9]",
+          "&1": "$e[2;8]"
+        },
+        "grade": "2nde",
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$-&2$$ et dont $$u_#{&1+1}$$ vaut $$#{-&3*&2}$$ ?",
+        "name": "Déterminer le terme précédent  (raison négative) (2)",
+        "answer": "$$&3$$",
+        "level": "2"
+      },
+      {
+        "name": "Limite (2)",
+        "explanation": "car $$-&1$$ est négatif et $$&2$$ est plus grand que 1. ",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "level": "6",
+        "answer": "$$-\\infty$$",
+        "enounce": "Quelle est la limite de la suite $$(u_n)$$ de terme général $$u_n=-&1\\times&2^n$$ ?",
+        "grade": "2nde"
+      },
+      {
+        "name": "Déterminer le terme précédent  (4)",
+        "answer": "$$&3$$",
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$&2$$ et dont $$u_#{&1+1}$$ vaut $$#{&3*&2}$$ ?",
+        "grade": "2nde",
+        "variables": {
+          "&3": "$e[2;9]",
+          "&2": "$e[2;9]",
+          "&1": "$e[2;8]"
+        },
+        "level": "2"
+      },
+      {
+        "level": "3",
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$\\frac{1}{&2}$$ et dont $$u_#{&1+1}$$ vaut $$#{&3}$$ ?",
+        "answer": "$$#{&2*&3}$$",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;8]",
+          "&3": "$e[2;9]"
+        },
+        "name": "Déterminer le terme précédent  (fractionnaire) (4)",
+        "grade": "2nde"
+      },
+      {
+        "grade": "2nde",
+        "name": "Déterminer la raison (2)",
+        "level": "4",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&2": "$e[2;9]",
+          "&1": "$e[1;8]"
+        },
+        "answer": "$$&2$$",
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=&3$$ et $$u_#{&1+1}=#{&3*&2}$$ ?  "
+      },
+      {
+        "warning": "Ici, on connaît le terme $$u_1$$ et  non le terme $$u_0$$.",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "grade": "2nde",
+        "name": "Déterminer le terme général (3)",
+        "level": "1",
+        "answer": "$$u_n = &1  \\times  &2^{n-1}$$",
+        "enounce": "Quel est le terme général de la suite géométrique de premier terme $$u_1=&1$$ et de raison $$r=&2$$ ?",
+        "explanation": ""
+      },
+      {
+        "answer": "$$-\\frac{1}{&2}$$",
+        "variables": {
+          "&1": "$e[1;8]",
+          "&2": "$e[2;9]",
+          "&3": "$e[3;9]"
+        },
+        "level": "5",
+        "grade": "2nde",
+        "name": "Déterminer la raison (fractionnaire négative)  (3)",
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=-#{&3*&2}$$ et $$u_#{&1+1}=#{&3}$$ ?  "
+      },
+      {
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=-#{&3*&2}$$ et $$u_#{&1+1}=#{&3}$$ ?  ",
+        "grade": "2nde",
+        "level": "5",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[1;8]",
+          "&3": "$e[3;9]"
+        },
+        "name": "Déterminer la raison (fractionnaire négative)  (4)",
+        "explanation": "",
+        "answer": "$$-\\frac{1}{&2}$$"
+      },
+      {
+        "name": "Déterminer le terme précédent  (fractionnaire négative)",
+        "level": "3",
+        "variables": {
+          "&3": "$e[2;9]",
+          "&1": "$e[2;8]",
+          "&2": "$e[2;9]"
+        },
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$-\\frac{1}{&2}$$ et dont $$u_#{&1+1}$$ vaut $$-#{&3}$$ ?",
+        "answer": "$$#{&2*&3}$$",
+        "grade": "2nde"
+      },
+      {
+        "answer": "$$\\frac{1}{&2}$$",
+        "name": "Déterminer la raison (fractionnaire)",
+        "grade": "2nde",
+        "level": "5",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&3": "$e[3;9]",
+          "&1": "$e[1;8]"
+        },
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=#{&3*&2}$$ et $$u_#{&1+1}=#{&3}$$ ?  "
+      },
+      {
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "answer": "$$u_n = &1 \\times &2^{n-1}$$",
+        "warning": "Ici, on connaît le terme $$u_1$$ et  non le terme $$u_0$$.",
+        "grade": "2nde",
+        "enounce": "Quel est le terme général de la suite géométrique de premier terme $$u_1=&1$$ et de raison $$r=&2$$ ?",
+        "level": "1",
+        "name": "Déterminer le terme général (4)"
+      },
+      {
+        "answer": "$$u_n = &1 \\times (-&2)^n$$",
+        "grade": "2nde",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "enounce": "Quel est le terme général de la suite géométrique de premier terme $$u_0=&1$$ et de raison $$r=-&2$$ ?",
+        "name": "Déterminer le terme général (5)",
+        "level": "1"
+      },
+      {
+        "level": "3",
+        "name": "Déterminer le terme précédent  (fractionnaire) (3)",
+        "variables": {
+          "&3": "$e[2;9]",
+          "&1": "$e[2;8]",
+          "&2": "$e[2;9]"
+        },
+        "grade": "2nde",
+        "answer": "$$#{&2*&3}$$",
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$\\frac{1}{&2}$$ et dont $$u_#{&1+1}$$ vaut $$#{&3}$$ ?"
+      },
+      {
+        "level": "6",
+        "explanation": "car $$&1$$ est positif et $$&2$$ est plus grand que 1. ",
+        "answer": "$$+\\infty$$",
+        "name": "Limite",
+        "enounce": "Quelle est la limite de la suite $$(u_n)$$ de terme général $$u_n=&1\\times&2^n$$ ?",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "grade": "2nde"
+      },
+      {
+        "name": "Déterminer le terme précédent  (fractionnaire négative) (3)",
+        "answer": "$$-#{&2*&3}$$",
+        "variables": {
+          "&3": "$e[2;9]",
+          "&2": "$e[2;9]",
+          "&1": "$e[2;8]"
+        },
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$-\\frac{1}{&2}$$ et dont $$u_#{&1+1}$$ vaut $$#{&3}$$ ?",
+        "grade": "2nde",
+        "level": "3"
+      },
+      {
+        "enounce": "Quel est le terme général de la suite géométrique de premier terme $$u_1=&1$$ et de raison $$r=-&2$$ ?",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "name": "Déterminer le terme général (7)",
+        "level": "1",
+        "grade": "2nde",
+        "answer": "$$u_n = &1 \\times (-&2)^{n-1}$$",
+        "warning": "Ici, on connaît le terme $$u_1$$ et  non le terme $$u_0$$."
+      },
+      {
+        "level": "2",
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$&2$$ et dont $$u_#{&1+1}$$ vaut $$#{&3*&2}$$ ?",
+        "answer": "$$&3$$",
+        "name": "Déterminer le terme précédent ",
+        "grade": "2nde",
+        "variables": {
+          "&3": "$e[2;9]",
+          "&1": "$e[2;8]",
+          "&2": "$e[2;9]"
+        }
+      },
+      {
+        "grade": "2nde",
+        "name": "Déterminer la raison (fractionnaire) (3)",
+        "level": "5",
+        "answer": "$$\\frac{1}{&2}$$",
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=#{&3*&2}$$ et $$u_#{&1+1}=#{&3}$$ ?  ",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[1;8]",
+          "&3": "$e[3;9]"
+        }
+      },
+      {
+        "name": "Déterminer le terme précédent  (fractionnaire) (2)",
+        "level": "3",
+        "theme": "Suites géométriques",
+        "grade": "2nde",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&3": "$e[2;9]",
+          "&1": "$e[2;8]"
+        },
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$\\frac{1}{&2}$$ et dont $$u_#{&1+1}$$ vaut $$#{&3}$$ ?",
+        "answer": "$$#{&2*&3}$$"
+      },
+      {
+        "grade": "2nde",
+        "answer": "$$-\\frac{1}{&2}$$",
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=#{&3*&2}$$ et $$u_#{&1+1}=-#{&3}$$ ?  ",
+        "level": "5",
+        "variables": {
+          "&1": "$e[1;8]",
+          "&2": "$e[2;9]",
+          "&3": "$e[3;9]"
+        },
+        "name": "Déterminer la raison (fractionnaire négative)  (2)"
+      },
+      {
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "name": "Limite (3)",
+        "level": "6",
+        "grade": "2nde",
+        "explanation": "car  $$\\frac{1}{&2}$$ est plus petit que 1. ",
+        "enounce": "Quelle est la limite de la suite $$(u_n)$$ de terme général $$u_n=-&1\\times\\left(\\frac{1}{&2}\\right)^n$$ ?",
+        "answer": "$$0$$"
+      },
+      {
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=-&3$$ et $$u_#{&1+1}=#{&3*&2}$$ ?  ",
+        "answer": "$$-&2$$",
+        "grade": "2nde",
+        "name": "Déterminer la raison (négative) (3)",
+        "level": "4",
+        "variables": {
+          "&1": "$e[1;8]",
+          "&3": "$e[3;9]",
+          "&2": "$e[2;9]"
+        }
+      },
+      {
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "name": "Déterminer le terme général (6)",
+        "level": "1",
+        "grade": "2nde",
+        "answer": "$$u_n = &1 \\times (-&2)^n$$",
+        "enounce": "Quel est le terme général de la suite géométrique de premier terme $$u_0=&1$$ et de raison $$r=-&2$$ ?"
+      },
+      {
+        "level": "5",
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=#{&3*&2}$$ et $$u_#{&1+1}=-#{&3}$$ ?  ",
+        "grade": "2nde",
+        "answer": "$$-\\frac{1}{&2}$$",
+        "name": "Déterminer la raison (fractionnaire négative) ",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[1;8]",
+          "&2": "$e[2;9]"
+        }
+      },
+      {
+        "name": "Déterminer la raison (négative) (4)",
+        "variables": {
+          "&1": "$e[1;8]",
+          "&3": "$e[3;9]",
+          "&2": "$e[2;9]"
+        },
+        "level": "4",
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=-&3$$ et $$u_#{&1+1}=#{&3*&2}$$ ?  ",
+        "answer": "$$-&2$$",
+        "grade": "2nde"
+      },
+      {
+        "answer": "$$u_n = &1 \\times &2^n$$",
+        "name": "Déterminer le terme général",
+        "level": "1",
+        "enounce": "Quel est le terme général de la suite géométrique de premier terme $$u_0=&1$$ et de raison $$r=&2$$ ?",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "grade": "2nde"
+      },
+      {
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;8]",
+          "&3": "$e[2;9]"
+        },
+        "level": "3",
+        "grade": "2nde",
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$-\\frac{1}{&2}$$ et dont $$u_#{&1+1}$$ vaut $$#{&3}$$ ?",
+        "answer": "$$-#{&2*&3}$$",
+        "name": "Déterminer le terme précédent  (fractionnaire négative) (4)"
+      },
+      {
+        "enounce": "Quelle est la limite de la suite $$(u_n)$$ de terme général $$u_n=&1\\times\\left(\\frac{1}{&2}\\right)^n$$ ?",
+        "grade": "2nde",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "answer": "$$0$$",
+        "level": "6",
+        "explanation": "car  $$\\frac{1}{&2}$$ est plus petit que 1. ",
+        "name": "Limite (4)"
+      },
+      {
+        "enounce": "Quel est le terme général de la suite géométrique de premier terme $$u_0=&1$$ et de raison $$r=&2$$ ?",
+        "level": "1",
+        "name": "Déterminer le terme général (2)",
+        "answer": "$$u_n = &1 \\times &2^n$$",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "grade": "2nde"
+      },
+      {
+        "name": "Déterminer le terme précédent  (raison négative) (4)",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&3": "$e[2;9]",
+          "&1": "$e[2;8]"
+        },
+        "level": "2",
+        "grade": "2nde",
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$-&2$$ et dont $$u_#{&1+1}$$ vaut $$#{-&3*&2}$$ ?",
+        "image": "",
+        "answer": "$$&3$$"
+      },
+      {
+        "variables": {
+          "&3": "$e[2;9]",
+          "&1": "$e[2;8]",
+          "&2": "$e[2;9]"
+        },
+        "grade": "2nde",
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$-&2$$ et dont $$u_#{&1+1}$$ vaut $$#{-&3*&2}$$ ?",
+        "answer": "$$&3$$",
+        "level": "2",
+        "name": "Déterminer le terme précédent  (raison négative) (3)"
+      },
+      {
+        "name": "Déterminer la raison (négative)",
+        "level": "4",
+        "grade": "2nde",
+        "imageAnswer": "",
+        "answer": "$$-&2$$",
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=&3$$ et $$u_#{&1+1}=-#{&3*&2}$$ ?  ",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[1;8]",
+          "&3": "$e[3;9]"
+        }
+      },
+      {
+        "level": "2",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;8]",
+          "&3": "$e[2;9]"
+        },
+        "name": "Déterminer le terme précédent  (raison négative)",
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$-&2$$ et dont $$u_#{&1+1}$$ vaut $$#{-&3*&2}$$ ?",
+        "answer": "$$&3$$",
+        "grade": "2nde"
+      },
+      {
+        "answer": "$$&2$$",
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=&3$$ et $$u_#{&1+1}=#{&3*&2}$$ ?  ",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[1;8]",
+          "&2": "$e[2;9]"
+        },
+        "level": "4",
+        "name": "Déterminer la raison",
+        "grade": "2nde"
+      },
+      {
+        "level": "7",
+        "enounce": "Que vaut la somme  $$1+q+q^2+q^3+...+q^n$$, avec $$q \\in \\mathbb{R} \\setminus \\lbrace 1 \\rbrace $$ ?  ",
+        "name": "Somme des termes",
+        "grade": "2nde",
+        "answer": "$$\\frac{1-q^{n+1}}{1-q}$$"
+      },
+      {
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$&2$$ et dont $$u_#{&1+1}$$ vaut $$#{&3*&2}$$ ?",
+        "answer": "$$&3$$",
+        "level": "2",
+        "grade": "2nde",
+        "name": "Déterminer le terme précédent  (3)",
+        "variables": {
+          "&1": "$e[2;8]",
+          "&3": "$e[2;9]",
+          "&2": "$e[2;9]"
+        }
+      },
+      {
+        "name": "Déterminer la raison (3)",
+        "level": "4",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&3": "$e[3;9]",
+          "&1": "$e[1;8]"
+        },
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=&3$$ et $$u_#{&1+1}=#{&3*&2}$$ ?  ",
+        "answer": "$$&2$$",
+        "grade": "2nde"
+      },
+      {
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=&3$$ et $$u_#{&1+1}=-#{&3*&2}$$ ?  ",
+        "grade": "2nde",
+        "answer": "$$-&2$$",
+        "level": "4",
+        "name": "Déterminer la raison (négative) (2)",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[1;8]",
+          "&2": "$e[2;9]"
+        }
+      },
+      {
+        "answer": "$$\\frac{1}{&2}$$",
+        "name": "Déterminer la raison (fractionnaire) (4)",
+        "variables": {
+          "&1": "$e[1;8]",
+          "&3": "$e[3;9]",
+          "&2": "$e[2;9]"
+        },
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=#{&3*&2}$$ et $$u_#{&1+1}=#{&3}$$ ?  ",
+        "grade": "2nde",
+        "level": "5"
+      },
+      {
+        "name": "Déterminer la raison (4)",
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=&3$$ et $$u_#{&1+1}=#{&3*&2}$$ ?  ",
+        "level": "4",
+        "answer": "$$&2$$",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[1;8]",
+          "&2": "$e[2;9]"
+        },
+        "grade": "2nde"
+      },
+      {
+        "enounce": "Quelle est la raison de la suite géométrique $$(u_n)$$ dont on connaît les termes $$u_&1=#{&3*&2}$$ et $$u_#{&1+1}=#{&3}$$ ?  ",
+        "answer": "$$\\frac{1}{&2}$$",
+        "grade": "2nde",
+        "level": "5",
+        "name": "Déterminer la raison (fractionnaire) (2)",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&1": "$e[1;8]",
+          "&2": "$e[2;9]"
+        }
+      },
+      {
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "enounce": "Quel est le terme général de la suite géométrique de premier terme $$u_1=&1$$ et de raison $$r=-&2$$ ?",
+        "grade": "2nde",
+        "name": "Déterminer le terme général (8)",
+        "level": "1",
+        "warning": "Ici, on connaît le terme $$u_1$$ et  non le terme $$u_0$$.",
+        "answer": "$$u_n = &1 \\times (-&2)^{n-1}$$"
+      },
+      {
+        "variables": {
+          "&3": "$e[2;9]",
+          "&2": "$e[2;9]",
+          "&1": "$e[2;8]"
+        },
+        "level": "3",
+        "name": "Déterminer le terme précédent  (fractionnaire)",
+        "grade": "2nde",
+        "answer": "$$#{&2*&3}$$",
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$\\frac{1}{&2}$$ et dont $$u_#{&1+1}$$ vaut $$#{&3}$$ ?"
+      },
+      {
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;8]",
+          "&3": "$e[2;9]"
+        },
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$-\\frac{1}{&2}$$ et dont $$u_#{&1+1}$$ vaut $$-#{&3}$$ ?",
+        "answer": "$$#{&2*&3}$$",
+        "grade": "2nde",
+        "level": "3",
+        "name": "Déterminer le terme précédent  (fractionnaire négative) (2)"
+      },
+      {
+        "name": "Déterminer le terme précédent  (2)",
+        "variables": {
+          "&1": "$e[2;8]",
+          "&2": "$e[2;9]",
+          "&3": "$e[2;9]"
+        },
+        "answer": "$$&3$$",
+        "level": "2",
+        "enounce": "Que vaut le terme $$u_&1$$ pour la suite géométrique $$(u_n)$$ de raison $$&2$$ et dont $$u_#{&1+1}$$ vaut $$#{&3*&2}$$ ?",
+        "grade": "2nde"
+      }
+    ],
+    "Suites arithmétiques": [
+      {
+        "enounce": "Quelle est la limite de la suite $$(u_n)$$ de terme général $$u_n=&1+&2n$$ ?",
+        "name": "Limite (3)",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "answer": "$$+\\infty$$",
+        "level": "1",
+        "grade": "2nde"
+      },
+      {
+        "answer": "$$&4$$",
+        "enounce": "Quelle est la raison de la suite arithmétique $$u_n$$ dont on connaît les termes $$u_&1=&3$$ et $$u_&2=#{&3+(&2-&1)*&4}$$ ?  ",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&4": "$e[2;9]",
+          "&1": "$e[2;8]",
+          "&2": "$e[&1+1;9]"
+        },
+        "grade": "2nde",
+        "level": "1",
+        "name": "Déterminer la raison (4)"
+      },
+      {
+        "grade": "2nde",
+        "name": "Déterminer le terme général (5)",
+        "level": "1",
+        "answer": "$$u_n = &1+&2n$$",
+        "enounce": "Quel est le terme général de la suite arithmétique de premier terme $$u_0=&1$$ et de raison $$r=&2$$ ?",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        }
+      },
+      {
+        "answer": "$$u_n = &1-&2n$$",
+        "enounce": "Quel est le terme général de la suite arithmétique de premier terme $$u_0=&1$$ et de raison $$r=-&2$$ ?",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "name": "Déterminer le terme général (2)",
+        "grade": "2nde",
+        "level": "1"
+      },
+      {
+        "variables": {
+          "&1": "$e[2;8]",
+          "&3": "$e[3;9]",
+          "&4": "$e[2;9]",
+          "&2": "$e[&1+1;9]"
+        },
+        "level": "1",
+        "grade": "2nde",
+        "enounce": "Quelle est la raison de la suite arithmétique $$u_n$$ dont on connaît les termes $$u_&1=&3$$ et $$u_&2=#{&3+(&2-&1)*&4}$$ ?  ",
+        "answer": "$$&4$$",
+        "name": "Déterminer la raison (négative)"
+      },
+      {
+        "enounce": "Quelle est la limite de la suite $$(u_n)$$ de terme général $$u_n=&1-&2n$$ ?",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "level": "1",
+        "answer": "$$-\\infty$$",
+        "grade": "2nde",
+        "name": "Limite (2)"
+      },
+      {
+        "name": "Déterminer le premier terme (raison négative) (3)",
+        "enounce": "Quel vaut le terme $$u_0$$ pour la suite arithmétique $$(u_n)$$ de raison $$-&1$$ et dont $$u_&2$$ vaut $$#{&3-&2*&1}$$ ?",
+        "grade": "2nde",
+        "level": "1",
+        "answer": "$$&3$$ ",
+        "variables": {
+          "&1": "$e[2;8]",
+          "&2": "$e[1;9]",
+          "&3": "$e[2;9]"
+        }
+      },
+      {
+        "answer": "$$&3$$",
+        "grade": "2nde",
+        "level": "1",
+        "variables": {
+          "&2": "$e[1;9]",
+          "&3": "$e[2;9]",
+          "&1": "$e[2;8]"
+        },
+        "enounce": "Quel vaut le terme $$u_0$$ pour la suite arithmétique $$(u_n)$$ de raison $$&1$$ et dont $$u_&2$$ vaut $$#{&3+&2*&1}$$ ?",
+        "name": "Déterminer le premier terme (2)"
+      },
+      {
+        "variables": {
+          "&2": "$e[1;9]",
+          "&3": "$e[2;9]",
+          "&1": "$e[2;8]"
+        },
+        "name": "Déterminer le premier terme (raison négative)",
+        "level": "1",
+        "grade": "2nde",
+        "explanation": "",
+        "answer": "$$&3$$ ",
+        "enounce": "Quel vaut le terme $$u_0$$ pour la suite arithmétique $$(u_n)$$ de raison $$-&1$$ et dont $$u_&2$$ vaut $$#{&3-&2*&1}$$ ?"
+      },
+      {
+        "name": "Déterminer le terme général (3)",
+        "answer": "$$u_n = &1+&2(n-1)$$",
+        "grade": "2nde",
+        "level": "1",
+        "warning": "Ici, on connaît le terme $$u_1$$ et  non le terme $$u_0$$.",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "enounce": "Quel est le terme général de la suite arithmétique de premier terme $$u_1=&1$$ et de raison $$r=&2$$ ?"
+      },
+      {
+        "answer": "$$&3$$",
+        "variables": {
+          "&3": "$e[2;9]",
+          "&1": "$e[2;8]",
+          "&2": "$e[1;9]"
+        },
+        "enounce": "Quel vaut le terme $$u_0$$ pour la suite arithmétique $$(u_n)$$ de raison $$&1$$ et dont $$u_&2$$ vaut $$#{&3+&2*&1}$$ ?",
+        "grade": "2nde",
+        "level": "1",
+        "name": "Déterminer le premier terme (3)"
+      },
+      {
+        "warning": "Ici, on connaît le terme $$u_1$$ et  non le terme $$u_0$$.",
+        "enounce": "Quel est le terme général de la suite arithmétique de premier terme $$u_1=&1$$ et de raison $$r=&2$$ ?",
+        "answer": "$$u_n = &1+&2(n-1)$$",
+        "grade": "2nde",
+        "level": "1",
+        "name": "Déterminer le terme général (7)",
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        }
+      },
+      {
+        "variables": {
+          "&3": "$e[2;9]",
+          "&1": "$e[2;8]",
+          "&2": "$e[1;9]"
+        },
+        "name": "Déterminer le premier terme (raison négative) (2)",
+        "grade": "2nde",
+        "level": "1",
+        "answer": "$$&3$$ ",
+        "enounce": "Quel vaut le terme $$u_0$$ pour la suite arithmétique $$(u_n)$$ de raison $$-&1$$ et dont $$u_&2$$ vaut $$#{&3-&2*&1}$$ ?"
+      },
+      {
+        "enounce": "Quelle est la raison de la suite arithmétique $$u_n$$ dont on connaît les termes $$u_&1=&3$$ et $$u_&2=#{&3+(&2-&1)*&4}$$ ?  ",
+        "name": "Déterminer la raison (négative) (2)",
+        "level": "1",
+        "explanation": "",
+        "answer": "$$&4$$",
+        "grade": "2nde",
+        "variables": {
+          "&2": "$e[&1+1;9]",
+          "&1": "$e[2;8]",
+          "&3": "$e[3;9]",
+          "&4": "$e[2;9]"
+        }
+      },
+      {
+        "grade": "2nde",
+        "enounce": "Que vaut la somme  $$r+2r+3r+...+nr$$ ?  ",
+        "answer": "$$r\\times\\frac{n(n+1)}{2}$$",
+        "level": "1",
+        "name": "Somme des termes"
+      },
+      {
+        "level": "1",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "answer": "$$u_n = &1+&2n$$",
+        "name": "Déterminer le terme général",
+        "enounce": "Quel est le terme général de la suite arithmétique de premier terme $$u_0=&1$$ et de raison $$r=&2$$ ?",
+        "grade": "2nde"
+      },
+      {
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "answer": "$$+\\infty$$",
+        "name": "Limite",
+        "enounce": "Quelle est la limite de la suite $$(u_n)$$ de terme général $$u_n=&1+&2n$$ ?",
+        "level": "1",
+        "grade": "2nde"
+      },
+      {
+        "grade": "2nde",
+        "name": "Déterminer le premier terme (raison négative) (4)",
+        "level": "1",
+        "answer": "$$&3$$ ",
+        "enounce": "Quel vaut le terme $$u_0$$ pour la suite arithmétique $$(u_n)$$ de raison $$-&1$$ et dont $$u_&2$$ vaut $$#{&3-&2*&1}$$ ?",
+        "variables": {
+          "&3": "$e[2;9]",
+          "&2": "$e[1;9]",
+          "&1": "$e[2;8]"
+        }
+      },
+      {
+        "level": "1",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "answer": "$$u_n = &1-&2n$$",
+        "grade": "2nde",
+        "enounce": "Quel est le terme général de la suite arithmétique de premier terme $$u_0=&1$$ et de raison $$r=-&2$$ ?",
+        "name": "Déterminer le terme général (6)"
+      },
+      {
+        "variables": {
+          "&1": "$e[2;9]",
+          "&2": "$e[2;9]"
+        },
+        "answer": "$$u_n = &1-&2(n-1)$$",
+        "enounce": "Quel est le terme général de la suite arithmétique de premier terme $$u_1=&1$$ et de raison $$r=-&2$$ ?",
+        "warning": "Ici, on connaît le terme $$u_1$$ et  non le terme $$u_0$$.",
+        "grade": "2nde",
+        "level": "1",
+        "name": "Déterminer le terme général (4)"
+      },
+      {
+        "variables": {
+          "&1": "$e[2;8]",
+          "&2": "$e[&1+1;9]",
+          "&3": "$e[3;9]",
+          "&4": "$e[2;9]"
+        },
+        "grade": "2nde",
+        "answer": "$$&4$$",
+        "enounce": "Quelle est la raison de la suite arithmétique $$u_n$$ dont on connaît les termes $$u_&1=&3$$ et $$u_&2=#{&3+(&2-&1)*&4}$$ ?  ",
+        "level": "1",
+        "name": "Déterminer la raison (2)"
+      },
+      {
+        "grade": "2nde",
+        "name": "Déterminer la raison",
+        "level": "1",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&2": "$e[&1+1;9]",
+          "&4": "$e[2;9]",
+          "&1": "$e[2;8]"
+        },
+        "answer": "$$&4$$",
+        "enounce": "Quelle est la raison de la suite arithmétique $$u_n$$ dont on connaît les termes $$u_&1=&3$$ et $$u_&2=#{&3+(&2-&1)*&4}$$ ?  "
+      },
+      {
+        "answer": "$$u_n = &1-&2(n-1)$$",
+        "name": "Déterminer le terme général (8)",
+        "enounce": "Quel est le terme général de la suite arithmétique de premier terme $$u_1=&1$$ et de raison $$r=-&2$$ ?",
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "warning": "Ici, on connaît le terme $$u_1$$ et  non le terme $$u_0$$.",
+        "grade": "2nde",
+        "level": "1"
+      },
+      {
+        "variables": {
+          "&2": "$e[2;9]",
+          "&1": "$e[2;9]"
+        },
+        "answer": "$$-\\infty$$",
+        "level": "1",
+        "enounce": "Quelle est la limite de la suite $$(u_n)$$ de terme général $$u_n=&1-&2n$$ ?",
+        "name": "Limite (4)",
+        "grade": "2nde"
+      },
+      {
+        "name": "Déterminer le premier terme (4)",
+        "variables": {
+          "&2": "$e[1;9]",
+          "&3": "$e[2;9]",
+          "&1": "$e[2;8]"
+        },
+        "level": "1",
+        "grade": "2nde",
+        "answer": "$$&3$$",
+        "enounce": "Quel vaut le terme $$u_0$$ pour la suite arithmétique $$(u_n)$$ de raison $$&1$$ et dont $$u_&2$$ vaut $$#{&3+&2*&1}$$ ?"
+      },
+      {
+        "grade": "2nde",
+        "level": "1",
+        "variables": {
+          "&2": "$e[&1+1;9]",
+          "&4": "$e[2;9]",
+          "&3": "$e[3;9]",
+          "&1": "$e[2;8]"
+        },
+        "enounce": "Quelle est la raison de la suite arithmétique $$u_n$$ dont on connaît les termes $$u_&1=&3$$ et $$u_&2=#{&3+(&2-&1)*&4}$$ ?  ",
+        "name": "Déterminer la raison (négative) (3)",
+        "answer": "$$&4$$"
+      },
+      {
+        "enounce": "Quelle est la raison de la suite arithmétique $$u_n$$ dont on connaît les termes $$u_&1=&3$$ et $$u_&2=#{&3+(&2-&1)*&4}$$ ?  ",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&4": "$e[2;9]",
+          "&2": "$e[&1+1;9]",
+          "&1": "$e[2;8]"
+        },
+        "name": "Déterminer la raison (négative) (4)",
+        "level": "1",
+        "answer": "$$&4$$",
+        "grade": "2nde"
+      },
+      {
+        "grade": "2nde",
+        "enounce": "Quel vaut le terme $$u_0$$ pour la suite arithmétique $$(u_n)$$ de raison $$&1$$ et dont $$u_&2$$ vaut $$#{&3+&2*&1}$$ ?",
+        "level": "1",
+        "answer": "$$&3$$",
+        "variables": {
+          "&1": "$e[2;8]",
+          "&2": "$e[1;9]",
+          "&3": "$e[2;9]"
+        },
+        "name": "Déterminer le premier terme"
+      },
+      {
+        "name": "Déterminer la raison (3)",
+        "variables": {
+          "&3": "$e[3;9]",
+          "&4": "$e[2;9]",
+          "&1": "$e[2;8]",
+          "&2": "$e[&1+1;9]"
+        },
+        "explanation": "",
+        "enounce": "Quelle est la raison de la suite arithmétique $$u_n$$ dont on connaît les termes $$u_&1=&3$$ et $$u_&2=#{&3+(&2-&1)*&4}$$ ?  ",
+        "level": "1",
+        "answer": "$$&4$$",
+        "grade": "2nde"
+      }
+    ]
+  },
+  "Gestion des données": {
+    "Pourcentages": [
+      {
+        "grade": "6ème",
+        "name": "Déterminer un pourcentage (4)",
+        "variables": {
+          "&1": "$e[5;22]"
+        },
+        "explanation": "Les filles représentent **&1/25=${&1*4}/100** de la classe, c'est à dire **${&1*4}**%, donc les garçons représentent **100**%-**${&1*4}**%",
+        "enounce": "Dans la classe de Majd, il y a **25** élèves en tout et **&1** filles. Quel est le pourcentage de garçons dans la classe?",
+        "level": "3",
+        "answer": "**${100-&1*4}**%"
+      },
+      {
+        "level": "3",
+        "answer": "$$45$$%",
+        "grade": "6ème",
+        "name": "Fraction en pourcentage (5)",
+        "enounce": "$$\\frac{9}{20}$$ correspond à quel pourcentage ?"
+      },
+      {
+        "enounce": "Dans la toute petite classe de Tariq, il y a **10** élèves en tout et **&1** filles. Quel est le pourcentage de garçons dans la classe?",
+        "explanation": "Les filles représentent **&1/10=${&1*10}/100** de la classe, c'est à dire **${&1*10}**%, donc les garçons représentent **100**%-**${&1*10}**%",
+        "grade": "6ème",
+        "variables": {
+          "&1": "$e[3;9]"
+        },
+        "name": "Déterminer un pourcentage (6)",
+        "level": "3",
+        "answer": "**${100-&1*10}**%"
+      },
+      {
+        "grade": "6ème",
+        "answer": "$$40$$%",
+        "name": "Fraction en pourcentage (4)",
+        "enounce": "$$\\frac{4}{10}$$ correspond à quel pourcentage ?",
+        "level": "1"
+      },
+      {
+        "explanation": "$$10$$% c'est $$\\frac{1}{10}$$, donc on divise $$230$$ par $$10$$.",
+        "answer": "$$23$$",
+        "name": "10% d'un nombre",
+        "level": "2",
+        "enounce": "Calculer $$10$$% de $$230$$",
+        "grade": "6ème"
+      },
+      {
+        "grade": "6ème",
+        "level": "1",
+        "enounce": "$$75$$% c'est $$\\frac{75}{100}$$, mais c'est aussi....",
+        "answer": "$$\\frac{3}{4}$$",
+        "name": "75% c'est ...."
+      },
+      {
+        "explanation": "$$50$$% c'est $$\\frac{1}{2}$$, donc on calcule la moitié !",
+        "level": "2",
+        "enounce": "Calculer $$50$$% de $$300$$",
+        "name": "50% d'un nombre",
+        "answer": "$$150$$",
+        "grade": "6ème"
+      },
+      {
+        "grade": "6ème",
+        "answer": "$$\\frac{1}{5}$$",
+        "level": "1",
+        "enounce": "$$20$$% c'est $$\\frac{20}{100}$$, mais c'est aussi....",
+        "name": "20% c'est ...."
+      },
+      {
+        "enounce": "$$10$$% c'est $$\\frac{10}{100}$$, mais c'est aussi....",
+        "level": "1",
+        "grade": "6ème",
+        "title": "10% c'est ....",
+        "answer": "$$\\frac{1}{10}$$",
+        "name": "10% c'est ...."
+      },
+      {
+        "answer": "$$\\frac{1}{2}$$",
+        "enounce": "$$50$$% c'est $$\\frac{50}{100}$$, mais c'est aussi ....",
+        "level": "1",
+        "title": "50% c'est ....",
+        "name": "50% c'est ....",
+        "grade": "6ème"
+      },
+      {
+        "level": "1",
+        "answer": "$$60$$%",
+        "grade": "6ème",
+        "title": "Fraction en pourcentage",
+        "enounce": "$$\\frac{3}{5}$$ correspond à quel pourcentage ?"
+      },
+      {
+        "grade": "6ème",
+        "explanation": "Les filles représentent **&1/20=${&1*5}/100** de la classe, c'est à dire **${&1*5}**%, donc les garçons représentent **100**%-**${&1*5}**%",
+        "level": "3",
+        "answer": "**${100-&1*5}**%",
+        "variables": {
+          "&1": "$e[5;18]"
+        },
+        "enounce": "Dans la classe de Farid, il y a **20** élèves en tout et **&1** filles. Quel est le pourcentage de garçons dans la classe?",
+        "name": "Déterminer un pourcentage (5)"
+      },
+      {
+        "grade": "6ème",
+        "variables": {
+          "&1": "$e[5;22]"
+        },
+        "answer": "**${&1*4}**%",
+        "level": "3",
+        "enounce": "Dans la classe de Maryam, il y a **25** élèves en tout et **&1** filles. Quel est le pourcentage de filles dans la classe?",
+        "explanation": "**&1/25=${&1*4}/100**",
+        "name": "Déterminer un pourcentage"
+      },
+      {
+        "grade": "6ème",
+        "explanation": "**&1/10=${&1*10}/100**",
+        "enounce": "Dans la toute petite classe de Sirine, il y a **10** élèves en tout et **&1** filles. Quel est le pourcentage de filles dans la classe?",
+        "level": "3",
+        "name": "Déterminer un pourcentage (3)",
+        "variables": {
+          "&1": "$e[3;9]"
+        },
+        "answer": "**${&1*10}**%"
+      },
+      {
+        "enounce": "Sofien a calculé que dans sa classe il y avait **112**% de garçons. Est-ce possible ?",
+        "name": "Pourcentage impossible",
+        "answer": "Non",
+        "grade": "6ème",
+        "level": "1",
+        "explanation": "Le résultat ne peut pas être plus grand que **100**% car **100**% représente la totalité des élèves de la classe."
+      },
+      {
+        "enounce": "$$25$$% c'est $$\\frac{25}{100}$$, mais c'est aussi ....",
+        "name": "25% c'est ....",
+        "answer": "$$\\frac{1}{4}$$",
+        "level": "1",
+        "grade": "6ème"
+      },
+      {
+        "enounce": "$$23$$%, c'est quelle fraction ?",
+        "answer": "$$\\frac{23}{100}$$",
+        "level": "1",
+        "grade": "6ème",
+        "name": "Pourcentage en fraction (2)"
+      },
+      {
+        "answer": "$$50$$%",
+        "enounce": "$$\\frac{9}{18}$$ correspond à quel pourcentage ?",
+        "explanation": "$$9$$ c'est la moitié de $$18$$ !",
+        "grade": "6ème",
+        "level": "1",
+        "name": "Fraction en pourcentage (3)"
+      },
+      {
+        "enounce": "Calculer $$25$$% de $$800$$",
+        "answer": "$$200$$",
+        "name": "25% d'un nombre",
+        "grade": "6ème",
+        "level": "2",
+        "explanation": "$$25$$% c'est $$\\frac{1}{4}$$, donc on divise par $$4$$ !"
+      },
+      {
+        "level": "2",
+        "explanation": "$$10$$% de $$230$$, c'est $$23$$, et $$20$$%, c'est le double !",
+        "enounce": "calculer $$20$$% de $$230$$",
+        "name": "20% d'un nombre",
+        "answer": "$$46$$",
+        "grade": "6ème"
+      },
+      {
+        "answer": "**${&1*5}**%",
+        "enounce": "Dans la classe de Zoé, il y a **20** élèves en tout et **&1** filles. Quel est le pourcentage de filles dans la classe?",
+        "name": "Déterminer un pourcentage (2)",
+        "explanation": "**&1/20=${&1*5}/100**",
+        "variables": {
+          "&1": "$e[5;18]"
+        },
+        "level": "3",
+        "grade": "6ème"
+      }
+    ],
+    "Fonctions (généralités)": [
+      {
+        "enounce": "Pour un nombre  choisi, combien d'images peut-on obtenir par la fonction $$f$$ ?",
+        "name": "Nombre d'images",
+        "grade": "3ème",
+        "answer": "1 seule image.",
+        "level": "1"
+      },
+      
+      {
+        "level": "1",
+        "answer": "$$-3$$ ;   $$-1$$  et  $$4$$",
+        "name": "Lecture gaphique (2)",
+        "grade": "3ème",
+        "image": "flashcards-img/fonctions- généralités - lecture graphique 2 - petit.png",
+        "enounce": "Trouve graphiquement les antécédents de $$1$$ par la fonction $$f$$."
+      },
+      {
+        "grade": "3ème",
+        "name": "Trouver l'image (7)",
+        "level": "2",
+        "imageAnswer": "flashcards-img/fonctions généralités - trouver l'image 7 - correction - petit.png",
+        "enounce": "Quelle est l'image de $$3$$ par la fonction $$f$$ ?",
+        "image": "flashcards-img/une-fonction-petit.png",
+        "answer": "$$0$$"
+      },
+      {
+        "answer": "$$2$$ est l'image de $$3$$ par la fonction $$f$$.",
+        "name": "Traduire un relation fonctionnelle avec le bon vocabulaire",
+        "grade": "3ème",
+        "enounce": "Traduire l'égalité $$f(3)=2$$ par une phrase utilisant le mot \"image\".",
+        "level": "1"
+      },
+      {
+        "enounce": "Quelle est l'image de $$1$$ par la fonction $$f$$ ?",
+        "answer": "$$-2$$",
+        "image": "flashcards-img/une-fonction-petit.png",
+        "level": "2",
+        "grade": "3ème",
+        "imageAnswer": "flashcards-img/fonctions généralités - trouver l'image 5 - correction - petit.png",
+        "name": "Trouver l'image (5)"
+      },
+      {
+        "answer": "$$3$$ est un antécédent de $$2$$ par la fonction $$f$$.",
+        "level": "1",
+        "grade": "3ème",
+        "name": "Traduire un relation fonctionnelle avec le bon vocabulaire (2)",
+        "enounce": "Traduire l'égalité $$f(3)=2$$ par une phrase utilisant le mot \"antécédent\"."
+      },
+      {
+        "level": "1",
+        "name": "Image d'un  nombre par une fonction (2)",
+        "explanation": "$$f(\\textcolor{orange}{\\bold{2}})=3\\times\\textcolor{orange}{\\bold{2}}+4=6+4=10$$",
+        "answer": "On remplace $$\\textcolor{orange}{x}$$ par $$\\textcolor{orange}{2}$$ dans l'expression de la fonction et on calcule.",
+        "grade": "3ème",
+        "enounce": "Comment calculer l'image de 2 par la fonction $$f(x)=3x+4$$ ?"
+      },
+      {
+        "enounce": "Quelles sont les 2 manières de représenter une fonction ?",
+        "grade": "3ème",
+        "name": "Représentation d'une fonction",
+        "answer": "Avec une courbe représentative, ou avec une expression algébrique,  par exemple $$f(x)=3x^2-5$$.",
+        "level": "1"
+      },
+      {
+        "name": "Image d'un  nombre par une fonction",
+        "answer": "$$f(2)$$",
+        "level": "1",
+        "enounce": "Comment note-t-on l'image de $$2$$ par la fonction $$f$$ ?",
+        "grade": "3ème"
+      },
+      {
+        "name": "Trouver l'image (2)",
+        "grade": "3ème",
+        "image": "flashcards-img/une-fonction-petit.png",
+        "imageAnswer": "flashcards-img/fonctions généralités - trouver l'image 2 - correction - petit.png",
+        "answer": "$$3$$",
+        "enounce": "Que vaut $$f(-2)$$ ?",
+        "level": "2"
+      },
+      {
+        "imageAnswer": "flashcards-img/fonctions- généralités - où trouver l'image - petit.png",
+        "name": "Où lire l'image  ?",
+        "level": "1",
+        "answer": "Sur l'axe des ordonnées.",
+        "image": "flashcards-img/fonctions- généralités - une fonction 2 - petit.png",
+        "grade": "3ème",
+        "enounce": "Sur ce graphique, où peut-on lire les images par la  fonction $$f$$ ?"
+      },
+      {
+        "level": "2",
+        "grade": "3ème",
+        "imageAnswer": "flashcards-img/une-fonction-petit.png",
+        "name": "Trouver l'image (6)",
+        "answer": "$$-1$$",
+        "image": "flashcards-img/une-fonction-petit.png",
+        "enounce": "Que vaut $$f(2)$$ ?"
+      },
+      {
+        "enounce": "Pour un nombre  choisi, combien d'antécédents peut-on obtenir par la fonction $$f$$ ?",
+        "name": "Nombre d'antécédents",
+        "answer": "Cela dépend de la fonction. On  peut en trouver plusieurs, un seul ou aucun.",
+        "level": "1",
+        "grade": "3ème"
+      },
+      {
+        "image": "flashcards-img/une-fonction-petit.png",
+        "imageAnswer": "flashcards-img/fonctions généralités - trouver l'image 4 - correction - petit.png",
+        "grade": "3ème",
+        "level": "2",
+        "enounce": "Que vaut $$f(0)$$ ?",
+        "answer": "$$-1$$",
+        "name": "Trouver l'image (4) "
+      },
+      {
+        "answer": "Une fonction sert à exprimer l'évolution d'une quantité en fonction d'une autre.",
+        "grade": "3ème",
+        "level": "1",
+        "name": "Définition d'une fonction",
+        "enounce": "Qu'est-ce qu'une fonction?"
+      },
+      {
+        "name": "Intérêt de l'expression algébrique",
+        "explanation": "Pour être précis, il faut faire des calculs à l'aide de l'expression algébrique.",
+        "grade": "3ème",
+        "enounce": "Pourquoi la lecture graphique n'est pas suffisante pour trouver un antécédent ou une image ?",
+        "answer": "La lecture graphique n'est pas précise.",
+        "level": "1"
+      },
+      {
+        "level": "1",
+        "grade": "3ème",
+        "answer": "Sur l'axe des abscisses.",
+        "enounce": "Sur ce graphique, où peut-on lire les antécédents par la  fonction $$f$$ ?",
+        "image": "flashcards-img/fonctions- généralités - une fonction 2 - petit.png",
+        "name": "Où lire l'antécédent  ?",
+        "imageAnswer": "flashcards-img/fonctions- généralités - où trouver un antécédent - petit.png"
+      },
+      {
+        "name": "Lecture gaphique",
+        "grade": "3ème",
+        "answer": "1",
+        "enounce": "Trouve graphiquement l'image de $$4$$ par la fonction $$f$$.",
+        "level": "1",
+        "image": "flashcards-img/fonctions- généralités - lecture graphique - petit.png"
+      },
+      {
+        "enounce": "Quelle est l'image de $$-4$$ par la fonction $$f$$ ?",
+        "grade": "3ème",
+        "level": "2",
+        "answer": "$$-1$$",
+        "image": "flashcards-img/une-fonction-petit.png",
+        "imageAnswer": "flashcards-img/fonctions généralités - trouver l'image - correction - petit.png",
+        "name": "Trouver l'image"
+      },
+      {
+        "image": "flashcards-img/une-fonction-petit.png",
+        "enounce": "Que vaut $$f(4)$$ ?",
+        "level": "2",
+        "grade": "3ème",
+        "answer": "$$1$$",
+        "name": "Trouver l'image (8) ",
+        "imageAnswer": "flashcards-img/fonctions généralités - trouver l'image 8 - correction - petit.png"
+      },
+      {
+        "grade": "3ème",
+        "answer": "$$1$$",
+        "image": "flashcards-img/une-fonction-petit.png",
+        "imageAnswer": "flashcards-img/fonctions généralités - trouver l'image 3 - correction - petit.png",
+        "enounce": "Quelle est l'image de $$-1$$ par la fonction $$f$$ ?",
+        "level": "2",
+        "name": "Trouver l'image (3)"
+      }
+    ],
+    "Fonctions affines": [
+      {
+        "enounce": "Voici la courbe représentative de la fonction affine d'équation $$f(x)=-4x-3$$. Comment interpréter l'ordonnée à l'origine dans ce graphique?",
+        "imageAnswer": "flashcards-img/fonctions affines - interprétation ordonnée à l'origine 2 - correction-800px.png",
+        "level": "4",
+        "image": "flashcards-img/fonctions affines - interprétation ordonnée à l'origine 2-800px.png",
+        "answer": "L'ordonnée à l'origine, c'est l'image de $$0$$, donc l'endroit où la courbe représentative de la fonction $$f$$ coupe l'axe des ordonnées.",
+        "name": "Interprétation de l'ordonnée à l'origine (2)",
+        "grade": "3ème"
+      },
+      {
+        "explanation": "La courbe n'est pas une droite.",
+        "level": "1",
+        "answer": "Non",
+        "name": "Reconnaître la courbe d'une fonction affine (2)",
+        "grade": "3ème",
+        "enounce": "Cette courbe représente-t-elle une fonction affine ?",
+        "image": "flashcards-img/fonctions affines - exemple fonction 2-800px.png"
+      },
+      {
+        "level": "1",
+        "explanation": "La courbe n'est pas une droite.",
+        "enounce": "Cette courbe représente-t-elle une fonction affine ?",
+        "answer": "Non",
+        "image": "flashcards-img/fonctions affines - exemple fonction 3-800px.png",
+        "grade": "3ème",
+        "name": "Reconnaître la courbe d'une fonction affine (3)"
+      },
+      {
+        "name": "Trouver l'expression algébrique (2)",
+        "grade": "3ème",
+        "enounce": "Trouve l'expression algébrique de la fonction affine $$f$$.",
+        "image": "flashcards-img/fonctions affines - trouver l'expression 2-800px.png",
+        "level": "5",
+        "imageAnswer": "flashcards-img/fonctions affines - trouver l'expression 2 - correction-800px.png",
+        "answer": "$$f(x)=-2x-1$$"
+      },
+      {
+        "grade": "3ème",
+        "level": "2",
+        "name": "Reconnaître l'expression d'une fonction affine (2)",
+        "explanation": "L'expression algébrique est bien de la forme $$ax+b$$ avec $$a=7$$ et $$b=-3$$.",
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=7x-3$$ est-elle une fonction affine \n ?",
+        "answer": "Oui"
+      },
+      {
+        "name": "Reconnaître la courbe d'une fonction affine (9)",
+        "explanation": "Cette courbe est une droite mais ne représente pas une fonction car ici on ne peut pas dire quelle est l'image de $$3$$ (il y a une infinité de possibilités).",
+        "warning": "Une droite parallèle à l'axe des abscisses n'est pas la représentation d'une fonction.",
+        "grade": "3ème",
+        "image": "flashcards-img/fonctions affines - exemple fonction 9-800px.png",
+        "level": "1",
+        "answer": "Non",
+        "enounce": "Cette courbe représente-t-elle une fonction affine ?"
+      },
+      {
+        "grade": "3ème",
+        "name": "Reconnaître l'expression d'une fonction affine (9)",
+        "answer": "Oui",
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=2$$ est-elle une fonction affine \n ?",
+        "level": "2",
+        "explanation": "L'expression algébrique est bien de la forme $$ax+b$$ avec $$a=0$$ et $$b=2$$."
+      },
+      {
+        "name": "Trouver l'expression algébrique (4)",
+        "enounce": "Trouve l'expression algébrique de la fonction affine $$f$$.",
+        "imageAnswer": "flashcards-img/fonctions affines - trouver l'expression 4 - correction-800px.png",
+        "image": "flashcards-img/fonctions affines - trouver l'expression 4-800px.png",
+        "grade": "3ème",
+        "answer": "$$f(x)=3x+1$$",
+        "level": "5"
+      },
+      {
+        "explanation": "L'expression algébrique n'est pas de la forme $$ax+b$$.",
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=\\frac{4}{x}+3$$ est-elle une fonction affine \n ?",
+        "level": "2",
+        "answer": "Non",
+        "grade": "3ème",
+        "name": "Reconnaître l'expression d'une fonction affine (11)"
+      },
+      {
+        "level": "1",
+        "grade": "3ème",
+        "enounce": "Cette courbe représente-t-elle une fonction affine ?",
+        "name": "Reconnaître la courbe d'une fonction affine (8)",
+        "explanation": "La courbe représentative de la fonction est une droite. C'est même la courbe représentative d'une fonction linéaire.",
+        "answer": "Oui",
+        "image": "flashcards-img/fonctions affines - exemple fonction 8-800px.png"
+      },
+      {
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=\\frac{10x+8}{2}$$ est-elle une fonction affine ?",
+        "name": "Reconnaître l'expression d'une fonction affine (5)",
+        "level": "2",
+        "answer": "Oui",
+        "grade": "3ème",
+        "explanation": "$$f(x)=\\frac{10x+8}{2}= \\frac{10}{2}x+\\frac{8}{2}=5x+4$$, donc l'expression algébrique est bien de la forme $$ax+b$$ avec $$a=3$$ et $$b=2$$."
+      },
+      {
+        "level": "1",
+        "image": "flashcards-img/fonctions affines - exemple fonction 4-800px.png",
+        "name": "Reconnaître la courbe d'une fonction affine (4)",
+        "enounce": "Cette courbe représente-t-elle une fonction affine ?",
+        "explanation": "La courbe n'est pas une droite.",
+        "grade": "3ème",
+        "answer": "Non"
+      },
+      {
+        "grade": "3ème",
+        "explanation": "L'expression algébrique est de la forme $$ax+b$$ avec $$a=-\\frac{4}{7}$$ et $$b=\\frac{3}{4}$$.",
+        "level": "2",
+        "answer": "Oui",
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=-\\frac{4}{7}x+\\frac{3}{4}$$ est-elle une fonction affine \n ?",
+        "name": "Reconnaître l'expression d'une fonction affine (13)"
+      },
+      {
+        "answer": "L'ordonnée à l'origine.",
+        "grade": "3ème",
+        "explanation": "",
+        "level": "3",
+        "name": "Ordonnée à l'origine",
+        "enounce": "Soit $$f$$ une fonction affine d'expression $$f(x)=3x+5$$. Comment  s'appelle le nombre 5 ?"
+      },
+      {
+        "explanation": "La courbe représentative de la fonction est une droite. C'est même la courbe représentative d'une fonction constante.",
+        "name": "Reconnaître la courbe d'une fonction affine (7)",
+        "enounce": "Cette courbe représente-t-elle une fonction affine ?",
+        "answer": "Oui",
+        "image": "flashcards-img/fonctions affines - exemple fonction 7-800px.png",
+        "grade": "3ème",
+        "level": "1"
+      },
+      {
+        "imageAnswer": "flashcards-img/fonctions affines - trouver l'expression 3 - correction-800px.png",
+        "grade": "3ème",
+        "answer": "$$f(x)=-5x+3$$",
+        "enounce": "Trouve l'expression algébrique de la fonction affine $$f$$.",
+        "level": "5",
+        "image": "flashcards-img/fonctions affines - trouver l'expression 3-800px.png",
+        "name": "Trouver l'expression algébrique (3)"
+      },
+      {
+        "imageAnswer": "flashcards-img/fonctions affines - trouver l'expression 3 - correction-800px.png",
+        "grade": "3ème",
+        "answer": "$$f(x)=-5x+3$$",
+        "enounce": "Trouve l'expression algébrique de la fonction affine $$f$$.",
+        "level": "5",
+        "image": "flashcards-img/fonctions affines - trouver l'expression 3-800px.png",
+        "name": "Trouver l'expression algébrique (3)"
+      },
+      {
+        "enounce": "Voici la courbe représentative de la fonction affine d'équation $$f(x)=-4x+8$$. Comment interpréter le coefficient directeur dans ce graphique?",
+        "level": "4",
+        "grade": "3ème",
+        "name": "Interprétation du coefficient directeur (2)",
+        "image": "flashcards-img/fonctions affines - interprétation coefficient directeur 2-800px.png",
+        "imageAnswer": "flashcards-img/fonctions affines - interprétation coefficient directeur 2 - correction-800px.png"
+      },
+      {
+        "answer": "Oui",
+        "level": "2",
+        "explanation": "L'expression algébrique est bien de la forme $$ax+b$$ avec $$a=-1$$ et $$b=8$$.",
+        "grade": "3ème",
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=-x+8$$ est-elle une fonction affine \n ?",
+        "name": "Reconnaître l'expression d'une fonction affine (7)"
+      },
+      {
+        "enounce": "Soit $$f$$ une fonction affine d'expression $$f(x)=3x+5$$. Comment  s'appelle le nombre 3 ?",
+        "answer": "Le coefficient directeur (ou pente).",
+        "name": "Coefficient directeur",
+        "level": "3",
+        "grade": "3ème"
+      },
+      {
+        "grade": "3ème",
+        "level": "2",
+        "name": "Reconnaître l'expression d'une fonction affine (6)",
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=x+4$$ est-elle une fonction affine \n ?",
+        "answer": "Oui",
+        "explanation": "L'expression algébrique est bien de la forme $$ax+b$$ avec $$a=1$$ et $$b=4$$."
+      },
+      {
+        "grade": "3ème",
+        "enounce": "Je prends un abonnement de 200 Qr pour un an dans un cinéma pour pouvoir payer les places moins chers. Avec l'abonnement, une séance coûte seulement 30 Qr. Quelle est l'expression de la fonction $$p$$ représentant le coût total sur une année en fonction du nombre de séances ?",
+        "name": "Traduire une situation par une fonction affine",
+        "answer": "Si $$x$$ représente le nombre  de séances, le coût $$p$$ sur l'année  est  $$p(x)=200+30x$$",
+        "level": "6"
+      },
+      {
+        "enounce": "Voici la courbe représentative de la fonction affine d'équation $$f(x)=4x+2$$. Comment interpréter l'ordonnée à l'origine dans ce graphique?",
+        "imageAnswer": "flashcards-img/fonctions affines - interprétation ordonnée à l'origine - correction-800px.png",
+        "image": "flashcards-img/fonctions affines - interprétation ordonnée à l'origine-800px.png",
+        "level": "4",
+        "answer": "L'ordonnée à l'origine, c'est l'image de $$0$$, donc l'endroit où la courbe représentative de la fonction $$f$$ coupe l'axe des ordonnées.",
+        "name": "Interprétation de l'ordonnée à l'origine",
+        "grade": "3ème"
+      },
+      {
+        "name": "Reconnaître l'expression d'une fonction affine (4)",
+        "explanation": "$$8+2x=2x+8$$ donc l'expression algébrique est bien de la forme $$ax+b$$ avec $$a=2$$ et $$b=8$$.",
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=8+2x$$ est-elle une fonction affine \n ?",
+        "level": "2",
+        "grade": "3ème",
+        "answer": "Oui"
+      },
+      {
+        "explanation": "L'expression algébrique est bien de la forme $$ax+b$$ avec $$a=3$$ et $$b=0$$.",
+        "answer": "Oui",
+        "name": "Reconnaître l'expression d'une fonction affine (8)",
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=3x$$ est-elle une fonction affine \n ?",
+        "grade": "3ème",
+        "level": "2"
+      },
+      {
+        "imageAnswer": "flashcards-img/fonctions affines - interprétation coefficient directeur- correction-800px.png",
+        "level": "4",
+        "grade": "3ème",
+        "enounce": "Voici la courbe représentative de la fonction affine d'équation $$f(x)=3x+1$$. Comment interpréter le coefficient directeur dans ce graphique?",
+        "image": "flashcards-img/fonctions affines - interprétation coefficient directeur-800px.png",
+        "name": "Interprétation du coefficient directeur"
+      },
+      {
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=3x+2$$ est-elle une fonction affine \n ?",
+        "name": "Reconnaître l'expression d'une fonction affine",
+        "level": "2",
+        "explanation": "L'expression algébrique est bien de la forme $$ax+b$$ avec $$a=3$$ et $$b=2$$.",
+        "grade": "3ème",
+        "answer": "Oui"
+      },
+      {
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=-5x-9$$ est-elle une fonction affine \n ?",
+        "explanation": "L'expression algébrique est bien de la forme $$ax+b$$ avec $$a=-5$$ et $$b=-9$$.",
+        "name": "Reconnaître l'expression d'une fonction affine (3)",
+        "answer": "Oui",
+        "grade": "3ème",
+        "level": "2"
+      },
+      {
+        "name": "Reconnaître la courbe d'une fonction affine (copie)",
+        "explanation": "Cette courbe n'est pas une droite.",
+        "answer": "Non",
+        "grade": "3ème",
+        "level": "1",
+        "enounce": "Cette courbe représente-t-elle une fonction affine ?"
+      },
+      {
+        "grade": "3ème",
+        "explanation": "La courbe représentative de la fonction est une droite.",
+        "image": "flashcards-img/fonctions affines - exemple fonction 6-800px.png",
+        "answer": "Oui",
+        "name": "Reconnaître la courbe d'une fonction affine (6)",
+        "level": "1",
+        "enounce": "Cette courbe représente-t-elle une fonction affine ?"
+      },
+      {
+        "enounce": "Cette courbe représente-t-elle une fonction affine ?",
+        "grade": "3ème",
+        "level": "1",
+        "answer": "Oui",
+        "image": "flashcards-img/fonctions affines - exemple fonction 5-800px.png",
+        "name": "Reconnaître la courbe d'une fonction affine (5)",
+        "explanation": "La courbe représentative de la fonction est une droite."
+      },
+      {
+        "grade": "3ème",
+        "answer": "Non",
+        "name": "Reconnaître l'expression d'une fonction affine (10)",
+        "explanation": "L'expression algébrique n'est pas de la forme $$ax+b$$.",
+        "level": "2",
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=2x^2-4$$ est-elle une fonction affine \n ?"
+      },
+      {
+        "enounce": "Trouve l'expression algébrique de la fonction affine $$f$$.",
+        "level": "5",
+        "name": "Trouver l'expression algébrique",
+        "image": "flashcards-img/fonctions affines - trouver l'expression --800px.png",
+        "imageAnswer": "flashcards-img/fonctions affines - trouver l'expression - correction-800px.png",
+        "grade": "3ème",
+        "answer": "$$f(x)=3x-1$$"
+      },
+      {
+        "answer": "Oui",
+        "level": "2",
+        "name": "Reconnaître l'expression d'une fonction affine (12)",
+        "enounce": "La fonction $$f$$ dont l'expression algébrique est $$f(x)=\\frac{x}{5}-2$$ est-elle une fonction affine \n ?",
+        "explanation": "L'expression algébrique est de la forme $$ax+b$$ avec $$a=\\frac{1}{5}$$ et $$b=-2$$.",
+        "grade": "3ème"
+      },
+      {
+        "level": "1",
+        "enounce": "Cette courbe représente-t-elle une fonction affine ?",
+        "answer": "Non",
+        "grade": "3ème",
+        "name": "Reconnaître la courbe d'une fonction affine",
+        "image": "flashcards-img/fonctions affines - exemple fonction-800px.png",
+        "explanation": "Cette courbe n'est pas une droite."
+      }
+    ]
+  },
+  "Probabilités": {
+    "Les bases": [
+      {
+        "name": "Evénements",
+        "answer": "Un événement certain.",
+        "level": "2",
+        "enounce": "Comment appelle-t-on un événement dont la probabilité vaut 1 ?",
+        "grade": "5ème"
+      },
+      {
+        "answer": "Une expérience reproductible dont on connait tous les résultats possibles, mais dont les résultats ne sont pas prévisibles.",
+        "level": "1",
+        "enounce": "Qu'est-ce qu'une expérience aléatoire ?",
+        "grade": "5ème",
+        "name": "Vocabulaire (2)"
+      },
+      {
+        "name": "Evénements (4)",
+        "level": "2",
+        "grade": "5ème",
+        "enounce": "Comment appelle-t-on deux événements qui ne peuvent pas se réaliser en même temps ?",
+        "answer": "Des évènements incompatibles.",
+        "explanation": "Par exemple, dans un lancer de dé, les évènements \"obtenir un nombre pair\" et \"obtenir un nombre impair\" sont incompatibles."
+      },
+      {
+        "grade": "5ème",
+        "enounce": "Quand on obtient une issue favorable à un évènment, que dit-on de cet évènement ?",
+        "level": "2",
+        "answer": "On dit que l'évènement est réalisé.",
+        "name": "Evénements (3)"
+      },
+      {
+        "name": "Notion de probabilité (2)",
+        "answer": "Non car  $$\\frac{5}{4}>1$$ et une probabilité doit être comprise entre 0 et 1.",
+        "level": "3",
+        "grade": "5ème",
+        "enounce": "Est-il possible d'obtenir une probabilité de $$\\frac{5}{4}$$ pour un évènement ?"
+      },
+      {
+        "level": "1",
+        "answer": "Un événement est un ensemble d'issues.",
+        "enounce": "Qu'est-ce qu'un événement ?",
+        "grade": "5ème",
+        "explanation": "Par exemple, si on lance un dé à 6 faces, l'événement \"Obtenir un nombre pair\" est constitué des issues 2, 4 et 6.",
+        "name": "Vocabulaire (3)"
+      },
+      {
+        "enounce": "Ca veut dire quoi, associer une probabilité à un événement ?",
+        "grade": "5ème",
+        "answer": "Cela veut dire que l'on attribue à l'événement un nombre compris  entre 0 et 1 pour exprimer la chance que cet évènement se réalise.",
+        "name": "Notion de probabilité",
+        "level": "3",
+        "imageAnswer": ""
+      },
+      {
+        "level": "1",
+        "answer": "Les issues.",
+        "name": "Vocabulaire",
+        "enounce": "Comment appelle-t-on les résultats possibles d'une expérience aléatoire ?",
+        "grade": "5ème"
+      },
+      {
+        "answer": "Un événement impossible.",
+        "grade": "5ème",
+        "enounce": "Comment appelle-t-on un événement dont la probabilité vaut 0 ?",
+        "name": "Evénements (2)",
+        "level": "2"
+      },
+      {
+        "explanation": "Par exemple, dans un lancer de dé, l'évènement contraire de \"obtenir un nombre pair\" est \"obtenir un nombre impair\".",
+        "enounce": "Qu'est-ce qu'un évènement contraire ?",
+        "name": "Evénements (5)",
+        "level": "2",
+        "answer": "L'évènement contraire de l'évènement A est l'évènement qui se réalise quand A ne se réalise pas.",
+        "grade": "5ème"
+      }
+    ],
+    "Calcul par dénombrement": [
+      {
+        "explanation": "Il y a en tout $$3+4+5=12$$ boules.",
+        "name": "Urne",
+        "answer": "$$\\frac{4}{12}=\\frac{1}{3}$$",
+        "enounce": "Dans une urne, il y a 3 boules blanches, 4 boules vertes et 5 boules rouges. Quelle est la probabilité de tirer une boule verte ?",
+        "grade": "5ème",
+        "level": "2"
+      },
+      {
+        "level": "3",
+        "explanation": "Il y a $$6$$ cas favorables : $$15$$, $$25$$, $$35$$, $$45$$, $$55$$, $$65$$, sur un total de $$6  \\times 6 = 36 $$ possibilités en tout.   ",
+        "enounce": "On lance deux fois de suites le même dé à 6 faces et on forme un nombre à 2 chiffres avec les 2 résultats obtenus : le premier résultat pour le chiffre des dizaines, le deuxième pour le chiffre des unités. Quelle est la probabilité d'obtenir un nombre se terminant par 5 ?",
+        "answer": "$$\\frac{6}{36}=\\frac{1}{6}$$",
+        "name": "Lancer de 2 dés (4)",
+        "grade": "4ème"
+      },
+      {
+        "level": "1",
+        "enounce": "Si on lance un dé à 6 faces, quelle est la probabilité d'obtenir le nombre 2",
+        "answer": "$$\\frac{1}{6}$$",
+        "explanation": "Il n'y a qu'une seule manière d'obtenir le nombre 2.",
+        "grade": "5ème",
+        "name": "Lancer de dé (2)"
+      },
+      {
+        "enounce": "On lance deux fois de suites le même dé à 6 faces et on forme un nombre à 2 chiffres avec les 2 résultats obtenus : le premier résultat pour le chiffre des dizaines, le deuxième pour le chiffre des unités. Quelle est la probabilité d'obtenir un nombre ayant dans son écriture au moins 1 fois le chiffre 3 ?",
+        "level": "3",
+        "answer": "$$\\frac{11}{36}$$",
+        "name": "Lancer de 2 dés (3)",
+        "explanation": "Il y a $$11$$ cas favorables : $$13$$, $$23$$, $$31$$, $$32$$, $$33$$, $$34$$, $$35$$, $$36$$, $$43$$, $$53$$, $$63$$, sur un total de $$6  \\times 6 = 36 $$ possibilités en tout.   ",
+        "grade": "4ème"
+      },
+      {
+        "explanation": "Il y a $$6$$ possibilités pour le premier chiffre et $$6$$ possibilités pour le 2ème, donc en tout $$6 \\times 6$$ possibilités.",
+        "enounce": "On lance deux fois de suites le même dé à 6 faces et on forme un nombre à 2 chiffres avec les 2 résultats obtenus : le premier résultat pour le chiffre des dizaines, le deuxième pour le chiffre des unités. Combien de nombres peut-on obtenir ?",
+        "grade": "4ème",
+        "level": "3",
+        "name": "Lancer de 2 dés",
+        "answer": "$$36$$",
+        "domain": "Probabilités"
+      },
+      {
+        "explanation": "Il y a $$6$$ cas favorables : $$11$$, $$22$$, $$33$$, $$44$$, $$55$$, $$66$$, sur un total de $$6  \\times 6 = 36 $$ possibilités.   ",
+        "grade": "4ème",
+        "level": "3",
+        "name": "Lancer de 2 dés (2)",
+        "answer": "$$\\frac{6}{36}=\\frac{1}{6}$$",
+        "enounce": "On lance deux fois de suites le même dé à 6 faces et on forme un nombre à 2 chiffres avec les 2 résultats obtenus : le premier résultat pour le chiffre des dizaines, le deuxième pour le chiffre des unités. Quelle est la probabilité d'obtenir un nombre composé des 2 même chiffres ?"
+      },
+      {
+        "explanation": "Il y a $$6$$ cas favorables : $$15$$, $$25$$, $$35$$, $$45$$, $$55$$, $$65$$, sur un total de $$6  \\times 6 = 36 $$ possibilités en tout.   ",
+        "grade": "4ème",
+        "enounce": "On lance deux fois de suites le même dé à 6 faces et on forme un nombre à 2 chiffres avec les 2 résultats obtenus : le premier résultat pour le chiffre des dizaines, le deuxième pour le chiffre des unités. Quelle est la probabilité d'obtenir un nombre se terminant par 5 ?",
+        "level": "3",
+        "answer": "$$\\frac{6}{36}=\\frac{1}{6}$$",
+        "name": "Lancer de 2 dés (5)"
+      },
+      {
+        "explanation": "Il y a 3 cas favorables pour obtenir un nombre pair : 2, 4, ou 6.",
+        "answer": "$$\\frac{3}{6}=\\frac{1}{2}$$",
+        "grade": "5ème",
+        "level": "1",
+        "name": "Lancer de dé (3)",
+        "enounce": "Si on lance un dé à 6 faces, quelle est la probabilité d'obtenir un nombre pair ?"
+      },
+      {
+        "enounce": "On lance un dé à 6 faces et on regarde le nombre obtenu. Combien y-a-t-il de résultats possibles ?",
+        "grade": "5ème",
+        "level": "1",
+        "name": "Lancer de dé",
+        "answer": "$$6$$"
+      },
+      {
+        "answer": "$$\\frac{4}{6}=\\frac{2}{3}$$",
+        "enounce": "Si on lance un dé à 6 faces, quelle est la probabilité d'obtenir un nombre inférieur à 5 ?",
+        "explanation": "Il y a 4 possibilités pour obtenir un nombre inférieur à 5 : obtenir 1, 2, 3, ou 4.",
+        "grade": "5ème",
+        "name": "Lancer de dé (5)",
+        "level": "1"
+      },
+      {
+        "explanation": "Il y a 2 possibilités pour obtenir un multiple de 3 : obtenir 3 ou 6.",
+        "enounce": "Si on lance un dé à 6 faces, quelle est la probabilité d'obtenir un multiple de 3 ?",
+        "name": "Lancer de dé (4)",
+        "answer": "$$\\frac{2}{6}=\\frac{1}{3}$$",
+        "level": "1",
+        "grade": "5ème"
+      },
+      {
+        "grade": "4ème",
+        "name": "Lancer de 2 dés (6)",
+        "enounce": "On lance deux fois de suites le même dé à 6 faces et on ajoute les 2 chiffres. Quelle est la probabilité d'obtenir une somme égalé à 6 ?",
+        "explanation": "Il y a $$5$$ cas favorables : $$1+5$$, $$2+4$$, $$3+3$$, $$4+2$$, $$5+1$$, sur un total de $$6  \\times 6 = 36 $$ possibilités.   ",
+        "answer": "$$\\frac{5}{36}$$",
+        "level": "3"
+      }
+    ]
+  }
+}
+

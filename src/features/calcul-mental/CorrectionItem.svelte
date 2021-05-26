@@ -169,7 +169,7 @@
     //  TODO: a Remplacer par searchMisplacedSpaces
     if (!empty && options && options.includes('answer-require-spaces')) {
       const a = answer_latex.replace(/\\,/g, ' ').replace(',', '.').trim()
-      console.log(`a = "${a}"`)
+    
       const regex = /\d+[\d\s]*(\.[\d\s]*\d+)?/g
       const matches = a.match(regex)
 
