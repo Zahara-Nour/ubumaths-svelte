@@ -4134,7 +4134,64 @@ export default {
       'Par substitution': [
         {
           description: 'Calculer en substituant les variables',
-          subscription: 'Entiers naturels',
+          subdescription: 'Expressions simples. Pas de simplification de la multiplication.',
+          enounces: [
+            'Calculer $$&3 \\times &1$$ avec $$&1=&2$$',
+            'Calculer $$&1 \\times &3$$ avec $$&1=&2$$',
+            'Calculer $$&3 + &1$$ avec $$&1=&2$$',
+            'Calculer $$&1 + &3$$ avec $$&1=&2$$',
+            
+          ],
+          expressions: ['&3*&1', '&1*&3', '&3+&1', '&1+&3'],
+          variables: [
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+            },
+          ],
+          letters: [
+            {
+              '&1': '&2',
+            },
+          ],
+          options: ['no-exp'],
+          type: 'result',
+          details: [
+            ['&3 \\times &2', '#{&3*&1}',],
+          ],
+          defaultDelay: 30,
+        },
+        {
+          description: 'Calculer en substituant les variables',
+          subdescription: 'Expressions simples. Simplification de la multiplication.',
+          enounces: [
+            'Calculer $$&3&1$$ avec $$&1=&2$$',
+            'Calculer $$&3 + &1$$ avec $$&1=&2$$',    
+          ],
+          expressions: ['&3&1', '&3+&1'],
+          variables: [
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+            },
+          ],
+          letters: [
+            {
+              '&1': '&2',
+            },
+          ],
+          options: ['no-exp'],
+          type: 'result',
+          details: [
+            ['&3 \\times &2', '#{&3*&1}',],
+          ],
+          defaultDelay: 30,
+        },
+        {
+          description: 'Calculer en substituant les variables',
+          subdescription: 'Entiers naturels',
           enounces: [
             'Calculer $$&3&1+&4$$ avec $$&1=&2$$',
             'Calculer $$&4+&3&1$$ avec $$&1=&2$$',
