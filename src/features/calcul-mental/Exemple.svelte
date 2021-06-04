@@ -7,16 +7,25 @@
   } from 'svelte-materialify/src'
 
   import Question from './Question.svelte'
+  import Mathlive from 'mathlive/dist/mathlive.min.js'
 
   export let question
 
+  const regex = /\$\$(.*?)\$\$/g
+  const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
+
+  $: description = question.description.replace(regex, replacement)
+
+  $: subdescription = question.subdescription
+    ? question.subdescription.replace(regex, replacement)
+    : null
 </script>
 
 <Card>
-  <CardTitle>{question.description}</CardTitle>
+  <CardTitle>{@html description}</CardTitle>
 
-  {#if question.subdescription}
-    <CardSubtitle>{question.subdescription}</CardSubtitle>
+  {#if subdescription}
+    <CardSubtitle>{@html subdescription}</CardSubtitle>
   {/if}
 
   <CardText>
