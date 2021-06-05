@@ -5,19 +5,41 @@
 // exp-no-spaces = false
 // answer-require-spaces = false
 // 
+// require-correct-spaces = false
+// no-penalty-for-incorrect-spaces = false
+
+
 // * produits implicites
 // answer-require-implicit-products = true
+
+
+// require-implicit-products = false
+// no-penalty-for-explicit-products = false
 // 
 // * parenthèses inutiles
 // answer-allow-unecessary-brackets = false
 // 
+// require-no-extraneaous-brackets
+// no-penalty-for-extraneous-brackets
+
+
+
 // * zéros inutiles
 // answer-allow-unecessary-zeros = false
 // exp-allow-unecessary-zeros = false
 // 
+// require-no-extraneaous-zeros
+// no-penalty-for-extraneous-zeros
+
+
 // * signes inutiles
 // answer-allow-unecessary-signs = false
 // 
+// require-no-extraneaous-signs
+// no-penalty-for-extraneous-signs
+
+
+
 // * permutation des termes et facteurs
 // 
 // * termes nuls
@@ -40,9 +62,9 @@ export default {
         variables: [
           { '&1': '$e[4;10]', '&2': '$e{&1;&1}' },
         ],
-        options: ['exp-no-spaces', 'answer-require-spaces'],
+        options: ['exp-no-spaces', 'require-correct-spaces'],
         type: 'rewrite',
-        defaultDelay: 20,
+        defaultDelay: 1,
       },
       {
         description: 'Ecrire un grand nombre entier sans les zéros inutiles',
@@ -122,7 +144,7 @@ export default {
           ],
           solutions: [['&2*100 + &3*10 + &4']],
           // solutions:[['&1*1000 +  &2*100 + &3*10 + &4']],
-          options: ['answer-allow-unecessary-brackets'],
+          options: ['no-penalty-for-extraneous-brackets'],
           type: 'rewrite',
           defaultDelay: 20,
         },
@@ -1153,25 +1175,25 @@ export default {
             '?*15=90',
           ],
           solutions: [
-            
-              ['25'],
-              ['20'],
-              ['50'],
-              ['12'],
-              ['15'],
-              ['14'],
-              ['18'],
-              ['15'],
 
-              ['4'],
-              ['5'],
-              ['2'],
-              ['5'],
-              ['4'],
-              ['5'],
-              ['5'],
-              ['6'],
-            
+            ['25'],
+            ['20'],
+            ['50'],
+            ['12'],
+            ['15'],
+            ['14'],
+            ['18'],
+            ['15'],
+
+            ['4'],
+            ['5'],
+            ['2'],
+            ['5'],
+            ['4'],
+            ['5'],
+            ['5'],
+            ['6'],
+
           ],
 
           options: ['exhaust'],
@@ -3574,21 +3596,24 @@ export default {
           subdescription: 'Multiplication avec nombres relatifs',
           enounces: ['Complète cette égalité avec le  nombre manquant.'],
           expressions: [
-            '(?/&3)*(&2/&4)=#{&1*&2}/#{&3*&4}',
-            '(&1/?)*(&2/&4)=#{&1*&2}/#{&3*&4}',
-            '(&1/&3)*(?/&4)=#{&1*&2}/#{&3*&4}',
-            '(&1/&3)*(&2/?)=#{&1*&2}/#{&3*&4}',
+
+            '(?/(&3))*((&2)/(&4))=(#{&1*(&2)})/(#{&3*(&4)})',
+            '((&1)/?)*((&2)/(&4))=(#{&1*(&2)})/(#{&3*(&4)})',
+            '((&1)/(&3))*(?/(&4))=(#{&1*(&2)})/(#{&3*(&4)})',
+            '((&1)/(&3))*((&2)/?)=(#{&1*(&2)})/(#{&3*(&4)})',
           ],
           variables: [
             {
               '&1': '$er[2;9]',
               '&2': '$er[2;9]',
-              '&3': '$er[2;9]\\{&1;&2;-&1;-&2}',
-              '&4': '$er[2;9]\\{&1;&2;-&1;-&2}',
+              '&3': '$er[2;9]\\{&1;&2}',
+              '&4': '$er[2;9]\\{&1;&2}',
             },
           ],
           // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
-          solutions: [['&1'], ['&3'], ['&2'], ['&4']],
+          solutions: [['&1'],
+          ['&3'], ['&2'], ['&4']
+          ],
           type: 'trou',
           defaultDelay: 20,
         },
@@ -4129,6 +4154,113 @@ export default {
       ],
     },
   },
+  Proportionnalité: {
+    'Pourcentages': {
+      Définition: [
+        {
+          description: "Définition d'un pourcentage",
+          subdescription: "Convertir un pourcentage en une fraction de dénominateur 100.",
+          enounces: ['Quelle est la fraction correspondant à :'],
+          expressions: ['&1%'],
+          variables: [{ '&1': '$e[1;100]'}],
+          solutions: [['&1/100']],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: "Définition d'un pourcentage",
+          subdescription: "convertir une fraction de dénominateur 100 en pourcentage.",
+          enounces: ['Quelle est pourcentage correspondant à la fraction :'],
+          expressions: ['&1/100'],
+          variables: [{ '&1': '$e[1;100]'}],
+          solutions: [['&1%']],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: "Définition d'un pourcentage",
+          subdescription: "Convertir un pourcentage en une fraction simplifiée.",
+          enounces: ['Quelle est la fraction simplifiée correspondant à :'],
+          expressions: ['&1%'],
+          variables: [{ '&1': '$l{10;20;30;40;50;60;70;80;90;100;25;75;200;300;400}'}],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        
+      ],
+      'Proportions':[
+
+      ],
+      "Calculer":[
+        {
+          description: "Calculer le pourcentage d'une quantité",
+          subdescription: "50%",
+          enounces: ['Calcule $$50$$% de $$#{&1*2}$$.'],
+          expressions: ['50%*#{&1*2}'],
+          options:['no-exp'],
+          variables: [{ '&1': '$e[1;50]'}],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: "Calculer le pourcentage d'une quantité",
+          subdescription: "10%",
+          enounces: ['Calcule $$10$$% de $$#{&1*10}$$.'],
+          expressions: ['10%*#{&1*10}'],
+          options:['no-exp'],
+          variables: [{ '&1': '$e[1;50]'}],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: "Calculer le pourcentage d'une quantité",
+          subdescription: "10% d'un nombre non multiple de 10",
+          enounces: ['Calcule $$10$$% de $$#{&1}$$.'],
+          expressions: ['10%*#{&1}'],
+          options:['no-exp'],
+          variables: [{ '&1': '$e[1;100]\\{m10}'}],
+          'result-type': 'decimal',
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: "Calculer le pourcentage d'une quantité",
+          subdescription: "20%-40%",
+          enounces: ['Calcule $$&1$$% de $$#{&2*10}$$.'],
+          expressions: ['&1%*#{&2*10}'],
+          options:['no-exp'],
+          variables: [{ '&1':'$l{20;30;40}', '&2': '$e[1;40]'}],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: "Calculer le pourcentage d'une quantité",
+          subdescription: "25%",
+          enounces: ['Calcule $$25$$% de $$#{&1*4}$$.'],
+          expressions: ['25%*#{&1*4}'],
+          options:['no-exp'],
+          variables: [{ '&1': '$e[1;15]'}],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: "Calculer le pourcentage d'une quantité",
+          subdescription: "75%",
+          enounces: ['Calcule $$75$$% de $$#{&1*4}$$.'],
+          expressions: ['75%*#{&1*4}'],
+          options:['no-exp'],
+          variables: [{ '&1': '$e[1;12]'}],
+          type: 'result',
+          defaultDelay: 10,
+        },
+
+      ]
+      
+      
+      
+    
+    }
+  },
   'Calcul littéral': {
     Calculs: {
       'Par substitution': [
@@ -4140,7 +4272,7 @@ export default {
             'Calculer $$&1 \\times &3$$ avec $$&1=&2$$',
             'Calculer $$&3 + &1$$ avec $$&1=&2$$',
             'Calculer $$&1 + &3$$ avec $$&1=&2$$',
-            
+
           ],
           expressions: ['&3*&1', '&1*&3', '&3+&1', '&1+&3'],
           variables: [
@@ -4167,7 +4299,7 @@ export default {
           subdescription: 'Expressions simples. Simplification de la multiplication.',
           enounces: [
             'Calculer $$&3&1$$ avec $$&1=&2$$',
-            'Calculer $$&3 + &1$$ avec $$&1=&2$$',    
+            'Calculer $$&3 + &1$$ avec $$&1=&2$$',
           ],
           expressions: ['&3&1', '&3+&1'],
           variables: [
