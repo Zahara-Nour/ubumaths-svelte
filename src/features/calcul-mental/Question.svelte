@@ -3,6 +3,7 @@
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { fontSize } from '../../app/stores'
   export let question
+  export let size = $fontSize
 
   let mf
   let enounce
@@ -32,7 +33,7 @@
     <div
       id="enounce"
       class="mt-4 text-center"
-      style="font-size:{$fontSize + 4}px;max-width:500px;"
+      style="font-size:{size}px;max-width:500px;"
     >
       {@html enounce}
     </div>
@@ -41,7 +42,7 @@
   {#if showExp}
     <div id="expression" class="mt-12 d-flex align-center justify-center">
       <math-field
-        style="font-size:{$fontSize + 10}px;display:inline-block"
+        style="font-size:{size + 8}px;display:inline-block"
         read-only="true"
         bind:this="{mf}"
       >

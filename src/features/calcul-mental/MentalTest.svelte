@@ -11,7 +11,7 @@
   import { calculMentalAssessment } from './stores'
   import { isTouchScreendevice, shuffle } from '../../app/utils'
   import { fontSize, user } from '../../app/stores'
-  import { getDocument } from '../../app/db'
+  import { getDocument, saveDocument } from '../../app/db'
   import { tick } from 'svelte'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { math } from 'tinycas/build/math/math'
@@ -46,6 +46,10 @@
   let choices
   let correct = false
   let restart = false
+  let classroom
+  let savedFontSize
+  let selectionRef
+  
 
   const regex = /\$\$(.*?)\$\$/g
   const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
@@ -88,6 +92,8 @@
     domain = queryParams.domain
     theme = queryParams.theme
     level = queryParams.level
+    classroom = queryParams.classroom === 'true'
+    console.log('clssroom', classroom)
     assessmentId = queryParams.assessmentId
     questions = []
 
@@ -166,8 +172,8 @@
     const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%'
    
     if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
- 
-      commit()
+      // if (elapsed > 3000) commit()
+      if (answer !== '') commit()
       return false
     } else if (
       keystroke === '[Space]' &&
@@ -275,6 +281,8 @@
     console.log('answer', answer)
     correct = math(answer).type !== '!! Error !!'
   }
+
+ 
 </script>
 
 {#if finish}
@@ -284,6 +292,8 @@
     answers_latex="{answers_latex}"
     answers_choice="{answers_choice}"
     query={location.search}
+    classroom={classroom}
+    size={classroom ? 42: $fontSize}
     bind:restart
 
   />
@@ -297,7 +307,7 @@
     />
   </div>
   <div class="mt-5 mb-5">
-    <Question question="{generated}" />
+    <Question size={classroom ? 42: $fontSize} question="{generated}" />
   </div>
   <!-- <div class:error> -->
 
@@ -313,7 +323,7 @@
           </Button>
         {/each}
       </div>
-    {:else}
+    {:else if !classroom}
       <div
         class="mt-16 d-flex flex-row align-center justify-center"
         style="max-width:500px;width:100%"

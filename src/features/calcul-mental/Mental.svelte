@@ -25,6 +25,7 @@
   } from 'svelte-materialify/src'
 
   import {
+    mdiProjectorScreen,
     mdiRocketLaunchOutline,
     mdiHelp,
     mdiBasketPlus,
@@ -80,6 +81,7 @@
   let selectedClassroom
   let selectedStudents = {}
   let teacherAssessmentId
+  let classroom = false
 
   for (let theme_i = 0; theme_i < themes.length; theme_i++) {
     Object.keys(questions).forEach((th, th_i) => {
@@ -108,7 +110,6 @@
     subdomainIdx = Object.keys(questions[theme][domain]).indexOf(subdomain)
     level = queryParams.level
     levelIdx = level - 1
-  
   } else {
     themeIdx = 0
     theme = themes[0]
@@ -169,6 +170,12 @@
       url = '/mental-test'
     } else {
       url = `/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
+    }
+
+    if (url.includes('?')) {
+      url += `&classroom=${classroom}`
+    } else  {
+      url += `?classroom=${classroom}`
     }
 
     if (decodeURI(encodeURI(url)) !== url) warn('URI malformed', url)
@@ -342,7 +349,6 @@
     console.log('assignedStudents', assignedStudents)
   }
 
-
   $: isLoggedIn = $user.id != 'guest'
   $: isTeacher = isLoggedIn && $user.roles.includes('teacher')
   $: isStudent = isLoggedIn && $user.roles.includes('student')
@@ -450,6 +456,16 @@
   <div class="flex-grow-1"></div>
 
   {#if !showBasket}
+    <Button
+      class="ml-2 mr-2 amber darken-2 white-text"
+      fab
+      size="x-small"
+      depressed = {classroom}
+      on:click="{()=>{classroom = !classroom}}"
+    >
+      <Icon path="{mdiProjectorScreen}" />
+    </Button>
+
     <Button
       class="ml-2 mr-2 amber darken-2 white-text"
       disabled="{disable}"

@@ -1,11 +1,11 @@
 <script>
   import CorrectionItem from './CorrectionItem.svelte'
   import { Button, Icon } from 'svelte-materialify/src'
-  import { mdiCloudDownloadOutline, mdiHome, mdiLifebuoy, mdiReload, mdiScanHelper } from '@mdi/js'
+  import { mdiCloudDownloadOutline, mdiHome, mdiLifebuoy, mdiReload, mdiScanHelper, mdiProjectorScreen } from '@mdi/js'
   import Reveal from 'reveal.js'
   import { onMount } from 'svelte'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
-  import { user } from '../../app/stores'
+  import { fontSize, user } from '../../app/stores'
   import { calculMentalAssessment } from './stores'
   import { saveDocument } from '../../app/db'
 import { navigate } from 'svelte-routing';
@@ -16,6 +16,10 @@ import { navigate } from 'svelte-routing';
   export let answers_choice
   export let restart
   export let query
+  export let classroom
+  export let size = $fontSize
+
+
   const help = questions[0].help
   let score = 0
   let total = 0
@@ -179,6 +183,8 @@ import { navigate } from 'svelte-routing';
           item="{item}"
           addPoints="{addPoints}"
           details="{details}"
+          classroom={classroom}
+          size={size}
         />
       {/each}
     </div>

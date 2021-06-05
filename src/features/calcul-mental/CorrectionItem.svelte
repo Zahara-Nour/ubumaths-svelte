@@ -11,15 +11,40 @@
   export let item
   export let addPoints
   export let details
-  const number = item.number
-  const options = item.options
+  export let classroom
+  export let size = $fontSize
+  const {
+    number,
+    options = '',
+    qexp_latex,
+    solutions,
+    answer,
+    answer_latex,
+  } = item
+
+  const STATUS_EMPTY = 'empty'
+  const STATUS_CORRECT = 'correct'
+  const STATUS_INCORRECT = 'incorrect'
+  const STATUS_UNOPTIMAL_FORM = 'unoptimal  form'
+  const STATUS_BAD_FORM = 'bad form'
+
+  const EMPTY_ANSWER = "Tu n'as rien répondu."
+  const ZEROS = 'Ta réponse contient des des zéros inutiles.'
+  const BRACKETS = 'Ton expression contient des parenthèses inutiles.'
+  const SPACES = 'Les chiffres sont mal espacés.'
+  const SIGNS = 'Tu peux faire des simplifications de signes.'
+  const BAD = "Ton expression n'est pas mathématiquement correcte."
+  const PRODUCTS = 'Tu peux simplifier les symboles de multiplication.'
+  const FORM =
+    "<span class='orange-text'>Ta réponse</span> n'est pas écrite sous la forme demandée."
+
   const implicit = options && options.includes('implicit')
   // l'expression de départ doit être envoyé en latex également
   const qexp = item.qexp
-  const qexp_latex = item.qexp_latex
+
   const correction_latex = item.correction
   // less solutions doivent être envoyées en Latex
-  const solutions = item.solutions
+
   const solutions_latex = item.solutions.map((solution) => {
     if (item.type === 'choice') {
       return solution // Ce n'est pas du latex !
@@ -29,93 +54,141 @@
     }
   })
 
+  let status
+  let penalty = false
   const details_latex = item.details // details are in latex form
-  const answer = item.answer
-  const answer_latex = item.answer_latex
-  const empty = !item.answer
-  const badExpression =
-    item.type !== 'choice' && math(answer).type === '!! Error !!'
-  const seemsCorrect = // réponse équivalente à la solution mais la forme n'est peut être pas satisfaisante
-    item.type !== 'choice' &&
-    !empty &&
-    !badExpression &&
-    item.solutions.some((solution) => math(answer).equals(math(solution)))
+  const coms = []
 
-  let correct = false
-
-  const validateSpaces = checkSpaces()
-  const validateBrackets = checkBrackets()
-  const validateZeros = checkZeros()
-  const validateSigns = checkSigns()
-  const validateOrder = checkOrder()
-  const validateAnswer = checkAnswer()
-
-  if (item.type === 'choice') {
-    correct = item.solutions.includes(item.answer_choice)
+  if (!item.answer) {
+    if (!classroom) coms.push(EMPTY_ANSWER)
+    status = STATUS_EMPTY
   } else {
-    correct =
-      seemsCorrect &&
-      validateZeros &&
-      validateBrackets &&
-      validateSigns &&
-      validateOrder &&
-      validateSpaces &&
-      validateAnswer
+    console.log('not empty')
+    switch (item.type) {
+      case 'choice':
+        status =
+          item.solutions.includes(item.answer_choice) === true
+            ? STATUS_CORRECT
+            : STATUS_INCORRECT
+        break
+
+      default: {
+        const badExpression =
+          item.type !== 'choice' && math(answer).type === '!! Error !!'
+        const equivalent =
+          !badExpression &&
+          item.solutions.some((solution) => math(answer).equals(math(solution)))
+        if (badExpression) {
+          coms.push(BAD)
+          status = STATUS_INCORRECT
+        } else if (!equivalent) {
+          status = STATUS_INCORRECT
+        } else {
+          // vérification des contraintes de forme
+          checkConstraints()
+          if (status !== STATUS_BAD_FORM) {
+            checkAnswer()
+          }
+        }
+      }
+    }
   }
-  // const strictlyCorrect =
-  //   !badExpression &&
-  //   solutions_latex.some((e) => e.strictlyEquals(answer_latex))
-  let coms = []
+
+  // retourne un tableau des contraintes non respectées
+  function checkConstraints() {
+    console.log('check Constraints')
+    if (
+      !options.includes('no-penalty-for-incorrect-spaces') &&
+      !checkSpaces()
+    ) {
+      coms.push(SPACES)
+      if (options.includes('require-correct-spaces')) {
+        status = STATUS_BAD_FORM
+      } else {
+        penalty = true
+        status = STATUS_UNOPTIMAL_FORM
+      }
+    }
+
+    if (
+      !options.includes('no-penalty-for-explicit-products') &&
+      !checkProducts()
+    ) {
+      coms.push(PRODUCTS)
+      if (options.includes('require-implicit-products')) {
+        status = STATUS_BAD_FORM
+      } else {
+        penalty = true
+        status = STATUS_UNOPTIMAL_FORM
+      }
+    }
+
+    if (
+      !options.includes('no-penalty-for-extraneous-brackets') &&
+      !checkBrackets()
+    ) {
+      coms.push(BRACKETS)
+      if (options.includes('require-no-extraneaous-brackets')) {
+        status = STATUS_BAD_FORM
+      } else {
+        penalty = true
+        status = STATUS_UNOPTIMAL_FORM
+      }
+    }
+
+    if (!options.includes('no-penalty-for-extraneous-zeros') && !checkZeros()) {
+      coms.push(ZEROS)
+      if (options.includes('require-no-extraneaous-zeros')) {
+        status = STATUS_BAD_FORM
+      } else {
+        penalty = true
+        status = STATUS_UNOPTIMAL_FORM
+      }
+    }
+
+    if (!options.includes('no-penalty-for-extraneous-signs') && !checkSigns()) {
+      coms.push(SIGNS)
+      if (options.includes('require-no-extraneaous-signs')) {
+        status = STATUS_BAD_FORM
+      } else {
+        penalty = true
+        status = STATUS_UNOPTIMAL_FORM
+      }
+    }
+  }
+
+  // const validateFractions = checkFractions()
 
   const correction = createCorrection(false)
   const detailedCorrection = item.details ? createCorrection(true) : null
 
-  // console.log('badExpressio', badExpression)
-  // console.log('correct', correct)
-  // console.log('empty', empty)
-  // console.log('validateSpaces', validateSpaces)
-
-  const EMPTY_ANSWER = "Tu n'as rien répondu."
-  const ZEROS = 'Ta réponse contient des des zéros inutiles.'
-  const BRACKETS = 'Ton expression contient des parenthèses inutiles.'
-  const SPACES = 'Les chiffres sont mal espacés.'
-  const SIGNS = 'Tu peux faire des simplifications de signes.'
-  const BAD = "Ton expression n'est pas mathématiquement correcte."
-  const FORM = "<span class='orange-text'>Ta réponse</span> n'est pas écrite sous la forme demandée."
-
-  if (empty) {
-    coms.push(EMPTY_ANSWER)
-  }
-
-  if (!empty && badExpression) {
-    coms.push(BAD)
-  }
-
-  if (seemsCorrect && !validateSpaces) {
-    coms.push(SPACES)
-  }
-
-  if (seemsCorrect && !validateZeros) {
-    coms.push(ZEROS)
-  }
-
-  if (seemsCorrect && !validateBrackets) {
-    coms.push(BRACKETS)
-  }
-
-  if (seemsCorrect && !validateAnswer) {
-    coms.push(FORM)
-  }
+  // if (seemsCorrect && !validateAnswer) {
+  //   coms.push(FORM)
+  // }
 
   onMount(() => {
     Mathlive.renderMathInElement(`correction${number}`)
+    let score = 0
+    switch (status) {
+      case STATUS_CORRECT:
+        score = item.points
+        break
 
-    if (correct) addPoints(item.points)
+      case STATUS_UNOPTIMAL_FORM:
+        score = item.points / 2
+        break
+
+      default:
+      // console.log('default case status')
+    }
+    console.log('score', score, status)
+    addPoints(score)
   })
 
   function checkAnswer() {
+    console.log('checkAnswer')
     let e = math(answer)
-  
+
     let sols = solutions.map((solution) => math(solution))
 
     if (!(options && options.includes('answer-disallow-removing-null-terms'))) {
@@ -130,8 +203,9 @@
       sols = sols.map((solution) => solution.removeFactorsOne())
     }
 
-    // if (options && options.includes('answer-allow-unecessary-brackets')) {
-    // le test des parenthèses a été fait avant, on les enlève pour comparer à la solution
+    // Les tests de contraintes ont été faits. Il faut simplifier la réonse pour pouvoir
+    // la comparer à la solution : on enlève les parenthèses inutiles, les signes inutiles....
+
     e = e.removeUnecessaryBrackets()
     sols = sols.map((solution) => solution.removeUnecessaryBrackets())
     // }
@@ -145,18 +219,21 @@
       e = e.sortTermsAndFactors()
       sols = sols.map((solution) => solution.sortTermsAndFactors())
     }
-   
-    return sols.some((sol) => sol.strictlyEquals(e))
+    if (!sols.some((sol) => sol.strictlyEquals(e))) {
+      status = STATUS_BAD_FORM
+    } else if (status !== STATUS_UNOPTIMAL_FORM) {
+      status = STATUS_CORRECT
+    }
+
+    if (status === STATUS_BAD_FORM) coms.push(FORM)
   }
 
   function checkBrackets() {
-    if (
-      !empty &&
-      !(options && options.includes('answer-allow-unecessary-brackets'))
-    ) {
-      const e = math(answer)
-      return e.removeUnecessaryBrackets().string === e.string
-    }
+    const e = math(answer)
+    return e.removeUnecessaryBrackets().string === e.string
+  }
+
+  function checkProducts() {
     return true
   }
 
@@ -167,41 +244,39 @@
   // retourne true si la vérification est OK
   function checkSpaces() {
     //  TODO: a Remplacer par searchMisplacedSpaces
-    if (!empty && options && options.includes('answer-require-spaces')) {
-      const a = answer_latex.replace(/\\,/g, ' ').replace(',', '.').trim()
-    
-      const regex = /\d+[\d\s]*(\.[\d\s]*\d+)?/g
-      const matches = a.match(regex)
 
-      if (matches) {
-        const regexsInt = [
-          /\d{4}/,
-          /\s$/,
-          /\s\d{2}$/,
-          /\s\d{2}\s/,
-          /\s\d$/,
-          /\s\d\s/,
-        ]
+    const a = answer_latex.replace(/\\,/g, ' ').replace(',', '.').trim()
 
-        const regexsDec = [
-          /\d{4}/,
-          /^\s/,
-          /^\d{2}\s/,
-          /\s\d{2}\s/,
-          /^\d\s/,
-          /\s\d\s/,
-        ]
-        return !matches.some((match) => {
-          let [int, dec] = match.split('.')
+    const regex = /\d+[\d\s]*(\.[\d\s]*\d+)?/g
+    const matches = a.match(regex)
 
-          return (
-            regexsInt.some((regex) => int.match(regex)) ||
-            (dec && regexsDec.some((regex) => dec.match(regex)))
-          )
-        })
-      }
+    if (matches) {
+      const regexsInt = [
+        /\d{4}/,
+        /\s$/,
+        /\s\d{2}$/,
+        /\s\d{2}\s/,
+        /\s\d$/,
+        /\s\d\s/,
+      ]
+
+      const regexsDec = [
+        /\d{4}/,
+        /^\s/,
+        /^\d{2}\s/,
+        /\s\d{2}\s/,
+        /^\d\s/,
+        /\s\d\s/,
+      ]
+      return !matches.some((match) => {
+        let [int, dec] = match.split('.')
+
+        return (
+          regexsInt.some((regex) => int.match(regex)) ||
+          (dec && regexsDec.some((regex) => dec.match(regex)))
+        )
+      })
     }
-    return true
   }
 
   function checkOrder() {
@@ -210,14 +285,7 @@
 
   // retourne true si la vérification est OK
   function checkZeros() {
-    if (
-      !empty &&
-      !(options && options.includes('answer-allow-unecessary-zeros'))
-    ) {
-      console.log('check zeros')
-      return !math(answer).searchUnecessaryZeros()
-    }
-    return true
+    return !math(answer).searchUnecessaryZeros()
   }
 
   function createCorrection(details) {
@@ -230,15 +298,19 @@
         if (details) {
         } else {
           // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
+          console.log('STATUS', status)
           line = `$$\\begin{align*}  ${qexp_latex}`
-          if (empty) {
+          if (status === STATUS_EMPTY) {
             line +=
               `=\\textcolor{green}{${solutions_latex[0]}}` + '\\end{align*}$$'
-          } else if (!seemsCorrect) {
+          } else if (status === STATUS_INCORRECT) {
             line +=
               `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
               `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
-          } else if (!correct) {
+          } else if (
+            status === STATUS_BAD_FORM ||
+            status === STATUS_UNOPTIMAL_FORM
+          ) {
             line +=
               `&= \\textcolor{orange}{${answer_latex}}` +
               `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
@@ -370,24 +442,47 @@
             lines.push(line)
           })
         } else {
-          line =
-            '$$' +
-            qexp_latex.replace(
-              /\\ldots/,
-              `\\textcolor{green}{${solutions_latex[0]}}`,
-            ) +
-            '$$'
+          if (status === STATUS_CORRECT) {
+            line =
+              '$$' +
+              qexp_latex.replace(
+                /\\ldots/,
+                `\\textcolor{green}{${answer_latex}}`,
+              ) +
+              '$$'
+          } else {
+            line =
+              '$$' +
+              qexp_latex.replace(
+                /\\ldots/,
+                `\\textcolor{green}{${solutions_latex[0]}}`,
+              ) +
+              '$$'
 
-          lines.push(line)
-          if (!empty && !correct) {
-            coms.push(
-              'Ta réponse : $$' +
-                qexp_latex.replace(
-                  /\\ldots/,
-                  `\\textcolor{red}{${answer_latex}}`,
-                ) +
-                '$$',
-            )
+            if (status === STATUS_INCORRECT) {
+              coms.unshift(
+                'Ta réponse : $$' +
+                  qexp_latex.replace(
+                    /\\ldots/,
+                    `\\textcolor{red}{${answer_latex}}`,
+                  ) +
+                  '$$',
+              )
+            } else if (
+              status === STATUS_BAD_FORM ||
+              status === STATUS_UNOPTIMAL_FORM
+            ) {
+              coms.unshift(
+                'Ta réponse : $$' +
+                  qexp_latex.replace(
+                    /\\ldots/,
+                    `\\textcolor{orange}{${answer_latex}}`,
+                  ) +
+                  '$$',
+              )
+            }
+
+            lines.push(line)
           }
         }
     }
@@ -405,9 +500,13 @@
           fab
           size="x-small"
           depressed
-          class="{correct ? 'green white-text' : 'red white-text'}"
+          class="{status === STATUS_CORRECT
+            ? 'green white-text'
+            : status === STATUS_UNOPTIMAL_FORM
+            ? 'orange white-text'
+            : 'red white-text'}"
         >
-          <span style="font-size:{$fontSize}px;">{item.number}</span>
+          <span style="font-size:{size}px;">{item.number}</span>
         </Button>
 
         <!-- a div is necessary for the icon to center aligned -->
@@ -435,13 +534,13 @@
       >
         {#if details && item.details}
           {#each detailedCorrection as line}
-            <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{$fontSize}px;">
+            <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{size}px;">
               {line}
             </div>
           {/each}
         {:else}
           {#each correction as line}
-            <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{$fontSize}px;">
+            <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{size}px;">
               {@html line}
             </div>
           {/each}
@@ -450,7 +549,7 @@
             {#each coms as com}
               <div
                 class="ml-2 mr-2 mt-2 mb-2"
-                style="font-size:{$fontSize}px;font-family: 'Handlee', cursive;"
+                style="font-size:{size}px;font-family: 'Handlee', cursive;"
               >
                 {@html com}
               </div>
