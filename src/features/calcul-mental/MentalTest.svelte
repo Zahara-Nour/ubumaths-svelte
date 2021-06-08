@@ -71,6 +71,9 @@
       onKeystroke,
       // 'keypress-sound': 'none',
       // 'keypress-vibration': false,
+      inlineShortcuts: {
+        'xx': {},
+      },
     })
     if (!mf.hasFocus) mf.focus()
   }
