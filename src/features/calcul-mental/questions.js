@@ -3787,8 +3787,19 @@ export default {
           subdescription:
             "Dénominateur multiple de l'autre, nombres positifs, sans simplification",
           enounces: ['Calcule.'],
-          expressions: ['&1/&3+&2/#{&3*&4}', '&2/#{&3*&4}+&1/&3'],
+          expressions: [
+            '&1/&3+&2/#{&3*&4}',
+            '&2/#{&3*&4}+&1/&3',
+            '&1/&3+&2/#{&3*&4}',
+            '&2/#{&3*&4}+&1/&3'
+          ],
           variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{cd(&1);cd(&2)}',
+              '&4': '$e[2;9]\\{cd(&2)}',
+            },
             {
               '&1': '$e[2;9]',
               '&2': '$e[2;9]',
@@ -5653,7 +5664,8 @@ export default {
           solutions: [
             ['&2'],
           ],
-          type: 'result',
+          
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -5671,7 +5683,7 @@ export default {
           solutions: [
             ['#{&1+&2}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -5689,7 +5701,7 @@ export default {
           solutions: [
             ['&2'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -5708,7 +5720,7 @@ export default {
           solutions: [
             ['&2'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -5726,7 +5738,7 @@ export default {
           solutions: [
             ['#{&1*&2}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -5744,7 +5756,7 @@ export default {
           solutions: [
             ['&1'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
       ],
@@ -5777,7 +5789,7 @@ export default {
           solutions: [
             ['&2'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -5795,7 +5807,7 @@ export default {
           solutions: [
             ['#{&1+(&2)}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -5813,7 +5825,7 @@ export default {
           solutions: [
             ['&2'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -5846,7 +5858,7 @@ export default {
           solutions: [
             ['&2'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -5869,7 +5881,7 @@ export default {
           solutions: [
             ['#{&1*(&2)}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -5887,7 +5899,7 @@ export default {
           solutions: [
             ['&1'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
       ],
@@ -5910,7 +5922,7 @@ export default {
           solutions: [
             ['#{&3/&1}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -5929,7 +5941,7 @@ export default {
           solutions: [
             ['#{(&2+&3)/&1}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -5948,7 +5960,7 @@ export default {
           solutions: [
             ['#{&2/&3}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -6000,7 +6012,7 @@ export default {
             ['&2/&1'],
             ['&2/&1'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -6019,7 +6031,7 @@ export default {
           solutions: [
             ['#{&2*&3/&1}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -6045,7 +6057,7 @@ export default {
             ['#{&2*&1}'],
             ['#{&2/&1}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
       ],
@@ -6068,7 +6080,7 @@ export default {
           solutions: [
             ['#{-&2/&1}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -6089,7 +6101,7 @@ export default {
           solutions: [
             ['#{-(&2)/(&1)}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -6112,7 +6124,7 @@ export default {
           solutions: [
             ['#{(&1-&2)/&3}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -6135,7 +6147,7 @@ export default {
           solutions: [
             ['#{(&1-(&2))/(&3)}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -6157,7 +6169,7 @@ export default {
           solutions: [
             ['#{(&1-&2)/(&3-&4)}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
         {
@@ -6179,7 +6191,7 @@ export default {
           solutions: [
             ['#{(&1-(&2))/(&3-(&4))}'],
           ],
-          type: 'result',
+          type: 'equation',
           defaultDelay: 30,
         },
       ]

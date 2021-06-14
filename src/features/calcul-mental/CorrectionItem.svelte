@@ -468,7 +468,36 @@
                 `&= \\textcolor{orange}{${answer_latex}}` +
                 `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
             } else {
-              line += `=\\textcolor{green}{${answer_latex}}$$`
+              line += `=\\textcolor{green}{${answer_latex}}\\end{align*}$$`
+            }
+            lines.push(line)
+          }
+          break
+        }
+
+        case 'equation': {
+          if (details) {
+          } else {
+            // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
+            line =  `La solution de $$${qexp_latex}$$ est :`
+            lines.push(line)
+            line = `$$\\begin{align*}  x`
+            if (status === STATUS_EMPTY) {
+              line +=
+                `=\\textcolor{green}{${solutions_latex[0]}}` + '\\end{align*}$$'
+            } else if (status === STATUS_INCORRECT) {
+              line +=
+                `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
+                `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
+            } else if (
+              status === STATUS_BAD_FORM ||
+              status === STATUS_UNOPTIMAL_FORM
+            ) {
+              line +=
+                `&= \\textcolor{orange}{${answer_latex}}` +
+                `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
+            } else {
+              line += `=\\textcolor{green}{${answer_latex}}\\end{align*}$$`
             }
             lines.push(line)
           }
