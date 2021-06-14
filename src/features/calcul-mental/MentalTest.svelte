@@ -49,7 +49,6 @@
   let classroom
   let savedFontSize
   let selectionRef
-  
 
   const regex = /\$\$(.*?)\$\$/g
   const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
@@ -105,7 +104,7 @@
       if (question.options && question.options.includes('exhaust')) {
         const n = Math.min(question.expressions.length, 10)
         const indices = []
-        question.expressions.forEach((_,i)=> {
+        question.expressions.forEach((_, i) => {
           indices.push(i)
         })
         shuffle(indices)
@@ -143,8 +142,8 @@
   }
 
   function onChoice(choice) {
-    answer = choice
-    answer_latex = choice
+    // answer = choice
+    // answer_latex = choice
     answer_choice = choice
     change()
   }
@@ -156,7 +155,7 @@
       .trim()
     answer = mf
       .getValue('ASCIIMath')
-      .replace(/xx/g, '*')
+      // .replace(/xx/g, '*')
       .replace(/÷/g, ':')
       .replace(/\((\d+(,\d+)*)\)\//g, (_, p1) => p1 + '/')
       .replace(/\(([a-z])\)\//g, (_, p1) => p1 + '/')
@@ -173,7 +172,7 @@
 
   function onKeystroke(mathfield, keystroke, e) {
     const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%'
-   
+
     if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
       // if (elapsed > 3000) commit()
       if (answer !== '') commit()
@@ -190,6 +189,7 @@
       mf.insert('\\,')
       return false
     } else if (e.key === '*') {
+      console.log('#########')
       mf.insert('\\times ')
       return false
     } else if (e.key === ':') {
@@ -242,6 +242,8 @@
         if (!mf.hasFocus()) mf.focus()
       }
       answer = ''
+      answer_latex = ''
+      answer_choice = null
       current++
       question = questions[current]
       generated = generate(question, generateds)
@@ -281,11 +283,8 @@
   }
 
   $: {
-    console.log('answer', answer)
     correct = math(answer).type !== '!! Error !!'
   }
-
- 
 </script>
 
 {#if finish}
@@ -294,11 +293,10 @@
     answers="{answers}"
     answers_latex="{answers_latex}"
     answers_choice="{answers_choice}"
-    query={location.search}
-    classroom={classroom}
-    size={classroom ? 42: $fontSize}
+    query="{location.search}"
+    classroom="{classroom}"
+    size="{classroom ? 42 : $fontSize}"
     bind:restart
-
   />
 {:else if generated}
   <div class="mt-6 mb-6">
@@ -310,7 +308,7 @@
     />
   </div>
   <div class="mt-5 mb-5">
-    <Question size={classroom ? 42: $fontSize} question="{generated}" />
+    <Question size="{classroom ? 42 : $fontSize}" question="{generated}" />
   </div>
   <!-- <div class:error> -->
 
@@ -320,7 +318,8 @@
         {#each choices as choice, i}
           <Button
             class="ml-3 mr-3"
-            on:click="{() => onChoice(generated.choices[i])}"
+            
+            on:click="{() => onChoice(i)}"
           >
             <div style="font-size:{$fontSize + 4}px;">{@html choice}</div>
           </Button>

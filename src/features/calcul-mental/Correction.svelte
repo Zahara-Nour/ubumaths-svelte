@@ -105,7 +105,11 @@ import { navigate } from 'svelte-routing';
       options: question.options,
       enounce: question.enounce,
       correction: question.correction,
+      correctionFormat:question.correctionFormat,
+      testAnswer:question.testAnswer,
+      choices:question.choices
     }
+    console.log('items', items )
   }
 
   const options = {

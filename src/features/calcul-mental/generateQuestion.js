@@ -18,6 +18,9 @@ export default function generateQuestion(question, generateds) {
   let conditions
   let letters
   let correction
+  let testAnswer
+
+  const {options=[]} = question
 
   const generatedExpressions = generateds ? generateds.map((g) => g.expression) : []
   const generatedEnounces = generateds ? generateds.map((g) => g.enounce) : []
@@ -144,11 +147,24 @@ export default function generateQuestion(question, generateds) {
         expression = expression.replace(regexDecimal, replacementDecimal)
         expression = expression.replace(regexExactSigned, replacementExactSigned)
         expression = expression.replace(regexExact, replacementExact)
-        if (question.options && question.options.includes('remove-null-terms')) {
+        if (options.includes('remove-null-terms')) {
           expression = math(expression).removeNullTerms().string
         }
-        if (question.options && question.options.includes('shuffle-terms')) {
+
+        if (options.includes('shuffle-terms-and-factors')) {
+          expression = math(expression).shuffleTermsAndFactors().string
+        } 
+        else if (options.includes('shuffle-terms')) {
           expression = math(expression).shuffleTerms().string
+        } 
+        else if (options.includes('shuffle-factors')) {
+          expression = math(expression).shuffleFactors().string
+        } 
+        else if (options.includes('shallow-shuffle-terms')) {
+          expression = math(expression).shallowShuffleTerms().string
+        }
+        else if (options.includes('shallow-shuffle-factors')) {
+          expression = math(expression).shallowShuffleFactors().string
         }
       }
 
@@ -225,15 +241,15 @@ export default function generateQuestion(question, generateds) {
         }
 
       }
-      if (question.type === 'choice' && typeof solution === 'number') {
-        solution = choices[solution]
-      }
+      // if (question.type === 'choice' && typeof solution === 'number') {
+      //   solution = choices[solution]
+      // }
       return solution
     })
 
   }
   // Il faut évaluer l'expression
-  else {
+  else if (expression) {
     let params = { decimal: question['result-type'] === 'decimal' }
 
     // 
@@ -255,7 +271,7 @@ export default function generateQuestion(question, generateds) {
       params = { ...params, ...letters }
     }
 
-    solutions = [math(expression).eval(params).string]
+    solutions = [math(expression).eval(params).removeMultOperator().removeFactorsOne().string]
   }
 
   if (question.details) {
@@ -313,6 +329,7 @@ export default function generateQuestion(question, generateds) {
   }
 
 
+    // TODO : enlever doublon avec correctionFormat
   if (question.corrections) {
     correction = question.corrections[question.corrections.length === 1 ? 0 : i]
     Object.getOwnPropertyNames(variables).forEach((name) => {
@@ -326,6 +343,19 @@ export default function generateQuestion(question, generateds) {
     correction = correction.replace(regexExact, replacementExact)
   }
 
+  if (question.testAnswer) {
+    testAnswer = question.testAnswer[question.testAnswer.length === 1 ? 0 : i]
+    Object.getOwnPropertyNames(variables).forEach((name) => {
+      const regex = new RegExp(name, 'g')
+
+      testAnswer = testAnswer.replace(regex, variables[name])
+    })
+    testAnswer = testAnswer.replace(regexDecimalLatex, replacementDecimalLatex)
+    testAnswer = testAnswer.replace(regexDecimal, replacementDecimal)
+    testAnswer = testAnswer.replace(regexExactLatex, replacementExactLatex)
+    testAnswer = testAnswer.replace(regexExact, replacementExact)
+  }
+
   let expression_latex
   if (expression) {
     expression_latex = math(expression).toLatex({
@@ -334,6 +364,42 @@ export default function generateQuestion(question, generateds) {
 
     })
   }
+
+  let correctionFormat
+  if (question.correctionFormat) {
+    correctionFormat = question.correctionFormat[question.correctionFormat.length === 1 ? 0 : i]
+    console.log('correctionFormat', correctionFormat)
+    let {correct, uncorrect} = correctionFormat 
+    
+    correct = correct.map(format => {
+      Object.getOwnPropertyNames(variables).forEach((name) => {
+        const regex = new RegExp(name, 'g')
+        format = format.replace(regex, variables[name])
+      })
+      return format
+    })
+
+    correct = correct.map(format => format.replace(regexDecimalLatex, replacementDecimalLatex))
+    correct = correct.map(format => format.replace(regexDecimal, replacementDecimal))
+    correct = correct.map(format => format.replace(regexExactLatex, replacementExactLatex))
+    correct = correct.map(format => format.replace(regexExact, replacementExact))
+
+    uncorrect = uncorrect.map(format => {
+      Object.getOwnPropertyNames(variables).forEach((name) => {
+        const regex = new RegExp(name, 'g')
+        format = format.replace(regex, variables[name])
+      })
+      return format
+    })
+
+    uncorrect = uncorrect.map(format => format.replace(regexDecimalLatex, replacementDecimalLatex))
+    uncorrect = uncorrect.map(format => format.replace(regexDecimal, replacementDecimal))
+    uncorrect = uncorrect.map(format => format.replace(regexExactLatex, replacementExactLatex))
+    uncorrect = uncorrect.map(format => format.replace(regexExact, replacementExact))
+
+    correctionFormat = {correct, uncorrect}
+  }
+
 
   const generated = {
     points: 1,
@@ -348,7 +414,9 @@ export default function generateQuestion(question, generateds) {
   if (details) generated.details = details
   if (enounce) generated.enounce = enounce
   if (correction) generated.correction = correction
+  if (correctionFormat) generated.correctionFormat = correctionFormat
   if (expression2) generated.expression2 = expression2
+  if (testAnswer) generated.testAnswer = testAnswer
 
 
   return generated

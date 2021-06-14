@@ -38,17 +38,30 @@
 // require-no-extraneaous-signs
 // no-penalty-for-extraneous-signs
 
+// * facteurs égaux à 1
+// require-no-factor-one = false
+// no-penalty-for-factor-one = false
 
+// * facteurs égaux à 0
+// require-no-factor-zero = false
+// no-penalty-for-factor-zero = false
 
 // * permutation des termes et facteurs
-// 
+// disallow-terms-permutation=false
+// disallow-factors-permutation=false
+// disallow-terms-and-factors-permutation=false
+
 // * termes nuls
-// answer-disallow-removing-null-terms = false
-// 
-// * facteurs égaux à 1
-// answer-disallow-removing-factors-one = false
+// require-no-null-terms = false
+// no-penalty-for-null-terms = false
 
 
+// * mélange des termes et facteurs
+// shuffle-terms = false
+// shuffle-factors = false
+// shuffle-terms-and-factors = false
+// shallow-shuffle-terms = false
+// shallow-shuffle-factors = false
 
 
 
@@ -1425,10 +1438,9 @@ export default {
         },
 
       ],
-      'Division euclidienne': [
+      'Divisibilité': [
         {
           description: 'Effectuer une division euclidienne ',
-          subdescription: '',
           enounces:
             ["Ecris l'expression correspondant à la division euclidienne de $$#{&1*&2+&3}$$ par $$&2$$."],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[1;&2-1]' }],
@@ -1436,6 +1448,132 @@ export default {
           solutions: [['&1 * &2+&3']],
           options: ['no-exp'],
           type: 'decomposition',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Trouver un diviseur',
+          subdescription: 'Une décomposition est donnée',
+          enounces:
+            ["Trouve un diviseur de $$%{&1*&2}$$ (autre que $$1$$ et $$#{&1*&2}$$), sachant que :"],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]\\{&1}' }],
+          expressions: ['#{&1*&2}=&1*&2'],
+          // solutions: [['&1']],
+          testAnswer: ['&answer!=1 && &answer!=#{&1*&2} && mod(#{&1*&2}; &answer)=0'],
+          type: 'rewrite',
+          correctionFormat: [{
+            correct: ['$$&solution$$ est un diviseur de $$%{&1*&2}$$'],
+            uncorrect: ['<span style="color:green;">$$&1$$</span> et <span style="color:green;">$$&2$$</span> sont des diviseurs de $$%{&1*&2}$$']
+          }],
+          defaultDelay: 30,
+        },
+        {
+          description: 'Trouver un diviseur',
+          enounces:
+            ["Trouve un diviseur de $$%{&1*&2}$$ (autre que $$1$$ et $$#{&1*&2}$$)."],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]\\{&1}' }],
+          testAnswer: ['&answer!=1 && &answer!=#{&1*&2} && mod(#{&1*&2}; &answer)=0'],
+          type: 'rewrite',
+          correctionFormat: [{
+            correct: ['&solution est un diviseur de $$%{&1*&2}$$'],
+            uncorrect: ['<span style="color:green;">$$&1$$</span> et <span style="color:green;">$$&2$$</span> sont des diviseurs de $$%{&1*&2}$$']
+          }],
+
+          defaultDelay: 30,
+        },
+        {
+          description: 'Utiliser un critère de divisibilité',
+          subdescription: 'Par 2',
+          enounces:
+            ["Le nombre $$%{&1}$$ est-il divisible par 2 ?"],
+          variables: [{ '&1': '2*$e{3}' }, { '&1': '2*$e{3}+1' }],
+
+          type: 'choice',
+          choices: [
+            ['Oui', 'Non'],
+          ],
+          // corrections: [
+          //   'Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est ',
+          // ],
+          solutions: [
+            ['mod(&1;2)=0 ?? 0 :: 1'],
+          ],
+          correctionFormat: [{
+            correct: ['$$2$$ est un diviseur de $$%{&1}$$ ? &solution'],
+            uncorrect: ['$$2$$ est un diviseur de $$%{&1}$$ ? &solution']
+          }],
+
+          defaultDelay: 30,
+        },
+        {
+          description: 'Utiliser un critère de divisibilité',
+          subdescription: 'Par 3',
+          enounces:
+            ["Le nombre $$%{&1}$$ est-il divisible par 3 ?"],
+          variables: [{ '&1': '3*$e[21;333]' }, { '&1': '3*$e[21;333]+$e[1;2]' }],
+
+          type: 'choice',
+          choices: [
+            ['Oui', 'Non'],
+          ],
+          // corrections: [
+          //   'Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est ',
+          // ],
+          solutions: [
+            ['mod(&1;3)=0 ?? 0 :: 1'],
+          ],
+          correctionFormat: [{
+            correct: ['$$3$$ est un diviseur de $$%{&1}$$ ? &solution'],
+            uncorrect: ['$$3$$ est un diviseur de $$%{&1}$$ ? &solution']
+          }],
+
+          defaultDelay: 30,
+        },
+        {
+          description: 'Utiliser un critère de divisibilité',
+          subdescription: 'Par 5',
+          enounces:
+            ["Le nombre $$%{&1}$$ est-il divisible par 5 ?"],
+          variables: [{ '&1': '5*$e{3}' }, { '&1': '5*$e{5}+$e[1;4]' }],
+
+          type: 'choice',
+          choices: [
+            ['Oui', 'Non'],
+          ],
+          // corrections: [
+          //   'Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est ',
+          // ],
+          solutions: [
+            ['mod(&1;5)=0 ?? 0 :: 1'],
+          ],
+          correctionFormat: [{
+            correct: ['$$5$$ est un diviseur de $$%{&1}$$ ? &solution'],
+            uncorrect: ['$$5$$ est un diviseur de $$%{&1}$$ ? &solution']
+          }],
+
+          defaultDelay: 30,
+        },
+        {
+          description: 'Utiliser un critère de divisibilité',
+          subdescription: 'Par 10',
+          enounces:
+            ["Le nombre $$%{&1}$$ est-il divisible par 10 ?"],
+          variables: [{ '&1': '10*$e{3}' }, { '&1': '10*$e{5}+$e[1;9]' }],
+
+          type: 'choice',
+          choices: [
+            ['Oui', 'Non'],
+          ],
+          // corrections: [
+          //   'Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est ',
+          // ],
+          solutions: [
+            ['mod(&1;10)=0 ?? 0 :: 1'],
+          ],
+          correctionFormat: [{
+            correct: ['$$10$$ est un diviseur de $$%{&1}$$ ? &solution'],
+            uncorrect: ['$$10$$ est un diviseur de $$%{&1}$$ ? &solution']
+          }],
+
           defaultDelay: 30,
         },
       ],
@@ -4154,6 +4292,193 @@ export default {
       ],
     },
   },
+  Puissances: {
+    'Apprivoiser': {
+      Définition: [
+        {
+          description: "Traduire un produit en puissance",
+          enounces: ["Réécris cette expression à l'aide d'une puissance"],
+          expressions: ['&1*&1', '&1*&1*&1', '&1*&1*&1*&1', '&1*&1*&1*&1*&1', '&1*&1*&1*&1*&1*&1', '&1*&1*&1*&1*&1*&1*&1'],
+          variables: [
+            { '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}' }
+          ],
+          solutions: [
+            ['&1^2'],
+            ['&1^3'],
+            ['&1^4'],
+            ['&1^5'],
+            ['&1^6'],
+            ['&1^7'],
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
+          description: "Traduire une puissance en produit",
+          enounces: ["Réécris cette expression à l'aide d'un produit"],
+          expressions: ['&1^2',
+            '&1^3',
+            '&1^4',
+            '&1^5',
+            '&1^6',
+            '&1^7'
+          ],
+
+          variables: [
+            { '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}' }
+          ],
+          solutions: [
+            ['&1*&1'], ['&1*&1*&1'], ['&1*&1*&1*&1'], ['&1*&1*&1*&1*&1'], ['&1*&1*&1*&1*&1*&1'], ['&1*&1*&1*&1*&1*&1*&1']
+          ],
+          type: 'result',
+          options: ['no-penalty-for-explicit-products'],
+          defaultDelay: 20,
+        },
+        {
+          description: "Définition d'une puissance à exposant négatif",
+          enounces: ["Ecris la définition de cette puissance."],
+          expressions: ['&1^(-&2)'],
+
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}',
+              '&2': '$e[2;9]'
+            }
+          ],
+          solutions: [
+            ['1/(&1^&2)'],
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+
+      ]
+    },
+    'Calculer': {
+      Multiplier: [
+        {
+          description: "Multiplier 2 puissances d'un même nombre.",
+          subdescription: "Exposants positifs",
+          enounces: ["Calcule en écrivant le résultat sous la forme d'une puissance."],
+          expressions: ['&1^&2*&1^&3'],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}',
+              '&2': '$e[2;5]',
+              '&3': '$e[2;5]',
+            }
+          ],
+          solutions: [
+            ['&1^(#{&2+&3})'],
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
+          description: "Multiplier 2 puissances d'un même nombre.",
+          subdescription: "Exposants relatifs",
+          enounces: ["Calcule en écrivant le résultat sous la forme d'une puissance."],
+          expressions: ['&1^(&2)*&1^(&3)'],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}',
+              '&2': '$er[2;5]',
+              '&3': '$er[2;5]\\{-(&2)}',
+            }
+          ],
+          solutions: [
+            ['&1^(#{&2+(&3)})'],
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+      ],
+      Diviser: [
+        {
+          description: "Diviser 2 puissances d'un même nombre.",
+          subdescription: "Exposants positifs",
+          enounces: ["Calcule en écrivant le résultat sous la forme d'une puissance."],
+          expressions: ['(&1^&2)/(&1^&3)'],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}',
+              '&2': '$e[4;10]',
+              '&3': '$e[2;&2-2]',
+            }
+          ],
+          solutions: [
+            ['&1^(#{&2-&3})'],
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
+          description: "Diviser 2 puissances d'un même nombre.",
+          subdescription: "Exposants relatifs",
+          enounces: ["Calcule en écrivant le résultat sous la forme d'une puissance."],
+          expressions: ['(&1^(&2))/(&1^(&3))'],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}',
+              '&2': '$er[2;5]',
+              '&3': '$er[2;5]',
+            }
+          ],
+          conditions: ['abs(&2-(&3))>1'],
+          solutions: [
+            ['&1^(#{&2-(&3)})'],
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+      ],
+      'Puissance de puissance': [
+        {
+          description: "Puissance d'une puissance",
+          subdescription: "Exposants positifs",
+          enounces: ["Calcule en écrivant le résultat sous la forme d'une puissance."],
+          expressions: ['(&1^&2)^&3'],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+            }
+          ],
+          solutions: [
+            ['&1^(#{&2*&3})'],
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+
+        {
+          description: "Puissance d'une puissance",
+          subdescription: "Exposants relatifs",
+          enounces: ["Calcule en écrivant le résultat sous la forme d'une puissance."],
+          expressions: ['(&1^(&2))^(&3)'],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}',
+              '&2': '$er[2;9]',
+              '&3': '$er[2;9]',
+            }
+          ],
+          solutions: [
+            ['&1^(#{&2*(&3)})'],
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+        },
+      ]
+    }
+  },
   Proportionnalité: {
     'Pourcentages': {
       Définition: [
@@ -4162,7 +4487,7 @@ export default {
           subdescription: "Convertir un pourcentage en une fraction de dénominateur 100.",
           enounces: ['Quelle est la fraction correspondant à :'],
           expressions: ['&1%'],
-          variables: [{ '&1': '$e[1;100]'}],
+          variables: [{ '&1': '$e[1;100]' }],
           solutions: [['&1/100']],
           type: 'result',
           defaultDelay: 10,
@@ -4172,7 +4497,7 @@ export default {
           subdescription: "convertir une fraction de dénominateur 100 en pourcentage.",
           enounces: ['Quelle est pourcentage correspondant à la fraction :'],
           expressions: ['&1/100'],
-          variables: [{ '&1': '$e[1;100]'}],
+          variables: [{ '&1': '$e[1;100]' }],
           solutions: [['&1%']],
           type: 'result',
           defaultDelay: 10,
@@ -4182,43 +4507,43 @@ export default {
           subdescription: "Convertir un pourcentage en une fraction simplifiée.",
           enounces: ['Quelle est la fraction simplifiée correspondant à :'],
           expressions: ['&1%'],
-          variables: [{ '&1': '$l{10;20;30;40;50;60;70;80;90;100;25;75;200;300;400}'}],
+          variables: [{ '&1': '$l{10;20;30;40;50;60;70;80;90;100;25;75;200;300;400}' }],
           type: 'result',
           defaultDelay: 10,
         },
-        
-      ],
-      'Proportions':[
 
       ],
-      "Calculer":[
+      'Proportions': [
+
+      ],
+      "Calculer": [
         {
           description: "Calculer le pourcentage d'une quantité",
           subdescription: "50%",
-          enounces: ['Calcule $$50$$% de $$#{&1*2}$$.'],
+          enounces: ['Calcule $$50\\%$$ de $$#{&1*2}$$.'],
           expressions: ['50%*#{&1*2}'],
-          options:['no-exp'],
-          variables: [{ '&1': '$e[1;50]'}],
+          options: ['no-exp'],
+          variables: [{ '&1': '$e[1;50]' }],
           type: 'result',
           defaultDelay: 10,
         },
         {
           description: "Calculer le pourcentage d'une quantité",
           subdescription: "10%",
-          enounces: ['Calcule $$10$$% de $$#{&1*10}$$.'],
+          enounces: ['Calcule $$10\\%$$ de $$#{&1*10}$$.'],
           expressions: ['10%*#{&1*10}'],
-          options:['no-exp'],
-          variables: [{ '&1': '$e[1;50]'}],
+          options: ['no-exp'],
+          variables: [{ '&1': '$e[1;50]' }],
           type: 'result',
           defaultDelay: 10,
         },
         {
           description: "Calculer le pourcentage d'une quantité",
           subdescription: "10% d'un nombre non multiple de 10",
-          enounces: ['Calcule $$10$$% de $$#{&1}$$.'],
+          enounces: ['Calcule $$10\\%$$ de $$#{&1}$$.'],
           expressions: ['10%*#{&1}'],
-          options:['no-exp'],
-          variables: [{ '&1': '$e[1;100]\\{m10}'}],
+          options: ['no-exp'],
+          variables: [{ '&1': '$e[1;100]\\{m10}' }],
           'result-type': 'decimal',
           type: 'result',
           defaultDelay: 10,
@@ -4226,39 +4551,107 @@ export default {
         {
           description: "Calculer le pourcentage d'une quantité",
           subdescription: "20%-40%",
-          enounces: ['Calcule $$&1$$% de $$#{&2*10}$$.'],
+          enounces: ['Calcule $$&1\\%$$ de $$#{&2*10}$$.'],
           expressions: ['&1%*#{&2*10}'],
-          options:['no-exp'],
-          variables: [{ '&1':'$l{20;30;40}', '&2': '$e[1;40]'}],
+          options: ['no-exp'],
+          variables: [{ '&1': '$l{20;30;40}', '&2': '$e[1;40]' }],
           type: 'result',
           defaultDelay: 10,
         },
         {
           description: "Calculer le pourcentage d'une quantité",
           subdescription: "25%",
-          enounces: ['Calcule $$25$$% de $$#{&1*4}$$.'],
+          enounces: ['Calcule $$25\\%$$ de $$#{&1*4}$$.'],
           expressions: ['25%*#{&1*4}'],
-          options:['no-exp'],
-          variables: [{ '&1': '$e[1;15]'}],
+          options: ['no-exp'],
+          variables: [{ '&1': '$e[1;15]' }],
           type: 'result',
           defaultDelay: 10,
         },
         {
           description: "Calculer le pourcentage d'une quantité",
           subdescription: "75%",
-          enounces: ['Calcule $$75$$% de $$#{&1*4}$$.'],
+          enounces: ['Calcule $$75\\%$$ de $$#{&1*4}$$.'],
           expressions: ['75%*#{&1*4}'],
-          options:['no-exp'],
-          variables: [{ '&1': '$e[1;12]'}],
+          options: ['no-exp'],
+          variables: [{ '&1': '$e[1;12]' }],
           type: 'result',
           defaultDelay: 10,
         },
 
+      ],
+      "Variations": [
+        {
+          description: "Augmentation",
+          enounces: ["Un article qui coûtait initialement $$%{&1}$$ Qr voit son prix augmenter de $$&2\\%$$. Quel est son nouveau prix?"],
+          expressions: ['#{&1}+#{&1}*(&2/100)'],
+          options: ['no-exp'],
+          variables: [{ '&1': '$e[2;20]*10', '&2': '$l{10;20;50;100;200}' }],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: "Diminution",
+          enounces: ["Un article qui coûtait initialement $$%{&1}$$ Qr voit son prix diminuer de $$&2\\%$$. Quel est son nouveau prix?"],
+          expressions: ['#{&1}-#{&1}*(&2/100)'],
+          options: ['no-exp'],
+          variables: [{ '&1': '$e[2;20]*10', '&2': '$l{10;20;30;50;100}' }],
+          type: 'result',
+          defaultDelay: 10,
+        },
+        {
+          description: "Trouver le coefficient multiplicateur",
+          subdescription: "Augmentation",
+          enounces: ["Quel est le coefficient multiplicateur correspondant à une augmentation de $$&1\\%$$?"],
+          expressions: ['1+&1/100'],
+          options: ['no-exp'],
+          variables: [{ '&1': '$l{$e[1;30];100;200;50}', }],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 10,
+        },
+        {
+          description: "Trouver le coefficient multiplicateur",
+          subdescription: "Diminution",
+          enounces: ["Quel est le coefficient multiplicateur correspondant à une diminution de $$&1\\%$$?"],
+          expressions: ['1-&1/100'],
+          options: ['no-exp'],
+          variables: [{ '&1': '$l{$e[1;30];100}', }],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 10,
+        },
+        {
+          description: "Trouver le pourcentage d'augmentation",
+          enounces: ["Quel est le pourcentage d'augmentation correspondant à un coefficient multiplicateur de $$%%{1+&1/100}$$?"],
+          expressions: ['##{1+&1/100}'],
+          options: ['no-exp'],
+          variables: [{ '&1': '$l{$e[1;30];100;200;50}', }],
+          type: 'result',
+          solutions: [['&1%']],
+          defaultDelay: 10,
+        },
+        {
+          description: "Trouver le pourcentage de diminution",
+          enounces: ["Quel est le pourcentage de diminution correspondant à un coefficient multiplicateur de $$%%{1-&1/100}$$?"],
+          expressions: ['##{1-&1/100}'],
+          options: ['no-exp'],
+          variables: [{ '&1': '$l{$e[1;30];100}', }],
+          type: 'rewrite',
+          correctionFormat: [{
+            correct: ['Un coefficient de $$&exp$$ correspond à une diminution de $$&solution$$'],
+            uncorrect: ['Un coefficient de $$&exp$$ correspond à une diminution de $$&solution$$']
+          }],
+          solutions: [['&1%']],
+          defaultDelay: 10,
+        },
+
+
       ]
-      
-      
-      
-    
+
+
+
+
     }
   },
   'Calcul littéral': {
@@ -4363,24 +4756,130 @@ export default {
       ],
     },
     Transformation: {
+      "Simplification d'écriture": [
+        {
+          description: 'Simplifier le symbole de multiplication',
+          subdescription: 'Devant une lettre',
+
+          enounces: ["Enlève, quand c'est possible, le symbole de la multiplication:"],
+          expressions: [
+            '&2*&1',
+            '&1*&2'
+          ],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y}',
+              '&2': '$e[2;9]',
+            },
+          ],
+          options: ['shallow-shuffle-factors', 'require-implicit-products', 'disallow-factors-permutation'],
+          solutions: [
+            ['&2&1'],
+            ['&1*&2']
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Simplifier le symbole de multiplication',
+          subdescription: 'Devant une parenthèse',
+
+          enounces: ["Enlève, quand c'est possible, le symbole de la multiplication:"],
+          expressions: [
+            '&3*(&1+&2)',
+            '&3*(&1+&4)',
+            '&5*(&1+&2)',
+            '&5*(&1+&4)',
+            '(&1+&2)*&5',
+            '(&1+&4)*&5',
+          ],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y}',
+              '&2': '$l{a;b;c;x;y}\\{&1}',
+              '&3': '$l{a;b;c;x;y}',
+              '&4': '$e[2;9]',
+              '&5': '$e[2;9]',
+            },
+          ],
+          options: ['shuffle-terms', 'require-implicit-products', 'disallow-factors-permutation'],
+          solutions: [
+            ['&3(&1+&2)'],
+            ['&3(&1+&4)'],
+            ['&5(&1+&2)'],
+            ['&5(&1+&4)'],
+            ['(&1+&2)*&5'],
+            ['(&1+&4)*&5']
+
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Simplifier un produit par 0 ou 1',
+          enounces: ["Ecris plus simplement cette expression littérale :"],
+          expressions: [
+            '1&1',
+            '0&1'
+          ],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y}',
+            },
+          ],
+          options: ['require-no-factor-one', 'require-no-factor-zero'],
+          solutions: [
+            ['&1'],
+            ['0']
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+
+
+        {
+          description: "Simplifier à l'aide d'un carré ou d'un cube",
+          enounces: ["Simlifie l'écriture de cette expression littérale :"],
+          expressions: [
+            '&1*&1',
+            '&1*&1*&1'
+          ],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y}',
+            },
+          ],
+          solutions: [['&1^2'], ['&1^3']],
+          type: 'rewrite',
+          defaultDelay: 30,
+        },
+
+      ],
       Réduction: [
         {
           description: 'Réduire une expression simple',
           subscription: 'Coefficients positifs',
           enounces: ['Réduire :'],
-          expressions: ['#{&2&1}+#{&3&1}'],
+          expressions: [
+            '#{&2&1}+#{&3&1}',
+            '#{&3&1}-#{&2&1}'
+          ],
           variables: [
             {
               '&1': '$l{a;b;c}',
               '&2': '$e[1;9]',
               '&3': '$e[1;9]',
             },
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$e[1;8]',
+              '&3': '$e[&2;9]',
+            },
           ],
           // solutions: [['#{&2+&3}&1']],
           type: 'result',
-          details: [['(&2+&3) \\times &1']],
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
         {
           description: 'Réduire une expression simple',
@@ -4397,7 +4896,7 @@ export default {
           // solutions: [['#{&2-&3}&1'], ['#{-&2+&3}&1'],['#{-&2-&3}&1']],
           type: 'result',
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
         {
           description: 'Réduire une expression',
@@ -4421,7 +4920,7 @@ export default {
           details: [['(&2+&3)&1+(&5+&6)&4']],
           type: 'result',
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
         {
           description: 'Réduire une expression',
@@ -4453,11 +4952,11 @@ export default {
           // ],
           type: 'result',
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
         {
           description: 'Réduire une expression',
-          subscription: 'Coefficients positifs, expression du second degré',
+          subscription: 'Coefficients relatifs, expression du second degré',
           enounces: ['Réduire :'],
           expressions: [
             '#{&2&1^2}#s{&3&1}#s{&4}#s{&5&1^2}#s{&6&1}#s{&7}',
@@ -4478,7 +4977,7 @@ export default {
 
           type: 'result',
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
         {
           description: 'Réduire un produit',
@@ -4503,7 +5002,7 @@ export default {
           type: 'result',
           // details: [['(&2+&3) \\times &1']],
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
         {
           description: 'Réduire un produit',
@@ -4540,21 +5039,20 @@ export default {
           type: 'result',
           // details: [['(&2+&3) \\times &1']],
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
       ],
       'Simplification de parenthèses': [
         {
           description: 'Enlever les parenthèses',
-          subscription: 'Coefficients positifs',
-          enounces: ["Réécrire l'expression en enelevant les parenthèses :"],
+          enounces: ["Réécrire l'expression en en elevant les parenthèses :"],
           expressions: ['#{&1&2}+(#{&3&4}&5)', '#{&1&2}-(#{&3&4}&5)'],
           variables: [
             {
               '&1': '$er[1;9]',
               '&2': '$l{a;b;c}',
               '&3': '$er[1;9]',
-              '&4': '$l{a;b;c}\\{&1}',
+              '&4': '$l{a;b;c}\\{&2}',
               '&5': '$ers[1;9]',
             },
           ],
@@ -4562,7 +5060,7 @@ export default {
           type: 'result',
           solutions: [['#{&1&2}#s{&3&4}&5'], ['#{&1&2}#s{-(&3&4)}#s{-(&5)}']],
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
         {
           description: 'Réduire avec parenthèses',
@@ -4588,10 +5086,35 @@ export default {
           //     ['#{&1&2}#s{-&3&4}#s{-&5}'],
           // ],
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
       ],
       Développement: [
+        {
+          description: 'Développer',
+          subdescription: 'Simple - Coefficients positifs',
+          enounces: ['Développer et réduire :'],
+          expressions: [
+            '&1(&2+&4)',
+            '&1(&4+&2)',
+            '(&2+&4)*&1',
+            '(&4+&2)*&1',
+            '&1(&2-&4)',
+            '&1(&4-&2)',
+            '(&2-&4)*&1',
+            '(&4-&2)*&1',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&4': '$l{a;b;c;x;y;z}',
+            },
+          ],
+
+          type: 'result',
+          defaultDelay: 30,
+        },
         {
           description: 'Développer',
           subdescription: 'Coefficients positifs',
@@ -4605,6 +5128,14 @@ export default {
             '&4(#{&3&4}+&2)',
             '(&2+#{&3&4})&4',
             '(#{&3&4}+&2)&4',
+            '&1(&2-#{&3&4})',
+            '&1(#{&3&4}-&2)',
+            '(&2-#{&3&4})*&1',
+            '(#{&3&4}-&2)*&1',
+            '&4(&2-#{&3&4})',
+            '&4(#{&3&4}-&2)',
+            '(&2-#{&3&4})&4',
+            '(#{&3&4}-&2)&4',
           ],
           variables: [
             {
@@ -4628,7 +5159,7 @@ export default {
           // ],
 
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
         {
           description: 'Développer',
@@ -4796,62 +5327,242 @@ export default {
       ],
       Factorisation: [
         {
+          description: 'Trouver un facteur commun',
+          subdescription: 'Simple - Coefficients positifs',
+          enounces: ['Quel est le facteur commun dans les 2 produits ?'],
+          expressions: [
+            '&1&3+&1&4',
+            '&1&3+&4*&1',
+            '&3*&1+&1&4',
+            '&3*&1+&4*&1',
+            '&1*&2+&1&3',
+            '&2*&1+&1&3',
+            '&2*&1+&3*&1',
+            '&1*&2+&3*&1',
+            '&1&3-&1&4',
+            '&1&3-&4*&1',
+            '&3*&1-&1&4',
+            '&3*&1-&4*&1',
+            '&1*&2-&1&3',
+            '&2*&1-&1&3',
+            '&2*&1-&3*&1',
+            '&1*&2-&3*&1',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{cd(&1)}',
+              '&3': '$l{x;y;z}',
+              '&4': '$l{x;y;z}\\{&3}',
+
+            },
+          ],
+          solutions: [
+            ['&1']
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
           description: 'Factoriser',
-          subdescription: 'Coefficients positifs',
+          subdescription: 'Simple - Coefficients positifs',
           enounces: ['Factoriser :'],
-          expressions: ['&1&3+#{&1*&2}&4', '#{&1*&2}&4+&1&3'],
+          expressions: [
+            '&1&3+&1&4',
+            '&1&3+&4*&1',
+            '&3*&1+&1&4',
+            '&3*&1+&4*&1',
+            '&1*&2+&1&3',
+            '&2*&1+&1&3',
+            '&2*&1+&3*&1',
+            '&1*&2+&3*&1',
+            '&1&3-&1&4',
+            '&1&3-&4*&1',
+            '&3*&1-&1&4',
+            '&3*&1-&4*&1',
+            '&1*&2-&1&3',
+            '&2*&1-&1&3',
+            '&2*&1-&3*&1',
+            '&1*&2-&3*&1',
+          ],
           variables: [
             {
               '&1': '$e[2;9]',
               '&2': '$e[2;9]',
               '&3': '$l{x;y;z}',
               '&4': '$l{x;y;z}\\{&3}',
-              '&5': 'pgcd(&1;&1*&2)',
-              '&6': '&1:&5',
-              '&7': '&1*&2:&5',
+
             },
           ],
           solutions: [
-            ['#{&5}(#{&6*&3}+#{&7*&4})'],
-            ['#{&5}(#{&7*&4}+#{&6*&3})'],
+            ['&1(&3+&4)'],
+            ['&1(&3+&4)'],
+            ['&1(&3+&4)'],
+            ['&1(&3+&4)'],
+            ['&1(&2+&3)'],
+            ['&1(&2+&3)'],
+            ['&1(&2+&3)'],
+            ['&1(&2+&3)'],
+            ['&1(&3-&4)'],
+            ['&1(&3-&4)'],
+            ['&1(&3-&4)'],
+            ['&1(&3-&4)'],
+            ['&1(&2-&3)'],
+            ['&1(&2-&3)'],
+            ['&1(&2-&3)'],
+            ['&1(&2-&3)'],
           ],
           type: 'result',
           defaultDelay: 30,
-          options: ['implicit'],
         },
         {
-          description: 'Factoriser',
-          subdescription: 'Coefficients positifs',
-          enounces: ['Factoriser :'],
-          expressions: ['&1+#{&1*&2}&3', '#{&1*&2}&3+&1'],
+          description: 'Trouver un facteur commun',
+          subdescription: 'Facteur non forcément apparent',
+          enounces: ['Trouve un facteur commun à ces 2 produits.'],
+          expressions: [
+            '&1&3+#{&1*&2}&4',
+            '&1&3-#{&1*&2}&4',
+            '#{&1*&2}&4+&1&3',
+            '#{&1*&2}&4-&1&3'
+          ],
           variables: [
             {
-              '&1': '$e[2;9]',
-              '&2': '$e[2;9]',
+              '&1': '$l{2;3;5;7}',
+              '&2': '$e[2;9]\\{cd(&1)}',
               '&3': '$l{x;y;z}',
-              '&4': 'pgcd(&1;&1*&2)',
-              '&5': '&1:&4',
-              '&6': '&1*&2:&4',
+              '&4': '$l{x;y;z}\\{&3}',
             },
           ],
           solutions: [
-            ['#{&4}(#{&5}+#{&6}&3)'],
-            ['#{&4}(#{&6}&3+#{&5})'],
-            // ['#{&5}*(#{&7*&4}+#{&6})'],
+            ['&1'],
           ],
-          type: 'result',
+          type: 'rewrite',
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
         {
           description: 'Factoriser',
           subdescription: 'Coefficients positifs',
           enounces: ['Factoriser :'],
           expressions: [
+            '&1&3+#{&1*&2}&4',
+            '#{&1*&2}&4+&1&3',
+            '&1&3-#{&1*&2}&4',
+            '#{&1*&2}&4-&1&3'
+          ],
+          variables: [
+            {
+              '&1': '$l{2;3;5;7}',
+              '&2': '$e[2;9]\\{cd(&1)}',
+              '&3': '$l{x;y;z}',
+              '&4': '$l{x;y;z}\\{&3}',
+            },
+          ],
+          solutions: [
+            ['&1(&3+&2&4)'],
+            ['&1(&3+&2&4)'],
+            ['&1(&3-&2&4)'],
+            ['&1(&3-&2&4)'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+
+        },
+        {
+          description: 'Trouver le plus grand facteur commun',
+          subdescription: 'Le plus possible',
+          enounces: ['Quel est le plus grand facteur commun dans ces 2 produits ?'],
+          expressions: [
+            '#{&1*&2}&5+#{&1*&3}&4',
+            '#{&1*&2}&5-#{&1*&3}&4',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{&2}',
+              '&4': '$l{x;y;z}',
+              '&5': '$l{x;y;z}\\{&4}',
+              '&6': 'pgcd(&1*&2;&1*&3)',
+              '&7': '&1*&2:&6',
+              '&8': '&1*&3:&6',
+            },
+          ],
+          solutions: [
+            ['#{&6}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+
+        },
+        {
+          description: 'Factoriser',
+          subdescription: 'Le plus possible',
+          enounces: ['Factorise le plus possible :'],
+          expressions: [
+            '#{&1*&2}&5+#{&1*&3}&4',
+            '#{&1*&2}&5-#{&1*&3}&4',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{&2}',
+              '&4': '$l{x;y;z}',
+              '&5': '$l{x;y;z}\\{&4}',
+              '&6': 'pgcd(&1*&2;&1*&3)',
+              '&7': '&1*&2:&6',
+              '&8': '&1*&3:&6',
+            },
+          ],
+          solutions: [
+            ['#{&6}(#{&7*&5}+#{&8*&4})'],
+            ['#{&6}(#{&7*&5}-#{&8*&4})'],
+
+          ],
+          type: 'result',
+          defaultDelay: 30,
+
+        },
+        {
+          description: 'Factoriser',
+          enounces: ['Factoriser le plus possible:'],
+          expressions: [
+            '&1+#{&1*&2}&3',
+            '#{&1*&2}&3+&1',
+            '&1-#{&1*&2}&3',
+            '#{&1*&2}&3-&1'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$l{x;y;z}',
+            },
+          ],
+          solutions: [
+            ['&1(1+&2&3)'],
+            ['&1(&2&3+1)'],
+            ['&1(1-&2&3)'],
+            ['&1(&2&3-1)'],
+
+          ],
+          type: 'result',
+          defaultDelay: 30,
+
+        },
+        {
+          description: 'Factoriser',
+          subdescription: 'Avec des carrés',
+          enounces: ['Factoriser :'],
+          expressions: [
             '#{&1*&2*&3^2}+#{&1*&3}',
             '#{&1*&3^2}+#{&1*&2*&3}',
             '#{&1*&2*&3}+#{&1*&3^2}',
             '#{&1*&3}+#{&1*&2*&3^2}',
+            '#{&1*&2*&3^2}-#{&1*&3}',
+            '#{&1*&3^2}-#{&1*&2*&3}',
+            '#{&1*&2*&3}-#{&1*&3^2}',
+            '#{&1*&3}-#{&1*&2*&3^2}',
           ],
           variables: [
             {
@@ -4865,18 +5576,24 @@ export default {
             ['#{&1&3}(&3+&2)'],
             ['#{&1&3}(&2+&3)'],
             ['#{&1&3}(1+#{&2*&3})'],
+            ['#{&1&3}(#{&2*&3}-1)'],
+            ['#{&1&3}(&3-&2)'],
+            ['#{&1&3}(&2-&3)'],
+            ['#{&1&3}(1-#{&2*&3})'],
           ],
           type: 'result',
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
         {
           description: 'Factoriser',
           subdescription: 'Coefficients positifs',
-          enounces: ['Factoriser :'],
+          enounces: ['Factoriser le plus possible :'],
           expressions: [
             '#{&1*&2*&4^2}+#{&1*&3*&4}',
             '#{&1*&2*&4}+#{&1*&3*&4^2}',
+            '#{&1*&2*&4^2}-#{&1*&3*&4}',
+            '#{&1*&2*&4}-#{&1*&3*&4^2}',
           ],
           variables: [
             {
@@ -4889,10 +5606,15 @@ export default {
               '&7': '&1*&3:&5',
             },
           ],
-          solutions: [['#{&5&4}(#{&6*&4}+#{&7})'], ['#{&5&4}(#{&6}+#{&7*&4})']],
+          solutions: [
+            ['#{&5&4}(#{&6*&4}+#{&7})'],
+            ['#{&5&4}(#{&6}+#{&7*&4})'],
+            ['#{&5&4}(#{&6*&4}-#{&7})'],
+            ['#{&5&4}(#{&6}-#{&7*&4})']
+          ],
           type: 'result',
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
         {
           description: 'Factoriser $$a^2-b^2$$',
@@ -4908,9 +5630,559 @@ export default {
           solutions: [['(&1+&3)(&1-&3)'], ['(&3+&1)(&3-&1)']],
           type: 'result',
           defaultDelay: 30,
-          options: ['implicit'],
+
         },
       ],
     },
+    'Equations': {
+      'Dans $$\\N$$': [
+        {
+          description: 'Addition',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            'x+&1=#{&1+&2}',
+            '&1+x=#{&1+&2}',
+
+          ],
+          variables: [
+            {
+              '&1': '$e[5;9]',
+              '&2': '$e[2;9]',
+            },
+          ],
+          solutions: [
+            ['&2'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Soustraction',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            'x-&1=&2',
+          ],
+          variables: [
+            {
+              '&1': '$e[5;9]',
+              '&2': '$e[2;9]',
+            },
+          ],
+          solutions: [
+            ['#{&1+&2}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Soustraction (2)',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '#{&1+&2}-x=&1',
+          ],
+          variables: [
+            {
+              '&1': '$e[5;9]',
+              '&2': '$e[2;9]',
+            },
+          ],
+          solutions: [
+            ['&2'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Multiplication',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '&1x=#{&1*&2}',
+            'x*&1=#{&1*&2}',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+            },
+          ],
+          solutions: [
+            ['&2'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Division',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            'x/&1=#{&2}',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+            },
+          ],
+          solutions: [
+            ['#{&1*&2}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Division (2)',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '#{&1*&2}/x=#{&2}',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+            },
+          ],
+          solutions: [
+            ['&1'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+      ],
+      'Dans $$\\Z$$': [
+        {
+          description: 'Addition',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            'x+&1=#{&1+(&2)}',
+            '&1+x=#{&1+(&2)}',
+            'x+(&1)=#{&1+(&2)}',
+
+
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$er[2;9]',
+            },
+            {
+              '&1': '$er[2;9]',
+              '&2': '$er[2;9]',
+            },
+            {
+              '&1': '-$e[2;9]',
+              '&2': '$er[2;9]',
+            },
+
+          ],
+          solutions: [
+            ['&2'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Soustraction',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            'x-&1=&2',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '-$e[2;9]',
+            },
+          ],
+          solutions: [
+            ['#{&1+(&2)}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Soustraction (2)',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '#{&1+(&2)}-x=&1',
+          ],
+          variables: [
+            {
+              '&1': '$er[2;9]',
+              '&2': '$er[2;9]',
+            },
+          ],
+          solutions: [
+            ['&2'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Multiplication',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '&1x=#{&1*(&2)}',
+            '&1x=#{&1*(&2)}',
+            'x*&1=#{&1*(&2)}',
+            'x*(&1)=#{&1*(&2)}',
+          ],
+          variables: [
+            {
+              '&1': '$er[2;9]',
+              '&2': '$er[2;9]',
+            },
+            {
+              '&1': '$er[2;9]',
+              '&2': '$er[2;9]',
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '-$e[2;9]',
+            },
+            {
+              '&1': '-$e[2;9]',
+              '&2': '$er[2;9]',
+            },
+          ],
+          solutions: [
+            ['&2'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Division',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            'x/&1=#{&2}',
+            'x/(&1)=#{&2}',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$er[2;9]',
+            },
+            {
+              '&1': '-$e[2;9]',
+              '&2': '$er[2;9]',
+            },
+          ],
+          solutions: [
+            ['#{&1*(&2)}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Division (2)',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '(#{&1*(&2)})/x=#{&2}',
+          ],
+          variables: [
+            {
+              '&1': '$er[2;9]',
+              '&2': '$er[2;9]',
+            },
+          ],
+          solutions: [
+            ['&1'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+      ],
+      'Dans $$\\Q$$': [
+        {
+          description: 'Addition',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            'x+&2/&1=#{&2+&3}/&1',
+            '&2/&1+x=#{&3+&2}/&1',
+
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[5;9]\\{&1}',
+              '&3': '$e[2;9]\\{&1}',
+            },
+          ],
+          solutions: [
+            ['#{&3/&1}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Soustraction',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            'x-&2/&1=&3/&1',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[5;9]\\{&1}',
+              '&3': '$e[2;9]\\{&1}',
+            },
+          ],
+          solutions: [
+            ['#{(&2+&3)/&1}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Soustraction (2)',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '#{&2+&3}/&1-x=&2/&1',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[5;9]\\{&1}',
+              '&3': '$e[2;9]\\{&1}',
+            },
+          ],
+          solutions: [
+            ['#{&2/&3}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Multiplication',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '&2x=#{&2*&3}/&1',
+            'x*&2=#{&2*&3}/&1',
+            '(&2/&1)x=#{&2*&3}/&1',
+            'x*(&2/&1)=#{&2*&3}/&1',
+            'x*&1=&2',
+            '&1x=&2',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{&1}',
+              '&3': '$e[2;9]',
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{&1}',
+              '&3': '$e[2;9]',
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{&1}',
+              '&3': '$e[2;9]',
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{&1}',
+              '&3': '$e[2;9]',
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{cd(&1)}',
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{cd(&1)}',
+            },
+          ],
+          solutions: [
+            ['#{&3/&1}'],
+            ['#{&3/&1}'],
+            ['&3'],
+            ['&3'],
+            ['&2/&1'],
+            ['&2/&1'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Division',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            'x/&2=&3/&1',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{&1}',
+            },
+          ],
+          solutions: [
+            ['#{&2*&3/&1}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Division (2)',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '#{&3*&2}/x=&3/&1',
+            '&2/x=&1',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{&1}',
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{m(&1);d(&1)}',
+
+            },
+          ],
+          solutions: [
+            ['#{&2*&1}'],
+            ['#{&2/&1}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+      ],
+      'Linéaire du premier degré': [
+        {
+          description: 'Equation linéaire du premier degré',
+          subdescription: 'Coefficients positifs - Second Membre nul',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '&1x+&2=0',
+            '&2+&1x=0',
+
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[1;9]',
+            },
+          ],
+          solutions: [
+            ['#{-&2/&1}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Equation linéaire du premier degré',
+          subdescription: 'Coefficients relatifs - Second membre nul',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '&1x#s{&2}=0',
+            '&2#s{&1}x=0',
+
+          ],
+          variables: [
+            {
+              '&1': '$er[2;9]',
+              '&2': '$er[1;9]',
+            },
+          ],
+          solutions: [
+            ['#{-(&2)/(&1)}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Equation linéaire du premier degré',
+          subdescription: 'Coefficients positifs',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '&3x+&2=&1',
+            '&2+&3x=&1',
+
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[1;&1-1]',
+              '&3': '$e[2;9]',
+            },
+
+          ],
+          solutions: [
+            ['#{(&1-&2)/&3}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Equation linéaire du premier degré',
+          subdescription: 'Coefficients relatifs',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '&3x#s{&2}=&1',
+            '&2#s{&3}x=&1',
+
+          ],
+          variables: [
+            {
+              '&1': '$er[1;9]',
+              '&2': '$er[1;9]\\{&1}',
+              '&3': '$er[2;9]',
+            },
+
+          ],
+          solutions: [
+            ['#{(&1-(&2))/(&3)}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Equation linéaire du premier degré',
+          subdescription: 'Coefficients positifs - Avec second membre',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '&3x+&2=&4x+&1',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[1;&1-1]',
+              '&3': '$e[3;9]',
+              '&4': '$e[2;&3-1]',
+            },
+
+          ],
+          solutions: [
+            ['#{(&1-&2)/(&3-&4)}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Equation linéaire du premier degré',
+          subdescription: 'Coefficients positifs - Avec second membre',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '&3x#s{&2}=&4x#s{&1}',
+          ],
+          variables: [
+            {
+              '&1': '$er[1;9]',
+              '&2': '$er[1;9]\\{&1}',
+              '&3': '$er[2;9]',
+              '&4': '$er[2;9]\\{&3}',
+            },
+
+          ],
+          solutions: [
+            ['#{(&1-(&2))/(&3-(&4))}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+      ]
+    }
   },
 }

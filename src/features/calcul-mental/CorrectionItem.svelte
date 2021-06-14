@@ -20,7 +20,15 @@
     solutions,
     answer,
     answer_latex,
+    answer_choice,
+    correctionFormat,
+    testAnswer,
   } = item
+
+  let answerColor = 'green'
+
+  const regex = /\$\$(.*?)\$\$/g
+  const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
 
   const STATUS_EMPTY = 'empty'
   const STATUS_CORRECT = 'correct'
@@ -29,37 +37,52 @@
   const STATUS_BAD_FORM = 'bad form'
 
   const EMPTY_ANSWER = "Tu n'as rien répondu."
-  const ZEROS = 'Ta réponse contient des des zéros inutiles.'
-  const BRACKETS = 'Ton expression contient des parenthèses inutiles.'
-  const SPACES = 'Les chiffres sont mal espacés.'
-  const SIGNS = 'Tu peux faire des simplifications de signes.'
-  const BAD = "Ton expression n'est pas mathématiquement correcte."
-  const PRODUCTS = 'Tu peux simplifier les symboles de multiplication.'
+  const ZEROS =
+    "<span style='color:_COLORANSWER_'>Ta réponse</span> contient des des zéros inutiles"
+  const FACTORE_ONE =
+    "<span style='color:_COLORANSWER_'>Ta réponse</span> contient un facteur égal à 1 que tu peux simplifier."
+  const FACTORE_ZERO =
+    "<span style='color:_COLORANSWER_'>Ta réponse</span> contient un produit nul que tu peux simplifier."
+  const NULL_TERMS =
+    "<span style='color:_COLORANSWER_'>Ta réponse</span> contient un terme nul que tu peux enlever."
+  const BRACKETS =
+    "<span style='color:#_COLORANSWER_'>Ta réponse</span> contient des parenthèses inutiles."
+  const SPACES =
+    "Les chiffres sont mal espacés dans <span style='color:_COLORANSWER_'>ta réponse</span>."
+  const SIGNS =
+    "Tu peux faire des simplifications de signes dans <span style='color:_COLORANSWER_'>ta réponse</span>."
+  const BAD =
+    "<span style='color:_COLORANSWER_'>Ta réponse</span> n'est pas mathématiquement correcte."
+  const PRODUCTS =
+    "Tu peux simplifier les symboles de multiplication dans <span style='color:_COLORANSWER_'>ta réponse</span>."
   const FORM =
-    "<span class='orange-text'>Ta réponse</span> n'est pas écrite sous la forme demandée."
+    "<span style='color:_COLORANSWER_'>Ta réponse</span> n'est pas écrite sous la forme demandée."
 
   const implicit = options && options.includes('implicit')
+
   // l'expression de départ doit être envoyé en latex également
-  const qexp = item.qexp
 
   const correction_latex = item.correction
   // less solutions doivent être envoyées en Latex
 
-  const solutions_latex = item.solutions.map((solution) => {
-    if (item.type === 'choice') {
-      return solution // Ce n'est pas du latex !
-    } else {
-      const e = math(solution)
-      return e.type === '!! Error !!' ? solution : e.toLatex({ implicit })
-    }
-  })
+  const solutions_latex = item.solutions
+    ? item.solutions.map((solution) => {
+        if (item.type === 'choice') {
+          return solution // Ce n'est pas du latex !
+        } else {
+          const e = math(solution)
+          return e.type === '!! Error !!' ? solution : e.toLatex({ implicit })
+        }
+      })
+    : null
 
   let status
   let penalty = false
   const details_latex = item.details // details are in latex form
-  const coms = []
+  let coms = []
 
-  if (!item.answer) {
+  if (!item.answer && item.answer_choice === null) {
+    //answer_choice peut etre égal à 0
     if (!classroom) coms.push(EMPTY_ANSWER)
     status = STATUS_EMPTY
   } else {
@@ -76,8 +99,11 @@
         const badExpression =
           item.type !== 'choice' && math(answer).type === '!! Error !!'
         const equivalent =
-          !badExpression &&
-          item.solutions.some((solution) => math(answer).equals(math(solution)))
+          testAnswer ||
+          (!badExpression &&
+            item.solutions.some((solution) =>
+              math(answer).equals(math(solution)),
+            ))
         if (badExpression) {
           coms.push(BAD)
           status = STATUS_INCORRECT
@@ -94,79 +120,96 @@
     }
   }
 
-  // retourne un tableau des contraintes non respectées
-  function checkConstraints() {
-    console.log('check Constraints')
-    if (
-      !options.includes('no-penalty-for-incorrect-spaces') &&
-      !checkSpaces()
-    ) {
-      coms.push(SPACES)
-      if (options.includes('require-correct-spaces')) {
-        status = STATUS_BAD_FORM
-      } else {
-        penalty = true
-        status = STATUS_UNOPTIMAL_FORM
-      }
-    }
-
-    if (
-      !options.includes('no-penalty-for-explicit-products') &&
-      !checkProducts()
-    ) {
-      coms.push(PRODUCTS)
-      if (options.includes('require-implicit-products')) {
-        status = STATUS_BAD_FORM
-      } else {
-        penalty = true
-        status = STATUS_UNOPTIMAL_FORM
-      }
-    }
-
-    if (
-      !options.includes('no-penalty-for-extraneous-brackets') &&
-      !checkBrackets()
-    ) {
-      coms.push(BRACKETS)
-      if (options.includes('require-no-extraneaous-brackets')) {
-        status = STATUS_BAD_FORM
-      } else {
-        penalty = true
-        status = STATUS_UNOPTIMAL_FORM
-      }
-    }
-
-    if (!options.includes('no-penalty-for-extraneous-zeros') && !checkZeros()) {
-      coms.push(ZEROS)
-      if (options.includes('require-no-extraneaous-zeros')) {
-        status = STATUS_BAD_FORM
-      } else {
-        penalty = true
-        status = STATUS_UNOPTIMAL_FORM
-      }
-    }
-
-    if (!options.includes('no-penalty-for-extraneous-signs') && !checkSigns()) {
-      coms.push(SIGNS)
-      if (options.includes('require-no-extraneaous-signs')) {
-        status = STATUS_BAD_FORM
-      } else {
-        penalty = true
-        status = STATUS_UNOPTIMAL_FORM
-      }
-    }
+  if (status === STATUS_BAD_FORM || status == STATUS_INCORRECT) {
+    answerColor = 'red'
+  } else if (status === STATUS_UNOPTIMAL_FORM) {
+    answerColor = 'orange'
   }
-
-  // const validateFractions = checkFractions()
 
   const correction = createCorrection(false)
   const detailedCorrection = item.details ? createCorrection(true) : null
+
+  // retourne un tableau des contraintes non respectées
+  function checkConstraints() {
+    console.log('check Constraints')
+
+    const checks = [
+      {
+        option: ['no-penalty-for-incorrect-spaces', 'require-correct-spaces'],
+        function: checkSpaces,
+        com: SPACES,
+      },
+      {
+        option: [
+          'no-penalty-for-explicit-products',
+          'require-implicit-products',
+        ],
+        function: checkProducts,
+        com: PRODUCTS,
+      },
+      {
+        option: [
+          'no-penalty-for-extraneous-brackets',
+          'require-no-extraneaous-brackets',
+        ],
+        function: checkBrackets,
+        com: BRACKETS,
+      },
+      {
+        option: [
+          'no-penalty-for-extraneous-zeros',
+          'require-no-extraneaous-zeros',
+        ],
+        function: checkZeros,
+        com: ZEROS,
+      },
+      {
+        option: [
+          'no-penalty-for-extraneous-signs',
+          'require-no-extraneaous-signs',
+        ],
+        function: checkSigns,
+        com: SIGNS,
+      },
+      {
+        option: ['no-penalty-for-factor-one', 'require-no-factor-one'],
+        function: checkFactorsOne,
+        com: FACTORE_ONE,
+      },
+      {
+        option: ['no-penalty-for-factor-zero', 'require-no-factor-zero'],
+        function: checkFactorsZero,
+        com: FACTORE_ZERO,
+      },
+      {
+        option: ['no-penalty-for-null-terms', 'require-no-null-terms'],
+        function: checkNullTerms,
+        com: NULL_TERMS,
+      },
+    ]
+
+    checks.forEach((check) => {
+      if (!options.includes(check.option[0]) && !check.function()) {
+        coms.push(check.com)
+        if (options.includes(check.option[1])) {
+          status = STATUS_BAD_FORM
+        } else {
+          penalty = true
+          if (status !== STATUS_BAD_FORM) status = STATUS_UNOPTIMAL_FORM
+        }
+      }
+      console.log('check', status)
+    })
+  }
+
+  // const validateFractions = checkFractions()
 
   // if (seemsCorrect && !validateAnswer) {
   //   coms.push(FORM)
   // }
 
   onMount(() => {
+    //  TODO: a remplacer par le markup direct
     Mathlive.renderMathInElement(`correction${number}`)
     let score = 0
     switch (status) {
@@ -187,45 +230,85 @@
 
   function checkAnswer() {
     console.log('checkAnswer')
-    let e = math(answer)
 
-    let sols = solutions.map((solution) => math(solution))
+    if (testAnswer) {
+      const tests = testAnswer.replace(/&answer/g, answer).split('&&')
+      console.log('tests', tests)
+      const failed = tests.some((test) => math(test).eval().isFalse())
 
-    if (!(options && options.includes('answer-disallow-removing-null-terms'))) {
-      e = e.removeNullTerms()
-      sols = sols.map((solution) => solution.removeNullTerms())
-    }
+      // TODO : tester les formats
 
-    if (
-      !(options && options.includes('answer-disallow-removing-factors-one'))
-    ) {
+      if (failed) {
+        status = STATUS_INCORRECT
+      } else if (status !== STATUS_UNOPTIMAL_FORM) {
+        status = STATUS_CORRECT
+      }
+    } else {
+      let e = math(answer)
+
+      let sols = solutions.map((solution) => math(solution))
+
+      // Les tests de contraintes ont été faits. Il faut simplifier la réonse pour pouvoir
+      // la comparer à la solution : on enlève les parenthèses inutiles, les signes inutiles....
+
+      e = e.removeUnecessaryBrackets()
+      sols = sols.map((solution) => solution.removeUnecessaryBrackets())
+      // }
+
       e = e.removeFactorsOne()
       sols = sols.map((solution) => solution.removeFactorsOne())
-    }
 
-    // Les tests de contraintes ont été faits. Il faut simplifier la réonse pour pouvoir
-    // la comparer à la solution : on enlève les parenthèses inutiles, les signes inutiles....
+      e = e.simplifyNullProducts()
+      sols = sols.map((solution) => solution.simplifyNullProducts())
 
-    e = e.removeUnecessaryBrackets()
-    sols = sols.map((solution) => solution.removeUnecessaryBrackets())
-    // }
+      e = e.removeNullTerms()
+      sols = sols.map((solution) => solution.removeNullTerms())
 
-    if (
-      !(
-        options &&
-        options.includes('answer-disallow-terms-and-factors-permutation')
-      )
-    ) {
-      e = e.sortTermsAndFactors()
-      sols = sols.map((solution) => solution.sortTermsAndFactors())
-    }
-    if (!sols.some((sol) => sol.strictlyEquals(e))) {
-      status = STATUS_BAD_FORM
-    } else if (status !== STATUS_UNOPTIMAL_FORM) {
-      status = STATUS_CORRECT
+      e = e.removeMultOperator()
+      sols = sols.map((solution) => solution.removeMultOperator())
+
+      if (
+        options.includes('disallow-terms-and-factors-permutation') ||
+        options.includes('disallow-terms-permutation') ||
+        options.includes('disallow-factors-permutation')
+      ) {
+        if (
+          !options.includes('disallow-terms-permutation') &&
+          !options.includes('disallow-terms-and-factors-permutation')
+        ) {
+          e = e.sortTerms()
+          sols = sols.map((solution) => solution.sortTerms())
+        } else if (
+          !options.includes('disallow-factors-permutation') &&
+          !options.includes('disallow-terms-and-factors-permutation')
+        ) {
+          e = e.sortFactors()
+          sols = sols.map((solution) => solution.sortFactors())
+        }
+      } else {
+        e = e.sortTermsAndFactors()
+        sols = sols.map((solution) => solution.sortTermsAndFactors())
+      }
+
+      console.log('checkAnswer', sols, e.string)
+      if (!sols.some((sol) => sol.strictlyEquals(e))) {
+        status = STATUS_BAD_FORM
+      } else if (status !== STATUS_UNOPTIMAL_FORM) {
+        status = STATUS_CORRECT
+      }
     }
 
     if (status === STATUS_BAD_FORM) coms.push(FORM)
+  }
+
+  function checkProducts() {
+    const e = math(answer)
+    return e.removeMultOperator().string === e.string
+  }
+
+  function checkNullTerms() {
+    const e = math(answer)
+    return e.removeNullTerms().string === e.string
   }
 
   function checkBrackets() {
@@ -233,12 +316,18 @@
     return e.removeUnecessaryBrackets().string === e.string
   }
 
-  function checkProducts() {
+  function checkSigns() {
     return true
   }
 
-  function checkSigns() {
-    return true
+  function checkFactorsOne() {
+    const e = math(answer)
+    return e.removeFactorsOne().string === e.string
+  }
+
+  function checkFactorsZero() {
+    const e = math(answer)
+    return e.simplifyNullProducts().string === e.string
   }
 
   // retourne true si la vérification est OK
@@ -277,6 +366,8 @@
         )
       })
     }
+
+    return true
   }
 
   function checkOrder() {
@@ -292,200 +383,271 @@
     let line
     let lines = []
 
-    switch (item.type) {
-      case 'result':
-      case 'rewrite': {
-        if (details) {
-        } else {
-          // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
-          console.log('STATUS', status)
-          line = `$$\\begin{align*}  ${qexp_latex}`
-          if (status === STATUS_EMPTY) {
-            line +=
-              `=\\textcolor{green}{${solutions_latex[0]}}` + '\\end{align*}$$'
-          } else if (status === STATUS_INCORRECT) {
-            line +=
-              `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
-              `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
-          } else if (
-            status === STATUS_BAD_FORM ||
-            status === STATUS_UNOPTIMAL_FORM
-          ) {
-            line +=
-              `&= \\textcolor{orange}{${answer_latex}}` +
-              `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
-          } else {
-            line += `=\\textcolor{green}{${answer_latex}}$$`
-          }
+    if (correctionFormat) {
+      if (status === STATUS_CORRECT) {
+        correctionFormat.correct.forEach((format) => {
+          line = format
+            .replace('&exp', qexp_latex)
+            .replace(
+              '&solution',
+              `<span style="color:green;">${
+                item.type === 'choice'
+                  ? item.choices[solutions[0]]
+                  : answer_latex
+              }</span>`,
+            )
           lines.push(line)
+        })
+      } else {
+        correctionFormat.uncorrect.forEach((format) => {
+          line = format.replace('&exp', qexp_latex).replace(
+            '&solution',
+
+            `<span style="color:green;">${
+              item.type === 'choice'
+                ? item.choices[solutions[0]]
+                : solutions_latex[0]
+            }</span>`,
+          )
+          lines.push(line)
+        })
+        if (status === STATUS_INCORRECT) {
+          coms.unshift(
+            'Ta réponse : ' +
+              correctionFormat.correct[0]
+                .replace('&exp', qexp_latex)
+                .replace(
+                  '&solution',
+                  `<span style="color:red;">${
+                    item.type === 'choice'
+                      ? item.choices[answer_choice]
+                      : answer_latex
+                  }</span>`,
+                ),
+          )
+        } else if (
+          status === STATUS_BAD_FORM ||
+          status === STATUS_UNOPTIMAL_FORM
+        ) {
+          coms.unshift(
+            'Ta réponse : ' +
+              correctionFormat.correct[0]
+                .replace('&exp', qexp_latex)
+                .replace(
+                  '&solution',
+                  `<span style="color:orange;">${
+                    item.type === 'choice'
+                      ? item.choices[answer_choice]
+                      : answer_latex
+                  }</span>`,
+                ),
+          )
         }
-        break
       }
-      case 'choice':
-        line =
-          correction_latex +
-          '<span class="green-text">' +
-          solutions_latex[0] +
-          '</span>'
-
-        lines.push(line)
-        break
-
-      case 'enonce':
-        lines.push(item.enounce)
-
-        if (empty) {
-          line = '$$' + `\\textcolor{green}{${solutions_latex[0]}}` + '$$'
-        } else if (badExpression || !correct) {
-          line =
-            '$$\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
-            answer_latex +
-            '}}\\text{  }\\textcolor{green}{' +
-            solutions_latex[0] +
-            '}$$'
-        } else {
-          line = '$$\\textcolor{green}{' + answer_latex + '}$$'
-
-          // if (!strictlyCorrect) {
-          //   line +=
-          //     '\\color{black}\\text{ mais }\\color{green}' +
-          //     s_exp.latex +
-          //     "\\color{black}\\text{ c'est encore mieux !}"
-          // }
-        }
-        lines.push(line)
-
-        break
-
-      case 'decomposition':
-        if (details) {
-        } else {
-          line = '$$\\begin{align*}' + qexp_latex
-          if (empty) {
-            solutions_latex.forEach((solution, i) => {
-              if (i !== 0) line += '\\\\'
-              line += ' &=\\textcolor{green}{' + solution + '}'
-            })
-            line += '\\end{align*}$$'
-          } else if (!seemsCorrect) {
-            line = '$$\\begin{align*}' + qexp_latex
-            line += `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}`
-            solutions_latex.forEach((solution, i) => {
-              line += '\\\\ &=\\textcolor{green}{' + solution + '}'
-            })
-            line += '\\end{align*}$$'
-          } else if (!correct) {
-            line = '$$\\begin{align*}' + qexp_latex
-            line += `&=\\textcolor{orange}{${answer_latex}}`
-            solutions_latex.forEach((solution, i) => {
-              line += '\\\\ &=\\textcolor{green}{' + solution + '}'
-            })
-            line += '\\end{align*}$$'
+    } else {
+      switch (item.type) {
+        case 'result':
+        case 'rewrite': {
+          if (details) {
           } else {
-            line += `=\\textcolor{green}{${answer_latex}}$$`
-          }
-          lines.push(line)
-        }
-        break
+            // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
 
-      // case 'result':
-      //   if (details) {
-      //     line = '$$\\begin{align*}' + qexp_latex
-      //     details_latex.forEach((detail, i) => {
-      //       if (detail !== solutions_latex[0]) {
-      //         if (i !== 0) line += ' \\\\ '
-      //         line += '& =' + detail
-      //       }
-      //     })
-      //     line +=
-      //       ' \\\\ & =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-      //       solutions_latex[0] +
-      //       '}'
-      //     line += '\\end{align*}$$'
-      //     lines.push(line)
-      //   } else {
-      //     // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
-      //     line = '$$' + qexp_latex
-      //     if (empty) {
-      //       line += `=\\textcolor{green}{${solutions_latex[0]}}` + '$$'
-      //     } else if (badExpression || !correct) {
-      //       line +=
-      //         '=\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
-      //         answer_latex +
-      //         '}}\\text{  }\\textcolor{green}{' +
-      //         solutions_latex[0] +
-      //         '}$$'
-      //     } else {
-      //       line += '=\\textcolor{green}{' + answer_latex + '}$$'
-
-      //     }
-      //     lines.push(line)
-      //   }
-
-      // break
-
-      case 'trou':
-        if (details) {
-          line = '$$\\begin{align*}'
-          item.details.forEach((detail, i) => {
-            if (i === 0) line += detail
-            if (i > 1) line += ' \\\\ '
-            if (i === item.details.length - 1) {
+            line = `$$\\begin{align*}  ${qexp_latex}`
+            if (status === STATUS_EMPTY) {
               line +=
-                '& =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-                solutions_latex[0] +
-                '}'
-            } else {
-              line += '& =' + detail
-            }
-            line += '\\end{align*}$$'
-            lines.push(line)
-          })
-        } else {
-          if (status === STATUS_CORRECT) {
-            line =
-              '$$' +
-              qexp_latex.replace(
-                /\\ldots/,
-                `\\textcolor{green}{${answer_latex}}`,
-              ) +
-              '$$'
-          } else {
-            line =
-              '$$' +
-              qexp_latex.replace(
-                /\\ldots/,
-                `\\textcolor{green}{${solutions_latex[0]}}`,
-              ) +
-              '$$'
-
-            if (status === STATUS_INCORRECT) {
-              coms.unshift(
-                'Ta réponse : $$' +
-                  qexp_latex.replace(
-                    /\\ldots/,
-                    `\\textcolor{red}{${answer_latex}}`,
-                  ) +
-                  '$$',
-              )
+                `=\\textcolor{green}{${solutions_latex[0]}}` + '\\end{align*}$$'
+            } else if (status === STATUS_INCORRECT) {
+              line +=
+                `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
+                `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
             } else if (
               status === STATUS_BAD_FORM ||
               status === STATUS_UNOPTIMAL_FORM
             ) {
-              coms.unshift(
-                'Ta réponse : $$' +
-                  qexp_latex.replace(
-                    /\\ldots/,
-                    `\\textcolor{orange}{${answer_latex}}`,
-                  ) +
-                  '$$',
-              )
+              line +=
+                `&= \\textcolor{orange}{${answer_latex}}` +
+                `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
+            } else {
+              line += `=\\textcolor{green}{${answer_latex}}$$`
             }
-
             lines.push(line)
           }
+          break
         }
+        case 'choice':
+          // line =
+          //   correction_latex +
+          //   '<span class="green-text">' +
+          //   solutions_latex[0] +
+          //   '</span>'
+
+          // lines.push(line)
+          break
+
+        case 'enonce':
+          lines.push(item.enounce)
+
+          if (empty) {
+            line = '$$' + `\\textcolor{green}{${solutions_latex[0]}}` + '$$'
+          } else if (badExpression || !correct) {
+            line =
+              '$$\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
+              answer_latex +
+              '}}\\text{  }\\textcolor{green}{' +
+              solutions_latex[0] +
+              '}$$'
+          } else {
+            line = '$$\\textcolor{green}{' + answer_latex + '}$$'
+
+            // if (!strictlyCorrect) {
+            //   line +=
+            //     '\\color{black}\\text{ mais }\\color{green}' +
+            //     s_exp.latex +
+            //     "\\color{black}\\text{ c'est encore mieux !}"
+            // }
+          }
+          lines.push(line)
+
+          break
+
+        case 'decomposition':
+          if (details) {
+          } else {
+            line = '$$\\begin{align*}' + qexp_latex
+            if (empty) {
+              solutions_latex.forEach((solution, i) => {
+                if (i !== 0) line += '\\\\'
+                line += ' &=\\textcolor{green}{' + solution + '}'
+              })
+              line += '\\end{align*}$$'
+            } else if (!seemsCorrect) {
+              line = '$$\\begin{align*}' + qexp_latex
+              line += `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}`
+              solutions_latex.forEach((solution, i) => {
+                line += '\\\\ &=\\textcolor{green}{' + solution + '}'
+              })
+              line += '\\end{align*}$$'
+            } else if (!correct) {
+              line = '$$\\begin{align*}' + qexp_latex
+              line += `&=\\textcolor{orange}{${answer_latex}}`
+              solutions_latex.forEach((solution, i) => {
+                line += '\\\\ &=\\textcolor{green}{' + solution + '}'
+              })
+              line += '\\end{align*}$$'
+            } else {
+              line += `=\\textcolor{green}{${answer_latex}}$$`
+            }
+            lines.push(line)
+          }
+          break
+
+        // case 'result':
+        //   if (details) {
+        //     line = '$$\\begin{align*}' + qexp_latex
+        //     details_latex.forEach((detail, i) => {
+        //       if (detail !== solutions_latex[0]) {
+        //         if (i !== 0) line += ' \\\\ '
+        //         line += '& =' + detail
+        //       }
+        //     })
+        //     line +=
+        //       ' \\\\ & =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
+        //       solutions_latex[0] +
+        //       '}'
+        //     line += '\\end{align*}$$'
+        //     lines.push(line)
+        //   } else {
+        //     // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
+        //     line = '$$' + qexp_latex
+        //     if (empty) {
+        //       line += `=\\textcolor{green}{${solutions_latex[0]}}` + '$$'
+        //     } else if (badExpression || !correct) {
+        //       line +=
+        //         '=\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
+        //         answer_latex +
+        //         '}}\\text{  }\\textcolor{green}{' +
+        //         solutions_latex[0] +
+        //         '}$$'
+        //     } else {
+        //       line += '=\\textcolor{green}{' + answer_latex + '}$$'
+
+        //     }
+        //     lines.push(line)
+        //   }
+
+        // break
+
+        case 'trou':
+          if (details) {
+            line = '$$\\begin{align*}'
+            item.details.forEach((detail, i) => {
+              if (i === 0) line += detail
+              if (i > 1) line += ' \\\\ '
+              if (i === item.details.length - 1) {
+                line +=
+                  '& =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
+                  solutions_latex[0] +
+                  '}'
+              } else {
+                line += '& =' + detail
+              }
+              line += '\\end{align*}$$'
+              lines.push(line)
+            })
+          } else {
+            //TODO : empty ?
+            if (status === STATUS_CORRECT) {
+              line =
+                '$$' +
+                qexp_latex.replace(
+                  /\\ldots/,
+                  `\\textcolor{green}{${answer_latex}}`,
+                ) +
+                '$$'
+            } else {
+              line =
+                '$$' +
+                qexp_latex.replace(
+                  /\\ldots/,
+                  `\\textcolor{green}{${solutions_latex[0]}}`,
+                ) +
+                '$$'
+
+              if (status === STATUS_INCORRECT) {
+                coms.unshift(
+                  'Ta réponse : $$' +
+                    qexp_latex.replace(
+                      /\\ldots/,
+                      `\\textcolor{red}{${answer_latex}}`,
+                    ) +
+                    '$$',
+                )
+              } else if (
+                status === STATUS_BAD_FORM ||
+                status === STATUS_UNOPTIMAL_FORM
+              ) {
+                coms.unshift(
+                  'Ta réponse : $$' +
+                    qexp_latex.replace(
+                      /\\ldots/,
+                      `\\textcolor{orange}{${answer_latex}}`,
+                    ) +
+                    '$$',
+                )
+              }
+
+              lines.push(line)
+            }
+          }
+      }
     }
+
+    lines = lines.map((line) =>
+      line.replace(regex, replacement).replace(/_COLORANSWER_/g, answerColor),
+    )
+    coms = coms.map((com) =>
+      com.replace(regex, replacement).replace(/_COLORANSWER_/g, answerColor),
+    )
     return lines
   }
 
@@ -528,10 +690,7 @@
         <div class="flex-grow-1"></div>
       </div>
 
-      <div
-        id="{`correction${number}`}"
-        style="display:flex;flex-direction:column"
-      >
+      <div id="{`correction${number}`}" class="flex-shrink-2">
         {#if details && item.details}
           {#each detailedCorrection as line}
             <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{size}px;">
