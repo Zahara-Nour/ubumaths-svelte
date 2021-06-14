@@ -20,7 +20,7 @@ export default function generateQuestion(question, generateds) {
   let correction
   let testAnswer
 
-  const {options=[]} = question
+  const { options = [] } = question
 
   const generatedExpressions = generateds ? generateds.map((g) => g.expression) : []
   const generatedEnounces = generateds ? generateds.map((g) => g.enounce) : []
@@ -153,13 +153,13 @@ export default function generateQuestion(question, generateds) {
 
         if (options.includes('shuffle-terms-and-factors')) {
           expression = math(expression).shuffleTermsAndFactors().string
-        } 
+        }
         else if (options.includes('shuffle-terms')) {
           expression = math(expression).shuffleTerms().string
-        } 
+        }
         else if (options.includes('shuffle-factors')) {
           expression = math(expression).shuffleFactors().string
-        } 
+        }
         else if (options.includes('shallow-shuffle-terms')) {
           expression = math(expression).shallowShuffleTerms().string
         }
@@ -196,17 +196,18 @@ export default function generateQuestion(question, generateds) {
       }
 
       if (!doItAgain && question.conditions) {
-        let condition =
-          question.conditions[question.conditions.length === 1 ? 0 : i]
+        let tests =
+          question.conditions[question.conditions.length === 1 ? 0 : i].split('&&')
+        tests.forEach(test => {
+          Object.getOwnPropertyNames(variables).forEach((name) => {
+            const regex = new RegExp(name, 'g')
+            test = test.replace(regex, variables[name])
+          })
 
-        Object.getOwnPropertyNames(variables).forEach((name) => {
-          const regex = new RegExp(name, 'g')
-          condition = condition.replace(regex, variables[name])
+          if (math(test).eval().string === 'false') {
+            doItAgain = true
+          }
         })
-
-        if (math(condition).eval().string === 'false') {
-          doItAgain = true
-        }
       }
     }
   } while (doItAgain && count < 1000)
@@ -329,7 +330,7 @@ export default function generateQuestion(question, generateds) {
   }
 
 
-    // TODO : enlever doublon avec correctionFormat
+  // TODO : enlever doublon avec correctionFormat
   if (question.corrections) {
     correction = question.corrections[question.corrections.length === 1 ? 0 : i]
     Object.getOwnPropertyNames(variables).forEach((name) => {
@@ -369,8 +370,8 @@ export default function generateQuestion(question, generateds) {
   if (question.correctionFormat) {
     correctionFormat = question.correctionFormat[question.correctionFormat.length === 1 ? 0 : i]
     console.log('correctionFormat', correctionFormat)
-    let {correct, uncorrect} = correctionFormat 
-    
+    let { correct, uncorrect } = correctionFormat
+
     correct = correct.map(format => {
       Object.getOwnPropertyNames(variables).forEach((name) => {
         const regex = new RegExp(name, 'g')
@@ -397,7 +398,7 @@ export default function generateQuestion(question, generateds) {
     uncorrect = uncorrect.map(format => format.replace(regexExactLatex, replacementExactLatex))
     uncorrect = uncorrect.map(format => format.replace(regexExact, replacementExact))
 
-    correctionFormat = {correct, uncorrect}
+    correctionFormat = { correct, uncorrect }
   }
 
 
