@@ -51,7 +51,7 @@
   let selectionRef
 
   const regex = /\$\$(.*?)\$\$/g
-  const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
+  const replacement = (matched, p1) => Mathlive.convertLatexToMarkup(p1)
 
   function countDown() {
     elapsed = Date.now() - start
@@ -154,7 +154,7 @@
       .replace(/(\\,){2,}/g, '\\,')
       .trim()
     answer = mf
-      .getValue('ASCIIMath')
+      .getValue('ascii-math')
       // .replace(/xx/g, '*')
       .replace(/÷/g, ':')
       .replace(/\((\d+(,\d+)*)\)\//g, (_, p1) => p1 + '/')
@@ -162,7 +162,7 @@
       .replace(/\/\((\d+(,\d+)*)\)/g, (_, p1) => '/' + p1)
       .replace(/\/\(([a-z])\)/g, (_, p1) => '/' + p1)
       .trim()
-    // console.log(`answer-latex "${answer_latex}"`)
+    console.log(`answer latex: ${answer_latex} asccii: ${answer}`)
   }
 
   function commit() {
@@ -172,10 +172,14 @@
 
   function onKeystroke(mathfield, keystroke, e) {
     const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%'
-
+    console.log('keystroke', keystroke)
     if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
       // if (elapsed > 3000) commit()
-      if (answer !== '') commit()
+      console.log('trying to commit')
+      if (answer !== '') {
+        commit()
+        console.log('commited')
+      }
       return false
     } else if (
       keystroke === '[Space]' &&
@@ -188,7 +192,11 @@
     ) {
       mf.insert('\\,')
       return false
-    } else if (e.key === '*') {
+    } else if (e.key === 'r') {
+      mf.insert('\\sqrt')
+      return false
+    }
+    else if (e.key === '*') {
       console.log('#########')
       mf.insert('\\times ')
       return false

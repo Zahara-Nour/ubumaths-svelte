@@ -12,7 +12,7 @@
   export let question
 
   const regex = /\$\$(.*?)\$\$/g
-  const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
+  const replacement = (matched, p1) => Mathlive.convertLatexToMarkup(p1)
 
   $: description = question.description.replace(regex, replacement)
 

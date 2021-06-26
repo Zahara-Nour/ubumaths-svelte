@@ -28,7 +28,7 @@
   let answerColor = 'green'
 
   const regex = /\$\$(.*?)\$\$/g
-  const replacement = (matched, p1) => Mathlive.latexToMarkup(p1)
+  const replacement = (matched, p1) => Mathlive.convertLatexToMarkup(p1)
 
   const STATUS_EMPTY = 'empty'
   const STATUS_CORRECT = 'correct'
