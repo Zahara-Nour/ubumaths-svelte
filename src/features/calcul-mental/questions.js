@@ -1236,7 +1236,7 @@ export default {
         },
       ],
 
-      Carrés: [
+      'Carrés - Racines carrées': [
         {
           description: 'Calculer un carré',
           subdescription: 'Entier de 1 à 15',
@@ -1254,6 +1254,24 @@ export default {
           variables: [{ '&1': '$e[2;15]' }],
           solutions: [['&1']],
           type: 'trou',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Réduire une racine carré',
+          enounces: ['Réduis sous la forme $$a\\sqrt{b}$$'],
+          expressions: ['sqrt(#{&1*&1*&2})'],
+          variables: [{ '&1': '$l{2;3;5;10}', '&2': '$l{2;3;5}' }],
+          // solutions: [['&1sqrt(&2)']],
+          type: 'result',
+          defaultDelay: 20,
+        },
+        {
+          description: 'Réduire une expression avec des racines carré',
+          enounces: ['Réduis sous la forme $$a\\sqrt{b}$$'],
+          expressions: ['sqrt(#{&1*&1*&3})+sqrt(#{&2*&2*&3})'],
+          variables: [{ '&1': '$l{2;3;5;10}', '&2': '$l{2;3;5;10}\\{&1}', '&3': '$l{2;3;5}' }],
+          // solutions: [['&1sqrt(&2)']],
+          type: 'result',
           defaultDelay: 20,
         },
       ],
