@@ -310,7 +310,7 @@
   <div class="mt-6 mb-6">
     <CircularProgress
       number="{current + 1}"
-      fontSize="{$fontSize + 8}"
+      fontSize="{classroom ? 42 : $fontSize + 8}"
       strokeWidth="{5}"
       percentage="{percentage}"
     />

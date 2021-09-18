@@ -689,7 +689,7 @@
       <div class="mr-4 d-flex  flex-column align-center justify-start">
         <Button
           fab
-          size="x-small"
+       
           depressed
           class="{status === STATUS_CORRECT
             ? 'green white-text'

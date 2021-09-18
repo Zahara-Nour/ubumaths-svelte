@@ -34,6 +34,7 @@
     mdiPlus,
     mdiCloudDownloadOutline,
     mdiCloudUploadOutline,
+    mdiLink,
   } from '@mdi/js'
   import { navigate } from 'svelte-routing'
   import questions from './questions'
@@ -157,6 +158,19 @@
     levelsIdxs[themeIdx][domainIdx][subdomainIdx] = l
   }
 
+  function copyLink() {
+    console.log('clipboard')
+    const url = `https://ubumaths.net/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
+    navigator.clipboard
+      .writeText(url)
+      .then(function () {
+        console.log('copy to clipboard: ', url)
+      })
+      .catch(function () {
+        console.log('failed to write to clipboard')
+      })
+  }
+
   function launchTest({ type, assessment }) {
     let url
     if (type === 'assessment') {
@@ -174,7 +188,7 @@
 
     if (url.includes('?')) {
       url += `&classroom=${classroom}`
-    } else  {
+    } else {
       url += `?classroom=${classroom}`
     }
 
@@ -425,7 +439,7 @@
   <h5 class="mt-8 amber-text font-weight-bold">Entrainement libre</h5>
 {/if}
 
-<div class="mt-3 mb-3 d-flex">
+<div class="mt-3 mb-3 d-flex" style="{'position:sticky;top:10px;z-index:10'}">
   {#if isTeacher && showBasket}
     <Tooltip bottom>
       <Button
@@ -460,8 +474,19 @@
       class="ml-2 mr-2 amber darken-2 white-text"
       fab
       size="x-small"
-      depressed = {classroom}
-      on:click="{()=>{classroom = !classroom}}"
+      on:click="{copyLink}"
+    >
+      <Icon path="{mdiLink}" />
+    </Button>
+
+    <Button
+      class="ml-2 mr-2 amber darken-2 white-text"
+      fab
+      size="x-small"
+      depressed="{classroom}"
+      on:click="{() => {
+        classroom = !classroom
+      }}"
     >
       <Icon path="{mdiProjectorScreen}" />
     </Button>
