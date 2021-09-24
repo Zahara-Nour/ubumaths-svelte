@@ -47,6 +47,7 @@
   import { saveDocument, getDocument } from '../../app/db'
   import queryString from 'query-string'
   import Exemple from './Exemple.svelte'
+  import Buttons from './Buttons.svelte'
 
   export let location
 
@@ -71,8 +72,8 @@
   let teacherAssessments
   let studentAssessments
   let teacherAssessmentsTitles = []
-  let disableSave = true
-  let saving = false
+
+  
   let saveSuccess = false
   let saveFailure = false
   let displayAssessmentList = false
@@ -161,19 +162,6 @@
     levelsIdxs[themeIdx][domainIdx][subdomainIdx] = l
   }
 
-  function copyLink() {
-    console.log('clipboard')
-    const url = `https://ubumaths.net/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
-    navigator.clipboard
-      .writeText(url)
-      .then(function () {
-        console.log('copy to clipboard: ', url)
-      })
-      .catch(function () {
-        console.log('failed to write to clipboard')
-      })
-  }
-
   function launchTest({ type, assessment }) {
     let url
     if (type === 'assessment') {
@@ -205,8 +193,6 @@
     return generateQuestion(q)
   }
 
-  const toggleHelp = () => (displayDescription = !displayDescription)
-
   function addToBasket(theme, domain, subdomain, level, count) {
     let qs = questions[theme][domain][subdomain]
     // console.log('questions', qs)
@@ -216,7 +202,7 @@
         item.theme === theme &&
         item.domain === domain &&
         item.subdomain === subdomain &&
-        item.level === level
+        item.level === level,
     )
     if (index !== -1) {
       basket[index].count++
@@ -236,53 +222,16 @@
     }
   }
 
-  const toggleBasket = () => (showBasket = !showBasket)
   const addItem = (i) => basket[i].count++
 
   function removeItem(i) {
     if (basket[i].count > 1) {
       basket[i].count--
     } else {
-      basket.splice(i,1)
+      basket.splice(i, 1)
       basket = basket
     }
   }
-
-  async function save() {
-    const path = `Users/${$user.id}/Assessments`
-    const questions = []
-    const document = {
-      date: new Date().getTime(),
-      questions: basket.map((item) => ({
-        count: item.count,
-        theme: item.theme,
-        domain: item.domain,
-        subdomain: item.subdomain,
-        level: item.level,
-      })),
-      title: evalTitle,
-    }
-
-    saving = true
-
-    const assessment = await saveDocument({ path, document })
-
-    const results = await saveDocument({
-      path: `Users/${$user.id}/Results`,
-      document: { id: assessment.id },
-    })
-
-    if (assessment) {
-      teacherAssessments = [...teacherAssessments, assessment]
-      teacherAssessmentId = assessment.id
-      saveSuccess = true
-    } else {
-      saveFailure = true
-    }
-    saving = false
-  }
-
-  const load = () => (displayAssessmentList = true)
 
   async function fetchTeacherAssessments() {
     teacherAssessments = await getCollection({
@@ -406,8 +355,7 @@
       selectedClassroom = $user.classrooms[0]
     }
   }
-  $: disableSave =
-    evalTitle === '' || teacherAssessmentsTitles.includes(evalTitle) || saving
+
   $: generated = generateExemple(theme, domain, subdomain, level)
 </script>
 
@@ -456,124 +404,21 @@
   <h5 class="mt-8 amber-text font-weight-bold">Entrainement libre</h5>
 {/if}
 
-<div class="mt-3 mb-3 d-flex" style="{'position:sticky;top:10px;z-index:10'}">
-  {#if isTeacher && showBasket}
-    <Tooltip bottom>
-      <Button
-        class="ml-2 mr-2 amber white-text darken-2"
-        fab
-        size="x-small"
-        on:click="{load}"
-      >
-        <Icon path="{mdiCloudDownloadOutline}" />
-      </Button>
-      <span slot="tip">Charger</span>
-    </Tooltip>
-
-    <Tooltip bottom>
-      <Button
-        class="{disableSave ? '' : 'amber white-text darken-2'} ml-2 mr-2"
-        disabled="{disableSave}"
-        fab
-        size="x-small"
-        on:click="{save}"
-      >
-        <Icon path="{mdiCloudUploadOutline}" />
-      </Button>
-      <span slot="tip">Enregistrer</span>
-    </Tooltip>
-  {/if}
-
-  <div class="flex-grow-1"></div>
-
-  {#if !showBasket}
-    <Button
-      class="ml-2 mr-2 amber darken-2 white-text"
-      fab
-      size="x-small"
-      on:click="{copyLink}"
-    >
-      <Icon path="{mdiLink}" />
-    </Button>
-
-    <Button
-      class="ml-2 mr-2 amber darken-2 white-text"
-      fab
-      size="x-small"
-      depressed="{classroom}"
-      on:click="{() => {
-        classroom = !classroom
-      }}"
-    >
-      <Icon path="{mdiProjectorScreen}" />
-    </Button>
-
-    <Button
-      class="ml-2 mr-2 amber darken-2 white-text"
-      disabled="{disable}"
-      fab
-      size="x-small"
-      on:click="{toggleHelp}"
-    >
-      <Icon path="{mdiHelp}" />
-    </Button>
-  {/if}
-
-  {#if isTeacher}
-    {#if !showBasket}
-      <Button
-        class="ml-2 mr-2 amber darken-2 white-text"
-        disabled="{disable}"
-        fab
-        size="x-small"
-        on:click="{() => addToBasket(theme, domain, subdomain, level, 1)}"
-      >
-        <Icon path="{mdiBasketPlus}" />
-      </Button>
-    {/if}
-    {#if basket.length}
-      <Badge
-        class="red"
-        bordered
-        value="{basket.reduce((acc, item) => acc + item.count, 0)}"
-        offsetX="{16}"
-        offsetY="{16}"
-      >
-        <Button
-          disabled="{disable}"
-          class="amber white-text darken-2 ml-2 mr-2"
-          depressed="{showBasket}"
-          fab
-          size="x-small"
-          on:click="{toggleBasket}"
-        >
-          <Icon path="{mdiBasket}" />
-        </Button>
-      </Badge>
-    {:else}
-      <Button
-        disabled="{disable}"
-        class="amber white-text darken-2 ml-2 mr-2"
-        depressed="{showBasket}"
-        fab
-        size="x-small"
-        on:click="{toggleBasket}"
-      >
-        <Icon path="{mdiBasket}" />
-      </Button>
-    {/if}
-  {/if}
-
-  <Button
-    class="ml-2 mr-2 amber darken-2 white-text"
-    disabled="{disable}"
-    fab
-    size="x-small"
-    on:click="{launchTest}"
-  >
-    <Icon path="{mdiRocketLaunchOutline}" />
-  </Button>
-</div>
+<Buttons
+  isTeacher="{isTeacher}"
+  bind:showBasket
+  classroom="{classroom}"
+  basket="{basket}"
+  launchTest="{launchTest}"
+  addToBasket="{addToBasket}"
+  theme="{theme}"
+  domain="{domain}"
+  subdomain="{subdomain}"
+  level="{level}"
+  disable="{disable}"
+  evalTitle="{evalTitle}"
+  teacherAssessmentsTitles={teacherAssessmentsTitles}
+/>
 
 {#if isTeacher && showBasket}
   <TextField filled bind:value="{evalTitle}" rules="{titleRules}"
