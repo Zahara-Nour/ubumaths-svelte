@@ -22,6 +22,7 @@
     Col,
     Checkbox,
     Select,
+    Badge,
   } from 'svelte-materialify/src'
 
   import {
@@ -84,7 +85,7 @@
   let teacherAssessmentId
   let classroom = false
 
-  $mode = "menu"
+  $mode = 'menu'
 
   for (let theme_i = 0; theme_i < themes.length; theme_i++) {
     Object.keys(questions).forEach((th, th_i) => {
@@ -210,26 +211,40 @@
     let qs = questions[theme][domain][subdomain]
     // console.log('questions', qs)
     const q = qs.find((q) => qs.indexOf(q) + 1 === parseInt(level, 10))
-    basket = [
-      ...basket,
-      {
-        theme,
-        domain,
-        subdomain,
-        level,
-        count,
-        generated: generateExemple(theme, domain, subdomain, level),
-        ...q,
-      },
-    ]
+    const index = basket.findIndex(
+      (item) =>
+        item.theme === theme &&
+        item.domain === domain &&
+        item.subdomain === subdomain &&
+        item.level === level
+    )
+    if (index !== -1) {
+      basket[index].count++
+    } else {
+      basket = [
+        ...basket,
+        {
+          theme,
+          domain,
+          subdomain,
+          level,
+          count,
+          generated: generateExemple(theme, domain, subdomain, level),
+          ...q,
+        },
+      ]
+    }
   }
 
   const toggleBasket = () => (showBasket = !showBasket)
   const addItem = (i) => basket[i].count++
 
   function removeItem(i) {
-    if (basket[i].count > 0) {
+    if (basket[i].count > 1) {
       basket[i].count--
+    } else {
+      basket.splice(i,1)
+      basket = basket
     }
   }
 
@@ -516,17 +531,37 @@
         <Icon path="{mdiBasketPlus}" />
       </Button>
     {/if}
-
-    <Button
-      disabled="{disable}"
-      class="amber white-text darken-2 ml-2 mr-2"
-      depressed="{showBasket}"
-      fab
-      size="x-small"
-      on:click="{toggleBasket}"
-    >
-      <Icon path="{mdiBasket}" />
-    </Button>
+    {#if basket.length}
+      <Badge
+        class="red"
+        bordered
+        value="{basket.reduce((acc, item) => acc + item.count, 0)}"
+        offsetX="{16}"
+        offsetY="{16}"
+      >
+        <Button
+          disabled="{disable}"
+          class="amber white-text darken-2 ml-2 mr-2"
+          depressed="{showBasket}"
+          fab
+          size="x-small"
+          on:click="{toggleBasket}"
+        >
+          <Icon path="{mdiBasket}" />
+        </Button>
+      </Badge>
+    {:else}
+      <Button
+        disabled="{disable}"
+        class="amber white-text darken-2 ml-2 mr-2"
+        depressed="{showBasket}"
+        fab
+        size="x-small"
+        on:click="{toggleBasket}"
+      >
+        <Icon path="{mdiBasket}" />
+      </Button>
+    {/if}
   {/if}
 
   <Button
@@ -549,7 +584,7 @@
     <List>
       {#each basket as item, i}
         <div class="mt-4 mb-4 d-flex flex-row">
-          <Card style="width:300px;max-width:80vh">
+          <Card style="width:80%;max-width:500px">
             <CardTitle>{item.description}</CardTitle>
             {#if item.subdescription}
               <CardSubtitle>{item.subdescription}</CardSubtitle>

@@ -33,7 +33,7 @@
     <div
       id="enounce"
       class="mt-4 text-center"
-      style="font-size:{size}px;max-width:500px;"
+      style="font-size:{size}px;max-width:900px;"
     >
       {@html enounce}
     </div>

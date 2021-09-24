@@ -16,6 +16,7 @@
   import { calculMentalAssessment } from './stores'
   import { saveDocument } from '../../app/db'
   import { navigate } from 'svelte-routing'
+  import { mode } from '../../app/stores'
 
   export let questions
   export let answers
@@ -187,34 +188,34 @@
     </div>
   {/if}
   {#if classroom}
-  <div class="d-flex" style="width:100%;overflow-x:auto;">
-    <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
-      <div>
-        {#each items.filter((item, i) => i % 2 == 0) as item}
-          <CorrectionItem
-            item="{item}"
-            addPoints="{addPoints}"
-            details="{details}"
-            classroom="{classroom}"
-            size="{size}"
-          />
-        {/each}
+    <div class="d-flex" style="width:100%;overflow-x:auto;">
+      <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
+        <div>
+          {#each items.filter((item, i) => i % 2 == 0) as item}
+            <CorrectionItem
+              item="{item}"
+              addPoints="{addPoints}"
+              details="{details}"
+              classroom="{classroom}"
+              size="{size}"
+            />
+          {/each}
+        </div>
+      </div>
+      <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
+        <div>
+          {#each items.filter((item, i) => i % 2 == 1) as item}
+            <CorrectionItem
+              item="{item}"
+              addPoints="{addPoints}"
+              details="{details}"
+              classroom="{classroom}"
+              size="{size}"
+            />
+          {/each}
+        </div>
       </div>
     </div>
-    <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
-      <div>
-        {#each items.filter((item, i) => i % 2 == 1) as item}
-          <CorrectionItem
-            item="{item}"
-            addPoints="{addPoints}"
-            details="{details}"
-            classroom="{classroom}"
-            size="{size}"
-          />
-        {/each}
-      </div>
-    </div>
-  </div>
   {:else}
     <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
       <div>
@@ -230,47 +231,48 @@
       </div>
     </div>
   {/if}
-
-  <div class="{colorResult + ' d-flex align-center  justify-space-around'}">
-    <div class="d-flex flex-column align-center">
-      <Button
-        class="ma-2 white"
-        fab
-        size="x-small"
-        on:click="{() => (restart = true)}"
-      >
-        <Icon path="{mdiReload}" />
-      </Button>
-      <Button
-        class="ma-2 white"
-        fab
-        size="x-small"
-        on:click="{() => navigate('/calcul-mental' + query)}"
-      >
-        <Icon path="{mdiHome}" />
-      </Button>
-    </div>
-    <div class="d-flex flex-column align-center">
-      <div
-        class="mt-2 mb-2 white-text"
-        style="font-family:'pacifico';font-size:34px"
-      >
-        {messageResult}
+  {#if $mode !== "classroom"}
+    <div class="{colorResult + ' d-flex align-center  justify-space-around'}">
+      <div class="d-flex flex-column align-center">
+        <Button
+          class="ma-2 white"
+          fab
+          size="x-small"
+          on:click="{() => (restart = true)}"
+        >
+          <Icon path="{mdiReload}" />
+        </Button>
+        <Button
+          class="ma-2 white"
+          fab
+          size="x-small"
+          on:click="{() => navigate('/calcul-mental' + query)}"
+        >
+          <Icon path="{mdiHome}" />
+        </Button>
       </div>
-      <div style="font-size:22px" class="mt-2 mb-2  white-text">
-        Score : {score}/{total}
+      <div class="d-flex flex-column align-center">
+        <div
+          class="mt-2 mb-2 white-text"
+          style="font-family:'pacifico';font-size:34px"
+        >
+          {messageResult}
+        </div>
+        <div style="font-size:22px" class="mt-2 mb-2  white-text">
+          Score : {score}/{total}
+        </div>
       </div>
+      {#if percent === 1}
+        <img alt="Great!" src="/images/great-150.png" />
+      {:else if percent >= 0.8}
+        <img alt="Good job!" src="/images/good-job-150.png" />
+      {:else if percent >= 0.5}
+        <img alt="Keep on!" src="/images/keep-on-150.png" />
+      {:else}
+        <img alt="Try again!" src="/images/try-again-150.png" />
+      {/if}
     </div>
-    {#if percent === 1}
-      <img alt="Great!" src="/images/great-150.png" />
-    {:else if percent >= 0.8}
-      <img alt="Good job!" src="/images/good-job-150.png" />
-    {:else if percent >= 0.5}
-      <img alt="Keep on!" src="/images/keep-on-150.png" />
-    {:else}
-      <img alt="Try again!" src="/images/try-again-150.png" />
-    {/if}
-  </div>
+  {/if}
 </div>
 
 <style>

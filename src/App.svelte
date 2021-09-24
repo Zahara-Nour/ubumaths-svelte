@@ -12,10 +12,12 @@
   import MentalTest from './features/calcul-mental/MentalTest.svelte'
   import { menuFontSize, user } from './app/stores'
   import { Snackbar, Footer, Button } from 'svelte-materialify/src'
+  import { mode } from './app/stores'
 
   export let url = ''
 
   let theme = 'light'
+ 
 
   function toggleTheme() {
     if (theme === 'light') theme = 'dark'
@@ -26,7 +28,7 @@
   function activateAssessmentsNotification() {
     assessmentsNotification = true
   }
-
+  $: displayWidth = $mode === "classroom" ? "95%" : "1024px"
   $: {
     if (
       $user.roles &&
@@ -50,11 +52,10 @@
 <MaterialApp theme="{theme}">
   <Router url="{url}">
     <!-- <button on:click="{toggleTheme}">Toggle Theme</button> -->
-
     <NavBar />
     <div
       class="main"
-      style="margin:auto; max-width:1024px;font-size:{$menuFontSize}"
+      style="margin:auto; max-width:{displayWidth};font-size:{$menuFontSize}"
     >
       <Route path="flash-cards/play" let:location>
         <Diaporama location="{location}" />
