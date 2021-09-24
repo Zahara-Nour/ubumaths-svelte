@@ -1,14 +1,21 @@
 <script>
   import CorrectionItem from './CorrectionItem.svelte'
   import { Button, Icon } from 'svelte-materialify/src'
-  import { mdiCloudDownloadOutline, mdiHome, mdiLifebuoy, mdiReload, mdiScanHelper, mdiProjectorScreen } from '@mdi/js'
+  import {
+    mdiCloudDownloadOutline,
+    mdiHome,
+    mdiLifebuoy,
+    mdiReload,
+    mdiScanHelper,
+    mdiProjectorScreen,
+  } from '@mdi/js'
   import Reveal from 'reveal.js'
   import { onMount } from 'svelte'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
-  import { fontSize, user } from '../../app/stores'
+  import { user } from '../../app/stores'
   import { calculMentalAssessment } from './stores'
   import { saveDocument } from '../../app/db'
-import { navigate } from 'svelte-routing';
+  import { navigate } from 'svelte-routing'
 
   export let questions
   export let answers
@@ -17,8 +24,7 @@ import { navigate } from 'svelte-routing';
   export let restart
   export let query
   export let classroom
-  export let size = $fontSize
-
+  export let size
 
   const help = questions[0].help
   let score = 0
@@ -105,11 +111,11 @@ import { navigate } from 'svelte-routing';
       options: question.options,
       enounce: question.enounce,
       correction: question.correction,
-      correctionFormat:question.correctionFormat,
-      testAnswer:question.testAnswer,
-      choices:question.choices
+      correctionFormat: question.correctionFormat,
+      testAnswer: question.testAnswer,
+      choices: question.choices,
     }
-    console.log('items', items )
+    console.log('items', items)
   }
 
   const options = {
@@ -180,19 +186,50 @@ import { navigate } from 'svelte-routing';
       </div>
     </div>
   {/if}
-  <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
-    <div>
-      {#each items as item}
-        <CorrectionItem
-          item="{item}"
-          addPoints="{addPoints}"
-          details="{details}"
-          classroom={classroom}
-          size={size}
-        />
-      {/each}
+  {#if classroom}
+  <div class="d-flex" style="width:100%;overflow-x:auto;">
+    <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
+      <div>
+        {#each items.filter((item, i) => i % 2 == 0) as item}
+          <CorrectionItem
+            item="{item}"
+            addPoints="{addPoints}"
+            details="{details}"
+            classroom="{classroom}"
+            size="{size}"
+          />
+        {/each}
+      </div>
+    </div>
+    <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
+      <div>
+        {#each items.filter((item, i) => i % 2 == 1) as item}
+          <CorrectionItem
+            item="{item}"
+            addPoints="{addPoints}"
+            details="{details}"
+            classroom="{classroom}"
+            size="{size}"
+          />
+        {/each}
+      </div>
     </div>
   </div>
+  {:else}
+    <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
+      <div>
+        {#each items as item}
+          <CorrectionItem
+            item="{item}"
+            addPoints="{addPoints}"
+            details="{details}"
+            classroom="{classroom}"
+            size="{size}"
+          />
+        {/each}
+      </div>
+    </div>
+  {/if}
 
   <div class="{colorResult + ' d-flex align-center  justify-space-around'}">
     <div class="d-flex flex-column align-center">
@@ -200,7 +237,7 @@ import { navigate } from 'svelte-routing';
         class="ma-2 white"
         fab
         size="x-small"
-        on:click="{() => restart = true}"
+        on:click="{() => (restart = true)}"
       >
         <Icon path="{mdiReload}" />
       </Button>
@@ -208,7 +245,7 @@ import { navigate } from 'svelte-routing';
         class="ma-2 white"
         fab
         size="x-small"
-        on:click="{() => navigate('/calcul-mental'+query)}"
+        on:click="{() => navigate('/calcul-mental' + query)}"
       >
         <Icon path="{mdiHome}" />
       </Button>

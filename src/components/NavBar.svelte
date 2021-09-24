@@ -2,6 +2,7 @@
   import Gidouille from './Gidouille.svelte'
   import AuthButton from './AuthButton.svelte'
   import { onMount } from 'svelte'
+
   import {
     AppBar,
     Button,
@@ -19,8 +20,14 @@
     mdiFormatFontSizeIncrease,
     mdiMenu,
   } from '@mdi/js'
-  import { fontSize, user } from '../app/stores'
-import { waiting } from '../features/calcul-mental/stores';
+  import {
+    mode,
+    menuFontSize,
+    testFontSize,
+    classroomFontSize,
+    user,
+  } from '../app/stores'
+  import { waiting } from '../features/calcul-mental/stores'
 
   let miniWindow = false
   let active = false
@@ -37,8 +44,36 @@ import { waiting } from '../features/calcul-mental/stores';
 
   const setMiniWindow = () => (miniWindow = window.innerWidth < 720)
   const toggleDrawer = () => (active = !active)
-  const increaseFontSize = () => fontSize.update((size) => size + 1)
-  const decreaseFontSize = () => fontSize.update((size) => size - 1)
+  const increaseFontSize = () => {
+    switch ($mode) {
+      case 'menu':
+        menuFontSize.update((size) => size + 1)
+        break
+
+      case 'classroom':
+        classroomFontSize.update((size) => size + 1)
+        break
+
+      case 'test':
+        testFontSize.update((size) => size + 1)
+        break
+    }
+  }
+  const decreaseFontSize = () => {
+    switch ($mode) {
+      case 'menu':
+        menuFontSize.update((size) => size - 1)
+        break
+
+      case 'classroom':
+        classroomFontSize.update((size) => size - 1)
+        break
+
+      case 'test':
+        testFontSize.update((size) => size - 1)
+        break
+    }
+  }
 
   function goTo(url) {
     navigate(url)
@@ -57,8 +92,8 @@ import { waiting } from '../features/calcul-mental/stores';
 <nav role="navigation">
   <AppBar dense flat>
     <div slot="icon">
-      <Button class='gidouille' on:click="{() => goTo('/')}" depressed>
-        <Gidouille spinning={$waiting.length}/>
+      <Button class="gidouille" on:click="{() => goTo('/')}" depressed>
+        <Gidouille spinning="{$waiting.length}" />
       </Button>
     </div>
 
@@ -179,5 +214,4 @@ import { waiting } from '../features/calcul-mental/stores';
   .gidouille {
     animation: infinite 2s linear spin;
   }
-
 </style>

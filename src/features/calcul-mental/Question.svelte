@@ -1,9 +1,9 @@
 <script>
   import { math } from 'tinycas/build/math/math'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
-  import { fontSize } from '../../app/stores'
+
   export let question
-  export let size = $fontSize
+  export let size
 
   let mf
   let enounce

@@ -10,7 +10,7 @@
   import NavBar from './components/NavBar.svelte'
   import Mental from './features/calcul-mental/Mental.svelte'
   import MentalTest from './features/calcul-mental/MentalTest.svelte'
-  import { fontSize, user } from './app/stores'
+  import { menuFontSize, user } from './app/stores'
   import { Snackbar, Footer, Button } from 'svelte-materialify/src'
 
   export let url = ''
@@ -54,7 +54,7 @@
     <NavBar />
     <div
       class="main"
-      style="margin:auto; max-width:1024px;font-size:{$fontSize}"
+      style="margin:auto; max-width:1024px;font-size:{$menuFontSize}"
     >
       <Route path="flash-cards/play" let:location>
         <Diaporama location="{location}" />

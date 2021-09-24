@@ -6,13 +6,13 @@
 
   import { mdiCheckCircle } from '@mdi/js'
   import { mdiCloseCircle } from '@mdi/js'
-  import { fontSize } from '../../app/stores'
+ 
 
   export let item
   export let addPoints
   export let details
   export let classroom
-  export let size = $fontSize
+  export let size
   const {
     number,
     options = '',

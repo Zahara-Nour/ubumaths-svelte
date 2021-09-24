@@ -40,7 +40,7 @@
   import questions from './questions'
   import Question from './Question.svelte'
   import generateQuestion from './generateQuestion'
-  import { fontSize, user } from '../../app/stores'
+  import { mode, menuFontSize, user } from '../../app/stores'
   import { calculMentalAssessment } from './stores'
   import { getCollection } from '../../app/collections'
   import { saveDocument, getDocument } from '../../app/db'
@@ -83,6 +83,8 @@
   let selectedStudents = {}
   let teacherAssessmentId
   let classroom = false
+
+  $mode = "menu"
 
   for (let theme_i = 0; theme_i < themes.length; theme_i++) {
     Object.keys(questions).forEach((th, th_i) => {
@@ -638,7 +640,7 @@
   >
     <div slot="tabs">
       {#each themes as item}
-        <Tab><span style="font-size:{$fontSize}px;">{item}</span></Tab>
+        <Tab><span style="font-size:{$menuFontSize}px;">{item}</span></Tab>
       {/each}
     </div>
 
@@ -650,12 +652,12 @@
               <span
                 slot="header"
                 class="text-uppercase red-text"
-                style="font-size:{$fontSize}px"
+                style="font-size:{$menuFontSize}px"
               >
                 {d}
               </span>
               <List style="width:100%;">
-                <div style="font-size:{$fontSize}px;">
+                <div style="font-size:{$menuFontSize}px;">
                   {#each Object.keys(questions[them][d]) as t, t_i}
                     <div class="mt-2 mb-2 d-flex align-center">
                       <span class="mr-3">{t}</span>
@@ -669,7 +671,7 @@
                             size="x-small"
                             depressed
                             on:click="{() => onChangeLevel(t, t_i, i)}"
-                            ><span style="font-size:{$fontSize}px;"
+                            ><span style="font-size:{$menuFontSize}px;"
                               >{i + 1}</span
                             ></Button
                           >

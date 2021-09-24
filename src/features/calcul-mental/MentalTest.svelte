@@ -10,7 +10,7 @@
   import virtualKeyboard from './virtualKeyboard'
   import { calculMentalAssessment } from './stores'
   import { isTouchScreendevice, shuffle } from '../../app/utils'
-  import { fontSize, user } from '../../app/stores'
+  import { mode, testFontSize, classroomFontSize, user } from '../../app/stores'
   import { getDocument, saveDocument } from '../../app/db'
   import { tick } from 'svelte'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
@@ -49,6 +49,7 @@
   let classroom
   let savedFontSize
   let selectionRef
+  
 
   const regex = /\$\$(.*?)\$\$/g
   const replacement = (matched, p1) => Mathlive.convertLatexToMarkup(p1)
@@ -95,7 +96,8 @@
     theme = queryParams.theme
     level = queryParams.level
     classroom = queryParams.classroom === 'true'
-    console.log('clssroom', classroom)
+    $mode = classroom ? "classroom" : "test"
+    console.log('classroom', classroom)
     assessmentId = queryParams.assessmentId
     questions = []
 
@@ -303,20 +305,20 @@
     answers_choice="{answers_choice}"
     query="{location.search}"
     classroom="{classroom}"
-    size="{classroom ? 42 : $fontSize}"
+    size="{classroom ? $classroomFontSize : $testFontSize}"
     bind:restart
   />
 {:else if generated}
   <div class="mt-6 mb-6">
     <CircularProgress
       number="{current + 1}"
-      fontSize="{classroom ? 42 : $fontSize + 8}"
+      fontSize="{classroom ? $classroomFontSize : $testFontSize + 8}"
       strokeWidth="{5}"
       percentage="{percentage}"
     />
   </div>
   <div class="mt-5 mb-5">
-    <Question size="{classroom ? 42 : $fontSize}" question="{generated}" />
+    <Question size="{classroom ? $classroomFontSize : $testFontSize}" question="{generated}" />
   </div>
   <!-- <div class:error> -->
 
@@ -329,7 +331,7 @@
             
             on:click="{() => onChoice(i)}"
           >
-            <div style="font-size:{$fontSize + 4}px;">{@html choice}</div>
+            <div style="font-size:{$testFontSize + 4}px;">{@html choice}</div>
           </Button>
         {/each}
       </div>
@@ -338,10 +340,10 @@
         class="mt-16 d-flex flex-row align-center justify-center"
         style="max-width:500px;width:100%"
       >
-        <span class="mr-4" style="font-size:{$fontSize}px;">Ta réponse:</span>
+        <span class="mr-4" style="font-size:{$testFontSize}px;">Ta réponse:</span>
         <div class="flex-grow-1">
           <math-field
-            style="width:100%;font-size:{$fontSize}px;"
+            style="width:100%;font-size:{$testFontSize}px;"
             class="{correct
               ? 'pa-2 light-green lighten-5'
               : 'pa-2 deep-orange lighten-5'}"
