@@ -3,16 +3,14 @@
   import generate from './generateQuestion'
   import CircularProgress from '../../components/CircularProgress.svelte'
   import { Button } from 'svelte-materialify/src'
-  import { onDestroy, onMount, afterUpdate } from 'svelte'
+  import { onDestroy } from 'svelte'
   import Correction from './Correction.svelte'
   import qs from './questions'
   import queryString from 'query-string'
   import virtualKeyboard from './virtualKeyboard'
   import { calculMentalAssessment } from './stores'
-  import { isTouchScreendevice, shuffle } from '../../app/utils'
-  import { mode, testFontSize, classroomFontSize, user } from '../../app/stores'
-  import { getDocument, saveDocument } from '../../app/db'
-  import { tick } from 'svelte'
+  import {  shuffle } from '../../app/utils'
+  import { mode, testFontSize, classroomFontSize } from '../../app/stores'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { math } from 'tinycas/build/math/math'
 
@@ -47,7 +45,6 @@
   let correct = false
   let restart = false
   let classroom
-  let savedFontSize
   let selectionRef
   
 
@@ -97,12 +94,14 @@
     level = queryParams.level
     classroom = queryParams.classroom === 'true'
     $mode = classroom ? "classroom" : "test"
-    console.log('classroom', classroom)
     assessmentId = queryParams.assessmentId
     questions = []
 
+    // 1 seul exercice a été selectionné par l'intermédiaire du menu
     if (theme && domain && subdomain && level) {
       const question = getQuestion(theme, domain, subdomain, level)
+
+      // cas où les différentes questions sont écrites en dur
       if (question.options && question.options.includes('exhaust')) {
         const n = Math.min(question.expressions.length, 10)
         const indices = []
@@ -120,10 +119,15 @@
           }
         }
         console.log('exhaust', questions)
-      } else {
+      } 
+      // on, répète 10 fois la question de l'exercice
+      else {
         for (let i = 0; i < 10; i++) questions.push(question)
       }
-    } else if ($calculMentalAssessment) {
+    } 
+    
+    // les questions ont été passée par un store
+    else  {
       $calculMentalAssessment.questions.forEach((element) => {
         for (let i = 0; i < element.count; i++) {
           questions.push(
@@ -238,6 +242,7 @@
     recordAnswer()
   }
 
+  // on passe à la question suivante
   async function change() {
     if (timer) clearInterval(timer)
     if (timeout) clearTimeout(timeout)
@@ -270,8 +275,9 @@
     }
   }
 
-  $: initTest()
+  initTest()
 
+  // le bouton restart a été appuyé après la correction
   $: if (restart) {
     initTest()
   }
@@ -288,15 +294,15 @@
     mf.focus()
   }
 
+  // mise en forme du LaTeX dans les choix des questions à choix
   $: if (generated && generated.choices) {
     choices = generated.choices.map((c) => c.replace(regex, replacement))
   } else {
     choices = null
   }
 
-  $: {
-    correct = math(answer).type !== '!! Error !!'
-  }
+  // test pour vérifier que l'expression est bien formée à chaque frappe
+  $: correct = math(answer).type !== '!! Error !!'
 </script>
 
 {#if finish}

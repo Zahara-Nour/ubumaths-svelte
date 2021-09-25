@@ -1,53 +1,24 @@
 <script>
   import {
-    Icon,
     List,
-    ListItem,
-    Dialog,
-    Card,
-    CardTitle,
-    CardSubtitle,
-    CardText,
     Button,
     Tabs,
     Tab,
     TabContent,
-    TextField,
-    Tooltip,
-    Snackbar,
-    Divider,
     ExpansionPanels,
     ExpansionPanel,
-    Row,
-    Col,
-    Checkbox,
-    Select,
-    Badge,
   } from 'svelte-materialify/src'
 
-  import {
-    mdiProjectorScreen,
-    mdiRocketLaunchOutline,
-    mdiHelp,
-    mdiBasketPlus,
-    mdiBasket,
-    mdiMinus,
-    mdiPlus,
-    mdiCloudDownloadOutline,
-    mdiCloudUploadOutline,
-    mdiLink,
-  } from '@mdi/js'
   import { navigate } from 'svelte-routing'
   import questions from './questions'
-  import Question from './Question.svelte'
   import generateQuestion from './generateQuestion'
   import { mode, menuFontSize, user } from '../../app/stores'
   import { calculMentalAssessment } from './stores'
-  import { getCollection } from '../../app/collections'
-  import { saveDocument, getDocument } from '../../app/db'
   import queryString from 'query-string'
   import Exemple from './Exemple.svelte'
   import Buttons from './Buttons.svelte'
+  import Basket from './Basket.svelte'
+  import Assessments from './Assessments.svelte'
 
   export let location
 
@@ -68,23 +39,13 @@
   let generated
   let isLoggedIn
   let showBasket = false
-  let evalTitle = 'toto'
-  let teacherAssessments
-  let studentAssessments
-  let teacherAssessmentsTitles = []
-
-  
-  let saveSuccess = false
-  let saveFailure = false
-  let displayAssessmentList = false
+  let disableSave = true
+  let loadAssessments = () => {}
+  let saveAssessment = () => {}
   let displayDescription = false
-  let classrooms
   let isTeacher
-  let selectedClassrooms = []
-  let selectedClassroom
-  let selectedStudents = {}
-  let teacherAssessmentId
   let classroom = false
+  let modified = false
 
   $mode = 'menu'
 
@@ -126,12 +87,6 @@
     level = 1
   }
 
-  const titleRules = [
-    (v) =>
-      !teacherAssessmentsTitles.includes(v) ||
-      "Titre d'évaluation déjà utilisé",
-  ]
-
   function onChangeTheme(e) {
     themeIdx = e.detail
     theme = themes[themeIdx]
@@ -164,19 +119,27 @@
 
   function launchTest({ type, assessment }) {
     let url
+    // passation d'une évaluation programmée
     if (type === 'assessment') {
       calculMentalAssessment.set(assessment)
       url = `/mental-test`
-    } else if (type === 'practice') {
+    } 
+    // entrainement à une évaluation programmée
+    else if (type === 'practice') {
       calculMentalAssessment.set(assessment)
       url = `/mental-test?practice=true`
-    } else if (basket.length) {
+    } 
+    // entrainement aux exercices du panier courant
+    else if (basket.length) {
       calculMentalAssessment.set({ questions: basket })
       url = '/mental-test'
-    } else {
+    }
+    // entrainement à l'exercice sélectionné par le menu
+    else {
       url = `/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
     }
 
+    // rajout du mode classroom
     if (url.includes('?')) {
       url += `&classroom=${classroom}`
     } else {
@@ -220,183 +183,33 @@
         },
       ]
     }
+    modified = true
   }
 
-  const addItem = (i) => basket[i].count++
+  const fillBasket = () => addToBasket(theme, domain, subdomain, level, 1)
 
-  function removeItem(i) {
-    if (basket[i].count > 1) {
-      basket[i].count--
-    } else {
-      basket.splice(i, 1)
-      basket = basket
-    }
-  }
-
-  async function fetchTeacherAssessments() {
-    teacherAssessments = await getCollection({
-      collectionPath: `Users/${$user.id}/Assessments`,
-    }).catch((error) => console.log(error))
-    teacherAssessmentsTitles = teacherAssessments.map((ev) => ev.title)
-  }
-
-  async function fetchStudentAssessments() {
-    const promises = $user.assessments.map((assessmentId) =>
-      getDocument({
-        path: `Users/${$user.teacher}/Assessments`,
-        id: assessmentId,
-      }),
-    )
-
-    studentAssessments = await Promise.all(promises)
-    console.log('studentAssessments', studentAssessments)
-  }
-
-  async function fetchStudents() {
-    $user.students = {}
-    const school = await getDocument({
-      path: `Schools`,
-      id: `${$user.country}$${$user.city}$${$user.school}`,
-    }).catch((error) => console.log(error))
-    console.log('school', school)
-    $user.classrooms.forEach((classroom) => {
-      $user.students[classroom] = school.classrooms[classroom]
-      selectedStudents[classroom] = []
-    })
-    console.log('students', $user.students)
-  }
-
-  function loadAssessment(assessment) {
-    basket = []
-    assessment.questions.forEach((q) => {
-      addToBasket(q.theme, q.domain, q.subdomain, q.level, q.count)
-    })
-    displayAssessmentList = false
-  }
-
-  async function assign() {
-    if (!teacherAssessmentId) {
-      console.log('erreur : l evaluation doit etre sauvegardée')
-      return
-    }
-
-    const assignedStudents = []
-    selectedClassrooms.forEach((classroom) => {
-      $user.students[classroom].forEach((student) => {
-        assignedStudents.push(student.id)
+  function copyLink() {
+    console.log('clipboard')
+    const url = `https://ubumaths.net/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
+    navigator.clipboard
+      .writeText(url)
+      .then(function () {
+        console.log('copy to clipboard: ', url)
       })
-    })
-
-    Object.keys(selectedStudents).forEach((classroom) => {
-      selectedStudents[classroom].forEach((student) => {
-        if (!assignedStudents.includes(student)) {
-          assignedStudents.push(student)
-        }
+      .catch(function () {
+        console.log('failed to write to clipboard')
       })
-    })
-
-    assignedStudents.forEach(async (student) => {
-      const doc = await getDocument({
-        path: 'Users',
-        id: student,
-      }).catch((err) => console.log(err))
-
-      console.log('doc student', doc)
-
-      // if (!doc.assessments[teacherAssessmentId]) {
-      //   await saveDocument({
-      //     path: 'Users',
-      //     document: {
-      //       id: student,
-      //       [`assessments.${teacherAssessmentId}`]: {
-      //         status: 'pending',
-      //       },
-      //     },
-      //   })
-      // }
-      if (!doc.assessments) doc.assessments = []
-      if (!doc.assessments.includes(teacherAssessmentId)) {
-        await saveDocument({
-          path: 'Users',
-          document: {
-            id: student,
-            assessments: doc.assessments.concat([teacherAssessmentId]),
-          },
-        })
-      }
-    })
-
-    console.log('assignedStudents', assignedStudents)
   }
 
   $: isLoggedIn = $user.id != 'guest'
   $: isTeacher = isLoggedIn && $user.roles.includes('teacher')
-  $: isStudent = isLoggedIn && $user.roles.includes('student')
-  $: gotAssessments = isStudent && $user.assessments.length
-  $: if (gotAssessments) {
-    fetchStudentAssessments()
-  }
-  $: if (isTeacher) classrooms = $user.classrooms
   $: disable = !theme || !domain || !subdomain || !(level >= 0)
-
-  $: if (showBasket && !teacherAssessments) {
-    fetchTeacherAssessments()
-  }
-
-  $: if (isTeacher && showBasket && !$user.students) {
-    fetchStudents()
-  }
-  $: if (teacherAssessments) {
-    teacherAssessmentsTitles = teacherAssessments.map((ev) => ev.title)
-  }
-  $: {
-    if ($user.classrooms && !selectedClassroom) {
-      console.log('reset', $user.classrooms)
-      selectedClassroom = $user.classrooms[0]
-    }
-  }
-
   $: generated = generateExemple(theme, domain, subdomain, level)
 </script>
 
 <h4 class="mt-5 pa-3 mb-5 amber white-text">Calcul mental</h4>
 
-{#if gotAssessments && studentAssessments}
-  <h5 class="amber-text font-weight-bold">Evaluations à faire</h5>
-
-  <div class="mt-3 grey lighten-4">
-    <div class="pa-2 pl-5" style="border-left: 5px solid red">
-      {#each studentAssessments as assessment}
-        <div class="mt-2 mb-2   d-flex align-center">
-          {assessment.title}
-          <!-- <Tooltip bottom> -->
-          <Button
-            on:click="{() => launchTest({ type: 'practice', assessment })}"
-            size="x-small"
-            class="ml-2 mr-2 amber lighten-2"
-          >
-            Entraînement
-          </Button>
-          <!-- <span slot="tip">Ce n'est pas noté !</span> -->
-          <!-- </Tooltip> -->
-
-          <!-- <Tooltip bottom> -->
-          <Button
-            class="ml-2 mr-2 white-text red lighten-1"
-            disabled="{disable}"
-            fab
-            size="x-small"
-            on:click="{() => launchTest({ type: 'assessment', assessment })}"
-          >
-            <Icon path="{mdiRocketLaunchOutline}" />
-          </Button>
-          <!-- <span slot="tip">Attention, c'est noté !</span>
-          </Tooltip> -->
-        </div>
-      {/each}
-    </div>
-  </div>
-{/if}
+<Assessments disable="{disable}" launchTest="{launchTest}" />
 
 {#if showBasket}
   <h5 class="mt-8 amber-text font-weight-bold">Panier</h5>
@@ -407,110 +220,26 @@
 <Buttons
   isTeacher="{isTeacher}"
   bind:showBasket
-  classroom="{classroom}"
+  bind:classroom
   basket="{basket}"
   launchTest="{launchTest}"
-  addToBasket="{addToBasket}"
-  theme="{theme}"
-  domain="{domain}"
-  subdomain="{subdomain}"
-  level="{level}"
+  fillBasket="{fillBasket}"
+  disableSave="{disableSave}"
+  copyLink="{copyLink}"
+  loadAssessments="{loadAssessments}"
+  saveAssessment="{saveAssessment}"
   disable="{disable}"
-  evalTitle="{evalTitle}"
-  teacherAssessmentsTitles={teacherAssessmentsTitles}
 />
 
 {#if isTeacher && showBasket}
-  <TextField filled bind:value="{evalTitle}" rules="{titleRules}"
-    >Titre</TextField
-  >
-
-  {#if basket.length}
-    <List>
-      {#each basket as item, i}
-        <div class="mt-4 mb-4 d-flex flex-row">
-          <Card style="width:80%;max-width:500px">
-            <CardTitle>{item.description}</CardTitle>
-            {#if item.subdescription}
-              <CardSubtitle>{item.subdescription}</CardSubtitle>
-            {/if}
-            <CardText>
-              <Question question="{item.generated}" />
-            </CardText>
-          </Card>
-          <div class="d-flex flex-column">
-            <div class="ml-2 d-flex flex-row">
-              <Button
-                class="ml-1 mr-1"
-                disabled="{disable}"
-                fab
-                size="x-small"
-                on:click="{() => removeItem(i)}"
-              >
-                <Icon path="{mdiMinus}" />
-              </Button>
-
-              <Button
-                class="ml-1 mr-1"
-                disabled="{disable}"
-                fab
-                size="x-small"
-                on:click="{() => addItem(i)}"
-              >
-                <Icon path="{mdiPlus}" />
-              </Button>
-            </div>
-            <div class="d-flex flex-row justify-center">
-              <div class="mt-2">
-                {basket[i].count}
-              </div>
-            </div>
-          </div>
-        </div>
-      {/each}
-    </List>
-  {:else}
-    Le panier est vide.
-  {/if}
-
-  <h5>Assigner à :</h5>
-  <Row class="align-start" noGutters style="height:150px">
-    <Col>
-      <List>
-        {#each classrooms as classroom}
-          <Checkbox
-            class="mt-2 mb-2"
-            bind:group="{selectedClassrooms}"
-            value="{classroom}">{classroom}</Checkbox
-          >
-        {/each}
-      </List>
-    </Col>
-    <Col>
-      <Select
-        items="{$user.classrooms.map((c) => ({ name: c, value: c }))}"
-        bind:value="{selectedClassroom}"
-      >
-        Classe
-      </Select>
-      {#if selectedClassroom && $user.students && $user.students[selectedClassroom]}
-        <List>
-          {#each $user.students[selectedClassroom] as student}
-            <Checkbox
-              class="mt-2 mb-2"
-              bind:group="{selectedStudents[selectedClassroom]}"
-              value="{student.id}"
-            >
-              {student.lastname}
-              {student.firstname}
-            </Checkbox>
-          {/each}
-        </List>
-      {/if}
-    </Col>
-  </Row>
-
-  <Button on:click="{assign}">Assigner</Button>
+  <Basket
+    bind:basket
+    bind:disableSave
+    bind:loadAssessments
+    bind:saveAssessment
+    bind:modified
+    addToBasket="{addToBasket}"
+  />
 {:else}
   <Tabs
     centerActive
@@ -582,41 +311,3 @@
     <Exemple question="{generated}" />
   </div>
 {/if}
-
-<Dialog bind:active="{displayAssessmentList}">
-  <div class="d-flex justify-center mt-2 mb-2">
-    <List class="elevation-2">
-      <h6>Liste des évaluations</h6>
-
-      <Divider />
-
-      {#each teacherAssessments as assessment}
-        <ListItem on:click="{() => loadAssessment(assessment)}">
-          {assessment.title}
-        </ListItem>
-      {/each}
-    </List>
-  </div>
-</Dialog>
-
-<Snackbar
-  class="justify-space-between red white-text"
-  bind:active="{saveFailure}"
-  text
-  right
-  top
-  timeout="{3000}"
->
-  Enregistrement réussi
-</Snackbar>
-
-<Snackbar
-  class="justify-space-between green  white-text"
-  bind:active="{saveSuccess}"
-  text
-  right
-  top
-  timeout="{3000}"
->
-  Enregistrement réussi
-</Snackbar>

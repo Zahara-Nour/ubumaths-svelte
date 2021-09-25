@@ -13,11 +13,11 @@
   import { menuFontSize, user } from './app/stores'
   import { Snackbar, Footer, Button } from 'svelte-materialify/src'
   import { mode } from './app/stores'
+  
 
   export let url = ''
 
   let theme = 'light'
- 
 
   function toggleTheme() {
     if (theme === 'light') theme = 'dark'
@@ -28,7 +28,7 @@
   function activateAssessmentsNotification() {
     assessmentsNotification = true
   }
-  $: displayWidth = $mode === "classroom" ? "95%" : "1024px"
+  $: displayWidth = $mode === 'classroom' ? '95%' : '1024px'
   $: {
     if (
       $user.roles &&
@@ -82,7 +82,7 @@
             height="60px"
           />
         </a>
-        <div class="flex-grow-1"/>
+        <div class="flex-grow-1"></div>
         <div class="text-body-2">D. Le Jolly</div>
       </div>
     </Footer>

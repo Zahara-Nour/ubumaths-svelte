@@ -1,14 +1,7 @@
 <script>
   import CorrectionItem from './CorrectionItem.svelte'
   import { Button, Icon } from 'svelte-materialify/src'
-  import {
-    mdiCloudDownloadOutline,
-    mdiHome,
-    mdiLifebuoy,
-    mdiReload,
-    mdiScanHelper,
-    mdiProjectorScreen,
-  } from '@mdi/js'
+  import { mdiHome, mdiLifebuoy, mdiReload, mdiScanHelper } from '@mdi/js'
   import Reveal from 'reveal.js'
   import { onMount } from 'svelte'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
@@ -28,32 +21,34 @@
   export let size
 
   const help = questions[0].help
+  let percent
   let score = 0
   let total = 0
   let details = false
   const items = []
   const toggleDetails = () => (details = !details)
-
   let colorResult
   let messageResult
 
-  $: percent = total ? score / total : null
-
-  $: if (percent === 1) {
-    colorResult = 'green'
-    messageResult = 'Perfect !'
-  } else if (percent >= 0.8) {
-    colorResult = 'green'
-    messageResult = 'Good Job !'
-  } else if (percent >= 0.5) {
-    colorResult = 'orange'
-    messageResult = 'Keep on !'
-  } else {
-    colorResult = 'red'
-    messageResult = 'Try again !'
-  }
-
+  // Quand le composant de correction a fini de s'afficher,
+  // le score a déjà été calculé, on l'enregistre
   onMount(async () => {
+    percent = score / total
+
+    if (percent === 1) {
+      colorResult = 'green'
+      messageResult = 'Perfect !'
+    } else if (percent >= 0.8) {
+      colorResult = 'green'
+      messageResult = 'Good Job !'
+    } else if (percent >= 0.5) {
+      colorResult = 'orange'
+      messageResult = 'Keep on !'
+    } else {
+      colorResult = 'red'
+      messageResult = 'Try again !'
+    }
+
     const assessment = $calculMentalAssessment
     if (assessment) {
       //on sauvegarde la note dans les données de l'élève
@@ -119,6 +114,7 @@
     console.log('items', items)
   }
 
+  // options revealjs
   const options = {
     // Determines where controls appear, "edges" or "bottom-right"
     controlsLayout: 'edges',
@@ -187,6 +183,7 @@
       </div>
     </div>
   {/if}
+
   {#if classroom}
     <div class="d-flex" style="width:100%;overflow-x:auto;">
       <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
@@ -231,7 +228,8 @@
       </div>
     </div>
   {/if}
-  {#if $mode !== "classroom"}
+
+  {#if $mode !== 'classroom'}
     <div class="{colorResult + ' d-flex align-center  justify-space-around'}">
       <div class="d-flex flex-column align-center">
         <Button

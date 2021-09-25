@@ -6,12 +6,12 @@
   import { Button, Icon } from 'svelte-materialify/src'
   import { mdiLogin, mdiLogout } from '@mdi/js'
   import { getCollection } from '../app/collections'
-  import {db} from '../app/db'
-import { navigate } from 'svelte-routing';
+  import { db, supabase } from '../app/db'
+  import { navigate } from 'svelte-routing'
 
   // Keep track of script status ("idle", "loading", "ready", "error")
   let status = 'idle'
-  let connecting =  false
+  let connecting = false
   $: loaded = status === 'ready'
   $: if (loaded) initAuth()
 
@@ -129,7 +129,6 @@ import { navigate } from 'svelte-routing';
       })
 
     const googleProfile = {
-      id: profile.getEmail().replace('.',':'),
       googleId: profile.getId(),
       imageUrl: profile.getImageUrl(),
       email: profile.getEmail(),
@@ -140,11 +139,24 @@ import { navigate } from 'svelte-routing';
       tokenId: authResponse.id_token,
       accessToken: authResponse.access_token,
     }
-    console.log('user', googleProfile.email)
-  
-    const userDatas = await fetchUser(googleProfile.id)
-    user.set({...googleProfile, ...userDatas})
-    console.log('user', $user)
+
+    // const userDatas = await fetchUser(googleProfile.id)
+
+    let { data, error } = await supabase
+      .from('users')
+      .select(`*, schools(city,country, name)`)
+      .eq('email', googleProfile.email ).single()
+    if (error) {
+      console.log('error', error)
+    } else if (!data) {
+      console.log('error : no user')
+    }
+    else{
+   
+      user.set({ ...googleProfile, ...data, ...data.schools })
+      console.log('user', $user)
+    }
+   
     connecting = false
   }
 
@@ -231,11 +243,23 @@ import { navigate } from 'svelte-routing';
 
 {#if auth2}
   {#if isLoggedIn}
-    <Button disabled={connecting} fab size="small" class="green white-text" on:click="{onSignOut}">
+    <Button
+      disabled="{connecting}"
+      fab
+      size="small"
+      class="green white-text"
+      on:click="{onSignOut}"
+    >
       <Icon path=" {mdiLogout}" />
     </Button>
   {:else}
-    <Button disabled={connecting} fab size="small" class="red white-text" on:click="{onSignIn}">
+    <Button
+      disabled="{connecting}"
+      fab
+      size="small"
+      class="red white-text"
+      on:click="{onSignIn}"
+    >
       <Icon path=" {mdiLogin}" />
     </Button>
   {/if}

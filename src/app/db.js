@@ -2,6 +2,20 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
 import { getLogger } from './utils'
+import { createClient } from '@supabase/supabase-js'
+import supabaseaccess from '../../private/supabase.json'
+
+  console.log('supabase', supabaseaccess)
+  const options = {}
+  const supabase = createClient(supabaseaccess.url, supabaseaccess.key, options)
+  console.log('supabase', supabase)
+
+  const test_supabase = async function () {
+    const { data, error } = await supabase.from('results').select()
+    console.log('data', data)
+    console.log('error', error)
+  }
+  test_supabase()
 
 
 const firebaseConfig = {
@@ -146,4 +160,4 @@ async function  saveDocument({ path, document }) {
 }
 
 
-export { fetchCollection, storage, db, saveDocument, getDocument }
+export { fetchCollection, storage, db, saveDocument, getDocument, supabase }
