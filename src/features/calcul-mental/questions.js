@@ -3503,11 +3503,11 @@ export default {
         },
         {
           description: 'Simplifier une fraction',
-          subdescription: '1 seule simplification possible',
+          subdescription: 'simplification par 2 ; 3 ; 5 ; 7 ; 11',
           enounces: ['Simplifie cette fraction.'],
-          expressions: ['#{&1*&3}/#{&2*&3}', '#{&2*&3}/#{&1*&3}'],
+          expressions: ['#{&1*&2}/#{&1*&3}', '#{&1*&3}/#{&1*&2}'],
           variables: [{
-            '&1': '$e[2;9]',
+            '&1': '$l{2;3;5;7;11}',
             '&2': '$e[2;9]\\{cd&1}',
             '&3': '$e[2;9]\\{cd&1;cd&2}'
           },

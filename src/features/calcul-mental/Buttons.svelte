@@ -21,6 +21,7 @@
   export let disableSave
   export let classroom
   export let disable
+  export let displayDescription
 
   
   const toggleHelp = () => (displayDescription = !displayDescription)

@@ -221,6 +221,7 @@
   isTeacher="{isTeacher}"
   bind:showBasket
   bind:classroom
+  bind:displayDescription
   basket="{basket}"
   launchTest="{launchTest}"
   fillBasket="{fillBasket}"
