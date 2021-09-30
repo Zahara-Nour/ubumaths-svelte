@@ -203,6 +203,7 @@
         "level": "4",
         "grade": "3ème",
         "name": "Interprétation du coefficient directeur",
+        "answer":"",
         "enounce": "Voici la courbe représentative de la fonction affine d'équation $$f(x)=3x+1$$. Comment interpréter le coefficient directeur dans ce graphique?",
         "image": "flashcards-img/fonctions affines - interprétation coefficient directeur-800px.png",
         "imageAnswer": "flashcards-img/fonctions affines - interprétation coefficient directeur- correction-800px.png"
@@ -211,6 +212,7 @@
         "level": "4",
         "grade": "3ème",
         "name": "Interprétation du coefficient directeur (2)",
+        "answer":"",
         "enounce": "Voici la courbe représentative de la fonction affine d'équation $$f(x)=-4x+8$$. Comment interpréter le coefficient directeur dans ce graphique?",
         "image": "flashcards-img/fonctions affines - interprétation coefficient directeur 2-800px.png",
         "imageAnswer": "flashcards-img/fonctions affines - interprétation coefficient directeur 2 - correction-800px.png"

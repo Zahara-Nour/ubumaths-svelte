@@ -1044,7 +1044,7 @@ export default {
           expressions: ['&1*&2', '&2*&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[12;99]' }],
           type: 'result',
-          defaultDelay: 20,
+          defaultDelay: 30,
         },
 
 
@@ -1055,7 +1055,7 @@ export default {
           expressions: ['&1*&2', '&2*&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[102;999]' }],
           type: 'result',
-          defaultDelay: 20,
+          defaultDelay: 30,
         },
       ],
       'Produits particuliers': [
