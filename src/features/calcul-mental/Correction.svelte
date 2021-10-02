@@ -7,7 +7,7 @@
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { user } from '../../app/stores'
   import { calculMentalAssessment } from './stores'
-  import { saveDocument } from '../../app/db'
+  import {  supabase } from '../../app/db'
   import { navigate } from 'svelte-routing'
   import { mode } from '../../app/stores'
 
@@ -15,6 +15,7 @@
   export let answers
   export let answers_latex
   export let answers_choice
+  export let times
   export let restart
   export let query
   export let classroom
@@ -29,6 +30,7 @@
   const toggleDetails = () => (details = !details)
   let colorResult
   let messageResult
+  let assessment
 
   // Quand le composant de correction a fini de s'afficher,
   // le score a déjà été calculé, on l'enregistre
@@ -49,40 +51,49 @@
       messageResult = 'Try again !'
     }
 
-    const assessment = $calculMentalAssessment
-    if (assessment) {
+    assessment = $calculMentalAssessment
+    if (assessment && assessment.type === 'assessment') {
       //on sauvegarde la note dans les données de l'élève
       const result = {
         mark: score,
         total: total,
+        questions:items
       }
-      $user.results[assessment.id] = result
 
-      saveDocument({
-        path: 'Users',
-        document: {
-          id: $user.id,
-          [`results.${assessment.id}`]: result,
-        },
-      })
 
-      //puis dans les données du professeur
-      saveDocument({
-        path: `Users/${$user.teacher}/Results`,
-        document: {
-          id: assessment.id,
-          [`${$user.classroom}.${$user.id}`]: result,
-        },
-      })
+      const { data, error } = await supabase
+        .from('results')
+        .insert([{ assessment_id: assessment.id, user_id: $user.id, result }])
 
-      //on enlève l'évaluation de la liste des évaluations
-      await saveDocument({
-        path: 'Users/',
-        document: {
-          id: $user.id,
-          assessments: firebase.firestore.FieldValue.arrayRemove(assessment.id),
-        },
-      })
+      if (error) {
+        console.log('error', error)
+      } else {
+        console.log('results:', data)
+        let { data: students_assessments, error_get_assessments } =
+          await supabase
+            .from('users')
+            .select('assessments')
+            .eq('id', $user.id)
+            .single()
+
+        if (error_get_assessments) {
+          console.log('error', error_get_assessments)
+        } else {
+          students_assessments = students_assessments.assessments
+          const index = students_assessments.indexOf(assessment.id)
+          students_assessments.splice(index, 1)
+          const { data, error_update } = await supabase
+            .from('users')
+            .upsert([{ id: $user.id, assessments: students_assessments }])
+
+          if (error_update) {
+            console.log('error', error_update)
+          } else {
+            console.log('assessments updated', data)
+            $user.assessments.splice($user.assessments.indexOf(assessment.id), 1)
+          }
+        }
+      }
     }
   })
 
@@ -99,6 +110,7 @@
       answer: answers[i],
       answer_latex: answers_latex[i],
       answer_choice: answers_choice[i],
+      time:times[i],
       solutions: question.solutions,
       details: question.details,
       type: question.type,
@@ -156,6 +168,7 @@
     const deck = new Reveal(document.querySelector('.deck'), options)
     deck.initialize()
   }
+  
 </script>
 
 <div>
@@ -232,6 +245,7 @@
   {#if $mode !== 'classroom'}
     <div class="{colorResult + ' d-flex align-center  justify-space-around'}">
       <div class="d-flex flex-column align-center">
+        {#if !assessment || assessment.type !=='assessment'}
         <Button
           class="ma-2 white"
           fab
@@ -240,6 +254,7 @@
         >
           <Icon path="{mdiReload}" />
         </Button>
+        {/if}
         <Button
           class="ma-2 white"
           fab

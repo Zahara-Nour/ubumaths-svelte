@@ -1,46 +1,45 @@
 <script>
-    import { user } from '../../app/stores'
-    import { mdiRocketLaunchOutline } from '@mdi/js'
-    import {
-    Button,
-    Icon
-  } from 'svelte-materialify/src'
+  import { user } from '../../app/stores'
+  import { mdiRocketLaunchOutline } from '@mdi/js'
+  import { Button, Icon } from 'svelte-materialify/src'
+  import { supabase } from '../../app/db'
 
-    export let launchTest
-    export let disable
-    let studentAssessments 
+  export let launchTest
+  export let disable
+  let assessments
 
-    
-    async function fetchStudentAssessments() {
-    const promises = $user.assessments.map((assessmentId) =>
-      getDocument({
-        path: `Users/${$user.teacher}/Assessments`,
-        id: assessmentId,
-      }),
-    )
+  async function fetchAssessments() {
+    const { data, error } = await supabase
+      .from('assessments')
+      .select('*')
+      .in('id', $user.assessments)
 
-    studentAssessments = await Promise.all(promises)
-    console.log('studentAssessments', studentAssessments)
+    if (error) {
+      console.log('error', error)
+    } else {
+      assessments = data
+      console.log('assessments', assessments)
+    }
   }
+
   $: isLoggedIn = $user.id != 'guest'
   $: isStudent = isLoggedIn && $user.roles.includes('student')
-  $: gotAssessments = isStudent && $user.assessments.length
-  $: if (gotAssessments) {
-    fetchStudentAssessments()
+  $: if (isStudent && $user.assessments) {
+    fetchAssessments()
   }
 </script>
 
-{#if gotAssessments && studentAssessments}
+{#if assessments}
   <h5 class="amber-text font-weight-bold">Evaluations à faire</h5>
 
   <div class="mt-3 grey lighten-4">
     <div class="pa-2 pl-5" style="border-left: 5px solid red">
-      {#each studentAssessments as assessment}
+      {#each assessments as assessment}
         <div class="mt-2 mb-2   d-flex align-center">
           {assessment.title}
           <!-- <Tooltip bottom> -->
           <Button
-            on:click="{() => launchTest({ type: 'practice', assessment })}"
+            on:click="{() => launchTest({ ...assessment, type: 'practice' })}"
             size="x-small"
             class="ml-2 mr-2 amber lighten-2"
           >
@@ -55,7 +54,7 @@
             disabled="{disable}"
             fab
             size="x-small"
-            on:click="{() => launchTest({ type: 'assessment', assessment })}"
+            on:click="{() => launchTest({ ...assessment, type: 'assessment' })}"
           >
             <Icon path="{mdiRocketLaunchOutline}" />
           </Button>

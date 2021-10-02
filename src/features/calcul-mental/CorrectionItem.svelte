@@ -68,7 +68,7 @@
   const solutions_latex = item.solutions
     ? item.solutions.map((solution) => {
         if (item.type === 'choice') {
-          return solution // Ce n'est pas du latex !
+          return item.choices[solution]
         } else {
           const e = math(solution)
           return e.type === '!! Error !!' ? solution : e.toLatex({ implicit })
@@ -504,13 +504,13 @@
           break
         }
         case 'choice':
-          // line =
-          //   correction_latex +
-          //   '<span class="green-text">' +
-          //   solutions_latex[0] +
-          //   '</span>'
+          line =
+            correction_latex +
+            '<span class="green-text">' +
+            solutions_latex[0] +
+            '</span>'
 
-          // lines.push(line)
+          lines.push(line)
           break
 
         case 'enonce':

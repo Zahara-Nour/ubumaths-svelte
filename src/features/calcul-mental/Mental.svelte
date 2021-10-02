@@ -66,26 +66,28 @@
     })
   }
 
+  themeIdx = 0
+  theme = themes[0]
+  domainIdx = 0
+  domain = Object.keys(questions[theme])[0]
+  subdomainIdx = 0
+  subdomain = Object.keys(questions[theme][domain])[0]
+  levelIdx = 0
+  level = 1
+
   if (location.search) {
     queryParams = queryString.parse(location.search)
-    theme = queryParams.theme
-    themeIdx = Object.keys(questions).indexOf(theme)
-    domain = queryParams.domain
-    domainIdx = Object.keys(questions[theme]).indexOf(domain)
-    subdomain = queryParams.subdomain
-    subdomainIdx = Object.keys(questions[theme][domain]).indexOf(subdomain)
-    level = queryParams.level
-    levelIdx = level - 1
-  } else {
-    themeIdx = 0
-    theme = themes[0]
-    domainIdx = 0
-    domain = Object.keys(questions[theme])[0]
-    subdomainIdx = 0
-    subdomain = Object.keys(questions[theme][domain])[0]
-    levelIdx = 0
-    level = 1
-  }
+    if (queryParams.theme && queryParams.domain && queryParams.subdomain) {
+      theme = queryParams.theme
+      themeIdx = Object.keys(questions).indexOf(theme)
+      domain = queryParams.domain
+      domainIdx = Object.keys(questions[theme]).indexOf(domain)
+      subdomain = queryParams.subdomain
+      subdomainIdx = Object.keys(questions[theme][domain]).indexOf(subdomain)
+      level = queryParams.level
+      levelIdx = level - 1
+    }
+  } 
 
   function onChangeTheme(e) {
     themeIdx = e.detail
@@ -117,25 +119,23 @@
     levelsIdxs[themeIdx][domainIdx][subdomainIdx] = l
   }
 
-  function launchTest({ type, assessment }) {
-    let url
+  function launchTest(assessment) {
+    let url = '/mental-test'
+    console.log('asessemnt', assessment)
     // passation d'une évaluation programmée
-    if (type === 'assessment') {
+    if (assessment) {
+      console.log('assessment')
       calculMentalAssessment.set(assessment)
-      url = `/mental-test`
-    } 
-    // entrainement à une évaluation programmée
-    else if (type === 'practice') {
-      calculMentalAssessment.set(assessment)
-      url = `/mental-test?practice=true`
-    } 
+    }
+
     // entrainement aux exercices du panier courant
     else if (basket.length) {
+      console.log('panier')
       calculMentalAssessment.set({ questions: basket })
-      url = '/mental-test'
     }
     // entrainement à l'exercice sélectionné par le menu
     else {
+      console.log('1 exercicex')
       url = `/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
     }
 
@@ -156,10 +156,16 @@
     return generateQuestion(q)
   }
 
-  function addToBasket(theme, domain, subdomain, level, count) {
+  const flushBasket = () => {
+    console.log('flush')
+    basket = []
+  }
+
+  function addToBasket(theme, domain, subdomain, level, count, delay) {
     let qs = questions[theme][domain][subdomain]
     // console.log('questions', qs)
     const q = qs.find((q) => qs.indexOf(q) + 1 === parseInt(level, 10))
+    if (!delay) delay = q.defaultDelay
     const index = basket.findIndex(
       (item) =>
         item.theme === theme &&
@@ -178,6 +184,7 @@
           subdomain,
           level,
           count,
+          delay,
           generated: generateExemple(theme, domain, subdomain, level),
           ...q,
         },
@@ -230,6 +237,7 @@
   loadAssessments="{loadAssessments}"
   saveAssessment="{saveAssessment}"
   disable="{disable}"
+  flushBasket="{flushBasket}"
 />
 
 {#if isTeacher && showBasket}

@@ -9,7 +9,7 @@
   import queryString from 'query-string'
   import virtualKeyboard from './virtualKeyboard'
   import { calculMentalAssessment } from './stores'
-  import {  shuffle } from '../../app/utils'
+  import { shuffle } from '../../app/utils'
   import { mode, testFontSize, classroomFontSize } from '../../app/stores'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { math } from 'tinycas/build/math/math'
@@ -25,6 +25,7 @@
   let answers = []
   let answers_latex = []
   let answers_choice = []
+  let times =[]
   let generated
   let generateds = []
   let delay
@@ -46,7 +47,6 @@
   let restart = false
   let classroom
   let selectionRef
-  
 
   const regex = /\$\$(.*?)\$\$/g
   const replacement = (matched, p1) => Mathlive.convertLatexToMarkup(p1)
@@ -69,7 +69,7 @@
       // 'keypress-sound': 'none',
       // 'keypress-vibration': false,
       inlineShortcuts: {
-        'xx': {},
+        xx: {},
       },
     })
     if (!mf.hasFocus) mf.focus()
@@ -93,7 +93,7 @@
     theme = queryParams.theme
     level = queryParams.level
     classroom = queryParams.classroom === 'true'
-    $mode = classroom ? "classroom" : "test"
+    $mode = classroom ? 'classroom' : 'test'
     assessmentId = queryParams.assessmentId
     questions = []
 
@@ -119,25 +119,26 @@
           }
         }
         console.log('exhaust', questions)
-      } 
+      }
       // on, répète 10 fois la question de l'exercice
       else {
         for (let i = 0; i < 10; i++) questions.push(question)
       }
-    } 
-    
+    }
+
     // les questions ont été passée par un store
-    else  {
+    else {
       $calculMentalAssessment.questions.forEach((element) => {
         for (let i = 0; i < element.count; i++) {
-          questions.push(
-            getQuestion(
+          questions.push({
+            ...getQuestion(
               element.theme,
               element.domain,
               element.subdomain,
               element.level,
             ),
-          )
+            delay: element.delay,
+          })
         }
       })
 
@@ -201,8 +202,7 @@
     } else if (e.key === 'r') {
       mf.insert('\\sqrt')
       return false
-    }
-    else if (e.key === '*') {
+    } else if (e.key === '*') {
       console.log('#########')
       mf.insert('\\times ')
       return false
@@ -246,10 +246,15 @@
   async function change() {
     if (timer) clearInterval(timer)
     if (timeout) clearTimeout(timeout)
+    
     if (current >= 0) {
       answers[current] = answer
       answers_latex[current] = answer_latex
       answers_choice[current] = answer_choice
+      let time = Math.min(Math.round(elapsed/1000), delay)
+      if (time ===0) time = 1
+      times[current] = time
+      console.log(times[current])
     }
     if (current < questions.length - 1) {
       if (mf) {
@@ -263,7 +268,7 @@
       question = questions[current]
       generated = generate(question, generateds)
       if (generateds) generateds.push(generated)
-      delay = question.defaultDelay * 1000
+      delay = question.delay ? question.delay * 1000 : question.defaultDelay * 1000
       percentage = 100
       start = Date.now()
       timer = setInterval(countDown, 10)
@@ -311,6 +316,7 @@
     answers="{answers}"
     answers_latex="{answers_latex}"
     answers_choice="{answers_choice}"
+    times={times}
     query="{location.search}"
     classroom="{classroom}"
     size="{classroom ? $classroomFontSize : $testFontSize}"
@@ -326,7 +332,10 @@
     />
   </div>
   <div class="mt-5 mb-5">
-    <Question size="{classroom ? $classroomFontSize : $testFontSize}" question="{generated}" />
+    <Question
+      size="{classroom ? $classroomFontSize : $testFontSize}"
+      question="{generated}"
+    />
   </div>
   <!-- <div class:error> -->
 
@@ -334,11 +343,7 @@
     {#if choices}
       <div class="mt-3 d-flex justify-center" style="width:100%;">
         {#each choices as choice, i}
-          <Button
-            class="ml-3 mr-3"
-            
-            on:click="{() => onChoice(i)}"
-          >
+          <Button class="ml-3 mr-3" on:click="{() => onChoice(i)}">
             <div style="font-size:{$testFontSize + 4}px;">{@html choice}</div>
           </Button>
         {/each}
@@ -348,7 +353,9 @@
         class="mt-16 d-flex flex-row align-center justify-center"
         style="max-width:500px;width:100%"
       >
-        <span class="mr-4" style="font-size:{$testFontSize}px;">Ta réponse:</span>
+        <span class="mr-4" style="font-size:{$testFontSize}px;"
+          >Ta réponse:</span
+        >
         <div class="flex-grow-1">
           <math-field
             style="width:100%;font-size:{$testFontSize}px;"

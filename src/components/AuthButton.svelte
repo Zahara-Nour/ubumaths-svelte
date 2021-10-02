@@ -152,7 +152,7 @@
       console.log('error : no user')
     }
     else{
-   
+      data.classes.push('Autres')
       user.set({ ...googleProfile, ...data, ...data.schools })
       console.log('user', $user)
     }

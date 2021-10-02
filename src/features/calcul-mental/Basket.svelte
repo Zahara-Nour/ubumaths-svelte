@@ -1,12 +1,7 @@
 <script>
   import { user } from '../../app/stores'
   import { saveDocument, getDocument, supabase } from '../../app/db'
-  import {
-    mdiAccountConvertOutline,
-    mdiConsoleNetworkOutline,
-    mdiMinus,
-    mdiPlus,
-  } from '@mdi/js'
+  import { mdiMinus, mdiPlus } from '@mdi/js'
   import {
     Icon,
     List,
@@ -83,6 +78,20 @@
     modified = true
   }
 
+  const lessTime = (i) => {
+    if (basket[i].delay < 5) {
+      basket[i].delay = 0
+    } else {
+      basket[i].delay = basket[i].delay - 5
+    }
+    modified = true
+  }
+
+  const moreTime = (i) => {
+    basket[i].delay = basket[i].delay + 5
+    modified = true
+  }
+
   async function fetchTeacherAssessments() {
     loading = true
     let { data: assessments, error } = await supabase
@@ -121,6 +130,36 @@
     })
 
     console.log('assigned ', assignedStudents)
+
+    // TODO: il faut vérifier si cette éval a déjà été assignée
+
+    assignedStudents.forEach(async (student) => {
+      // get students assesments
+      let assessments
+      const { data: students_assessments, error_get_assessments } =
+        await supabase
+          .from('users')
+          .select('assessments')
+          .eq('id', student)
+          .single()
+
+      if (error_get_assessments) {
+        console.log('error', error_get_assessments)
+      } else {
+        assessments = students_assessments.assessments ? students_assessments.assessments : []
+        console.log('assessments', assessments)
+        if (!assessments.includes(teacherAssessmentId)) {
+          assessments.push(teacherAssessmentId)
+        }
+        const { data, error_assign } = await supabase
+          .from('users')
+          .upsert([{ id: student, assessments }])
+
+        if (error_assign) {
+          console.log('error', error_assign)
+        }
+      }
+    })
 
     // assignedStudents.forEach(async (student) => {
     //   const doc = await getDocument({
@@ -175,6 +214,7 @@
         domain: item.domain,
         subdomain: item.subdomain,
         level: item.level,
+        delay: item.delay,
       })),
       title: evalTitle,
       teacher_id: $user.id,
@@ -200,7 +240,7 @@
       console.log('error', error)
       saveFailure = true
     } else {
-      console.log('data saved', data)
+      teacherAssessmentId = data.id
       if (overwrite) {
         const index = $user.teacherAssessments.findIndex(
           (assessment) => assessment.title === evalTitle,
@@ -219,7 +259,7 @@
   function loadAssessment(assessment) {
     basket = []
     assessment.questions.forEach((q) => {
-      addToBasket(q.theme, q.domain, q.subdomain, q.level, q.count)
+      addToBasket(q.theme, q.domain, q.subdomain, q.level, q.count, q.delay)
     })
     displayAssessmentList = false
     modified = false
@@ -252,17 +292,40 @@
           id: student.id,
         })
       })
-      Object.keys(sortedStudents).forEach((klass) => {
-        sortedStudents[klass].sort((a, b) => {
-          if (a.lastname < b.lastname) return -1
-          if (a.lastname > b.lastname) return 1
-          if (a.firstname < b.firstname) return -1
-          if (a.firstname > b.firstname) return 1
-          return 0
-        })
-      })
     }
-    console.log('students', students)
+
+    const { data: id_others, error_id_others } = await supabase
+      .from('users')
+      .select('others')
+      .eq('id', $user.id)
+
+      .single()
+
+    if (error_id_others) {
+      console.log('error', error_id_others)
+    } else {
+      console.log('others', id_others.others)
+      const { data: others, error_others } = await supabase
+        .from('users')
+        .select('id, firstname,lastname')
+        .in('id', id_others.others)
+      if (error_others) {
+        console.log('error', error_others)
+      } else {
+        console.log('others', others)
+        sortedStudents['Autres'] = others
+      }
+    }
+    Object.keys(sortedStudents).forEach((klass) => {
+      sortedStudents[klass].sort((a, b) => {
+        if (a.lastname < b.lastname) return -1
+        if (a.lastname > b.lastname) return 1
+        if (a.firstname < b.firstname) return -1
+        if (a.firstname > b.firstname) return 1
+        return 0
+      })
+    })
+
     $user.students = sortedStudents
     fetchingStudent = false
     console.log('students', $user.students)
@@ -310,8 +373,13 @@
             <Question question="{item.generated}" />
           </CardText>
         </Card>
-        <div class="d-flex flex-column">
-          <div class="ml-2 d-flex flex-row">
+        <div class="ma-2 d-flex flex-column">
+          <div class="d-flex flex-row justify-center">
+            <div class="mt-2">
+              répétition: {basket[i].count}
+            </div>
+          </div>
+          <div class="ml-2 d-flex flex-row justify-center">
             <Button
               class="ml-1 mr-1"
               fab
@@ -330,10 +398,30 @@
               <Icon path="{mdiPlus}" />
             </Button>
           </div>
+
           <div class="d-flex flex-row justify-center">
             <div class="mt-2">
-              {basket[i].count}
+              temps: {basket[i].delay} s
             </div>
+          </div>
+          <div class="ml-2 d-flex flex-row justify-center">
+            <Button
+              class="ml-1 mr-1"
+              fab
+              size="x-small"
+              on:click="{() => lessTime(i)}"
+            >
+              <Icon path="{mdiMinus}" />
+            </Button>
+
+            <Button
+              class="ml-1 mr-1"
+              fab
+              size="x-small"
+              on:click="{() => moreTime(i)}"
+            >
+              <Icon path="{mdiPlus}" />
+            </Button>
           </div>
         </div>
       </div>

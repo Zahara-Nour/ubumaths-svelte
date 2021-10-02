@@ -9,6 +9,7 @@
     mdiCloudDownloadOutline,
     mdiCloudUploadOutline,
     mdiLink,
+    mdiTrashCanOutline,
   } from '@mdi/js'
   export let isTeacher
   export let showBasket
@@ -22,8 +23,8 @@
   export let classroom
   export let disable
   export let displayDescription
+  export let flushBasket
 
-  
   const toggleHelp = () => (displayDescription = !displayDescription)
   const toggleBasket = () => (showBasket = !showBasket)
 </script>
@@ -103,6 +104,17 @@
         <Icon path="{mdiBasketPlus}" />
       </Button>
     {/if}
+    {#if showBasket}
+      <Button
+        disabled="{!basket.length}"
+        class="amber white-text darken-2 ml-2 mr-2"
+        fab
+        size="x-small"
+        on:click="{flushBasket}"
+      >
+        <Icon path="{mdiTrashCanOutline}" />
+      </Button>
+    {/if}
     {#if basket.length}
       <Badge
         class="red"
@@ -141,7 +153,7 @@
     disabled="{disable}"
     fab
     size="x-small"
-    on:click="{launchTest}"
+    on:click="{() => launchTest()}"
   >
     <Icon path="{mdiRocketLaunchOutline}" />
   </Button>
