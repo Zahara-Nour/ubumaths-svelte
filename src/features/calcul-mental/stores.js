@@ -2,6 +2,7 @@ import { writable } from 'svelte/store'
 export const generateds = writable(0)
 export const calculMentalAssessment = writable()
 export const waiting = writable([])
+
 // console.log("generateds", $generateds)
 let waitId = 0
 export function addWaiting() {

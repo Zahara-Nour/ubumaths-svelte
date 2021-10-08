@@ -1,15 +1,16 @@
 <script>
   import CorrectionItem from './CorrectionItem.svelte'
-  import { Button, Icon } from 'svelte-materialify/src'
+  import { ListItem, Button, Icon } from 'svelte-materialify/src'
   import { mdiHome, mdiLifebuoy, mdiReload, mdiScanHelper } from '@mdi/js'
   import Reveal from 'reveal.js'
   import { onMount } from 'svelte'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { user } from '../../app/stores'
   import { calculMentalAssessment } from './stores'
-  import {  supabase } from '../../app/db'
+  import { supabase } from '../../app/db'
   import { navigate } from 'svelte-routing'
   import { mode } from '../../app/stores'
+  import { STATUS_CORRECT, STATUS_UNOPTIMAL_FORM } from './correction'
 
   export let questions
   export let answers
@@ -31,6 +32,7 @@
   let colorResult
   let messageResult
   let assessment
+  let statuss = []
 
   // Quand le composant de correction a fini de s'afficher,
   // le score a déjà été calculé, on l'enregistre
@@ -57,9 +59,9 @@
       const result = {
         mark: score,
         total: total,
-        questions:items
+        title:assessment.title,
+        questions: items,
       }
-
 
       const { data, error } = await supabase
         .from('results')
@@ -90,10 +92,14 @@
             console.log('error', error_update)
           } else {
             console.log('assessments updated', data)
-            $user.assessments.splice($user.assessments.indexOf(assessment.id), 1)
+            $user.assessments.splice(
+              $user.assessments.indexOf(assessment.id),
+              1,
+            )
           }
         }
       }
+      calculMentalAssessment.set(null)
     }
   })
 
@@ -104,13 +110,14 @@
   for (let i = 0; i < questions.length; i++) {
     const question = questions[i]
     total += question.points
+    console.log("adPoints question", question)
     items[i] = {
       qexp: question.expression,
       qexp_latex: question.expression_latex,
       answer: answers[i],
       answer_latex: answers_latex[i],
       answer_choice: answers_choice[i],
-      time:times[i],
+      time: times[i],
       solutions: question.solutions,
       details: question.details,
       type: question.type,
@@ -168,7 +175,6 @@
     const deck = new Reveal(document.querySelector('.deck'), options)
     deck.initialize()
   }
-  
 </script>
 
 <div>
@@ -201,27 +207,52 @@
     <div class="d-flex" style="width:100%;overflow-x:auto;">
       <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
         <div>
-          {#each items.filter((item, i) => i % 2 == 0) as item}
-            <CorrectionItem
-              item="{item}"
-              addPoints="{addPoints}"
-              details="{details}"
-              classroom="{classroom}"
-              size="{size}"
-            />
-          {/each}
-        </div>
-      </div>
-      <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
-        <div>
-          {#each items.filter((item, i) => i % 2 == 1) as item}
-            <CorrectionItem
-              item="{item}"
-              addPoints="{addPoints}"
-              details="{details}"
-              classroom="{classroom}"
-              size="{size}"
-            />
+          {#each items.filter((item, i) => i % 2 == 1) as item, i}
+            <ListItem selectable="{false}">
+              <div class="d-flex justify-start align-start">
+                <div
+                  class="mr-4 d-flex  flex-column align-center justify-start"
+                >
+                  <Button
+                    fab
+                    depressed
+                    class="{statuss[i] === STATUS_CORRECT
+                      ? 'green white-text'
+                      : statuss[i] === STATUS_UNOPTIMAL_FORM
+                      ? 'orange white-text'
+                      : 'red white-text'}"
+                  >
+                    <span style="font-size:{size}px;">{item.number}</span>
+                  </Button>
+
+                  <!-- a div is necessary for the icon to center aligned -->
+                  <!-- <div>
+                  {#if correct}
+                    <Icon
+                      class="mt-2 green-text"
+                      style="font-size:{$fontSize}px;"
+                      path="{mdiCheckCircle}"
+                    />
+                  {:else}
+                    <Icon
+                      class="mt-2 red-text"
+                      style="font-size:{$fontSize}px;"
+                      path="{mdiCloseCircle}"
+                    />
+                  {/if}
+                </div> -->
+                  <div class="flex-grow-1"></div>
+                </div>
+                <CorrectionItem
+                  item="{item}"
+                  addPoints="{addPoints}"
+                  details="{details}"
+                  classroom="{classroom}"
+                  size="{size}"
+                  bind:status="{statuss[i]}"
+                />
+              </div>
+            </ListItem>
           {/each}
         </div>
       </div>
@@ -229,14 +260,50 @@
   {:else}
     <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
       <div>
-        {#each items as item}
-          <CorrectionItem
-            item="{item}"
-            addPoints="{addPoints}"
-            details="{details}"
-            classroom="{classroom}"
-            size="{size}"
-          />
+        {#each items as item, i}
+          <ListItem selectable="{false}">
+            <div class="d-flex justify-start align-start">
+              <div class="mr-4 d-flex  flex-column align-center justify-start">
+                <Button
+                  fab
+                  depressed
+                  class="{statuss[i] === STATUS_CORRECT
+                    ? 'green white-text'
+                    : statuss[i] === STATUS_UNOPTIMAL_FORM
+                    ? 'orange white-text'
+                    : 'red white-text'}"
+                >
+                  <span style="font-size:{size}px;">{item.number}</span>
+                </Button>
+
+                <!-- a div is necessary for the icon to center aligned -->
+                <!-- <div>
+              {#if correct}
+                <Icon
+                  class="mt-2 green-text"
+                  style="font-size:{$fontSize}px;"
+                  path="{mdiCheckCircle}"
+                />
+              {:else}
+                <Icon
+                  class="mt-2 red-text"
+                  style="font-size:{$fontSize}px;"
+                  path="{mdiCloseCircle}"
+                />
+              {/if}
+            </div> -->
+                <div class="flex-grow-1"></div>
+              </div>
+              <CorrectionItem
+                item="{item}"
+                addPoints="{addPoints}"
+                details="{details}"
+                classroom="{classroom}"
+                size="{size}"
+                bind:status="{statuss[i]}"
+              />
+            </div>
+          </ListItem>
         {/each}
       </div>
     </div>
@@ -245,15 +312,15 @@
   {#if $mode !== 'classroom'}
     <div class="{colorResult + ' d-flex align-center  justify-space-around'}">
       <div class="d-flex flex-column align-center">
-        {#if !assessment || assessment.type !=='assessment'}
-        <Button
-          class="ma-2 white"
-          fab
-          size="x-small"
-          on:click="{() => (restart = true)}"
-        >
-          <Icon path="{mdiReload}" />
-        </Button>
+        {#if !assessment || assessment.type !== 'assessment'}
+          <Button
+            class="ma-2 white"
+            fab
+            size="x-small"
+            on:click="{() => (restart = true)}"
+          >
+            <Icon path="{mdiReload}" />
+          </Button>
         {/if}
         <Button
           class="ma-2 white"

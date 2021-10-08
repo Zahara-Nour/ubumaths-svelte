@@ -9,6 +9,7 @@
   let assessments
 
   async function fetchAssessments() {
+    console.log('$user assessments', $user.assessments)
     const { data, error } = await supabase
       .from('assessments')
       .select('*')

@@ -14,11 +14,11 @@
   const regex = /\$\$(.*?)\$\$/g
   const replacement = (matched, p1) => Mathlive.convertLatexToMarkup(p1)
 
-  $: description = question.description.replace(regex, replacement)
+  $: description = question.description ? question.description.replace(regex, replacement) : ""
 
   $: subdescription = question.subdescription
     ? question.subdescription.replace(regex, replacement)
-    : null
+    : ""
 </script>
 
 <Card>

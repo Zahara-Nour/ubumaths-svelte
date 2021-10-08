@@ -277,6 +277,7 @@
       finish = true
       // mathlive bug : virtual keyboard still displays otherwise
       if (mf) mf.blur()
+      
     }
   }
 

@@ -19,6 +19,7 @@
     mdiFormatFontSizeDecrease,
     mdiFormatFontSizeIncrease,
     mdiMenu,
+    mdiViewDashboard,
   } from '@mdi/js'
   import {
     mode,
@@ -29,9 +30,10 @@
   } from '../app/stores'
   import { waiting } from '../features/calcul-mental/stores'
 
+  let links = []
   let miniWindow = false
   let active = false
-  let links = [
+  const linksNotLogedIn = [
     {
       name: 'Calcul mental',
       url: 'calcul-mental',
@@ -40,6 +42,14 @@
       name: 'Flash cards',
       url: 'flash-cards',
     },
+  ]
+
+  const linksLogedIn = [
+    {
+      name: 'Dashboard',
+      url: 'dashboard',
+    },
+    ...linksNotLogedIn,
   ]
 
   const setMiniWindow = () => (miniWindow = window.innerWidth < 720)
@@ -83,6 +93,17 @@
   onMount(setMiniWindow)
 
   $: isLoggedIn = $user.id !== 'guest'
+  $: isTeacher = isLoggedIn && $user.roles.includes('teacher')
+  $: isStudent = isLoggedIn && $user.roles.includes('student')
+  $: if (isLoggedIn) {
+      links = linksLogedIn
+    } else {
+      links = linksNotLogedIn
+    }
+  
+    $: console.log('links', links)
+
+  
 </script>
 
 <svelte:window on:resize="{setMiniWindow}" />
@@ -104,7 +125,7 @@
         <!-- <Link to="/">Home</Link> -->
         <!-- <Link to="about">About</Link> -->
         {#each links as link}
-          <Link to="{link.url}">{link.name}</Link>
+          <Link class='mr-2 ml-2' to="{link.url}">{link.name}</Link>
         {/each}
       </div>
     {/if}

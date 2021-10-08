@@ -13,7 +13,8 @@
   import { menuFontSize, user } from './app/stores'
   import { Snackbar, Footer, Button } from 'svelte-materialify/src'
   import { mode } from './app/stores'
-  
+  import DashBoardTeacher from './features/dashboard/DashBoardTeacher.svelte'
+  import DashBoardStudent from './features/dashboard/DashBoardStudent.svelte'
 
   export let url = ''
 
@@ -39,6 +40,9 @@
       activateAssessmentsNotification()
     }
   }
+  $: isLoggedIn = $user.id != 'guest'
+  $: isTeacher = isLoggedIn && $user.roles.includes('teacher')
+  $: isStudent = isLoggedIn && $user.roles.includes('student')
 </script>
 
 <svelte:head>
@@ -68,6 +72,13 @@
       </Route>
       <Route path="mental-test" let:location>
         <MentalTest location="{location}" />
+      </Route>
+      <Route path="dashboard" let:location>
+        {#if isStudent}
+          <DashBoardStudent />
+        {:else}
+          <DashBoardTeacher />
+        {/if}
       </Route>
       <Route path="/">
         <Home />
