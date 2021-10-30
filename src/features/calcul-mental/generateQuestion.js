@@ -370,7 +370,7 @@ export default function generateQuestion(question, generateds) {
   if (question.correctionFormat) {
     correctionFormat = question.correctionFormat[question.correctionFormat.length === 1 ? 0 : i]
     console.log('correctionFormat', correctionFormat)
-    let { correct, uncorrect } = correctionFormat
+    let { correct, uncorrect, answer } = correctionFormat
 
     correct = correct.map(format => {
       Object.getOwnPropertyNames(variables).forEach((name) => {
@@ -398,7 +398,20 @@ export default function generateQuestion(question, generateds) {
     uncorrect = uncorrect.map(format => format.replace(regexExactLatex, replacementExactLatex))
     uncorrect = uncorrect.map(format => format.replace(regexExact, replacementExact))
 
-    correctionFormat = { correct, uncorrect }
+
+    Object.getOwnPropertyNames(variables).forEach((name) => {
+      const regex = new RegExp(name, 'g')
+      answer = answer.replace(regex, variables[name])
+    })
+
+
+    answer = answer.replace(regexDecimalLatex, replacementDecimalLatex)
+    answer = answer.replace(regexDecimal, replacementDecimal)
+    answer = answer.replace(regexExactLatex, replacementExactLatex)
+    answer = answer.replace(regexExact, replacementExact)
+
+
+    correctionFormat = { correct, uncorrect, answer }
   }
 
 

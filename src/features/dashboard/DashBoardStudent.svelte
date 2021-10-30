@@ -27,6 +27,8 @@
     }
   }
   $: if ($user.results && value) {
+    console.log('$user.result', $user.results)
+    console.log('value', value)
     assessment = $user.results.find(result => result.result.title === value).result.questions
     console.log('assessment', assessment)
   }

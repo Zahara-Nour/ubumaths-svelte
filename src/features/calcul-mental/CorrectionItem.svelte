@@ -2,60 +2,41 @@
   import { math } from 'tinycas/build/math/math'
 
   import Mathlive from 'mathlive/dist/mathlive.min.js'
-  import { onMount, afterUpdate } from 'svelte'
+  import { onMount } from 'svelte'
   import {
     STATUS_BAD_FORM,
     STATUS_CORRECT,
     STATUS_INCORRECT,
     STATUS_UNOPTIMAL_FORM,
-    getStatus,
     STATUS_EMPTY,
   } from './correction'
-
-  import { mdiCheckCircle } from '@mdi/js'
-  import { mdiCloseCircle } from '@mdi/js'
-
+  
   export let item
-  export let addPoints
   export let details
-  export let classroom
+  export let coms = []
   export let size
   export let status
-  const {
-    number,
+  let number,
     options = '',
     qexp_latex,
     solutions,
-    answer,
     answer_latex,
     answer_choice,
-    correctionFormat,
-    testAnswer,
-  } = item
+    correctionFormat
+  
 
   let answerColor = 'green'
   const regex = /\$\$(.*?)\$\$/g
   const replacement = (matched, p1) => Mathlive.convertLatexToMarkup(p1)
   const implicit = options && options.includes('implicit')
   // l'expression de départ doit être envoyé en latex également
-  const correction_latex = item.correction
+  let correction_latex
   // less solutions doivent être envoyées en Latex
-  const solutions_latex = item.solutions
-    ? item.solutions.map((solution) => {
-        if (item.type === 'choice') {
-          return item.choices[solution]
-        } else {
-          const e = math(solution)
-          return e.type === '!! Error !!' ? solution : e.toLatex({ implicit })
-        }
-      })
-    : null
+  let solutions_latex
 
   let penalty = false
   const details_latex = item.details // details are in latex form
-  let coms = []
 
-  status = getStatus(item, coms, classroom)
 
   if (status === STATUS_BAD_FORM || status == STATUS_INCORRECT) {
     answerColor = 'red'
@@ -63,33 +44,58 @@
     answerColor = 'orange'
   }
 
-  const correction = createCorrection(false)
-  const detailedCorrection = item.details ? createCorrection(true) : null
+  let correction
+  let detailedCorrection
 
   // const validateFractions = checkFractions()
 
   // if (seemsCorrect && !validateAnswer) {
   //   coms.push(FORM)
   // }
+  function updateItem() {
+    console.log('item',item)
+      ;({
+        correction: correction_latex,
+        number,
+        options,
+        qexp_latex,
+        solutions,
+        answer_latex,
+        answer_choice,
+        correctionFormat
+      } = item)
+    
+
+    solutions_latex = item.solutions
+      ? item.solutions.map((solution) => {
+          if (item.type === 'choice') {
+            return item.choices[solution]
+          } else {
+            const e = math(solution)
+            return e.type === '!! Error !!' ? solution : e.toLatex({ implicit })
+          }
+        })
+      : null
+
+    correction = createCorrection(false)
+    detailedCorrection = item.details ? createCorrection(true) : null
+  }
 
   onMount(() => {
     //  TODO: a remplacer par le markup direct
-    Mathlive.renderMathInElement(`correction${number}`)
-    let score = 0
-    switch (status) {
-      case STATUS_CORRECT:
-        score = item.points
-        break
-
-      case STATUS_UNOPTIMAL_FORM:
-        score = item.points / 2
-        break
-
-      default:
-      // console.log('default case status')
-    }
-    console.log('score', score, status)
-    addPoints(score)
+    // let score = 0
+    // switch (status) {
+    //   case STATUS_CORRECT:
+    //     score = item.points
+    //     break
+    //   case STATUS_UNOPTIMAL_FORM:
+    //     score = item.points / 2
+    //     break
+    //   default:
+    //   // console.log('default case status')
+    // }
+    // console.log('score', score, status)
+    // addPoints(score)
   })
 
   function createCorrection(details) {
@@ -106,7 +112,7 @@
               `<span style="color:green;">${
                 item.type === 'choice'
                   ? item.choices[solutions[0]]
-                  : answer_latex
+                  : '$$$'+answer_latex+'$$$'
               }</span>`,
             )
           lines.push(line)
@@ -119,7 +125,7 @@
             `<span style="color:green;">${
               item.type === 'choice'
                 ? item.choices[solutions[0]]
-                : solutions_latex[0]
+                : '$$$'+solutions_latex[0]+'$$$'
             }</span>`,
           )
           lines.push(line)
@@ -127,14 +133,14 @@
         if (status === STATUS_INCORRECT) {
           coms.unshift(
             'Ta réponse : ' +
-              correctionFormat.correct[0]
+              correctionFormat.answer
                 .replace('&exp', qexp_latex)
                 .replace(
-                  '&solution',
+                  '&answer',
                   `<span style="color:red;">${
                     item.type === 'choice'
                       ? item.choices[answer_choice]
-                      : answer_latex
+                      : '$$$'+answer_latex+'$$$'
                   }</span>`,
                 ),
           )
@@ -144,14 +150,14 @@
         ) {
           coms.unshift(
             'Ta réponse : ' +
-              correctionFormat.correct[0]
+              correctionFormat.answer
                 .replace('&exp', qexp_latex)
                 .replace(
-                  '&solution',
+                  '&answer',
                   `<span style="color:orange;">${
                     item.type === 'choice'
                       ? item.choices[answer_choice]
-                      : answer_latex
+                      : '$$$'+answer_latex+'$$$'
                   }</span>`,
                 ),
           )
@@ -387,38 +393,42 @@
     lines = lines.map((line) =>
       line.replace(regex, replacement).replace(/_COLORANSWER_/g, answerColor),
     )
+    console.log('coms', coms)
     coms = coms.map((com) =>
       com.replace(regex, replacement).replace(/_COLORANSWER_/g, answerColor),
     )
     return lines
   }
 
+  $: if (item) updateItem()
   // console.log('item', item)
 </script>
 
-<div id="{`correction${number}`}" class="flex-shrink-2">
-  {#if details && item.details}
-    {#each detailedCorrection as line}
-      <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{size}px;">
-        {line}
-      </div>
-    {/each}
-  {:else}
-    {#each correction as line}
-      <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{size}px;">
-        {@html line}
-      </div>
-    {/each}
-
-    {#if coms.length}
-      {#each coms as com}
-        <div
-          class="ml-2 mr-2 mt-2 mb-2"
-          style="font-size:{size}px;font-family: 'Handlee', cursive;"
-        >
-          {@html com}
+{#if correction}
+  <div id="{`correction${number}`}" class="flex-shrink-2">
+    {#if details && item.details}
+      {#each detailedCorrection as line}
+        <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{size}px;">
+          {line}
         </div>
       {/each}
+    {:else}
+      {#each correction as line}
+        <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{size}px;">
+          {@html line}
+        </div>
+      {/each}
+
+      {#if coms.length}
+        {#each coms as com}
+          <div
+            class="ml-2 mr-2 mt-2 mb-2"
+            style="font-size:{size}px;font-family: 'Handlee', cursive;"
+          >
+            {@html com}
+          </div>
+        {/each}
+      {/if}
     {/if}
-  {/if}
-</div>
+  </div>
+{/if}

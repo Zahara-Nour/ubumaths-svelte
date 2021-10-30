@@ -1480,7 +1480,8 @@ export default {
           type: 'rewrite',
           correctionFormat: [{
             correct: ['$$&solution$$ est un diviseur de $$%{&1*&2}$$'],
-            uncorrect: ['<span style="color:green;">$$&1$$</span> et <span style="color:green;">$$&2$$</span> sont des diviseurs de $$%{&1*&2}$$']
+            uncorrect: ['<span style="color:green;">$$&1$$</span> et <span style="color:green;">$$&2$$</span> sont des diviseurs de $$%{&1*&2}$$'],
+            answer:'&answer est un diviseur de $$%{&1*&2}$$'
           }],
           defaultDelay: 30,
         },
@@ -1493,7 +1494,8 @@ export default {
           type: 'rewrite',
           correctionFormat: [{
             correct: ['&solution est un diviseur de $$%{&1*&2}$$'],
-            uncorrect: ['<span style="color:green;">$$&1$$</span> et <span style="color:green;">$$&2$$</span> sont des diviseurs de $$%{&1*&2}$$']
+            uncorrect: ['<span style="color:green;">$$&1$$</span> et <span style="color:green;">$$&2$$</span> sont des diviseurs de $$%{&1*&2}$$'],
+            answer:'&answer est un diviseur de $$%{&1*&2}$$'
           }],
 
           defaultDelay: 30,
@@ -1517,7 +1519,8 @@ export default {
           ],
           correctionFormat: [{
             correct: ['$$2$$ est un diviseur de $$%{&1}$$ ? &solution'],
-            uncorrect: ['$$2$$ est un diviseur de $$%{&1}$$ ? &solution']
+            uncorrect: ['$$2$$ est un diviseur de $$%{&1}$$ ? &solution'],
+            answer: '$$2$$ est un diviseur de $$%{&1}$$ ? &answer'
           }],
 
           defaultDelay: 30,
@@ -1541,7 +1544,8 @@ export default {
           ],
           correctionFormat: [{
             correct: ['$$3$$ est un diviseur de $$%{&1}$$ ? &solution'],
-            uncorrect: ['$$3$$ est un diviseur de $$%{&1}$$ ? &solution']
+            uncorrect: ['$$3$$ est un diviseur de $$%{&1}$$ ? &solution'],
+            answer: '$$3$$ est un diviseur de $$%{&1}$$ ? &answer'
           }],
 
           defaultDelay: 30,
@@ -1565,7 +1569,8 @@ export default {
           ],
           correctionFormat: [{
             correct: ['$$5$$ est un diviseur de $$%{&1}$$ ? &solution'],
-            uncorrect: ['$$5$$ est un diviseur de $$%{&1}$$ ? &solution']
+            uncorrect: ['$$5$$ est un diviseur de $$%{&1}$$ ? &solution'],
+            answer: '$$5$$ est un diviseur de $$%{&1}$$ ? &answer'
           }],
 
           defaultDelay: 30,
@@ -1589,7 +1594,8 @@ export default {
           ],
           correctionFormat: [{
             correct: ['$$10$$ est un diviseur de $$%{&1}$$ ? &solution'],
-            uncorrect: ['$$10$$ est un diviseur de $$%{&1}$$ ? &solution']
+            uncorrect: ['$$10$$ est un diviseur de $$%{&1}$$ ? &solution'],
+            answer: '$$10$$ est un diviseur de $$%{&1}$$ ? &answer'
           }],
 
           defaultDelay: 30,
@@ -3818,7 +3824,7 @@ export default {
               '&3': '$e[2;9]\\{cd(&1);cd(&2)}',
               '&4': '$e[2;9]\\{cd(&2)}',
             },
-          
+
           ],
           conditions: [
             'pgcd(&1*&4+&2;&3*&4)=1',
@@ -4669,7 +4675,8 @@ export default {
           type: 'rewrite',
           correctionFormat: [{
             correct: ['Un coefficient de $$&exp$$ correspond à une diminution de $$&solution$$'],
-            uncorrect: ['Un coefficient de $$&exp$$ correspond à une diminution de $$&solution$$']
+            uncorrect: ['Un coefficient de $$&exp$$ correspond à une diminution de $$&solution$$'],
+            answer: 'Un coefficient de $$&exp$$ correspond à une diminution de &answer'
           }],
           solutions: [['&1%']],
           defaultDelay: 10,
@@ -5357,8 +5364,75 @@ export default {
       Factorisation: [
         {
           description: 'Trouver un facteur commun',
-          subdescription: 'Simple - Coefficients positifs',
-          enounces: ['Quel est le facteur commun dans les 2 produits ?'],
+          subdescription: 'Facteur commun numérique apparent ',
+          enounces: ['Trouve un facteur commun.'],
+          expressions: [
+            '&1*&2+&1*&3',
+            '&2*&1+&1*&3',
+            '&1*&2+&3*&1',
+            '&2*&1+&3*&1',
+            '&1*&2-&1*&3',
+            '&2*&1-&1*&3',
+            '&1*&2-&3*&1',
+            '&2*&1-&3*&1',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{cd(&2)}',
+            },
+          ],
+          correctionFormat: [{
+            correct: ["Dans l'expression $$&exp$$ un facteur commun est &solution."],
+            uncorrect: ["Dans l'expression $$&exp$$ un facteur commun est &solution."],
+            answer: "Un facteur commun est &answer"
+          }],
+          solutions: [
+            ['&1'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Factoriser',
+          subdescription: 'Facteur commun apparent',
+          enounces: ['Factoriser le plus possible.'],
+          expressions: [
+            '&1*&2+&1*&3',
+            '&2*&1+&1*&3',
+            '&1*&2+&3*&1',
+            '&2*&1+&3*&1',
+            '&1*&2-&1*&3',
+            '&2*&1-&1*&3',
+            '&1*&2-&3*&1',
+            '&2*&1-&3*&1',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]\\{cd(&2)}',
+            },
+          ],
+          solutions: [
+            ['&1(&2+&3)'],
+            ['&1(&2+&3)'],
+            ['&1(&2+&3)'],
+            ['&1(&2+&3)'],
+            ['&1(&2-&3)'],
+            ['&1(&2-&3)'],
+            ['&1(&2-&3)'],
+            ['&1(&2-&3)'],
+          ],
+          options:["no-penalty-for-explicit-products"],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Trouver un facteur commun',
+          subdescription: 'Facteur commun apparent - littéral',
+          enounces: ['Trouve le plus grand facteur commun.'],
           expressions: [
             '&1&3+&1&4',
             '&1&3+&4*&1',
@@ -5376,6 +5450,118 @@ export default {
             '&2*&1-&1&3',
             '&2*&1-&3*&1',
             '&1*&2-&3*&1',
+
+            '&3*&1+&3*&2',
+            '&3*&1+&2&3',
+            '&1&3+&3*&2',
+            '&1&3+&2&3',
+            '&3*&1+&3&4',
+            '&3*&1+&4&3',
+            '&4&3+&3*&1',
+            '&4&3+&1&3',
+            '&3*&1-&3*&2',
+            '&3*&1-&2&3',
+            '&1&3-&3*&2',
+            '&1&3-&2&3',
+            '&3*&1-&3&4',
+            '&3*&1-&4&3',
+            '&4&3-&3*&1',
+            '&4&3-&1&3',
+
+
+
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{cd(&1)}',
+              '&3': '$l{x;y;z}',
+              '&4': '$l{x;y;z}\\{&3}',
+
+            },
+          ],
+          correctionFormat: [{
+            correct: ["Dans l'expression $$&exp$$ un facteur commun est &solution,"],
+            uncorrect: ["Dans l'expression $$&exp$$ un facteur commun est &solution,"],
+            answer: "Un facteur commun est &answer"
+          }],
+          solutions: [
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+            ['&1'],
+
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+            ['&3'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+        },
+        {
+          description: 'Factoriser',
+          subdescription: 'Facteur commun apparent - littéral',
+          enounces: ['Factoriser le plus possible.'],
+          expressions: [
+            '&1&3+&1&4',
+            '&1&3+&4*&1',
+            '&3*&1+&1&4',
+            '&3*&1+&4*&1',
+            '&1*&2+&1&3',
+            '&2*&1+&1&3',
+            '&2*&1+&3*&1',
+            '&1*&2+&3*&1',
+            '&1&3-&1&4',
+            '&1&3-&4*&1',
+            '&3*&1-&1&4',
+            '&3*&1-&4*&1',
+            '&1*&2-&1&3',
+            '&2*&1-&1&3',
+            '&2*&1-&3*&1',
+            '&1*&2-&3*&1',
+
+            '&3*&1+&3*&2',
+            '&3*&1+&2&3',
+            '&1&3+&3*&2',
+            '&1&3+&2&3',
+            '&3*&1+&3&4',
+            '&3*&1+&4&3',
+            '&4&3+&3*&1',
+            '&4&3+&1&3',
+            '&3*&1-&3*&2',
+            '&3*&1-&2&3',
+            '&1&3-&3*&2',
+            '&1&3-&2&3',
+            '&3*&1-&3&4',
+            '&3*&1-&4&3',
+            '&4&3-&3*&1',
+            '&4&3-&1&3',
+
           ],
           variables: [
             {
@@ -5387,67 +5573,47 @@ export default {
             },
           ],
           solutions: [
-            ['&1']
-          ],
-          type: 'result',
-          defaultDelay: 30,
-        },
-        {
-          description: 'Factoriser',
-          subdescription: 'Simple - Coefficients positifs',
-          enounces: ['Factoriser :'],
-          expressions: [
-            '&1&3+&1&4',
-            '&1&3+&4*&1',
-            '&3*&1+&1&4',
-            '&3*&1+&4*&1',
-            '&1*&2+&1&3',
-            '&2*&1+&1&3',
-            '&2*&1+&3*&1',
-            '&1*&2+&3*&1',
-            '&1&3-&1&4',
-            '&1&3-&4*&1',
-            '&3*&1-&1&4',
-            '&3*&1-&4*&1',
-            '&1*&2-&1&3',
-            '&2*&1-&1&3',
-            '&2*&1-&3*&1',
-            '&1*&2-&3*&1',
-          ],
-          variables: [
-            {
-              '&1': '$e[2;9]',
-              '&2': '$e[2;9]',
-              '&3': '$l{x;y;z}',
-              '&4': '$l{x;y;z}\\{&3}',
+            ['&1(&3+&4)'],
+            ['&1(&3+&4)'],
+            ['&1(&3+&4)'],
+            ['&1(&3+&4)'],
+            ['&1(&2+&3)'],
+            ['&1(&2+&3)'],
+            ['&1(&2+&3)'],
+            ['&1(&2+&3)'],
+            ['&1(&3-&4)'],
+            ['&1(&3-&4)'],
+            ['&1(&3-&4)'],
+            ['&1(&3-&4)'],
+            ['&1(&2-&3)'],
+            ['&1(&2-&3)'],
+            ['&1(&2-&3)'],
+            ['&1(&2-&3)'],
 
-            },
-          ],
-          solutions: [
-            ['&1(&3+&4)'],
-            ['&1(&3+&4)'],
-            ['&1(&3+&4)'],
-            ['&1(&3+&4)'],
-            ['&1(&2+&3)'],
-            ['&1(&2+&3)'],
-            ['&1(&2+&3)'],
-            ['&1(&2+&3)'],
-            ['&1(&3-&4)'],
-            ['&1(&3-&4)'],
-            ['&1(&3-&4)'],
-            ['&1(&3-&4)'],
-            ['&1(&2-&3)'],
-            ['&1(&2-&3)'],
-            ['&1(&2-&3)'],
-            ['&1(&2-&3)'],
+            ['&3(&1+&2)'],
+            ['&3(&1+&2)'],
+            ['&3(&1+&2)'],
+            ['&3(&1+&2)'],
+            ['&3(&1+&4)'],
+            ['&3(&1+&4)'],
+            ['&3(&1+&4)'],
+            ['&3(&1+&4)'],
+            ['&3(&1-&2)'],
+            ['&3(&1-&2)'],
+            ['&3(&1-&2)'],
+            ['&3(&1-&2)'],
+            ['&3(&1-&4)'],
+            ['&3(&1-&4)'],
+            ['&3(&4-&1)'],
+            ['&3(&4-&1)'],
           ],
           type: 'result',
           defaultDelay: 30,
         },
         {
-          description: 'Trouver un facteur commun',
-          subdescription: 'Facteur non forcément apparent',
-          enounces: ['Trouve un facteur commun à ces 2 produits.'],
+          description: 'Trouver le plus grand facteur commun ',
+          subdescription: 'Le facteur commun est apparent dans un des produits',
+          enounces: ['Trouve le plus grand facteur commun.'],
           expressions: [
             '&1&3+#{&1*&2}&4',
             '&1&3-#{&1*&2}&4',
@@ -5456,12 +5622,19 @@ export default {
           ],
           variables: [
             {
-              '&1': '$l{2;3;5;7}',
-              '&2': '$e[2;9]\\{cd(&1)}',
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
               '&3': '$l{x;y;z}',
               '&4': '$l{x;y;z}\\{&3}',
             },
           ],
+          correctionFormat: [{
+            correct: ["Dans l'expression $$&exp$$ le plus grand facteur commun est &solution,",
+              "car $$&1&3=\\textcolor{green}{&1}\\times{&3}$$ et $$#{&1*&2}&4=\\textcolor{green}{&1}\\times{&2&4}$$"],
+            uncorrect: ["Dans l'expression $$&exp$$ le plus grand facteur commun est &solution,",
+              "car $$&1&3=\\textcolor{green}{&1}\\times{&3}$$ et $$#{&1*&2}&4=\\textcolor{green}{&1}\\times{&2&4}$$"],
+            answer: "Le plus grand facteur commun est &answer"
+          }],
           solutions: [
             ['&1'],
           ],
@@ -5471,8 +5644,8 @@ export default {
         },
         {
           description: 'Factoriser',
-          subdescription: 'Coefficients positifs',
-          enounces: ['Factoriser :'],
+          subdescription: 'Le facteur commun est apparent dans un des produits',
+          enounces: ['Factoriser le plus possible.'],
           expressions: [
             '&1&3+#{&1*&2}&4',
             '#{&1*&2}&4+&1&3',
@@ -5481,17 +5654,17 @@ export default {
           ],
           variables: [
             {
-              '&1': '$l{2;3;5;7}',
-              '&2': '$e[2;9]\\{cd(&1)}',
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
               '&3': '$l{x;y;z}',
               '&4': '$l{x;y;z}\\{&3}',
             },
           ],
           solutions: [
             ['&1(&3+&2&4)'],
-            ['&1(&3+&2&4)'],
+            ['&1(&2&4+&3)'],
             ['&1(&3-&2&4)'],
-            ['&1(&3-&2&4)'],
+            ['&1(&2&4-&3)'],
           ],
           type: 'result',
           defaultDelay: 30,
@@ -5499,7 +5672,7 @@ export default {
         },
         {
           description: 'Trouver le plus grand facteur commun',
-          subdescription: 'Le plus possible',
+          subdescription: "Le plus grand facteur commun n'est pas apparent",
           enounces: ['Quel est le plus grand facteur commun dans ces 2 produits ?'],
           expressions: [
             '#{&1*&2}&5+#{&1*&3}&4',
@@ -5509,16 +5682,23 @@ export default {
             {
               '&1': '$e[2;9]',
               '&2': '$e[2;9]',
-              '&3': '$e[2;9]\\{&2}',
+              '&3': '$e[2;9]\\{cd(&2)}',
               '&4': '$l{x;y;z}',
               '&5': '$l{x;y;z}\\{&4}',
-              '&6': 'pgcd(&1*&2;&1*&3)',
-              '&7': '&1*&2:&6',
-              '&8': '&1*&3:&6',
+              // '&6': 'pgcd(&1*&2;&1*&3)',
+              // '&7': '&1*&2:&6',
+              // '&8': '&1*&3:&6',
             },
           ],
+          correctionFormat: [{
+            correct: ["Dans l'expression $$&exp$$ le plus grand facteur commun est &solution,",
+              "car $$#{&1*&2}&5=\\textcolor{green}{&1}\\times{&2&5}$$ et $$#{&1*&3}&4=\\textcolor{green}{&1}\\times{&3&4}$$"],
+            uncorrect: ["Dans l'expression $$&exp$$ le plus grand facteur commun est &solution,",
+              "car $$#{&1*&2}&5=\\textcolor{green}{&1}\\times{&2&5}$$ et $$#{&1*&3}&4=\\textcolor{green}{&1}\\times{&3&4}$$"],
+            answer: "Le plus grand facteur commun est &answer."
+          }],
           solutions: [
-            ['#{&6}'],
+            ['&1'],
           ],
           type: 'result',
           defaultDelay: 30,
@@ -5526,7 +5706,7 @@ export default {
         },
         {
           description: 'Factoriser',
-          subdescription: 'Le plus possible',
+          subdescription: "Le plus grand facteur commun n'est pas apparent",
           enounces: ['Factorise le plus possible :'],
           expressions: [
             '#{&1*&2}&5+#{&1*&3}&4',
@@ -5536,25 +5716,28 @@ export default {
             {
               '&1': '$e[2;9]',
               '&2': '$e[2;9]',
-              '&3': '$e[2;9]\\{&2}',
+              '&3': '$e[2;9]\\{cd(&2)}',
               '&4': '$l{x;y;z}',
               '&5': '$l{x;y;z}\\{&4}',
-              '&6': 'pgcd(&1*&2;&1*&3)',
-              '&7': '&1*&2:&6',
-              '&8': '&1*&3:&6',
+              // '&6': 'pgcd(&1*&2;&1*&3)',
+              // '&7': '&1*&2:&6',
+              // '&8': '&1*&3:&6',
             },
           ],
           solutions: [
-            ['#{&6}(#{&7*&5}+#{&8*&4})'],
-            ['#{&6}(#{&7*&5}-#{&8*&4})'],
+            ['#{&1}(#{&2*&5}+#{&3*&4})'],
+            ['#{&1}(#{&2*&5}-#{&3*&4})'],
 
           ],
           type: 'result',
           defaultDelay: 30,
 
         },
+        
+
         {
           description: 'Factoriser',
+          subdescription: 'Cas particulier',
           enounces: ['Factoriser le plus possible:'],
           expressions: [
             '&1+#{&1*&2}&3',
@@ -5581,43 +5764,8 @@ export default {
         },
         {
           description: 'Factoriser',
-          subdescription: 'Avec des carrés',
-          enounces: ['Factoriser :'],
-          expressions: [
-            '#{&1*&2*&3^2}+#{&1*&3}',
-            '#{&1*&3^2}+#{&1*&2*&3}',
-            '#{&1*&2*&3}+#{&1*&3^2}',
-            '#{&1*&3}+#{&1*&2*&3^2}',
-            '#{&1*&2*&3^2}-#{&1*&3}',
-            '#{&1*&3^2}-#{&1*&2*&3}',
-            '#{&1*&2*&3}-#{&1*&3^2}',
-            '#{&1*&3}-#{&1*&2*&3^2}',
-          ],
-          variables: [
-            {
-              '&1': '$e[1;9]',
-              '&2': '$e[1;9]',
-              '&3': '$l{x;y;z}',
-            },
-          ],
-          solutions: [
-            ['#{&1&3}(#{&2*&3}+1)'],
-            ['#{&1&3}(&3+&2)'],
-            ['#{&1&3}(&2+&3)'],
-            ['#{&1&3}(1+#{&2*&3})'],
-            ['#{&1&3}(#{&2*&3}-1)'],
-            ['#{&1&3}(&3-&2)'],
-            ['#{&1&3}(&2-&3)'],
-            ['#{&1&3}(1-#{&2*&3})'],
-          ],
-          type: 'result',
-          defaultDelay: 30,
-
-        },
-        {
-          description: 'Factoriser',
-          subdescription: 'Coefficients positifs',
-          enounces: ['Factoriser le plus possible :'],
+          subdescription: 'Cas général - avec des carrés',
+          enounces: ['Factoriser le plus possible.'],
           expressions: [
             '#{&1*&2*&4^2}+#{&1*&3*&4}',
             '#{&1*&2*&4}+#{&1*&3*&4^2}',
@@ -5645,6 +5793,9 @@ export default {
           defaultDelay: 30,
 
         },
+        
+      ],
+      'Factorisation avec identité remarquable': [
         {
           description: 'Factoriser $$a^2-b^2$$',
           enounces: ['Factoriser :'],
@@ -5661,7 +5812,38 @@ export default {
           defaultDelay: 30,
 
         },
-      ],
+        {
+          description: 'Factoriser une expression du second degré',
+          enounces: ['Factoriser :'],
+          expressions: ['&3^2-#{2*&1}&3+#{&1^2}', '&3^2+#{2*&1}&3+#{&1^2}'],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&3': '$l{x;y;z}',
+            },
+          ],
+          solutions: [['(&3-&1)^2'], ['(&3+&1)^2']],
+          type: 'result',
+          defaultDelay: 30,
+
+        },
+
+        {
+          description: 'Factoriser une expression du second degré (2)',
+          enounces: ['Factoriser :'],
+          expressions: ['x^2-#{&1+&2}x+#{&1*&2}', 'x^2#s{&2-&1}x-#{&1*&2}', 'x^2+#{&1+&2}x+#{&1*&2}' ],
+          conditions: ['abs(&2-(&1))!=1'],
+          variables: [
+            {
+              '&1': '$e[1;5]',
+              '&2': '$e[1;5]\\{&1}',
+            },
+          ],
+          solutions: [['(x-&1)(x-&2)'], ['(x-&1)(x+&2)'], ['(x+&1)(x+&2)']],
+          type: 'result',
+          defaultDelay: 30,
+
+        }],
     },
     'Equations': {
       'Dans $$\\N$$': [
@@ -5682,7 +5864,7 @@ export default {
           solutions: [
             ['&2'],
           ],
-          
+
           type: 'equation',
           defaultDelay: 30,
         },

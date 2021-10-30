@@ -10,7 +10,12 @@
   import { supabase } from '../../app/db'
   import { navigate } from 'svelte-routing'
   import { mode } from '../../app/stores'
-  import { STATUS_CORRECT, STATUS_UNOPTIMAL_FORM } from './correction'
+  import { getStatus, STATUS_CORRECT, STATUS_UNOPTIMAL_FORM } from './correction'
+  import {
+    good_class,
+    not_complete_class,
+    not_good_class,
+  } from '../../app/colors'
 
   export let questions
   export let answers
@@ -33,6 +38,7 @@
   let messageResult
   let assessment
   let statuss = []
+  let comss = []
 
   // Quand le composant de correction a fini de s'afficher,
   // le score a déjà été calculé, on l'enregistre
@@ -40,16 +46,16 @@
     percent = score / total
 
     if (percent === 1) {
-      colorResult = 'green'
+      colorResult = good_class
       messageResult = 'Perfect !'
     } else if (percent >= 0.8) {
-      colorResult = 'green'
+      colorResult = good_class
       messageResult = 'Good Job !'
     } else if (percent >= 0.5) {
-      colorResult = 'orange'
+      colorResult = not_complete_class
       messageResult = 'Keep on !'
     } else {
-      colorResult = 'red'
+      colorResult = not_good_class
       messageResult = 'Try again !'
     }
 
@@ -59,7 +65,7 @@
       const result = {
         mark: score,
         total: total,
-        title:assessment.title,
+        title: assessment.title,
         questions: items,
       }
 
@@ -110,7 +116,7 @@
   for (let i = 0; i < questions.length; i++) {
     const question = questions[i]
     total += question.points
-    console.log("adPoints question", question)
+    console.log('adPoints question', question)
     items[i] = {
       qexp: question.expression,
       qexp_latex: question.expression_latex,
@@ -123,14 +129,28 @@
       type: question.type,
       number: i + 1,
       points: question.points,
-      options: question.options,
+      options: question.options ? question.options : [],
       enounce: question.enounce,
       correction: question.correction,
       correctionFormat: question.correctionFormat,
       testAnswer: question.testAnswer,
       choices: question.choices,
     }
+    comss[i] = []
+    statuss[i] = getStatus(items[i], comss[i], classroom)
     console.log('items', items)
+    switch (statuss[i]) {
+        case STATUS_CORRECT:
+          score += items[i].points
+          break
+
+        case STATUS_UNOPTIMAL_FORM:
+          score += items[i].points / 2
+          break
+
+        default:
+        // console.log('default case status')
+      }
   }
 
   // options revealjs
@@ -181,7 +201,7 @@
   <div class="mt-3 mb-3 d-flex justify-end">
     {#if help}
       <Button
-        class="{displayHelp ? 'orange white-text' : ''} ml-2 mr-2"
+        class="{displayHelp ? not_complete_class : ''} ml-2 mr-2"
         fab
         size="x-small"
         on:click="{toggleDisplayHelp}"
@@ -217,10 +237,10 @@
                     fab
                     depressed
                     class="{statuss[i] === STATUS_CORRECT
-                      ? 'green white-text'
+                      ? good_class
                       : statuss[i] === STATUS_UNOPTIMAL_FORM
-                      ? 'orange white-text'
-                      : 'red white-text'}"
+                      ? not_complete_class
+                      : not_good_class}"
                   >
                     <span style="font-size:{size}px;">{item.number}</span>
                   </Button>
@@ -245,11 +265,10 @@
                 </div>
                 <CorrectionItem
                   item="{item}"
-                  addPoints="{addPoints}"
                   details="{details}"
-                  classroom="{classroom}"
                   size="{size}"
-                  bind:status="{statuss[i]}"
+                  status="{statuss[i]}"
+                  coms="{comss[i]}"
                 />
               </div>
             </ListItem>
@@ -268,10 +287,10 @@
                   fab
                   depressed
                   class="{statuss[i] === STATUS_CORRECT
-                    ? 'green white-text'
+                    ? good_class
                     : statuss[i] === STATUS_UNOPTIMAL_FORM
-                    ? 'orange white-text'
-                    : 'red white-text'}"
+                    ? not_complete_class
+                    : not_good_class}"
                 >
                   <span style="font-size:{size}px;">{item.number}</span>
                 </Button>
@@ -296,11 +315,10 @@
               </div>
               <CorrectionItem
                 item="{item}"
-                addPoints="{addPoints}"
                 details="{details}"
-                classroom="{classroom}"
                 size="{size}"
-                bind:status="{statuss[i]}"
+                status="{statuss[i]}"
+                coms="{comss[i]}"
               />
             </div>
           </ListItem>
@@ -314,7 +332,7 @@
       <div class="d-flex flex-column align-center">
         {#if !assessment || assessment.type !== 'assessment'}
           <Button
-            class="ma-2 white"
+            class="ma-2 white black-text"
             fab
             size="x-small"
             on:click="{() => (restart = true)}"
@@ -323,7 +341,7 @@
           </Button>
         {/if}
         <Button
-          class="ma-2 white"
+          class="ma-2 white black-text"
           fab
           size="x-small"
           on:click="{() => navigate('/calcul-mental' + query)}"
@@ -338,7 +356,7 @@
         >
           {messageResult}
         </div>
-        <div style="font-size:22px" class="mt-2 mb-2  white-text">
+        <div style="font-size:22px" class="mt-2 mb-2">
           Score : {score}/{total}
         </div>
       </div>

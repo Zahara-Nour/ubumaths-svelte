@@ -295,5 +295,6 @@ export function getStatus(item, coms=[], classroom) {
             }
         }
     }
+    console.log('status', status)
     return status
 }

@@ -7,6 +7,7 @@
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { mode, menuFontSize } from '../../app/stores'
   import {
+    getStatus,
     STATUS_CORRECT,
     STATUS_UNOPTIMAL_FORM,
   } from '../calcul-mental/correction'
@@ -30,6 +31,7 @@
   let messageResult
   let assessment
   let statuss = []
+  let comss = []
 
   // Quand le composant de correction a fini de s'afficher,
   // le score a déjà été calculé, on l'enregistre
@@ -51,9 +53,6 @@
     }
   })
 
-  function addPoints(points) {
-    score += points
-  }
 
   function updateItems() {
     total = 0
@@ -80,11 +79,24 @@
         testAnswer: question.testAnswer,
         choices: question.choices,
       }
+      comss[i] = []
+      statuss[i] = getStatus(items[i], comss[i], false)
+      switch (statuss[i]) {
+        case STATUS_CORRECT:
+          score += items[i].points
+          break
+
+        case STATUS_UNOPTIMAL_FORM:
+          score += items[i].points / 2
+          break
+
+        default:
+        // console.log('default case status')
+      }
+
       console.log('items', items)
     }
   }
-
-
 
   // options revealjs
   const options = {
@@ -176,17 +188,15 @@
                 <span style="font-size:{size}px;">{item.number}</span>
               </Button>
 
-              
               <div class="flex-grow-1"></div>
             </div>
             <QuestionCard size="{$menuFontSize}" question="{item}" />
             <CorrectionItem
               item="{item}"
-              addPoints="{addPoints}"
               details="{details}"
-              classroom="{false}"
               size="{size}"
-              bind:status="{statuss[i]}"
+              status="{statuss[i]}"
+              coms="{comss[i]}"
             />
           </div>
         </ListItem>
