@@ -3,39 +3,48 @@
   import { mdiRocketLaunchOutline } from '@mdi/js'
   import { Button, Icon } from 'svelte-materialify/src'
   import { supabase } from '../../app/db'
+  import { getLogger } from '../../app/utils'
 
   export let launchTest
   export let disable
-  let assessments
+  let fetchingAssessment = false
+
+  const { info, trace, fail } = getLogger('Assessments', 'info')
 
   async function fetchAssessments() {
-    console.log('$user assessments', $user.assessments)
+    fetchingAssessment = true
     const { data, error } = await supabase
       .from('assessments')
       .select('*')
       .in('id', $user.assessments)
 
     if (error) {
-      console.log('error', error)
+      fail(error)
     } else {
-      assessments = data
-      console.log('assessments', assessments)
+      $user.assessmentsDetails = data
+      info('fetched assessments', $user.assessmentsDetails)
     }
+    fetchingAssessment = false
   }
 
   $: isLoggedIn = $user.id != 'guest'
   $: isStudent = isLoggedIn && $user.roles.includes('student')
-  $: if (isStudent && $user.assessments) {
+  $: if (
+    isStudent &&
+    $user.assessments &&
+    !$user.assessmentsDetails &&
+    !fetchingAssessment
+  ) {
     fetchAssessments()
   }
 </script>
 
-{#if assessments}
+{#if $user.assessmentsDetails}
   <h5 class="amber-text font-weight-bold">Evaluations à faire</h5>
 
   <div class="mt-3 grey lighten-4">
     <div class="pa-2 pl-5" style="border-left: 5px solid red">
-      {#each assessments as assessment}
+      {#each $user.assessmentsDetails as assessment}
         <div class="mt-2 mb-2   d-flex align-center">
           {assessment.title}
           <!-- <Tooltip bottom> -->
