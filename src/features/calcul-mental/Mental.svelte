@@ -19,9 +19,12 @@
   import Buttons from './Buttons.svelte'
   import Basket from './Basket.svelte'
   import Assessments from './Assessments.svelte'
+  import { supabase } from '../../app/db'
+import { getLogger } from '../../app/utils';
 
   export let location
 
+  const {info, trace, fail} = getLogger('Mental', 'info')
   const themes = Object.keys(questions)
   let queryParams
   let basket = []
@@ -46,6 +49,7 @@
   let isTeacher
   let classroom = false
   let modified = false
+  let fetchingProgression = false
 
   $mode = 'menu'
 
@@ -87,7 +91,7 @@
       level = queryParams.level
       levelIdx = level - 1
     }
-  } 
+  }
 
   function onChangeTheme(e) {
     themeIdx = e.detail
@@ -121,21 +125,21 @@
 
   function launchTest(assessment) {
     let url = '/mental-test'
-    console.log('asessemnt', assessment)
+    
     // passation d'une évaluation programmée
     if (assessment) {
-      console.log('assessment')
+      info(`Launching ${assessment.type}`)
       calculMentalAssessment.set(assessment)
     }
 
     // entrainement aux exercices du panier courant
     else if (basket.length) {
-      console.log('panier')
+      info('Launching questions from basket')
       calculMentalAssessment.set({ questions: basket })
     }
     // entrainement à l'exercice sélectionné par le menu
     else {
-      console.log('1 exercicex')
+      info('Launching exercice from menu')
       url = `/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
     }
 
@@ -157,13 +161,12 @@
   }
 
   const flushBasket = () => {
-    console.log('flush')
     basket = []
   }
 
   function addToBasket(theme, domain, subdomain, level, count, delay) {
     let qs = questions[theme][domain][subdomain]
-    // console.log('questions', qs)
+   
     const q = qs.find((q) => qs.indexOf(q) + 1 === parseInt(level, 10))
     if (!delay) delay = q.defaultDelay
     const index = basket.findIndex(
@@ -196,22 +199,91 @@
   const fillBasket = () => addToBasket(theme, domain, subdomain, level, 1)
 
   function copyLink() {
-    console.log('clipboard')
+   
     const url = `https://ubumaths.net/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
     navigator.clipboard
       .writeText(url)
       .then(function () {
-        console.log('copy to clipboard: ', url)
+        info('copy exercice url to clipboard: ', url)
       })
       .catch(function () {
-        console.log('failed to write to clipboard')
+        fail('failed to write exercice url to clipboard')
       })
+  }
+
+  async function fetchProgression() {
+    fetchingProgression = true
+    const { data, error } = await supabase
+      .from('progression')
+      .select('progression')
+      .eq('user_id', $user.id)
+
+    if (error) {
+      fail(error)
+    } else {
+      let progression = {}
+      if (data.length === 0) {
+        // init progression
+        Object.keys(questions).forEach((theme) => {
+          progression[theme] = {}
+          Object.keys(questions[theme]).forEach((domain) => {
+            progression[theme][domain] = {}
+            Object.keys(questions[theme][domain]).forEach((subdomain) => {
+              progression[theme][domain][subdomain] = 0
+            })
+          })
+        })
+
+        const { data, error } = await supabase
+          .from('progression')
+          .insert({ user_id:$user.id, progression })
+
+        if (error) {
+          fail(error)
+        } else {
+          info('progression created in db for user', $user.id)
+        }
+
+
+      } else {
+        progression = data[0].progression
+        info('fetched progression', progression)
+      }
+      $user.progression = progression
+      fetchingProgression = false
+      
+    }
+    // fetchingProgression = false
+  }
+
+  function getClassColor(theme, domain, subd, l, isStudent, progression) {
+    // subdomainIdx === subd && levelIdx === l
+
+    let classColor = ''
+    if (isStudent && progression) {
+      const currentLevel = progression[theme][domain][subd]
+      if (l <= currentLevel && subdomain === subd && parseInt(level, 10) === l) {
+        classColor = 'green-text'
+      }
+      else if (l <= currentLevel) {
+        classColor = 'green white-text'
+      }
+    }
+    else if (subdomain === subd && parseInt(level, 10) === l) {
+      classColor = 'red white-text'
+    }
+      
+    return classColor
   }
 
   $: isLoggedIn = $user.id != 'guest'
   $: isTeacher = isLoggedIn && $user.roles.includes('teacher')
+  $: isStudent = isLoggedIn && $user.roles.includes('student')
   $: disable = !theme || !domain || !subdomain || !(level >= 0)
   $: generated = generateExemple(theme, domain, subdomain, level)
+  $: if (isStudent && !$user.progression && !fetchingProgression) {
+    fetchProgression()
+  }
 </script>
 
 <h4 class="mt-5 pa-3 mb-5 amber white-text">Calcul mental</h4>
@@ -282,9 +354,17 @@
                       <div>
                         {#each questions[them][d][t] as _, i}
                           <Button
-                            class="{subdomainIdx === t_i && levelIdx === i
-                              ? 'red white-text'
-                              : ''} ma-1"
+                          outlined={isStudent && subdomainIdx===t_i && levelIdx===i}
+                            class="{getClassColor(
+                              theme,
+                              domain,
+                              t,
+                              i + 1,
+                              isStudent,
+                              $user.progression,
+                              subdomain,
+                              level,
+                            ) + ' ma-1'}"
                             fab
                             size="x-small"
                             depressed

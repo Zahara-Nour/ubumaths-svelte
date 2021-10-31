@@ -10,12 +10,17 @@
   import { supabase } from '../../app/db'
   import { navigate } from 'svelte-routing'
   import { mode } from '../../app/stores'
-  import { getStatus, STATUS_CORRECT, STATUS_UNOPTIMAL_FORM } from './correction'
+  import {
+    getStatus,
+    STATUS_CORRECT,
+    STATUS_UNOPTIMAL_FORM,
+  } from './correction'
   import {
     good_class,
     not_complete_class,
     not_good_class,
   } from '../../app/colors'
+  import { getLogger } from '../../app/utils'
 
   export let questions
   export let answers
@@ -26,7 +31,12 @@
   export let query
   export let classroom
   export let size
+  export let theme = ''
+  export let domain = ''
+  export let subdomain = ''
+  export let level = 0
 
+  const { info, fail } = getLogger('Correction', 'info')
   const help = questions[0].help
   let percent
   let score = 0
@@ -48,7 +58,7 @@
     if (percent === 1) {
       colorResult = good_class
       messageResult = 'Perfect !'
-    } else if (percent >= 0.8) {
+    } else if (percent >= 0.9) {
       colorResult = good_class
       messageResult = 'Good Job !'
     } else if (percent >= 0.5) {
@@ -60,8 +70,37 @@
     }
 
     assessment = $calculMentalAssessment
-    if (assessment && assessment.type === 'assessment') {
-      //on sauvegarde la note dans les données de l'élève
+
+    //  sauvegarde de la progression dans le cas d'un exercice du menu
+    if (isStudent && percent >= 0.9 && theme) {
+      const currentLevel = $user.progression[theme][domain][subdomain]
+
+      if (parseInt(level, 10) === currentLevel + 1) {
+        const newProgression = { ...$user.progression }
+        newProgression[theme][domain][subdomain] = parseInt(level, 10)
+        info(
+          `user ${$user.id} won level ${level} for ${theme} > ${domain} > ${subdomain}`,
+        )
+
+        const { data, error } = await supabase
+          .from('progression')
+          .update({ progression: newProgression })
+          .eq('user_id', $user.id)
+
+        if (error) {
+          fail(error)
+        } else {
+          user.update((u) => {
+            u.progression = newProgression
+            return u
+          })
+          info(`progression updated for user ${$user.id}`, newProgression)
+        }
+      }
+    } 
+    // évaluation à sauvegarder
+    else if (assessment && assessment.type === 'assessment') {
+      
       const result = {
         mark: score,
         total: total,
@@ -74,9 +113,9 @@
         .insert([{ assessment_id: assessment.id, user_id: $user.id, result }])
 
       if (error) {
-        console.log('error', error)
+        fail(error)
       } else {
-        console.log('results:', data)
+      
         let { data: students_assessments, error_get_assessments } =
           await supabase
             .from('users')
@@ -85,7 +124,7 @@
             .single()
 
         if (error_get_assessments) {
-          console.log('error', error_get_assessments)
+          fail(error_get_assessments)
         } else {
           students_assessments = students_assessments.assessments
           const index = students_assessments.indexOf(assessment.id)
@@ -95,9 +134,9 @@
             .upsert([{ id: $user.id, assessments: students_assessments }])
 
           if (error_update) {
-            console.log('error', error_update)
+            fail(error_update)
           } else {
-            console.log('assessments updated', data)
+            info('assessments results updated', data)
             $user.assessments.splice(
               $user.assessments.indexOf(assessment.id),
               1,
@@ -105,6 +144,7 @@
           }
         }
       }
+      // on vide la session de question à faire
       calculMentalAssessment.set(null)
     }
   })
@@ -116,7 +156,6 @@
   for (let i = 0; i < questions.length; i++) {
     const question = questions[i]
     total += question.points
-    console.log('adPoints question', question)
     items[i] = {
       qexp: question.expression,
       qexp_latex: question.expression_latex,
@@ -138,19 +177,18 @@
     }
     comss[i] = []
     statuss[i] = getStatus(items[i], comss[i], classroom)
-    console.log('items', items)
     switch (statuss[i]) {
-        case STATUS_CORRECT:
-          score += items[i].points
-          break
+      case STATUS_CORRECT:
+        score += items[i].points
+        break
 
-        case STATUS_UNOPTIMAL_FORM:
-          score += items[i].points / 2
-          break
+      case STATUS_UNOPTIMAL_FORM:
+        score += items[i].points / 2
+        break
 
-        default:
-        // console.log('default case status')
-      }
+      default:
+      // console.log('default case status')
+    }
   }
 
   // options revealjs
@@ -195,6 +233,9 @@
     const deck = new Reveal(document.querySelector('.deck'), options)
     deck.initialize()
   }
+  $: isLoggedIn = $user.id != 'guest'
+  $: isTeacher = isLoggedIn && $user.roles.includes('teacher')
+  $: isStudent = isLoggedIn && $user.roles.includes('student')
 </script>
 
 <div>
