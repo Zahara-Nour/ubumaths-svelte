@@ -5,17 +5,8 @@ import { getLogger } from './utils'
 import { createClient } from '@supabase/supabase-js'
 import supabaseaccess from '../../private/supabase.json'
 
-  console.log('supabase', supabaseaccess)
-  const options = {}
-  const supabase = createClient(supabaseaccess.url, supabaseaccess.key, options)
-  console.log('supabase', supabase)
-
-  const test_supabase = async function () {
-    const { data, error } = await supabase.from('results').select()
-    console.log('data', data)
-    console.log('error', error)
-  }
-  test_supabase()
+const options = {}
+const supabase = createClient(supabaseaccess.url, supabaseaccess.key, options)
 
 
 const firebaseConfig = {
@@ -97,7 +88,7 @@ function getDocument({ path, id }) {
   })
 }
 
-async function  saveDocument({ path, document }) {
+async function saveDocument({ path, document }) {
   console.log('saving doc :', document, path)
   const pathArray = path.split('/')
   let collectionRef = db.collection(pathArray.shift())
