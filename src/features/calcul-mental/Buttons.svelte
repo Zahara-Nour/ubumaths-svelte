@@ -60,26 +60,28 @@
   <div class="flex-grow-1"></div>
 
   {#if !showBasket}
-    <Button
-      class="ml-2 mr-2 amber darken-2 white-text"
-      fab
-      size="x-small"
-      on:click="{copyLink}"
-    >
-      <Icon path="{mdiLink}" />
-    </Button>
+    {#if isTeacher}
+      <Button
+        class="ml-2 mr-2 amber darken-2 white-text"
+        fab
+        size="x-small"
+        on:click="{copyLink}"
+      >
+        <Icon path="{mdiLink}" />
+      </Button>
 
-    <Button
-      class="ml-2 mr-2 amber darken-2 white-text"
-      fab
-      size="x-small"
-      depressed="{classroom}"
-      on:click="{() => {
-        classroom = !classroom
-      }}"
-    >
-      <Icon path="{mdiProjectorScreen}" />
-    </Button>
+      <Button
+        class="ml-2 mr-2 amber darken-2 white-text"
+        fab
+        size="x-small"
+        depressed="{classroom}"
+        on:click="{() => {
+          classroom = !classroom
+        }}"
+      >
+        <Icon path="{mdiProjectorScreen}" />
+      </Button>
+    {/if}
 
     <Button
       class="ml-2 mr-2 amber darken-2 white-text"
