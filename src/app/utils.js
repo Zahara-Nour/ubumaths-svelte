@@ -1,7 +1,7 @@
 const loggers = {}
 function getLogger(name, level = 'info') {
   if (!loggers.hasOwnProperty(name) || loggers[name].level !== level) {
-    const levels = ['trace', 'debug', 'info', 'warn', 'error']
+    const levels = ['trace', 'debug', 'info', 'warn', 'fail']
     // const getTimestamp = () => ''
     // const getTimestamp = () => moment().format('YY-MM-DD HH:mm:ss')
     // const coloredPrefix = `%c[${getTimestamp()}] [${name}] `
@@ -10,8 +10,8 @@ function getLogger(name, level = 'info') {
     const prefix = `[${name}] `
     const noop = () => {}
 
-    const error =
-      levels.indexOf(level) <= levels.indexOf('error')
+    const fail =
+      levels.indexOf(level) <= levels.indexOf('fail')
         ? console.error.bind(console, coloredPrefix, 'color:#ED8784')
         : noop
     const warn =
@@ -34,7 +34,7 @@ function getLogger(name, level = 'info') {
 
     loggers[name] = {
       level,
-      error,
+      fail,
       warn,
       info,
       debug,
