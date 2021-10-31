@@ -9,13 +9,15 @@
   import queryString from 'query-string'
   import virtualKeyboard from './virtualKeyboard'
   import { calculMentalAssessment } from './stores'
-  import { shuffle } from '../../app/utils'
+  import { getLogger, shuffle } from '../../app/utils'
   import { mode, testFontSize, classroomFontSize } from '../../app/stores'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { math } from 'tinycas/build/math/math'
 
   export let location
 
+
+  let {info, fail, trace} = getLogger('MentalTest', 'info')
   let question = {}
   let questions
   let current = -1
@@ -118,7 +120,6 @@
             solutions: question.solutions ? [question.solutions[indice]] : null,
           }
         }
-        console.log('exhaust', questions)
       }
       // on, répète 10 fois la question de l'exercice
       else {
@@ -145,7 +146,7 @@
       shuffle(questions)
     }
     change()
-    console.log('questions', questions)
+    info('Begining test with questions :', questions)
   }
 
   function onChoice(choice) {
@@ -169,7 +170,7 @@
       .replace(/\/\((\d+(,\d+)*)\)/g, (_, p1) => '/' + p1)
       .replace(/\/\(([a-z])\)/g, (_, p1) => '/' + p1)
       .trim()
-    console.log(`answer latex: ${answer_latex} asccii: ${answer}`)
+    trace(`answer latex: ${answer_latex} asccii: ${answer}`)
   }
 
   function commit() {
@@ -179,13 +180,13 @@
 
   function onKeystroke(mathfield, keystroke, e) {
     const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%'
-    console.log('keystroke', keystroke)
+    trace('keystroke', keystroke)
     if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
       // if (elapsed > 3000) commit()
-      console.log('trying to commit')
+
       if (answer !== '') {
         commit()
-        console.log('commited')
+       
       }
       return false
     } else if (
@@ -203,7 +204,7 @@
       mf.insert('\\sqrt')
       return false
     } else if (e.key === '*') {
-      console.log('#########')
+
       mf.insert('\\times ')
       return false
     } else if (e.key === ':') {
@@ -254,7 +255,7 @@
       let time = Math.min(Math.round(elapsed/1000), delay)
       if (time ===0) time = 1
       times[current] = time
-      console.log(times[current])
+     
     }
     if (current < questions.length - 1) {
       if (mf) {
@@ -322,6 +323,10 @@
     classroom="{classroom}"
     size="{classroom ? $classroomFontSize : $testFontSize}"
     bind:restart
+    theme={theme}
+    domain={domain}
+    subdomain={subdomain}
+    level={level}
   />
 {:else if generated}
   <div class="mt-6 mb-6">

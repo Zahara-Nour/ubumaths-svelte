@@ -101,8 +101,6 @@
       links = linksNotLogedIn
     }
   
-    $: console.log('links', links)
-
   
 </script>
 

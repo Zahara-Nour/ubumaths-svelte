@@ -36,7 +36,6 @@
       $user.roles.includes('student') &&
       $user.assessments.length
     ) {
-      console.log('user', $user)
       activateAssessmentsNotification()
     }
   }

@@ -8,8 +8,10 @@
   import { getCollection } from '../app/collections'
   import { db, supabase } from '../app/db'
   import { navigate } from 'svelte-routing'
+  import { getLogger } from '../app/utils'
 
   // Keep track of script status ("idle", "loading", "ready", "error")
+  let { info, fail } = getLogger('Auth', 'info')
   let status = 'idle'
   let connecting = false
   $: loaded = status === 'ready'
@@ -91,9 +93,7 @@
       !profile.getEmail().includes('@voltairedoha.com') &&
       profile.getEmail() !== 'zahara.alnour@gmail.com'
     ) {
-      console.log(
-        "Erreur connexion avec un mail n'appartenant pas au domaine voltairedoha.com",
-      )
+      fail("email doesn't belon to domain voltairedoha.com")
       return
     }
 
@@ -121,7 +121,7 @@
               // // The firebase.auth.AuthCredential type that was used.
               // var credential = error.credential
               // ...
-              console.error('error while authenticating in Firebase', error)
+              fail('error while authenticating in Firebase', error)
             })
         } else {
           // console.log('User already signed-in Firebase.')
@@ -140,23 +140,23 @@
       accessToken: authResponse.access_token,
     }
 
-    // const userDatas = await fetchUser(googleProfile.id)
 
     let { data, error } = await supabase
       .from('users')
       .select(`*, schools(city,country, name)`)
-      .eq('email', googleProfile.email ).single()
+      .eq('email', googleProfile.email)
+      .single()
+
     if (error) {
-      console.log('error', error)
+      fail(error)
     } else if (!data) {
-      console.log('error : no user')
-    }
-    else{
+      fail(`no user ${googleProfile.email} in db`)
+    } else {
       data.classes.push('Autres')
       user.set({ ...googleProfile, ...data, ...data.schools })
-      console.log('user', $user)
+      info(`user ${$user.email} successfully logged in`, $user)
     }
-   
+
     connecting = false
   }
 
@@ -193,19 +193,19 @@
   }
 
   function logoutSuccess() {
-    console.log('logout success')
+    info(`user ${$user.id} successfuly logged out`)
     user.set({ id: 'guest' })
     connecting = false
     navigate('/')
   }
 
   function loginFailure(err) {
-    console.log('error while login', err)
+    fail('error while login', err)
     connecting = false
   }
 
   function logoutFailure(err) {
-    console.log('error while logout', err)
+    fail('error while logout', err)
     connecting = false
   }
 
@@ -223,22 +223,7 @@
     firebase.auth().signOut().then(logoutSuccess).catch(logoutFailure)
   }
 
-  function fetchUser(id) {
-    return db
-      .collection('Users')
-      .doc(id)
-      .get()
-      .then(function (doc) {
-        if (doc.exists) {
-          return doc.data()
-        } else {
-          console.log('No user', id)
-        }
-      })
-      .catch(function (error) {
-        console.error('Error loading document: ', error)
-      })
-  }
+ 
 </script>
 
 {#if auth2}
