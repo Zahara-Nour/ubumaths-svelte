@@ -193,10 +193,12 @@
   }
 
   function logoutSuccess() {
-    info(`user ${$user.id} successfuly logged out`)
+    const id = $user.id
     user.set({ id: 'guest' })
     connecting = false
+    info(`user ${$user.id} successfuly logged out`, $user)
     navigate('/')
+   
   }
 
   function loginFailure(err) {

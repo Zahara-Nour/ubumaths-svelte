@@ -1,5 +1,6 @@
 <script>
   import { Icon, Button, Tooltip, Badge } from 'svelte-materialify/src'
+  import { user } from '../../app/stores'
   import {
     mdiProjectorScreen,
     mdiRocketLaunchOutline,
@@ -11,7 +12,7 @@
     mdiLink,
     mdiTrashCanOutline,
   } from '@mdi/js'
-  export let isTeacher
+
   export let showBasket
   export let basket
   export let loadAssessments
@@ -27,6 +28,10 @@
 
   const toggleHelp = () => (displayDescription = !displayDescription)
   const toggleBasket = () => (showBasket = !showBasket)
+
+  $: isLoggedIn = $user.id != 'guest'
+  $: isTeacher = isLoggedIn && $user.roles.includes('teacher')
+  $: isStudent = isLoggedIn && $user.roles.includes('student')
 </script>
 
 <div class="mt-3 mb-3 d-flex" style="{'position:sticky;top:10px;z-index:10'}">
