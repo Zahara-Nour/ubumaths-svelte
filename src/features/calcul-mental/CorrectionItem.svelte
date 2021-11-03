@@ -10,20 +10,20 @@
     STATUS_UNOPTIMAL_FORM,
     STATUS_EMPTY,
   } from './correction'
-  
+
   export let item
   export let details
-  export let coms = []
   export let size
-  export let status
+
   let number,
     options = '',
     qexp_latex,
     solutions,
     answer_latex,
     answer_choice,
-    correctionFormat
-  
+    correctionFormat,
+    coms,
+    status
 
   let answerColor = 'green'
   const regex = /\$\$(.*?)\$\$/g
@@ -36,7 +36,6 @@
 
   let penalty = false
   const details_latex = item.details // details are in latex form
-
 
   if (status === STATUS_BAD_FORM || status == STATUS_INCORRECT) {
     answerColor = 'red'
@@ -53,18 +52,18 @@
   //   coms.push(FORM)
   // }
   function updateItem() {
-    console.log('item',item)
-      ;({
-        correction: correction_latex,
-        number,
-        options,
-        qexp_latex,
-        solutions,
-        answer_latex,
-        answer_choice,
-        correctionFormat
-      } = item)
-    
+    ;({
+      correction: correction_latex,
+      number,
+      options,
+      qexp_latex,
+      solutions,
+      answer_latex,
+      answer_choice,
+      correctionFormat,
+      coms,
+      status,
+    } = item)
 
     solutions_latex = item.solutions
       ? item.solutions.map((solution) => {
@@ -109,12 +108,14 @@
             .replace('&exp', qexp_latex)
             .replace(
               '&solution',
-              `<span style="color:green;">${
-                item.type === 'choice'
+              () =>
+                '<span style="color:green;">' +
+                (item.type === 'choice'
                   ? item.choices[solutions[0]]
-                  : '$$$'+answer_latex+'$$$'
-              }</span>`,
+                  : '$$' + answer_latex + '$$') +
+                '</span>',
             )
+          console.log('line', line)
           lines.push(line)
         })
       } else {
@@ -122,11 +123,12 @@
           line = format.replace('&exp', qexp_latex).replace(
             '&solution',
 
-            `<span style="color:green;">${
-              item.type === 'choice'
+            () =>
+              '<span style="color:green;">' +
+              (item.type === 'choice'
                 ? item.choices[solutions[0]]
-                : '$$$'+solutions_latex[0]+'$$$'
-            }</span>`,
+                : '$$' + solutions_latex[0] + '$$') +
+              '</span>',
           )
           lines.push(line)
         })
@@ -137,11 +139,12 @@
                 .replace('&exp', qexp_latex)
                 .replace(
                   '&answer',
-                  `<span style="color:red;">${
-                    item.type === 'choice'
+                  () =>
+                    '<span style="color:red;">' +
+                    (item.type === 'choice'
                       ? item.choices[answer_choice]
-                      : '$$$'+answer_latex+'$$$'
-                  }</span>`,
+                      : '$$' + answer_latex + '$$') +
+                    '</span>',
                 ),
           )
         } else if (
@@ -154,11 +157,12 @@
                 .replace('&exp', qexp_latex)
                 .replace(
                   '&answer',
-                  `<span style="color:orange;">${
-                    item.type === 'choice'
+                  () =>
+                    '<span style="color:orange;">' +
+                    (item.type === 'choice'
                       ? item.choices[answer_choice]
-                      : '$$$'+answer_latex+'$$$'
-                  }</span>`,
+                      : '$$' + answer_latex + '$$') +
+                    '</span>',
                 ),
           )
         }
@@ -261,32 +265,56 @@
         case 'decomposition':
           if (details) {
           } else {
-            line = '$$\\begin{align*}' + qexp_latex
-            if (empty) {
-              solutions_latex.forEach((solution, i) => {
-                if (i !== 0) line += '\\\\'
-                line += ' &=\\textcolor{green}{' + solution + '}'
-              })
-              line += '\\end{align*}$$'
-            } else if (!seemsCorrect) {
-              line = '$$\\begin{align*}' + qexp_latex
-              line += `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}`
-              solutions_latex.forEach((solution, i) => {
-                line += '\\\\ &=\\textcolor{green}{' + solution + '}'
-              })
-              line += '\\end{align*}$$'
-            } else if (!correct) {
-              line = '$$\\begin{align*}' + qexp_latex
-              line += `&=\\textcolor{orange}{${answer_latex}}`
-              solutions_latex.forEach((solution, i) => {
-                line += '\\\\ &=\\textcolor{green}{' + solution + '}'
-              })
-              line += '\\end{align*}$$'
+            // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
+
+            line = `$$\\begin{align*}  ${qexp_latex}`
+            if (status === STATUS_EMPTY) {
+              line +=
+                `=\\textcolor{green}{${solutions_latex[0]}}` + '\\end{align*}$$'
+            } else if (status === STATUS_INCORRECT) {
+              line +=
+                `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
+                `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
+            } else if (
+              status === STATUS_BAD_FORM ||
+              status === STATUS_UNOPTIMAL_FORM
+            ) {
+              line +=
+                `&= \\textcolor{orange}{${answer_latex}}` +
+                `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
             } else {
-              line += `=\\textcolor{green}{${answer_latex}}$$`
+              line += `=\\textcolor{green}{${answer_latex}}\\end{align*}$$`
             }
             lines.push(line)
           }
+          // if (details) {
+          // } else {
+          //   line = '$$\\begin{align*}' + qexp_latex
+          //   if (status===STATUS_EMPTY) {
+          //     solutions_latex.forEach((solution, i) => {
+          //       if (i !== 0) line += '\\\\'
+          //       line += ' &=\\textcolor{green}{' + solution + '}'
+          //     })
+          //     line += '\\end{align*}$$'
+          //   } else if (!seemsCorrect) {
+          //     line = '$$\\begin{align*}' + qexp_latex
+          //     line += `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}`
+          //     solutions_latex.forEach((solution, i) => {
+          //       line += '\\\\ &=\\textcolor{green}{' + solution + '}'
+          //     })
+          //     line += '\\end{align*}$$'
+          //   } else if (!correct) {
+          //     line = '$$\\begin{align*}' + qexp_latex
+          //     line += `&=\\textcolor{orange}{${answer_latex}}`
+          //     solutions_latex.forEach((solution, i) => {
+          //       line += '\\\\ &=\\textcolor{green}{' + solution + '}'
+          //     })
+          //     line += '\\end{align*}$$'
+          //   } else {
+          //     line += `=\\textcolor{green}{${answer_latex}}$$`
+          //   }
+          //   lines.push(line)
+          // }
           break
 
         // case 'result':
@@ -383,9 +411,8 @@
                     '$$',
                 )
               }
-
-              lines.push(line)
             }
+            lines.push(line)
           }
       }
     }
@@ -393,7 +420,7 @@
     lines = lines.map((line) =>
       line.replace(regex, replacement).replace(/_COLORANSWER_/g, answerColor),
     )
-    console.log('coms', coms)
+
     coms = coms.map((com) =>
       com.replace(regex, replacement).replace(/_COLORANSWER_/g, answerColor),
     )

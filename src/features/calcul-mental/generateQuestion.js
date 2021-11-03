@@ -1,9 +1,9 @@
 import { math } from 'tinycas/build/math/math'
 import emptyQuestion from './emptyQuestion'
-import { lexicoSort } from '../../app/utils'
+import { getLogger, lexicoSort } from '../../app/utils'
 import questions from './questions'
 
-
+let {fail, warn, info} = getLogger('generateQuestion', 'info')
 
 export default function generateQuestion(question, generateds) {
   // firestore returns objects with read-only properties
@@ -91,6 +91,7 @@ export default function generateQuestion(question, generateds) {
 
     // first select an expression
     i = Math.floor(n * Math.random())
+  
 
     if (question.expressions) {
       expression = question.expressions[question.expressions.length === 1 ? 0 : i]
@@ -124,6 +125,9 @@ export default function generateQuestion(question, generateds) {
             generated = generated.replace(regex, variables[precedentName])
 
           }
+
+          generated = generated.replace(regexExact, replacementExact)
+
           generated = math(generated).generate().string
           variables[name] = generated
 
@@ -184,7 +188,11 @@ export default function generateQuestion(question, generateds) {
         choices = choices.map(c => c.replace(regexExactLatex, replacementExactLatex))
       }
 
-      if (expression) {
+      if (expression && enounce) {
+        doItAgain = generatedExpressions.includes(expression) && generatedEnounces.includes(enounce)
+      }
+
+      else if (expression) {
         doItAgain = generatedExpressions.includes(expression)
       }
       else if (choices) {
@@ -203,6 +211,7 @@ export default function generateQuestion(question, generateds) {
             const regex = new RegExp(name, 'g')
             test = test.replace(regex, variables[name])
           })
+          test = test.replace(regexExact, replacementExact)
 
           if (math(test).eval().string === 'false') {
             doItAgain = true
@@ -213,7 +222,7 @@ export default function generateQuestion(question, generateds) {
   } while (doItAgain && count < 1000)
 
   if (count >= 1000) {
-    throw new Error('limit max')
+     warn("can't generate a different question from others")
   }
 
   if (question.solutions) {
@@ -369,7 +378,7 @@ export default function generateQuestion(question, generateds) {
   let correctionFormat
   if (question.correctionFormat) {
     correctionFormat = question.correctionFormat[question.correctionFormat.length === 1 ? 0 : i]
-    console.log('correctionFormat', correctionFormat)
+   
     let { correct, uncorrect, answer } = correctionFormat
 
     correct = correct.map(format => {

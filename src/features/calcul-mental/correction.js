@@ -1,11 +1,13 @@
 import { math } from 'tinycas/build/math/math'
+import { getLogger } from '../../app/utils'
 export const STATUS_EMPTY = 'empty'
 export const STATUS_CORRECT = 'correct'
 export const STATUS_INCORRECT = 'incorrect'
 export const STATUS_UNOPTIMAL_FORM = 'unoptimal  form'
 export const STATUS_BAD_FORM = 'bad form'
 
-let status
+let { fail, trace, info } = getLogger('correction', 'info')
+
 
 const EMPTY_ANSWER = "Tu n'as rien répondu."
 const ZEROS =
@@ -30,8 +32,7 @@ const FORM =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> n'est pas écrite sous la forme demandée."
 
 // retourne un tableau des contraintes non respectées
-function checkConstraints(item, coms) {
-    console.log('check Constraints')
+function checkConstraints(item) {
 
     const checks = [
         {
@@ -90,20 +91,20 @@ function checkConstraints(item, coms) {
 
     checks.forEach((check) => {
         if (!item.options.includes(check.option[0]) && !check.function(item)) {
-            coms.push(check.com)
+            item.coms.push(check.com)
             if (item.options.includes(check.option[1])) {
-                status = STATUS_BAD_FORM
+                item.status = STATUS_BAD_FORM
             } else {
                 // penalty = true
-                if (status !== STATUS_BAD_FORM) status = STATUS_UNOPTIMAL_FORM
+                if (item.status !== STATUS_BAD_FORM) item.status = STATUS_UNOPTIMAL_FORM
             }
         }
-        console.log('check', status)
+       
     })
 }
 
-function checkAnswer(item, coms) {
-    console.log('checkAnswer')
+function checkAnswer(item) {
+
 
     if (item.testAnswer) {
         const tests = item.testAnswer.replace(/&answer/g, item.answer).split('&&')
@@ -113,9 +114,9 @@ function checkAnswer(item, coms) {
         // TODO : tester les formats
 
         if (failed) {
-            status = STATUS_INCORRECT
-        } else if (status !== STATUS_UNOPTIMAL_FORM) {
-            status = STATUS_CORRECT
+            item.status = STATUS_INCORRECT
+        } else if (item.status !== STATUS_UNOPTIMAL_FORM) {
+            item.status = STATUS_CORRECT
         }
     } else {
         let e = math(item.answer)
@@ -164,15 +165,15 @@ function checkAnswer(item, coms) {
             sols = sols.map((solution) => solution.sortTermsAndFactors())
         }
 
-        console.log('checkAnswer', sols, e.string)
+       
         if (!sols.some((sol) => sol.strictlyEquals(e))) {
-            status = STATUS_BAD_FORM
-        } else if (status !== STATUS_UNOPTIMAL_FORM) {
-            status = STATUS_CORRECT
+            item.status = STATUS_BAD_FORM
+        } else if (item.status !== STATUS_UNOPTIMAL_FORM) {
+            item.status = STATUS_CORRECT
         }
     }
 
-    if (status === STATUS_BAD_FORM) coms.push(FORM)
+    if (item.status === STATUS_BAD_FORM) item.coms.push(FORM)
 }
 
 function checkProducts(item) {
@@ -253,48 +254,97 @@ function checkZeros(item) {
     return !math(item.answer).searchUnecessaryZeros()
 }
 
+export function assessItems(questions, answers, answers_latex, answers_choice, times, classroom) {
+    let total = 0
+    let score = 0
+    const items = []
+    for (let i = 0; i < questions.length; i++) {
+        const question = questions[i]
+        total += question.points
+        items[i] = {
+            qexp: question.expression,
+            qexp_latex: question.expression_latex,
+            answer: answers[i],
+            answer_latex: answers_latex[i],
+            answer_choice: answers_choice[i],
+            time: times[i],
+            solutions: question.solutions,
+            details: question.details,
+            type: question.type,
+            number: i + 1,
+            points: question.points,
+            options: question.options ? question.options : [],
+            enounce: question.enounce,
+            correction: question.correction,
+            correctionFormat: question.correctionFormat,
+            testAnswer: question.testAnswer,
+            choices: question.choices,
+            coms: [],
+            status: null
+        }
 
-export function getStatus(item, coms=[], classroom) {
-    status = null
+        assessItem(items[i], classroom)
+        switch (items[i].status) {
+            case STATUS_CORRECT:
+                score += items[i].points
+                break
+
+            case STATUS_UNOPTIMAL_FORM:
+                score += items[i].points / 2
+                break
+
+            case STATUS_EMPTY:
+            case STATUS_BAD_FORM:
+            case STATUS_INCORRECT:
+                break
+
+            default:
+                fail('status not set')
+        }
+    }
+    info('corrected items', items)
+    return { items, score, total }
+}
+export function assessItem(item, classroom) {
+
+
     if (!item.answer && item.answer_choice === null) {
         //answer_choice peut etre égal à 0
-        if (!classroom) coms.push(EMPTY_ANSWER)
-        status = STATUS_EMPTY
+        if (!classroom) item.coms.push(EMPTY_ANSWER)
+        item.status = STATUS_EMPTY
     } else {
-        console.log('not empty')
+      
         switch (item.type) {
             case 'choice':
-                status =
+                item.status =
                     item.solutions.includes(item.answer_choice) === true
                         ? STATUS_CORRECT
                         : STATUS_INCORRECT
-                console.log('status', status)
+
                 break
 
             default: {
                 const badExpression =
                     item.type !== 'choice' && math(item.answer).type === '!! Error !!'
                 const equivalent =
-                item.testAnswer ||
+                    item.testAnswer ||
                     (!badExpression &&
                         item.solutions.some((solution) =>
                             math(item.answer).equals(math(solution)),
                         ))
                 if (badExpression) {
-                    coms.push(BAD)
-                    status = STATUS_INCORRECT
+                    item.coms.push(BAD)
+                    item.status = STATUS_INCORRECT
                 } else if (!equivalent) {
-                    status = STATUS_INCORRECT
+                    item.status = STATUS_INCORRECT
                 } else {
                     // vérification des contraintes de forme
-                    checkConstraints(item, coms)
-                    if (status !== STATUS_BAD_FORM) {
-                        checkAnswer(item, coms)
+                    checkConstraints(item)
+                    if (item.status !== STATUS_BAD_FORM) {
+                        checkAnswer(item)
                     }
                 }
             }
         }
     }
-    console.log('status', status)
-    return status
 }

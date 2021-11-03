@@ -3,21 +3,26 @@
   import generate from './generateQuestion'
   import CircularProgress from '../../components/CircularProgress.svelte'
   import { Button } from 'svelte-materialify/src'
-  import { onDestroy } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import Correction from './Correction.svelte'
   import qs from './questions'
   import queryString from 'query-string'
   import virtualKeyboard from './virtualKeyboard'
   import { calculMentalAssessment } from './stores'
   import { getLogger, shuffle } from '../../app/utils'
+  import {
+    mode,
+    testFontSize,
+    classroomFontSize,
     handleKeydown,
+  } from '../../app/stores'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { math } from 'tinycas/build/math/math'
+  import { detach_after_dev } from 'svelte/internal'
 
   export let location
 
-
-  let {info, fail, trace} = getLogger('MentalTest', 'info')
+  let { info, fail, trace } = getLogger('MentalTest', 'info')
   let question = {}
   let questions
   let current = -1
@@ -27,7 +32,7 @@
   let answers = []
   let answers_latex = []
   let answers_choice = []
-  let times =[]
+  let times = []
   let generated
   let generateds = []
   let delay
@@ -212,7 +217,6 @@
 
       if (answer !== '') {
         commit()
-       
       }
       return false
     } else if (
@@ -230,7 +234,6 @@
       mf.insert('\\sqrt')
       return false
     } else if (e.key === '*') {
-
       mf.insert('\\times ')
       return false
     } else if (e.key === ':') {
@@ -273,7 +276,7 @@
   async function change() {
     if (timer) clearInterval(timer)
     // if (timeout) clearTimeout(timeout)
-    
+
     if (current >= 0) {
       answers[current] = answer
       answers_latex[current] = answer_latex
@@ -281,7 +284,6 @@
       let time = Math.min(Math.round(elapsed / 1000), delay)
       if (time === 0) time = 1
       times[current] = time
-     
     }
     if (current < questions.length - 1) {
       if (mf) {
@@ -302,12 +304,10 @@
       start = Date.now()
       previous = 0
       timer = setInterval(countDown, 10)
-      timeout = setTimeout(change, delay)
     } else {
       finish = true
       // mathlive bug : virtual keyboard still displays otherwise
       if (mf) mf.blur()
-      
     }
   }
 
@@ -320,10 +320,6 @@
 
   $: if (mf) {
     initMathField()
-  }
-
-  $: if (delay >= elapsed) {
-    percentage = ((delay - elapsed) * 100) / delay
   }
 
   $: if (generated && mf && !mf.hasFocus()) {
@@ -349,15 +345,15 @@
     answers="{answers}"
     answers_latex="{answers_latex}"
     answers_choice="{answers_choice}"
-    times={times}
+    times="{times}"
     query="{location.search}"
     classroom="{classroom}"
     size="{classroom ? $classroomFontSize : $testFontSize}"
     bind:restart
-    theme={theme}
-    domain={domain}
-    subdomain={subdomain}
-    level={level}
+    theme="{theme}"
+    domain="{domain}"
+    subdomain="{subdomain}"
+    level="{level}"
   />
 {:else if generated}
   <div class="mt-6 mb-6">
@@ -378,11 +374,21 @@
 
   <div class="d-flex align-center justify-center">
     {#if choices}
-      <div class="mt-3 d-flex justify-center" style="width:100%;">
+      <div class="mt-3 d-flex justify-space-around" style="width:100%;">
         {#each choices as choice, i}
-          <Button class="ml-3 mr-3" on:click="{() => onChoice(i)}">
-            <div style="font-size:{$testFontSize + 4}px;">{@html choice}</div>
-          </Button>
+          <!-- <Button size="x-large" class="ml-3 mr-3" on:click="{() => onChoice(i)}"> -->
+          <div >
+            <button class="rounded-lg pa-5 yellow lighten-4 ml-3 mr-3" on:click="{() => onChoice(i)}">
+              <div
+                style="font-size:{classroom
+                  ? $classroomFontSize
+                  : $testFontSize + 4}px;"
+              >
+                {@html choice}
+              </div>
+            </button>
+          </div>
+          <!-- </Button> -->
         {/each}
       </div>
     {:else if !classroom}

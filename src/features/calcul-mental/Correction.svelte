@@ -1,6 +1,6 @@
 <script>
   import CorrectionItem from './CorrectionItem.svelte'
-  import { ListItem, Button, Icon } from 'svelte-materialify/src'
+  import { ListItem, Button, Icon, Snackbar } from 'svelte-materialify/src'
   import { mdiHome, mdiLifebuoy, mdiReload, mdiScanHelper } from '@mdi/js'
   import Reveal from 'reveal.js'
   import { onMount } from 'svelte'
@@ -11,7 +11,7 @@
   import { navigate } from 'svelte-routing'
   import { mode } from '../../app/stores'
   import {
-    getStatus,
+    assessItems,
     STATUS_CORRECT,
     STATUS_UNOPTIMAL_FORM,
   } from './correction'
@@ -39,16 +39,15 @@
   const { info, fail } = getLogger('Correction', 'info')
   const help = questions[0].help
   let percent
-  let score = 0
-  let total = 0
   let details = false
-  const items = []
   const toggleDetails = () => (details = !details)
   let colorResult
   let messageResult
   let assessment
-  let statuss = []
-  let comss = []
+
+
+  // inititalisation
+  let {items, score, total} = assessItems(questions, answers, answers_latex, answers_choice, times, classroom)
 
   // Quand le composant de correction a fini de s'afficher,
   // le score a déjà été calculé, on l'enregistre
@@ -73,6 +72,7 @@
 
     //  sauvegarde de la progression dans le cas d'un exercice du menu
     if (isStudent && percent >= 0.9 && theme) {
+      congrats = true
       const currentLevel = $user.progression[theme][domain][subdomain]
 
       if (parseInt(level, 10) === currentLevel + 1) {
@@ -149,47 +149,8 @@
     }
   })
 
-  function addPoints(points) {
-    score += points
-  }
 
-  for (let i = 0; i < questions.length; i++) {
-    const question = questions[i]
-    total += question.points
-    items[i] = {
-      qexp: question.expression,
-      qexp_latex: question.expression_latex,
-      answer: answers[i],
-      answer_latex: answers_latex[i],
-      answer_choice: answers_choice[i],
-      time: times[i],
-      solutions: question.solutions,
-      details: question.details,
-      type: question.type,
-      number: i + 1,
-      points: question.points,
-      options: question.options ? question.options : [],
-      enounce: question.enounce,
-      correction: question.correction,
-      correctionFormat: question.correctionFormat,
-      testAnswer: question.testAnswer,
-      choices: question.choices,
-    }
-    comss[i] = []
-    statuss[i] = getStatus(items[i], comss[i], classroom)
-    switch (statuss[i]) {
-      case STATUS_CORRECT:
-        score += items[i].points
-        break
-
-      case STATUS_UNOPTIMAL_FORM:
-        score += items[i].points / 2
-        break
-
-      default:
-      // console.log('default case status')
-    }
-  }
+  
 
   // options revealjs
   const options = {
@@ -222,6 +183,7 @@
 
   let slides
   let displayHelp = false
+  let congrats = false
 
   function toggleDisplayHelp() {
     displayHelp = !displayHelp
@@ -237,7 +199,17 @@
   $: isTeacher = isLoggedIn && $user.roles.includes('teacher')
   $: isStudent = isLoggedIn && $user.roles.includes('student')
 </script>
-
+<Snackbar class="justify-space-between green white-text" bind:active={congrats} right top timeout={4000}>
+  Bravo 🎉 
+  Tu as gagné un niveau !
+  <Button
+    text
+    on:click={() => {
+      congrats = false;
+    }}>
+    Ok
+  </Button>
+</Snackbar>
 <div>
   <div class="mt-3 mb-3 d-flex justify-end">
     {#if help}
@@ -277,9 +249,9 @@
                   <Button
                     fab
                     depressed
-                    class="{statuss[i] === STATUS_CORRECT
+                    class="{item.status === STATUS_CORRECT
                       ? good_class
-                      : statuss[i] === STATUS_UNOPTIMAL_FORM
+                      : item.status === STATUS_UNOPTIMAL_FORM
                       ? not_complete_class
                       : not_good_class}"
                   >
@@ -308,8 +280,7 @@
                   item="{item}"
                   details="{details}"
                   size="{size}"
-                  status="{statuss[i]}"
-                  coms="{comss[i]}"
+              
                 />
               </div>
             </ListItem>
@@ -327,9 +298,9 @@
                 <Button
                   fab
                   depressed
-                  class="{statuss[i] === STATUS_CORRECT
+                  class="{item.status === STATUS_CORRECT
                     ? good_class
-                    : statuss[i] === STATUS_UNOPTIMAL_FORM
+                    : item.status === STATUS_UNOPTIMAL_FORM
                     ? not_complete_class
                     : not_good_class}"
                 >
@@ -358,8 +329,6 @@
                 item="{item}"
                 details="{details}"
                 size="{size}"
-                status="{statuss[i]}"
-                coms="{comss[i]}"
               />
             </div>
           </ListItem>

@@ -10,38 +10,116 @@
   import NavBar from './components/NavBar.svelte'
   import Mental from './features/calcul-mental/Mental.svelte'
   import MentalTest from './features/calcul-mental/MentalTest.svelte'
-  import { menuFontSize, user } from './app/stores'
+  import { menuFontSize, user, handleKeydown} from './app/stores'
   import { Snackbar, Footer, Button } from 'svelte-materialify/src'
   import { mode } from './app/stores'
   import DashBoardTeacher from './features/dashboard/DashBoardTeacher.svelte'
   import DashBoardStudent from './features/dashboard/DashBoardStudent.svelte'
+  import { getLogger } from './app/utils'
+  import { supabase } from './app/db'
+  import { gradeMatchesClass, testGrades } from './app/grade'
+  import questions from './features/calcul-mental/questions'
+
+  testGrades()
 
   export let url = ''
 
+  const { info, trace, fail } = getLogger('App', 'info')
   let theme = 'light'
+  let fetchingProgression = false
+
+  async function fetchProgression() {
+    fetchingProgression = true
+    const { data, error } = await supabase
+      .from('progression')
+      .select('progression')
+      .eq('user_id', $user.id)
+
+    if (error) {
+      fail(error)
+    } else {
+      let progression = {}
+      if (data.length === 0) {
+        // init progression
+        Object.keys(questions).forEach((theme) => {
+          progression[theme] = {}
+          Object.keys(questions[theme]).forEach((domain) => {
+            progression[theme][domain] = {}
+            Object.keys(questions[theme][domain]).forEach((subdomain) => {
+              progression[theme][domain][subdomain] = 0
+            })
+          })
+        })
+
+        const { data, error } = await supabase
+          .from('progression')
+          .insert({ user_id: $user.id, progression })
+
+        if (error) {
+          fail(error)
+        } else {
+          info('progression created in db for user', $user.id)
+        }
+      } else {
+        progression = data[0].progression
+        info('fetched progression', progression)
+      }
+      $user.progression = progression
+      fetchingProgression = false
+    }
+    // fetchingProgression = false
+  }
+
+  function getAvailable() {
+    const available = {}
+    Object.keys(questions).forEach((theme) => {
+      available[theme] = {}
+      Object.keys(questions[theme]).forEach((domain) => {
+        available[theme][domain] = {}
+        Object.keys(questions[theme][domain]).forEach((subdomain) => {
+          available[theme][domain][subdomain] = []
+          questions[theme][domain][subdomain].forEach((q, i) => {
+            if (gradeMatchesClass(q.grade, $user.grade)) {
+              available[theme][domain][subdomain].push(i + 1)
+            }
+          })
+          if (!available[theme][domain][subdomain].length) {
+            delete available[theme][domain][subdomain]
+          }
+        })
+        if (!Object.keys(available[theme][domain]).length) {
+          delete available[theme][domain]
+        }
+      })
+      if (!Object.keys(available[theme]).length) {
+        delete available[theme]
+      }
+    })
+
+    console.log('available', available)
+    $user.available=available
+  }
 
   function toggleTheme() {
     if (theme === 'light') theme = 'dark'
     else theme = 'light'
   }
 
-  let assessmentsNotification = false
-  function activateAssessmentsNotification() {
-    assessmentsNotification = true
-  }
+  
+  
   $: displayWidth = $mode === 'classroom' ? '95%' : '1024px'
-  $: {
-    if (
-      $user.roles &&
-      $user.roles.includes('student') &&
-      $user.assessments.length
-    ) {
-      activateAssessmentsNotification()
-    }
-  }
-  $: isLoggedIn = $user.id != 'guest'
+  
+
+  $: isLoggedIn = $user.id !== 'guest'
   $: isTeacher = isLoggedIn && $user.roles.includes('teacher')
   $: isStudent = isLoggedIn && $user.roles.includes('student')
+  $: if (isStudent && !$user.progression && !fetchingProgression) {
+    fetchProgression()
+  }
+
+  $: if (isStudent && !$user.available) {
+    getAvailable()
+  } 
 </script>
 
 <svelte:head>
@@ -103,24 +181,7 @@
   </Router>
 </MaterialApp>
 
-<Snackbar
-  class="justify-space-between amber lighten-2"
-  bind:active="{assessmentsNotification}"
-  text
-  right
-  top
-  timeout="{6000}"
->
-  Tu as des évaluations à faire !
-  <Button
-    text
-    on:click="{() => {
-      assessmentsNotification = false
-    }}"
-  >
-    Ok
-  </Button>
-</Snackbar>
+
 
 <style type="text/scss">
   @import 'style/_include-media';

@@ -7,7 +7,7 @@
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { mode, menuFontSize } from '../../app/stores'
   import {
-    getStatus,
+    assessItems,
     STATUS_CORRECT,
     STATUS_UNOPTIMAL_FORM,
   } from '../calcul-mental/correction'
@@ -22,16 +22,15 @@
 
   const help = questions[0].help
   let percent
-  let score = 0
-  let total = 0
   let details = false
-  const items = []
   const toggleDetails = () => (details = !details)
   let colorResult
   let messageResult
   let assessment
-  let statuss = []
-  let comss = []
+  let items
+  let score
+  let total
+
 
   // Quand le composant de correction a fini de s'afficher,
   // le score a déjà été calculé, on l'enregistre
@@ -41,7 +40,7 @@
     if (percent === 1) {
       colorResult = 'green'
       messageResult = 'Perfect !'
-    } else if (percent >= 0.8) {
+    } else if (percent >= 0.9) {
       colorResult = 'green'
       messageResult = 'Good Job !'
     } else if (percent >= 0.5) {
@@ -52,51 +51,6 @@
       messageResult = 'Try again !'
     }
   })
-
-
-  function updateItems() {
-    total = 0
-    score = 0
-    for (let i = 0; i < questions.length; i++) {
-      const question = questions[i]
-      total += question.points
-      items[i] = {
-        qexp: question.qexp,
-        qexp_latex: question.qexp_latex,
-        answer: answers[i],
-        answer_latex: answers_latex[i],
-        answer_choice: answers_choice[i],
-        time: times[i],
-        solutions: question.solutions,
-        details: question.details,
-        type: question.type,
-        number: i + 1,
-        points: question.points,
-        options: question.options,
-        enounce: question.enounce,
-        correction: question.correction,
-        correctionFormat: question.correctionFormat,
-        testAnswer: question.testAnswer,
-        choices: question.choices,
-      }
-      comss[i] = []
-      statuss[i] = getStatus(items[i], comss[i], false)
-      switch (statuss[i]) {
-        case STATUS_CORRECT:
-          score += items[i].points
-          break
-
-        case STATUS_UNOPTIMAL_FORM:
-          score += items[i].points / 2
-          break
-
-        default:
-        // console.log('default case status')
-      }
-
-      console.log('items', items)
-    }
-  }
 
   // options revealjs
   const options = {
@@ -141,7 +95,16 @@
     deck.initialize()
   }
 
-  $: if (questions) updateItems()
+  $: if (questions) {
+    ;({ items, score, total } = assessItems(
+    questions,
+    answers,
+    answers_latex,
+    answers_choice,
+    times,
+    false,
+  ))
+  }
 </script>
 
 <div>
@@ -179,9 +142,9 @@
               <Button
                 fab
                 depressed
-                class="{statuss[i] === STATUS_CORRECT
+                class="{item.status === STATUS_CORRECT
                   ? 'green white-text'
-                  : statuss[i] === STATUS_UNOPTIMAL_FORM
+                  : item.status === STATUS_UNOPTIMAL_FORM
                   ? 'orange white-text'
                   : 'red white-text'}"
               >
@@ -195,8 +158,6 @@
               item="{item}"
               details="{details}"
               size="{size}"
-              status="{statuss[i]}"
-              coms="{comss[i]}"
             />
           </div>
         </ListItem>
@@ -218,7 +179,7 @@
     </div>
     {#if percent === 1}
       <img alt="Great!" src="/images/great-150.png" />
-    {:else if percent >= 0.8}
+    {:else if percent >= 0.9}
       <img alt="Good job!" src="/images/good-job-150.png" />
     {:else if percent >= 0.5}
       <img alt="Keep on!" src="/images/keep-on-150.png" />

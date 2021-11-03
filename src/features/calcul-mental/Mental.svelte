@@ -7,6 +7,7 @@
     TabContent,
     ExpansionPanels,
     ExpansionPanel,
+    Snackbar
   } from 'svelte-materialify/src'
 
   import { navigate } from 'svelte-routing'
@@ -19,12 +20,12 @@
   import Buttons from './Buttons.svelte'
   import Basket from './Basket.svelte'
   import Assessments from './Assessments.svelte'
-  import { supabase } from '../../app/db'
-import { getLogger } from '../../app/utils';
+  import { getLogger } from '../../app/utils'
+  import { gradeMatchesClass } from '../../app/grade'
 
   export let location
 
-  const {info, trace, fail} = getLogger('Mental', 'info')
+  const { info, trace, fail } = getLogger('Mental', 'info')
   const themes = Object.keys(questions)
   let queryParams
   let basket = []
@@ -49,7 +50,8 @@ import { getLogger } from '../../app/utils';
   let isTeacher
   let classroom = false
   let modified = false
-  let fetchingProgression = false
+  let available
+ 
 
   $mode = 'menu'
 
@@ -93,6 +95,8 @@ import { getLogger } from '../../app/utils';
     }
   }
 
+  
+
   function onChangeTheme(e) {
     themeIdx = e.detail
     theme = themes[themeIdx]
@@ -125,7 +129,7 @@ import { getLogger } from '../../app/utils';
 
   function launchTest(assessment) {
     let url = '/mental-test'
-    
+
     // passation d'une évaluation programmée
     if (assessment) {
       info(`Launching ${assessment.type}`)
@@ -166,7 +170,7 @@ import { getLogger } from '../../app/utils';
 
   function addToBasket(theme, domain, subdomain, level, count, delay) {
     let qs = questions[theme][domain][subdomain]
-   
+
     const q = qs.find((q) => qs.indexOf(q) + 1 === parseInt(level, 10))
     if (!delay) delay = q.defaultDelay
     const index = basket.findIndex(
@@ -199,7 +203,6 @@ import { getLogger } from '../../app/utils';
   const fillBasket = () => addToBasket(theme, domain, subdomain, level, 1)
 
   function copyLink() {
-   
     const url = `https://ubumaths.net/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
     navigator.clipboard
       .writeText(url)
@@ -211,68 +214,25 @@ import { getLogger } from '../../app/utils';
       })
   }
 
-  async function fetchProgression() {
-    fetchingProgression = true
-    const { data, error } = await supabase
-      .from('progression')
-      .select('progression')
-      .eq('user_id', $user.id)
-
-    if (error) {
-      fail(error)
-    } else {
-      let progression = {}
-      if (data.length === 0) {
-        // init progression
-        Object.keys(questions).forEach((theme) => {
-          progression[theme] = {}
-          Object.keys(questions[theme]).forEach((domain) => {
-            progression[theme][domain] = {}
-            Object.keys(questions[theme][domain]).forEach((subdomain) => {
-              progression[theme][domain][subdomain] = 0
-            })
-          })
-        })
-
-        const { data, error } = await supabase
-          .from('progression')
-          .insert({ user_id:$user.id, progression })
-
-        if (error) {
-          fail(error)
-        } else {
-          info('progression created in db for user', $user.id)
-        }
-
-
-      } else {
-        progression = data[0].progression
-        info('fetched progression', progression)
-      }
-      $user.progression = progression
-      fetchingProgression = false
-      
-    }
-    // fetchingProgression = false
-  }
-
   function getClassColor(theme, domain, subd, l, isStudent, progression) {
     // subdomainIdx === subd && levelIdx === l
 
     let classColor = ''
     if (isStudent && progression) {
       const currentLevel = progression[theme][domain][subd]
-      if (l <= currentLevel && subdomain === subd && parseInt(level, 10) === l) {
+      if (
+        l <= currentLevel &&
+        subdomain === subd &&
+        parseInt(level, 10) === l
+      ) {
         classColor = 'green-text'
-      }
-      else if (l <= currentLevel) {
+      } else if (l <= currentLevel) {
         classColor = 'green white-text'
       }
-    }
-    else if (subdomain === subd && parseInt(level, 10) === l) {
+    } else if (subdomain === subd && parseInt(level, 10) === l) {
       classColor = 'red white-text'
     }
-      
+
     return classColor
   }
 
@@ -281,9 +241,8 @@ import { getLogger } from '../../app/utils';
   $: isStudent = isLoggedIn && $user.roles.includes('student')
   $: disable = !theme || !domain || !subdomain || !(level >= 0)
   $: generated = generateExemple(theme, domain, subdomain, level)
-  $: if (isStudent && !$user.progression && !fetchingProgression) {
-    fetchProgression()
-  }
+ 
+ 
 </script>
 
 <h4 class="mt-5 pa-3 mb-5 amber white-text">Calcul mental</h4>
@@ -297,7 +256,6 @@ import { getLogger } from '../../app/utils';
 {/if}
 
 <Buttons
-  isTeacher="{isTeacher}"
   bind:showBasket
   bind:classroom
   bind:displayDescription
@@ -330,60 +288,72 @@ import { getLogger } from '../../app/utils';
   >
     <div slot="tabs">
       {#each themes as item}
-        <Tab><span style="font-size:{$menuFontSize}px;">{item}</span></Tab>
+        {#if !isStudent ||  $user.available && $user.available[item]}
+          <Tab><span style="font-size:{$menuFontSize}px;">{item}</span></Tab>
+        {/if}
       {/each}
     </div>
 
     {#each themes as them, them_i}
-      <TabContent>
-        <ExpansionPanels on:change="{onChangeDomain}" value="{[domainIdx]}">
-          {#each Object.keys(questions[them]) as d, d_i}
-            <ExpansionPanel>
-              <span
-                slot="header"
-                class="text-uppercase red-text"
-                style="font-size:{$menuFontSize}px"
-              >
-                {d}
-              </span>
-              <List style="width:100%;">
-                <div style="font-size:{$menuFontSize}px;">
-                  {#each Object.keys(questions[them][d]) as t, t_i}
-                    <div class="mt-2 mb-2 d-flex align-center">
-                      <span class="mr-3">{t}</span>
-                      <div>
-                        {#each questions[them][d][t] as _, i}
-                          <Button
-                          outlined={isStudent && subdomainIdx===t_i && levelIdx===i}
-                            class="{getClassColor(
-                              theme,
-                              domain,
-                              t,
-                              i + 1,
-                              isStudent,
-                              $user.progression,
-                              subdomain,
-                              level,
-                            ) + ' ma-1'}"
-                            fab
-                            size="x-small"
-                            depressed
-                            on:click="{() => onChangeLevel(t, t_i, i)}"
-                            ><span style="font-size:{$menuFontSize}px;"
-                              >{i + 1}</span
-                            ></Button
-                          >
-                        {/each}
-                      </div>
-                      <div style="flex-grow:1;"></div>
+      {#if !isStudent || $user.available && $user.available[them]}
+        <TabContent>
+          <ExpansionPanels on:change="{onChangeDomain}" value="{[domainIdx]}">
+            {#each Object.keys(questions[them]) as d, d_i}
+              {#if !isStudent || $user.available[them][d]}
+                <ExpansionPanel>
+                  <span
+                    slot="header"
+                    class="text-uppercase red-text"
+                    style="font-size:{$menuFontSize}px"
+                  >
+                    {d}
+                  </span>
+                  <List style="width:100%;">
+                    <div style="font-size:{$menuFontSize}px;">
+                      {#each Object.keys(questions[them][d]) as t, t_i}
+                        {#if !isStudent || $user.available[them][d][t]}
+                          <div class="mt-2 mb-2 d-flex align-center">
+                            <span class="mr-3">{t}</span>
+                            <div>
+                              {#each questions[them][d][t] as q, i}
+                                {#if !isStudent || gradeMatchesClass(q.grade, $user.grade)}
+                                  <Button
+                                    outlined="{isStudent &&
+                                      subdomainIdx === t_i &&
+                                      levelIdx === i}"
+                                    class="{getClassColor(
+                                      theme,
+                                      domain,
+                                      t,
+                                      i + 1,
+                                      isStudent,
+                                      $user.progression,
+                                      subdomain,
+                                      level,
+                                    ) + ' ma-1'}"
+                                    fab
+                                    size="x-small"
+                                    depressed
+                                    on:click="{() => onChangeLevel(t, t_i, i)}"
+                                    ><span style="font-size:{$menuFontSize}px;"
+                                      >{i + 1}</span
+                                    ></Button
+                                  >
+                                {/if}
+                              {/each}
+                            </div>
+                            <div style="flex-grow:1;"></div>
+                          </div>
+                        {/if}
+                      {/each}
                     </div>
-                  {/each}
-                </div>
-              </List>
-            </ExpansionPanel>
-          {/each}
-        </ExpansionPanels>
-      </TabContent>
+                  </List>
+                </ExpansionPanel>
+              {/if}
+            {/each}
+          </ExpansionPanels>
+        </TabContent>
+      {/if}
     {/each}
   </Tabs>
 {/if}
@@ -400,3 +370,5 @@ import { getLogger } from '../../app/utils';
     <Exemple question="{generated}" />
   </div>
 {/if}
+
+

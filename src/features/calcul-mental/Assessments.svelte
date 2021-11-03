@@ -1,14 +1,14 @@
 <script>
   import { user } from '../../app/stores'
   import { mdiRocketLaunchOutline } from '@mdi/js'
-  import { Button, Icon } from 'svelte-materialify/src'
+  import { Button, Icon, Snackbar } from 'svelte-materialify/src'
   import { supabase } from '../../app/db'
   import { getLogger } from '../../app/utils'
 
   export let launchTest
   export let disable
   let fetchingAssessment = false
-
+  let assessmentsNotification = false
   const { info, trace, fail } = getLogger('Assessments', 'info')
 
   async function fetchAssessments() {
@@ -27,6 +27,10 @@
     fetchingAssessment = false
   }
 
+  function activateAssessmentsNotification() {
+    assessmentsNotification = true
+  }
+
   $: isLoggedIn = $user.id != 'guest'
   $: isStudent = isLoggedIn && $user.roles.includes('student')
   $: if (
@@ -37,6 +41,17 @@
   ) {
     fetchAssessments()
   }
+
+  $: {
+    if (
+      $user.roles &&
+      $user.roles.includes('student') &&
+      $user.assessments.length
+    ) {
+      activateAssessmentsNotification()
+    }
+  }
+
 </script>
 
 {#if $user.assessmentsDetails}
@@ -75,3 +90,22 @@
     </div>
   </div>
 {/if}
+
+<Snackbar
+  class="justify-space-between amber lighten-2"
+  bind:active="{assessmentsNotification}"
+  text
+  right
+  top
+  timeout="{6000}"
+>
+  Tu as des évaluations à faire !
+  <Button
+    text
+    on:click="{() => {
+      assessmentsNotification = false
+    }}"
+  >
+    Ok
+  </Button>
+</Snackbar>

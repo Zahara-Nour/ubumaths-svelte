@@ -1,3 +1,6 @@
+import { CP, CM1, CM2, SIXIEME, SECONDE, CINQUIEME, QUATRIEME, CE1, CE2 } from '../../app/grade'
+
+const UNKNOWN = 'a determiner'
 // OPTIONS
 // 
 // * espaces dans l'écriture des nombres
@@ -68,39 +71,317 @@
 export default {
   Entiers: {
     Apprivoiser: {
-      Ecriture: [{
-        description: 'Ecrire un grand nombre entier avec des espaces',
-        enounces: ["Réécris ce nombre  entiers  en rajoutant des espaces pour former des groupes de 3 chiffres."],
-        expressions: ['&2'],
-        variables: [
-          { '&1': '$e[4;10]', '&2': '$e{&1;&1}' },
-        ],
-        options: ['exp-no-spaces', 'require-correct-spaces'],
-        type: 'rewrite',
-        defaultDelay: 1,
-      },
-      {
-        description: 'Ecrire un grand nombre entier sans les zéros inutiles',
-        enounces: ["Réécris ce nombre entiers en enlevant les zéros inuiles."],
-        expressions: [
-          '00&1&2&3&4',
-          '00&1&2&3&40',
-          '00&1&2&3&400',
-          '0&1&2&3&4',
-          '0&1&2&3&40',
-          '0&1&2&3&400',
-        ],
-        variables: [
-          { '&1': '$e[1;9]', '&2': '$l{0;$e[1;9]}', '&3': '$l{0;$e[1;9]}', '&4': '$e[1;9]' },
-        ],
-        options: ['exp-allow-unecessary-zeros'],
-        type: 'rewrite',
-        defaultDelay: 20,
-      },
+      Ecriture: [
+        {
+          description: "Connaître la position décimale",
+          subdescriptions: ["Jusqu'aux dizaines."],
+          enounces: [
+            "Dans le nombre $$&4$$,  quel est le chiffre des dizaines ?",
+            "Dans le nombre $$&4$$, quel est le chiffre des unités ?"
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[0;9]\\{&1}',
+              '&4': '#{&1*10+&2}',
+            },
+
+          ],
+          solutions: [['&1'], ['&2'],],
+          correctionFormat: [
+            {
+              correct: ['Dans $$%%{&4}$$ le chiffre des dizaines est &solution.'],
+              uncorrect: ['Dans $$%%{&4}$$ le chiffre des dizaines est &solution.'],
+              answer: 'Le chiffre des dizaines est &answer.'
+            },
+            {
+              correct: ['Dans $$%%{&4}$$ le chiffre des unités est &solution.'],
+              uncorrect: ['Dans $$%%{&4}$$ le chiffre des unités est &solution.'],
+              answer: 'Le chiffre des unités est &answer.'
+            }
+          ],
+          type: 'rewrite',
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: "Connaître la position décimale",
+          subdescriptions: ["Jusqu'aux centaines"],
+          enounces: [
+            "Dans le nombre $$&4$$, quel est le chiffre des centaines ?",
+            "Dans le nombre $$&4$$,  quel est le chiffre des dizaines ?",
+            "Dans le nombre $$&4$$, quel est le chiffre des unités ?"
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[0;9]\\{&1}',
+              '&3': '$e[0;9]\\{&1;&2}',
+              '&4': '#{&1*100+&2*10+&3}',
+            },
+
+          ],
+          solutions: [['&1'], ['&2'], ['&3'],],
+          correctionFormat: [
+            {
+              correct: ['Dans $$%%{&4}$$ le chiffre des centaines est &solution.'],
+              uncorrect: ['Dans $$%%{&4}$$ le chiffre des centaines est &solution.'],
+              answer: 'Le chiffre des centaines est &answer.'
+            },
+            {
+              correct: ['Dans $$%%{&4}$$ le chiffre des dizaines est &solution.'],
+              uncorrect: ['Dans $$%%{&4}$$ le chiffre des dizaines est &solution.'],
+              answer: 'Le chiffre des dizaines est &answer.'
+            },
+            {
+              correct: ['Dans $$%%{&4}$$ le chiffre des unités est &solution.'],
+              uncorrect: ['Dans $$%%{&4}$$ le chiffre des unités est &solution.'],
+              answer: 'Le chiffre des unités est &answer.'
+            }
+          ],
+          type: 'rewrite',
+          defaultDelay: 10,
+          grade: CE1,
+        },
+        {
+          description: "Parité d'un nombre entier",
+          enounces: ["Ce nombre est-il pair ou impair ?"],
+          expressions: ['&2', '&3'],
+          variables: [
+            {
+              '&1': '$e[0;49]',
+              '&2': '#{2*&1}',
+              '&3': '#{2*&1+1}',
+            },
+
+          ],
+          choices: [
+            ['pair', 'impair'],
+          ],
+          correctionFormat: [{
+            correct: ['Le nombre $$&exp$$ est &solution'],
+            uncorrect: ['Le nombre $$&exp$$ est &solution'],
+            answer: 'Le nombre $$&exp$$ est &answer'
+          }],
+          // corrections: [
+          //   'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
+          // ],
+          solutions: [
+            [0], [1]
+          ],
+          type: 'choice',
+          defaultDelay: 10,
+          grade: CE1,
+        },
+        {
+          description: "Connaître la position décimale",
+          subdescriptions: ["Jusqu'aux milliers"],
+          enounces: [
+            "Dans le nombre $$%{&5}$$, quel est le chiffre des milliers ?",
+            "Dans le nombre $$%{&5}$$, quel est le chiffre des centaines ?",
+            "Dans le nombre $$%{&5}$$,  quel est le chiffre des dizaines ?",
+            "Dans le nombre $$%{&5}$$, quel est le chiffre des unités ?"
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[0;9]\\{&1}',
+              '&3': '$e[0;9]\\{&1;&2}',
+              '&4': '$e[0;9]\\{&1;&2;&3}',
+              '&5': '&1*1000+&2*100+&3*10+&4',
+            },
+
+          ],
+          solutions: [['&1'], ['&2'], ['&3'], ['&4'],],
+          correctionFormat: [
+            {
+              correct: ['Dans $$%{&5}$$ le chiffre des milliers est &solution.'],
+              uncorrect: ['Dans $$%{&5}$$ le chiffre des milliers est &solution.'],
+              answer: 'Le chiffre des milliers est &answer.'
+            },
+            {
+              correct: ['Dans $$%{&5}$$ le chiffre des centaines est &solution.'],
+              uncorrect: ['Dans $$%{&5}$$ le chiffre des centaines est &solution.'],
+              answer: 'Le chiffre des centaines est &answer.'
+            },
+            {
+              correct: ['Dans $$%{&5}$$ le chiffre des dizaines est &solution.'],
+              uncorrect: ['Dans $$%{&5}$$ le chiffre des dizaines est &solution.'],
+              answer: 'Le chiffre des dizaines est &answer.'
+            },
+            {
+              correct: ['Dans $$%{&5}$$ le chiffre des unités est &solution.'],
+              uncorrect: ['Dans $$%{&5}$$ le chiffre des unités est &solution.'],
+              answer: 'Le chiffre des unités est &answer.'
+            }
+          ],
+          type: 'rewrite',
+          defaultDelay: 10,
+          grade: CE2,
+        },
+        {
+          description: 'Ecrire un grand nombre entier avec des espaces',
+          description: 'Nombre à 4 chiffres',
+          enounces: ["Réécris ce nombre  entiers  en ajoutant un espace pour séparer le chiffre des milliers."],
+          expressions: ['&1'],
+          variables: [
+            { '&1':'$e{4;4}' },
+          ],
+          options: ['exp-no-spaces', 'require-correct-spaces'],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CE2,
+        },
+        {
+          description: 'Ecrire un grand nombre entier avec des espaces',
+          description: "Jusqu'à 12 chiffres",
+          enounces: ["Réécris ce nombre  entiers  en rajoutant des espaces pour former des groupes de 3 chiffres."],
+          expressions: ['&2'],
+          variables: [
+            { '&1': '$e[4;12]', '&2': '$e{&1;&1}' },
+          ],
+          options: ['exp-no-spaces', 'require-correct-spaces'],
+          type: 'result',
+          defaultDelay: 30,
+          grade: CM1,
+        },
+        {
+          description: 'Ecrire un grand nombre entier sans les zéros inutiles',
+          enounces: ["Réécris ce nombre entiers en enlevant les zéros inuiles."],
+          expressions: [
+            '00&1&2&3&4',
+            '00&1&2&3&40',
+            '00&1&2&3&400',
+            '0&1&2&3&4',
+            '0&1&2&3&40',
+            '0&1&2&3&400',
+          ],
+          variables: [
+            { '&1': '$e[1;9]', '&2': '$l{0;$e[1;9]}', '&3': '$l{0;$e[1;9]}', '&4': '$e[1;9]' },
+          ],
+          options: ['exp-allow-unecessary-zeros'],
+          type: 'rewrite',
+          defaultDelay: 20,
+          grade: UNKNOWN,
+        },
 
 
       ],
       Décomposition: [
+        {
+          description: "Décomposer l'écriture décimale un nombre",
+          subdescription: 'En dizaines et unités',
+          enounces: ["Décomposer ce nombre en dizaines et unités."],
+          expressions: ['#{&1*10+&2}'],
+          solutions: [['#{&1*10}+&2']],
+          variables: [{ '&1': '$e[1;9]', '&2': '$e[1;9]', }],
+          type: 'decomposition',
+          defaultDelay: 20,
+          grade: CP,
+        },
+        {
+          description: "Décomposer l'écriture décimale un nombre",
+          subdescription: 'En centaines, dizaines et unités',
+          enounces: ["Décomposer ce nombre en centaines, dizaines et unités."],
+          expressions: ['#{&1*100+&2*10+&3}'],
+          solutions: [['#{&1*100}+#{&2*10}+&3']],
+          variables: [{ '&1': '$e[1;9]', '&2': '$e[1;9]', '&3': '$e[1;9]', }],
+          type: 'decomposition',
+          defaultDelay: 20,
+          grade: CE1,
+        },
+        {
+          description: "Décomposer l'écriture décimale un nombre",
+          subdescription: "En centaines, dizaines et unités, à l'aide de produits",
+          enounces: ["Décompose ce nombre comme dans cet exemple : $$345 = (3 \\times 100) +(4 \\times 10) + 5$$."],
+          expressions: [
+            '#{&1*100 + &2*10 + &3}',
+            // '#{(&1*1000) +  (&2*100) + (&3*10) + &4}',
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9]',
+            },
+          ],
+          solutions: [['(&1*100) + (&2*10) + &3']],
+          // solutions:[['&1*1000 +  &2*100 + &3*10 + &4']],
+          options: ['no-penalty-for-extraneous-brackets', 'no-penalty-for-factor-one'],
+          type: 'decomposition',
+          defaultDelay: 30,
+          grade: CE1,
+        },
+        {
+          description: "Décomposer l'écriture décimale un nombre",
+          subdescription: 'En milliers, centaines, dizaines et unités',
+          enounces: ["Décomposer ce nombre en milliers, centaines, dizaines et unités."],
+          expressions: ['#{&1*1000+&2*100+&3*10+&4}'],
+          solutions: [['#{&1*1000}+#{&2*100}+#{&3*10}+&4']],
+          variables: [{ '&1': '$e[1;9]', '&2': '$e[1;9]', '&3': '$e[1;9]', '&4': '$e[1;9]' }],
+          type: 'decomposition',
+          defaultDelay: 20,
+          grade: CE2,
+        },
+        {
+          description: "Décomposer l'écriture décimale un nombre",
+          subdescription: "En milliers, centaines, dizaines et unités, à l'aide de produits",
+          enounces: ["Décompose ce nombre comme dans cet exemple : $$2\\,345 = (2 \\times 1\\,000) + (3 \\times 100) +(4 \\times 10) + 5$$."],
+          expressions: [
+            '#{&1*1000 + &2*100 + &3*10+&4}',
+            // '#{(&1*1000) +  (&2*100) + (&3*10) + &4}',
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9]',
+              '&4': '$e[1;9]',
+            },
+          ],
+          solutions: [['(&1*1000) + (&2*100) + (&3*10)+&4']],
+        
+          // solutions:[['&1*1000 +  &2*100 + &3*10 + &4']],
+          options: ['no-penalty-for-extraneous-brackets', 'no-penalty-for-factor-one'],
+          type: 'decomposition',
+          defaultDelay: 40,
+          grade: CE2,
+        },
+        {
+          description: "Décomposer l'écriture décimale un nombre",
+          subdescription: 'En dizaines de milliers, milliers, centaines, dizaines et unités',
+          enounces: ["Décomposer ce nombre en dieaines de milliers, milliers, centaines, dizaines et unités."],
+          expressions: ['#{&1*10000+&2*1000+&3*100+&4*10+&5}'],
+          solutions: [['#{&1*10000}+#{&2*1000}+#{&3*100}+#{&4*10}+&5']],
+          variables: [{ '&1': '$e[1;9]', '&2': '$e[1;9]', '&3': '$e[1;9]', '&4': '$e[1;9]', '&5': '$e[1;9]' }],
+          
+          type: 'decomposition',
+          defaultDelay: 20,
+          grade: CM1,
+        },
+        {
+          description: "Décomposer l'écriture décimale un nombre",
+          subdescription: "En dizaines de milliers, milliers, centaines, dizaines et unités, à l'aide de produits",
+          enounces: ["Décompose ce nombre comme dans cet exemple : $$12\\,345 = (1 \\times 10\\,000) +(2 \\times 1\\,000) + (3 \\times 100) +(4 \\times 10) + 5$$."],
+          expressions: [
+            '#{&1*10000 + &2*1000 + &3*100+&4*10+&5}',
+            // '#{(&1*1000) +  (&2*100) + (&3*10) + &4}',
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9]',
+              '&4': '$e[1;9]',
+              '&5': '$e[1;9]',
+            },
+          ],
+          solutions: [['(&1*10000) + (&2*1000) + (&3*100)+(&4*10)+&5']],
+          options: ['no-penalty-for-extraneous-brackets', 'no-penalty-for-factor-one'],
+          type: 'decomposition',
+          defaultDelay: 50,
+          grade: CM1,
+        },
         {
           description: "Décomposition décimale -> nombre entier",
           enounces: ["Réécris cette expression sous la forme d'un nombre entier."],
@@ -119,6 +400,7 @@ export default {
           options: ['remove-null-terms'],
           type: 'rewrite',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: "Décomposition décimale -> nombre entier",
@@ -139,6 +421,7 @@ export default {
           options: ['remove-null-terms', 'shuffle-terms'],
           type: 'rewrite',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: "Nombre entier -> décomposition décimale",
@@ -160,21 +443,22 @@ export default {
           options: ['no-penalty-for-extraneous-brackets'],
           type: 'rewrite',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
       Comparer: [
         {
           description: "Comparer deux nombres entiers",
+          subdescriptions: ["Nombres inférieurs à 100"],
           enounces: ["Quel est le plus petit de ces 2 nombres ?"],
           variables: [
             {
-              '&1': '$e[1;4]',
-              '&2': '$e{&1;&1}',
-              '&3': '$e{&1;&1}',
-              '&4': '$e{5-&1;5-&1}',
-              '&5': '&2+&4*10^&1',
-              '&6': '&3+&4*10^&1',
-
+              '&1': '$e[0;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[0;9]',
+              '&5': '#{&1*10+&2}',
+              '&6': '#{&3*10+&4}',
             },
 
           ],
@@ -182,24 +466,254 @@ export default {
           choices: [
             ['$$%%{&5}$$', '$$%%{&6}$$'],
           ],
-          corrections: [
-            'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
-          ],
+          correctionFormat: [{
+            correct: ['Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est &solution'],
+            uncorrect: ['Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est &solution'],
+            answer: 'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est &answer'
+          }],
+          // corrections: [
+          //   'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
+          // ],
           solutions: [
             ['&5<&6 ?? 0 :: 1'],
           ],
           type: 'choice',
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: "Comparer deux nombres entiers",
+          subdescriptions: ["Nombres inférieurs à 1000"],
+          enounces: ["Quel est le plus petit de ces 2 nombres ?"],
+          variables: [
+            {
+              '&1': '$e[0;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[1;9]',
+              '&4': '$e[0;9]',
+              '&5': '$e[0;9]',
+              '&6': '$e[1;9]',
+              '&7': '#{&1*100+&2*10+&3}',
+              '&8': '#{&4*100+&5*10+&6}',
+            },
+
+          ],
+          conditions: ['&7!=&8'],
+          choices: [
+            ['$$%%{&7}$$', '$$%%{&8}$$'],
+          ],
+          correctionFormat: [{
+            correct: ['Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &solution'],
+            uncorrect: ['Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &solution'],
+            answer: 'Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &answer'
+          }],
+          // corrections: [
+          //   'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
+          // ],
+          solutions: [
+            ['&7<&8 ?? 0 :: 1'],
+          ],
+          type: 'choice',
+          defaultDelay: 10,
+          grade: CE1,
+        },
+        {
+          description: "Comparer deux nombres entiers",
+          subdescriptions: ["Nombres inférieurs à 10000"],
+          enounces: ["Quel est le plus petit de ces 2 nombres ?"],
+          variables: [
+            {
+              '&1': '$e[0;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[0;9]',
+              '&5': '$e[0;9]',
+              '&6': '$e[0;9]',
+              '&7': '&1*1000+&2*100+&3*10+$e[0;9]',
+              '&8': '&4*1000+&5*100+&6*10+$e[0;9]',
+            },
+
+          ],
+          conditions: ['#{&7}!=#{&8}'],
+          choices: [
+            ['$$%%{&7}$$', '$$%%{&8}$$'],
+          ],
+          correctionFormat: [{
+            correct: ['Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &solution'],
+            uncorrect: ['Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &solution'],
+            answer: 'Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &answer'
+          }],
+          // corrections: [
+          //   'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
+          // ],
+          solutions: [
+            ['&7<&8 ?? 0 :: 1'],
+          ],
+          type: 'choice',
+          defaultDelay: 10,
+          grade: CE2,
+        },
+        {
+          description: "Comparer deux nombres entiers",
+          enounces: ["Quel est le plus petit de ces 2 nombres ?"],
+          variables: [
+            {
+              '&1': '$e[0;4]', // nombre de chiffres identiques
+              '&2': '$e[4-&1;9-&1]', // nombre de chiffres différents
+              '&3': '$e{&1;&1}', //partie identique
+              '&4': '$e{&2;&2}', // parties différentes
+              '&5': '$e{&2;&2}',
+              '&6': '#{&4+&3*10^&2}',
+              '&7': '#{&5+&3*10^&2}',
+            },
+          ],
+          conditions: ['&6!=&7'],
+          choices: [
+            ['$$%%{&6}$$', '$$%%{&7}$$'],
+          ],
+          correctionFormat: [{
+            correct: ['Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est &solution'],
+            uncorrect: ['Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est &solution'],
+            answer: 'Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est &answer'
+          }],
+          solutions: [
+            ['&6<&7 ?? 0 :: 1'],
+          ],
+          type: 'choice',
           defaultDelay: 20,
+          grade: CM1,
         },
       ]
 
     },
     Additionner: {
+      Tables: [
+        {
+          description: "Table d'addition'",
+          subdescription: 'de 1',
+          enounces: ['Calcule.'],
+          expressions: ['&1+1'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CP,
+        },
+        {
+          description: "Table d'addition'",
+          subdescription: 'de 2',
+          enounces: ['Calcule.'],
+          expressions: ['&1+2'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CP,
+        },
+        {
+          description: "Table d'addition'",
+          subdescription: 'de 3',
+          enounces: ['Calcule.'],
+          expressions: ['&1+3'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CP,
+        },
+        {
+          description: "Table d'addition'",
+          subdescription: 'de 4',
+          enounces: ['Calcule.'],
+          expressions: ['&1+4'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CP,
+        },
+        {
+          description: "Table d'addition'",
+          subdescription: 'de 5',
+          enounces: ['Calcule.'],
+          expressions: ['&1+5'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CP,
+        },
+        {
+          description: "Table d'addition'",
+          subdescription: 'de 6',
+          enounces: ['Calcule.'],
+          expressions: ['&1+6'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CP,
+        },
+        {
+          description: "Table d'addition'",
+          subdescription: 'de 7',
+          enounces: ['Calcule.'],
+          expressions: ['&1+7'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CP,
+        },
+        {
+          description: "Table d'addition'",
+          subdescription: 'de 8',
+          enounces: ['Calcule.'],
+          expressions: ['&1+8'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CP,
+        },
+        {
+          description: "Table d'addition'",
+          subdescription: 'de 9',
+          enounces: ['Calcule.'],
+          expressions: ['&1+9'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CP,
+        },
+      ],
       Somme: [
         {
           description: 'Calculer une somme',
           subdescription:
-            'Nombres entiers à 1 chiffre (sans retenue)',
+            'Somme égale à 10',
+          enounces: ["Calcule."],
+          expressions: ['&1 + #{10-&1}'],
+          variables: [
+            { '&1': '$e[0;9]' },
+          ],
+          type: 'result',
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: 'Calculer une somme',
+          subdescription:
+            'Nombres à 1 chiffre. Nombre plus grand en premier. Somme inférieure ou égale à 10',
+          enounces: ["Calculer."],
+          expressions: ['&1 + &2'],
+          variables: [
+            {
+              '&1': '$e[3;8]',
+              '&2': '$e[2;#{mini(10-&1;&1-1)}]',
+              //  '&3':'$e[2;&2]'
+            },
+          ],
+          type: 'result',
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: 'Calculer une somme',
+          subdescription:
+            'Nombres entiers à 1 chiffre. Somme inférieure à 10.',
           enounces: ["Calcule."],
           expressions: ['&1 + &2', '&1 + &2'],
           variables: [
@@ -208,46 +722,227 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une somme',
-          subdescription: 'Nombres entiers à 2 chiffres (sans retenue)',
+          subdescription:
+            'Nombres à 1 chiffre. Nombre plus grand en premier.',
+          enounces: ["Calculer."],
+          expressions: ['&1 + &2'],
+          variables: [
+            {
+              '&1': '$e[3;9]',
+              '&2': '$e[1;&1-1]',
+              //  '&3':'$e[2;&2]'
+            },
+          ],
+          type: 'result',
+          defaultDelay: 10,
+          grade: CP,
+        },
+
+        {
+          description: 'Calculer une somme',
+          subdescription: 'Somme sans retenue. Au moins un nombre à 2 chiffres.',
           enounces: ["Calcule."],
           expressions: [
             '#{&1*10 + &2} + #{&3*10 + &4}',
             '#{&1*10 + &2} + #{&3*10 + &4}',
             '#{&1*10 + &2} + #{&3*10 + &4}',
             '#{&1*10 + &2} + #{&3*10 + &4}',
+            '#{&1*10 + &2} + &4',
+            '#{&1*10 + &2} + &4',
+            '#{&1*10 + &2} + &4',
+            '#{&1*10 + &2} + &4',
           ],
           variables: [
             {
               '&1': '$e[5;7]',
-              '&3': '$e[2;9-&1]',
+              '&3': '$e[1;9-&1]',
               '&2': '$e[5;7]',
               '&4': '$e[2;9-&2]',
             },
             {
               '&1': '$e[2;4]',
-              '&3': '$e[2;9-&1]',
+              '&3': '$e[1;9-&1]',
               '&2': '$e[2;4]',
               '&4': '$e[2;9-&2]',
             },
             {
               '&1': '$e[5;7]',
-              '&3': '$e[2;9-&1]',
+              '&3': '$e[1;9-&1]',
               '&2': '$e[2;4]',
               '&4': '$e[2;9-&2]',
             },
             {
               '&1': '$e[2;4]',
-              '&3': '$e[2;9-&1]',
+              '&3': '$e[1;9-&1]',
+              '&2': '$e[5;7]]',
+              '&4': '$e[2;9-&2]',
+            },
+            {
+              '&1': '$e[5;7]',
+              '&2': '$e[5;7]',
+              '&4': '$e[2;9-&2]',
+            },
+            {
+              '&1': '$e[2;4]',
+              '&2': '$e[2;4]',
+              '&4': '$e[2;9-&2]',
+            },
+            {
+              '&1': '$e[5;7]',
+              '&2': '$e[2;4]',
+              '&4': '$e[2;9-&2]',
+            },
+            {
+              '&1': '$e[2;4]',
               '&2': '$e[5;7]]',
               '&4': '$e[2;9-&2]',
             },
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: CP,
         },
+        {
+          description: 'Calculer une somme',
+          subdescription: 'Somme d’un nombre à deux chiffres et d’un nombre à un chiffre, avec franchissement de la dizaine',
+          enounces: ["Calcule."],
+          expressions: [
+            '#{&1*10 + &2} + &3',
+
+          ],
+          variables: [
+            {
+              '&1': '$e[2;8]',
+              '&2': '$e[2;9]',
+              '&3': '$e[11-&2;9]',
+            },
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+          grade: CP,
+        },
+        {
+          description: 'Calculer une somme',
+          subdescription: 'sommes d’un nombre à deux chiffres et de dizaines entières',
+          enounces: ["Calcule."],
+          expressions: [
+            '#{&1*10 + &2} + #{&3*10}',
+
+          ],
+          variables: [
+            {
+              '&1': '$e[2;8]',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9-&1]',
+            },
+
+          ],
+          type: 'result',
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: 'Calculer une somme',
+          subdescription:
+            'Nombres entiers à 1 chiffre',
+          enounces: ["Calcule."],
+          expressions: ['&1 + &2'],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[11-&1;9]' }],
+          type: 'result',
+          defaultDelay: 20,
+          grade: CE1,
+        },
+        {
+          description: 'Calculer une somme',
+          subdescription: 'Nombres entiers à 2 chiffres (sans retenue entre les unités et les dizaines)',
+          enounces: ["Calcule."],
+          expressions: ['#{&1*10 + &2} +#{&3*10+&4}'],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&3': '$e[1;9]',
+              '&2': '$e[1;8]',
+              '&4': '$e[1;9-&2]',
+            },
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: 'Calculer une somme',
+          subdescription: 'Somme d’un nombre ayant au plus trois chiffres et d’un nombre ayant un seul chiffre non nul',
+          enounces: ["Calcule."],
+          expressions: ['#{&1*100 + &2*10+&3} +#{&5*10^&4}'],
+          variables: [
+            {
+              '&1': '$e[0;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[1;9]',
+              '&4': '$e[0;2]',
+              '&5': '$e[1;9]'
+            },
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: 'Calculer une somme',
+          subdescription:
+            'somme de deux termes dont le résultat est inférieur à 100',
+          enounces: ["Calcule."],
+          expressions: ['&1 + &2', '&1 + &2'],
+          variables: [
+            { '&1': '$e[1;98]', '&2': '$e[1;99-&1]' },
+          ],
+          type: 'result',
+          defaultDelay: 20,
+          grade: CE2,
+        },
+        {
+          description: 'Calculer une somme',
+          subdescription: 'Somme d’un nombre ayant au plus 4 chiffres et d’un nombre ayant un seul chiffre non nul',
+          enounces: ["Calcule."],
+          expressions: ['#{&1*1000 + &2*100+&3*10+&4} +#{&6*10^&5}'],
+          variables: [
+            {
+              '&1': '$e[0;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[1;9]',
+              '&5': '$e[0;3]',
+              '&6': '$e[1;9]'
+            },
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CE2,
+        },
+        {
+          description: 'Calculer une somme',
+          subdescription: 'Somme d’un nombre ayant au plus quatre chiffres et de 9 ou 19',
+          enounces: ["Calcule."],
+          expressions: ['&5+9', '&5+19'],
+          variables: [
+            {
+              '&1': '$e[0;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[1;9]',
+              '&5': '#{&1*1000+&2*100+&3*10+&4}',
+            },
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CE2,
+        },
+
         {
           description: 'Calculer une somme',
           subdescription: 'Nombres entiers à 3 chiffres (sans retenue)',
@@ -265,17 +960,9 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
+          grade: UNKNOWN,
         },
-        {
-          description: 'Calculer une somme',
-          subdescription:
-            'Nombres entiers à 1 chiffre (avec retenue)',
-          enounces: ["Calcule."],
-          expressions: ['&1 + &2'],
-          variables: [{ '&1': '$e[2;9]', '&2': '$e[11-&1;9]' }],
-          type: 'result',
-          defaultDelay: 20,
-        },
+
         {
           description: 'Calculer une somme',
           subdescription: 'Nombres entiers à 2 chiffres qui se marrient bien',
@@ -289,6 +976,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 15,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une somme',
@@ -305,6 +993,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 15,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une somme',
@@ -323,6 +1012,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 15,
+          grade: UNKNOWN,
         },
       ],
       Complément: [
@@ -336,6 +1026,41 @@ export default {
           type: 'trou',
           details: [['10-&1']],
           defaultDelay: 20,
+          grade: CP,
+        },
+        {
+          description: 'Trouver le complément',
+          subdescription: 'A la dizaine supérieure',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
+          expressions: ['?+#{&3-&2}=&3', '#{&3-&2}+?=&3'],
+          solutions: [['&2']],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[1;9]', '&3': '#{&1*10}' }],
+          type: 'trou',
+          defaultDelay: 10,
+          grade: CE1,
+        },
+        {
+          description: 'Trouver le complément',
+          subdescription: 'Complément à 100 des dizaines entières',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
+          expressions: ['?+&2=100', '&2+?=100'],
+          solutions: [['#{100-&2}']],
+          variables: [{ '&1': '$e[1;9]', '&2': '#{10*&1}' }],
+          // details: [['#{100-&2}']],
+          type: 'trou',
+          defaultDelay: 10,
+          grade: CE1,
+        },
+        {
+          description: 'Trouver le complément',
+          subdescription: 'A la centaine supérieure',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
+          expressions: ['?+#{&4-&3}=&4', '#{&4-&3}+?=&4'],
+          solutions: [['&3']],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[1;9]', '&3': '$e[1;99]', '&4': '#{&1*100}' }],
+          type: 'trou',
+          defaultDelay: 15,
+          grade: CE1,
         },
         {
           description: 'Trouver le complément',
@@ -344,9 +1069,33 @@ export default {
           expressions: ['?+&1=100', '&1+?=100'],
           solutions: [['#{100-&1}']],
           variables: [{ '&1': '$e[1;99]' }],
-          details: [['100-&1']],
+          // details: [['100-&1']],
           type: 'trou',
           defaultDelay: 20,
+          grade: CE2,
+        },
+        {
+          description: 'Trouver le complément',
+          subdescription: 'Complément à 1000',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
+          expressions: ['?+&1=1000', '&1+?=1000'],
+          solutions: [['#{1000-&1}']],
+          variables: [{ '&1': '$e[1;999]' }],
+          // details: [['1000-&1']],
+          type: 'trou',
+          defaultDelay: 20,
+          grade: CE2,
+        },
+        {
+          description: 'Trouver le complément',
+          subdescription: 'Au millier supérieure',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
+          expressions: ['?+#{&4-&3}=&4', '#{&4-&3}+?=&4'],
+          solutions: [['&3']],
+          variables: [{ '&1': '$e[2;9]', '&3': '$e[1;999]', '&4': '#{&1*1000}' }],
+          type: 'trou',
+          defaultDelay: 20,
+          grade: CE2,
         },
         {
           description: 'Trouver le complément',
@@ -358,6 +1107,7 @@ export default {
           details: [['#{&1*10}-&2']],
           type: 'trou',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Trouver le complément',
@@ -369,13 +1119,17 @@ export default {
           details: [['1000-&1']],
           type: 'trou',
           defaultDelay: 15,
+          grade: UNKNOWN,
         },
+      ],
+      Décomposition: [
+
       ],
       'A trou': [
         {
-          description: 'Compléter une égalité',
+          description: 'Compléter une addition à trou',
           subdescription:
-            'Nombres entiers à 1 chiffre (sans retenue)',
+            'Nombres entiers à 1 chiffre. Somme inférieure à 10.',
           enounces: ["Quel est le terme manquant dans cette égalité ?"],
           expressions: [
             '&1+? = #{&1+&2}',
@@ -391,7 +1145,26 @@ export default {
           ],
           type: 'trou',
           solutions: [['&2']],
-          defaultDelay: 20,
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: 'Compléter une addition à trou',
+          subdescription:
+            'Nombres entiers à 1 chiffre.',
+          enounces: ["Quel est le terme manquant dans cette égalité ?"],
+          expressions: [
+            '&1+? = #{&1+&2}',
+            '?+&1 = #{&1+&2}',
+          ],
+          variables: [
+            { '&1': '$e[2;9]', '&2': '$e[2;9]' },
+
+          ],
+          type: 'trou',
+          solutions: [['&2']],
+          defaultDelay: 15,
+          grade: CE1,
         },
         {
           description: 'Compléter une égalité',
@@ -440,6 +1213,7 @@ export default {
           type: 'trou',
           solutions: [['#{&6}']],
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Compléter une égalité',
@@ -473,6 +1247,7 @@ export default {
           solutions: [['#{&8}']],
           type: 'trou',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Compléter une égalité',
@@ -484,6 +1259,7 @@ export default {
           details: [['&2-&1']],
           type: 'trou',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Compléter une égalité',
@@ -495,6 +1271,7 @@ export default {
           details: [['&2-&1']],
           type: 'trou',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Compléter une  égalité',
@@ -506,7 +1283,156 @@ export default {
           details: [['&2-&1']],
           type: 'trou',
           defaultDelay: 30,
+          grade: UNKNOWN,
         },
+      ],
+      'Double et moitié': [
+        {
+          description: "Trouver le double",
+          subdescription: 'Nombre inférieur à 10',
+          enounces: ['Quel est le double du nombre $$&1$$ ?', 'Quel est le résultat de $$&1+&1$$ ?'],
+          expressions: ['2*&1'],
+          options: ['no-exp'],
+          variables: [{ '&1': '$e[0;9]' }],
+          correctionFormat: [{
+            correct: ['Le double de $$&1$$ est &solution.'],
+            uncorrect: ['Le double de $$&1$$ est &solution.'],
+            answer: 'Le double de $$&1$$ est &answer.'
+          },
+          {
+            correct: ['$$&1+&1=$$&solution'],
+            uncorrect: ['$$&1+&1=$$&solution'],
+            answer: '$$&1+&1=$$&answer'
+          }],
+          type: 'result',
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: "Trouver le double",
+          subdescription: "Dizaines entières (jusqu'à 50)",
+          enounces: ['Quel est le double du nombre $$&2$$ ?', 'Quel est le résultat de $$&2+&2$$ ?'],
+          expressions: ['2*&2'],
+          options: ['no-exp'],
+          variables: [{
+            '&1': '$e[1;5]*10',
+            '&2': '#{&1}'
+          }],
+          correctionFormat: [{
+            correct: ['Le double de $$&2$$ est &solution.'],
+            uncorrect: ['Le double de $$&2$$ est &solution.'],
+            answer: 'Le double de $$&2$$ est &answer.'
+          },
+          {
+            correct: ['$$&2+&2=$$&solution'],
+            uncorrect: ['$$&2+&2=$$&solution'],
+            answer: '$$&2+&2=$$&answer'
+          }],
+          type: 'result',
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: "Trouver la moitié",
+          subdescription: 'Nombre pair inférieur à 20',
+          enounces: ['Quelle est la moitié du nombre $$#{2*&1}$$ ?'],
+          expressions: ['&1'],
+          options: ['no-exp'],
+          variables: [{ '&1': '$e[0;10]' }],
+          correctionFormat: [{
+            correct: ['La moitié de $$#{2*&1}$$ est &solution.'],
+            uncorrect: ['La moitié de $$#{2*&1}$$ est &solution.'],
+            answer: 'La moitié de $$#{2*&1}$$ est &answer.'
+          }],
+          type: 'result',
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: "Trouver le double",
+          subdescription: "Nombres de 1 à 15, 25, 30, 40, 50 et 100",
+          enounces: ['Quel est le double du nombre $$&1$$ ?', 'Quel est le résultat de $$&1+&1$$ ?'],
+          expressions: ['2*&1'],
+          options: ['no-exp'],
+          variables: [{
+            '&1': '$l{$e[1;9];$e[11;15];25;30;40;50;100}',
+          }],
+          correctionFormat: [{
+            correct: ['Le double de $$&1$$ est &solution.'],
+            uncorrect: ['Le double de $$&1$$ est &solution.'],
+            answer: 'Le double de $$&1$$ est &answer.'
+          },
+          {
+            correct: ['$$&1+&1=$$&solution'],
+            uncorrect: ['$$&1+&1=$$&solution'],
+            answer: '$$&1+&1=$$&answer'
+          }],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: "Trouver la moitié",
+          subdescription: "Nombres pairs de 1 à 30, 40, 50 et 100",
+          enounces: ['Quel est la moitié du nombre $$&2$$ ?'],
+          expressions: ['&1'],
+          options: ['no-exp'],
+          variables: [{
+            '&1': '$l{$e[1;9];$e[11;15];20;25;50}', '&2': '#{2*&1}',
+          }],
+          correctionFormat: [{
+            correct: ['La moitié de $$&2$$ est &solution.'],
+            uncorrect: ['La moitié de $$&2$$ est &solution.'],
+            answer: 'La moitié de $$&2$$ est &answer.'
+          },
+          ],
+          type: 'rewrite',
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: "Trouver le double",
+          subdescription: "Nombres de 1 à 20, 25, 30, 40, 50, 60 et 100",
+          enounces: ['Quel est le double du nombre $$&1$$ ?', 'Quel est le résultat de $$&1+&1$$ ?'],
+          expressions: ['2*&1'],
+          options: ['no-exp'],
+          variables: [{
+            '&1': '$l{$e[1;10];$e[11;15];$e[15;20];25;30;40;50;60;100}',
+          }],
+          correctionFormat: [{
+            correct: ['Le double de $$&1$$ est &solution.'],
+            uncorrect: ['Le double de $$&1$$ est &solution.'],
+            answer: 'Le double de $$&1$$ est &answer.'
+          },
+          {
+            correct: ['$$&1+&1=$$&solution'],
+            uncorrect: ['$$&1+&1=$$&solution'],
+            answer: '$$&1+&1=$$&answer'
+          }],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CE2,
+        },
+        {
+          description: "Trouver la moitié",
+          subdescription: "Nombres pairs de 1 à 40, 50, 60 et 100",
+          enounces: ['Quel est la moitié du nombre $$&2$$ ?'],
+          expressions: ['&1'],
+          options: ['no-exp'],
+          variables: [{
+            '&1': '$l{$e[1;9];$e[11;15];$e[16;20];25;30;50}', '&2': '#{2*&1}',
+          }],
+          correctionFormat: [{
+            correct: ['La moitié de $$&2$$ est &solution.'],
+            uncorrect: ['La moitié de $$&2$$ est &solution.'],
+            answer: 'La moitié de $$&2$$ est &answer.'
+          },
+          ],
+          type: 'rewrite',
+          defaultDelay: 15,
+          grade: CE2,
+        },
+
       ],
       'Somme astucieuse': [
         {
@@ -538,6 +1464,7 @@ export default {
           }],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Additionner par regroupements',
@@ -575,6 +1502,7 @@ export default {
           variables: [{ '&1': '$e{1}', '&2': '$e{1}', '&3': '$e{1}' }],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Additionner par regroupements',
@@ -612,6 +1540,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Additionner par regroupements',
@@ -639,6 +1568,7 @@ export default {
           variables: [{ '&1': '$e{3;3}', '&2': '$e{3;3}' }],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
     },
@@ -650,10 +1580,163 @@ export default {
           enounces: ['Calcule.'],
           expressions: ['&1-&2'],
           variables: [{ '&1': '$e[5;9]', '&2': '$e[1;&1-1]' }],
-          solutions: [['#{&1-&2}']],
           type: 'result',
-          defaultDelay: 20,
+          defaultDelay: 10,
+          grade: CP,
         },
+        {
+          description: 'Calculer une différence (résultat positif)',
+          subdescription: 'Soustraire un nombre à un chiffre à un nombre à deux chiffres, sans franchissement de la dizaine',
+          enounces: ['Calcule.'],
+          expressions: ['#{&1*10+&3}-&2'],
+          variables: [{
+            '&1': '$e[1;9]',
+            '&2': '$e[1;8]',
+            '&3': '$e[&2+1;9]',
+          }],
+          type: 'result',
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: 'Calculer une différence (résultat positif)',
+          subdescription: 'Soustraire des dizaines entières à un nombre.',
+          enounces: ['Calcule.'],
+          expressions: ['#{&2*10+&3}-#{&1*10}'],
+          variables: [{
+            '&1': '$e[1;8]',
+            '&2': '$e[&1+1;9]',
+            '&3': '$e[0;9]',
+          }],
+          type: 'result',
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: 'Calculer une différence (résultat positif)',
+          subdescription: 'Soustraire un nombre à un chiffre à un nombre à deux chiffres, avec franchissement de la dizaine',
+          enounces: ['Calcule.'],
+          expressions: ['#{&1*10+&2}-&3'],
+          variables: [{
+            '&1': '$e[1;9]',
+            '&2': '$e[1;8]',
+            '&3': '$e[&2+1;9]',
+          }],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: 'Calculer une différence (résultat positif)',
+          subdescription: ' Soustraire un nombre à deux chiffres à un nombre à 3 chiffres, sans retenue',
+          enounces: ['Calcule.'],
+          expressions: ['#{ &1*100 + &2*10 + &3 } - #{ &4*10 + &5 }'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+              '&4': '$e[1;&2-1]',
+              '&5': '$e[0;&3-1]',
+            },
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CE1,
+        },
+
+        {
+          description: 'Calculer une différence (résultat positif)',
+          subdescription: '  Soustraire des centaines entières à un nombre',
+          enounces: ['Calcule.'],
+          expressions: ['#{ &1*100 + &2*10 + &3 } - #{&4*100}'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9]',
+              '&4': '$e[1;&1-1]',
+            },
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: 'Calculer une différence (résultat positif)',
+          subdescription: "Soustraire un nombre d'au plus 3 chiffres à un nombre à 4 chiffres, sans retenue",
+          enounces: ['Calcule.'],
+          expressions: ['#{ &1*1000 + &2*100 + &3*10+&4}-#{ &5*100 + &6*10+&7 }'],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+              '&4': '$e[2;9]',
+              '&5': '$e[0;&2-1]',
+              '&6': '$e[0;&3-1]',
+              '&7': '$e[1;&4-1]',
+            },
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: 'Calculer une différence (résultat positif)',
+          subdescription: 'Soustraire des dizaines entières, des centaines entières ou des milliers entiers à un nombre',
+          enounces: ['Calcule.'],
+          expressions: [
+            '#{ &1*100 + &2*10 + &3 } - #{&5*100}',
+            '#{ &1*100 + &2*10 + &3 } - #{&5*10}',
+            '#{ &1*1000 + &2*100 + &3*10 + &4 } - #{&5*1000}',
+            '#{ &1*1000 + &2*100 + &3*10 + &4 } - #{&5*100}',
+            '#{ &1*1000 + &2*100 + &3*10 + &4 } - #{&5*10}',
+           
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',   
+              '&5': '$e[1;&1-1]',
+            },
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',   
+              '&5': '$e[1;9]',
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[0;9]',
+              '&5': '$e[1;&1-1]',
+            },
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[0;9]',
+              '&5': '$e[1;9]',
+            },
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[0;9]',
+              '&5': '$e[1;9]',
+            },
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CE2,
+        },
+
+
+
+
         {
           description: 'Calculer une différence (résultat positif)',
           subdescription: 'Nombres à 2 chiffres (sans retenue)',
@@ -670,6 +1753,7 @@ export default {
           solutions: [['#{&1*10 + &2 -  (&3*10 + &4)}']],
           defaultDelay: 15,
           type: 'result',
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une différence (résultat positif)',
@@ -689,6 +1773,7 @@ export default {
           solutions: [['#{ &1*100 + &2*10 + &3 -( &4*100 + &5*10 + &6 )}']],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une différence (résultat positif)',
@@ -703,6 +1788,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 15,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une différence (résultat positif)',
@@ -720,6 +1806,7 @@ export default {
           solutions: [['#{ &1*10 + &4 -( &3*10 + &2 )}']],
           type: 'result',
           defaultDelay: 15,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une différence (résultat positif)',
@@ -739,6 +1826,7 @@ export default {
           solutions: [['#{ &1*100 + &5*10 + &6 -( &4*100 + &2*10 + &3 )}']],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
       'A trou': [
@@ -755,6 +1843,7 @@ export default {
           details: [['&1+&2'], ['&1-&2']],
           type: 'trou',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
@@ -788,6 +1877,7 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 15,
+          grade: UNKNOWN,
         },
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
@@ -826,6 +1916,7 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
@@ -851,6 +1942,7 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 15,
+          grade: UNKNOWN,
         },
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
@@ -883,6 +1975,7 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 15,
+          grade: UNKNOWN,
         },
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
@@ -922,6 +2015,7 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
       'Différence astucieuse': [
@@ -949,6 +2043,7 @@ export default {
           }],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ]
     },
@@ -962,6 +2057,7 @@ export default {
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
           defaultDelay: 6,
+          grade: CE1,
         },
         {
           description: "Table de multiplication",
@@ -971,6 +2067,7 @@ export default {
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
           defaultDelay: 6,
+          grade: CE1,
         },
         {
           description: "Table de multiplication",
@@ -980,6 +2077,7 @@ export default {
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
           defaultDelay: 6,
+          grade: CE1,
         },
         {
           description: "Table de multiplication",
@@ -989,6 +2087,7 @@ export default {
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
           defaultDelay: 6,
+          grade: CE1,
         },
         {
           description: "Table de multiplication",
@@ -998,6 +2097,7 @@ export default {
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
           defaultDelay: 6,
+          grade: CE2,
         },
         {
           description: "Table de multiplication",
@@ -1007,6 +2107,7 @@ export default {
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
           defaultDelay: 6,
+          grade: CE2,
         },
         {
           description: "Table de multiplication",
@@ -1016,6 +2117,7 @@ export default {
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
           defaultDelay: 6,
+          grade: CE2,
         },
         {
           description: "Table de multiplication",
@@ -1025,6 +2127,7 @@ export default {
           variables: [{ '&1': '$e[2;12]' }],
           type: 'result',
           defaultDelay: 6,
+          grade: CE2,
         },
       ],
       Produit: [
@@ -1036,6 +2139,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
           defaultDelay: 20,
+          grade: CE2,
         },
         {
           description: "Calculer un produit d'entiers",
@@ -1045,9 +2149,8 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[12;99]' }],
           type: 'result',
           defaultDelay: 30,
+          grade: UNKNOWN,
         },
-
-
         {
           description: "Calculer un produit d'entiers",
           subdescription: 'Un facteur à 3 chiffres',
@@ -1056,6 +2159,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[102;999]' }],
           type: 'result',
           defaultDelay: 30,
+          grade: UNKNOWN,
         },
       ],
       'Produits particuliers': [
@@ -1078,8 +2182,8 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
-
         {
           description: "Calculer un produit d'entiers",
           subdescription: 'Multiplication par 50',
@@ -1101,6 +2205,7 @@ export default {
           ],
           variables: [{ '&1': '$e[2;10]' }],
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: "Calculer un produit d'entiers",
@@ -1123,9 +2228,30 @@ export default {
           ],
           variables: [{ '&1': '$e[2;10]', '&2': '$e[1;3]' }],
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
       'Puissances de 10': [
+        {
+          description: "Calculer un produit d'entiers",
+          subdescription: "Multiplication par 10 d'un nombre inférieur à 100",
+          enounces: ['Calcule.'],
+          expressions: ['&1*10', '10*&1'],
+          variables: [{ '&1': '$e[1;99]' }],
+          type: 'result',
+          defaultDelay: 10,
+          grade: CE1,
+        },
+        {
+          description: "Calculer un produit d'entiers",
+          subdescription: "Multiplication par 100 d'un nombre inférieur à 100",
+          enounces: ['Calcule.'],
+          expressions: ['&1*100', '100*&1'],
+          variables: [{ '&1': '$e[1;99]' }],
+          type: 'result',
+          defaultDelay: 10,
+          grade: CE2,
+        },
         {
           description: "Calculer un produit d'entiers",
           subdescription: 'Multiplication par 10, 100 ou 1000',
@@ -1134,6 +2260,7 @@ export default {
           variables: [{ '&1': '$e[2;99]', '&2': '$e[1;3]' }],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: "Calculer un produit d'entiers",
@@ -1151,9 +2278,98 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
       'A trou': [
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplication par 2',
+          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          expressions: ['?*2=#{&1*2}', '2*?=#{&1*2}'],
+          variables: [{ '&1': '$e[2;9]' }],
+          solutions: [['&1']],
+          type: 'trou',
+          defaultDelay: 10,
+          grade: CE1,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplication par 3',
+          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          expressions: ['?*3=#{&1*3}', '3*?=#{&1*3}'],
+          variables: [{ '&1': '$e[2;9]' }],
+          solutions: [['&1']],
+          type: 'trou',
+          defaultDelay: 10,
+          grade: CE1,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplication par 4',
+          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          expressions: ['?*4=#{&1*4}', '4*?=#{&1*4}'],
+          variables: [{ '&1': '$e[2;9]' }],
+          solutions: [['&1']],
+          type: 'trou',
+          defaultDelay: 10,
+          grade: CE1,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplication par 5',
+          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          expressions: ['?*5=#{&1*5}', '5*?=#{&1*5}'],
+          variables: [{ '&1': '$e[2;9]' }],
+          solutions: [['&1']],
+          type: 'trou',
+          defaultDelay: 10,
+          grade: CE1,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplication par 6',
+          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          expressions: ['?*6=#{&1*6}', '6*?=#{&1*6}'],
+          variables: [{ '&1': '$e[2;9]' }],
+          solutions: [['&1']],
+          type: 'trou',
+          defaultDelay: 10,
+          grade: CE2,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplication par 7',
+          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          expressions: ['?*7=#{&1*7}', '7*?=#{&1*7}'],
+          variables: [{ '&1': '$e[2;9]' }],
+          solutions: [['&1']],
+          type: 'trou',
+          defaultDelay: 10,
+          grade: CE2,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplication par 8',
+          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          expressions: ['?*8=#{&1*8}', '8*?=#{&1*8}'],
+          variables: [{ '&1': '$e[2;9]' }],
+          solutions: [['&1']],
+          type: 'trou',
+          defaultDelay: 10,
+          grade: CE2,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplication par 9',
+          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          expressions: ['?*9=#{&1*9}', '9*?=#{&1*9}'],
+          variables: [{ '&1': '$e[2;9]' }],
+          solutions: [['&1']],
+          type: 'trou',
+          defaultDelay: 10,
+          grade: CE2,
+        },
         {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Facteurs à 1 chiffre',
@@ -1163,6 +2379,7 @@ export default {
           solutions: [['&2']],
           type: 'trou',
           defaultDelay: 20,
+          grade: CE2,
         },
         {
           description: 'Compléter une multiplication à trou',
@@ -1212,6 +2429,7 @@ export default {
           options: ['exhaust'],
           type: 'trou',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Compléter une multiplication à trou',
@@ -1233,6 +2451,7 @@ export default {
           solutions: [['#{&3*10^&4}']],
           type: 'trou',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
 
@@ -1245,6 +2464,7 @@ export default {
           variables: [{ '&1': '$e[2;15]' }],
           type: 'result',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: 'Trouver une racine carré',
@@ -1255,6 +2475,7 @@ export default {
           solutions: [['&1']],
           type: 'trou',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: 'Réduire une racine carré',
@@ -1264,6 +2485,7 @@ export default {
           // solutions: [['&1sqrt(&2)']],
           type: 'result',
           defaultDelay: 20,
+          grade: SECONDE,
         },
         {
           description: 'Réduire une expression avec des racines carré',
@@ -1273,6 +2495,7 @@ export default {
           // solutions: [['&1sqrt(&2)']],
           type: 'result',
           defaultDelay: 20,
+          grade: SECONDE,
         },
       ],
 
@@ -1285,6 +2508,7 @@ export default {
           variables: [{ '&1': '$l{20;25;50}', '&2': '100:&1', '&3': '$e[11;99]' }],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
       Distributivité: [
@@ -1297,6 +2521,7 @@ export default {
           details: [['10 \\times &1 + &1', '#{10*&1} + &1']],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Utiliser la distributivité',
@@ -1307,6 +2532,7 @@ export default {
           details: [['100 \\times &1 - &1', '#{100*&1} - &1']],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Utiliser la distributivité',
@@ -1317,6 +2543,7 @@ export default {
           details: [['10 \\times &1 + 2 \\times &1', '#{10*&1} + #{2*&1}']],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Utiliser la distributivité',
@@ -1327,6 +2554,7 @@ export default {
           details: [['100 \\times &1 - 2 \\times &1', '#{100*&1} - #{2*&1}']],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Utiliser la distributivité',
@@ -1363,6 +2591,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
       ],
       Décomposition: [
@@ -1416,6 +2645,7 @@ export default {
           format: '$e[2;9]*$e[2;9]',
           type: 'decomposition',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
     },
@@ -1429,6 +2659,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
       'A trou': [
@@ -1442,6 +2673,7 @@ export default {
           details: [['&1 \\times &2']],
           type: 'trou',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Compléter une division à trou ',
@@ -1453,6 +2685,7 @@ export default {
           details: [['#{&1*&2} \\div &1']],
           type: 'trou',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
 
       ],
@@ -1461,12 +2694,13 @@ export default {
           description: 'Effectuer une division euclidienne ',
           enounces:
             ["Ecris l'expression correspondant à la division euclidienne de $$#{&1*&2+&3}$$ par $$&2$$."],
-          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[1;&2-1]' }],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;10]', '&3': '$e[1;&2-1]' }],
           expressions: ['#{&1*&2+&3}'],
-          solutions: [['&1 * &2+&3']],
+          solutions: [['(&1*&2)+&3']],
           options: ['no-exp'],
           type: 'decomposition',
           defaultDelay: 30,
+          grade: CE2,
         },
         {
           description: 'Trouver un diviseur',
@@ -1481,9 +2715,10 @@ export default {
           correctionFormat: [{
             correct: ['$$&solution$$ est un diviseur de $$%{&1*&2}$$'],
             uncorrect: ['<span style="color:green;">$$&1$$</span> et <span style="color:green;">$$&2$$</span> sont des diviseurs de $$%{&1*&2}$$'],
-            answer:'&answer est un diviseur de $$%{&1*&2}$$'
+            answer: '&answer est un diviseur de $$%{&1*&2}$$'
           }],
           defaultDelay: 30,
+          grade: UNKNOWN,
         },
         {
           description: 'Trouver un diviseur',
@@ -1495,10 +2730,11 @@ export default {
           correctionFormat: [{
             correct: ['&solution est un diviseur de $$%{&1*&2}$$'],
             uncorrect: ['<span style="color:green;">$$&1$$</span> et <span style="color:green;">$$&2$$</span> sont des diviseurs de $$%{&1*&2}$$'],
-            answer:'&answer est un diviseur de $$%{&1*&2}$$'
+            answer: '&answer est un diviseur de $$%{&1*&2}$$'
           }],
 
           defaultDelay: 30,
+          grade: UNKNOWN,
         },
         {
           description: 'Utiliser un critère de divisibilité',
@@ -1524,6 +2760,7 @@ export default {
           }],
 
           defaultDelay: 30,
+          grade: UNKNOWN,
         },
         {
           description: 'Utiliser un critère de divisibilité',
@@ -1549,6 +2786,7 @@ export default {
           }],
 
           defaultDelay: 30,
+          grade: UNKNOWN,
         },
         {
           description: 'Utiliser un critère de divisibilité',
@@ -1574,6 +2812,7 @@ export default {
           }],
 
           defaultDelay: 30,
+          grade: UNKNOWN,
         },
         {
           description: 'Utiliser un critère de divisibilité',
@@ -1599,6 +2838,7 @@ export default {
           }],
 
           defaultDelay: 30,
+          grade: UNKNOWN,
         },
       ],
     },
@@ -1632,6 +2872,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une expression avec parenthèses',
@@ -1642,8 +2883,6 @@ export default {
             '(&1-&2)*(&3+&4)',
             '(&3+&4)*(&1-&2)',
             '((#{&1*&3}+#{&2*&3}):&3)*&4'
-
-
           ],
           variables: [
             { '&1': '$e[2;7]', '&2': '$e[2;9-&1]', '&3': '$e[2;7]', '&4': '$e[2;9-&3]' },
@@ -1654,6 +2893,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
       'Sans parenthèses': [
@@ -1679,6 +2919,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: 'Calculer une expression sans parenthèses',
@@ -1694,6 +2935,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: 'Calculer une expression sans parenthèses',
@@ -1716,6 +2958,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
       ]
     },
@@ -1750,6 +2993,7 @@ export default {
           ],
           type: 'enonce',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: 'Traduire une phrase en expression mathématique',
@@ -1781,10 +3025,9 @@ export default {
           ],
           type: 'enonce',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
       ]
-
-
     }
   },
   Décimaux: {
@@ -1804,7 +3047,8 @@ export default {
           expressions: ['&2/#{10^&1}'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 20
+          defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Traduire une fraction décimale en nombre décimal ',
@@ -1819,7 +3063,8 @@ export default {
           expressions: ['&2/#{10^&1}'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 20
+          defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Traduire une somme de fraction décimale en nombre décimal ',
@@ -1836,7 +3081,8 @@ export default {
           expressions: ['&1+&2/10+&3/100+&4/1000'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 20
+          defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Traduire une somme de fractions décimales en nombre décimal',
@@ -1856,7 +3102,8 @@ export default {
           options: ['shuffle-terms'],
           type: 'result',
           'result-type': 'decimal',
-          defaultDelay: 20
+          defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
       'Comparer': [
@@ -1896,6 +3143,7 @@ export default {
           ],
           type: 'choice',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ]
     },
@@ -1920,6 +3168,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une somme ',
@@ -1941,6 +3190,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une somme ',
@@ -1961,6 +3211,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une somme ',
@@ -1981,6 +3232,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
       'A trou': [
@@ -2004,6 +3256,7 @@ export default {
           solutions: [['&6']],
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une somme ',
@@ -2026,6 +3279,7 @@ export default {
           type: 'trou',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une somme ',
@@ -2047,6 +3301,7 @@ export default {
           solutions: [['&6']],
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer une somme ',
@@ -2068,6 +3323,7 @@ export default {
           type: 'trou',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
     },
@@ -2087,6 +3343,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer un produit',
@@ -2102,6 +3359,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Placer la virgule dans le produit',
@@ -2123,9 +3381,8 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
-
-
         {
           description: 'Calculer un produit',
           subdescription: 'Multiplier deux nombres décimaux',
@@ -2142,6 +3399,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer un produit',
@@ -2164,6 +3422,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
       'Produit particulier': [
@@ -2179,6 +3438,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Multiplier par 2,5',
@@ -2192,6 +3452,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
 
       ],
@@ -2211,6 +3472,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer un produit',
@@ -2226,6 +3488,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
 
       ]
@@ -2246,6 +3509,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer un quotient',
@@ -2262,6 +3526,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Calculer un quotient',
@@ -2279,6 +3544,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
     },
@@ -2337,6 +3603,7 @@ export default {
           type: 'trou',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
         {
           description: 'Convertir dans une autre unité',
@@ -2681,8 +3948,8 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
-
         {
           description: 'Calculer avec des unités',
           subdescription: "",
@@ -2718,6 +3985,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
       ],
       'Unités composées': [
@@ -2777,6 +4045,7 @@ export default {
           type: 'trou',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
 
         {
@@ -2835,6 +4104,7 @@ export default {
           type: 'trou',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: UNKNOWN,
         },
 
       ]
@@ -2856,6 +4126,7 @@ export default {
           solutions: [['-&1'], ['0-&1']],
           type: 'result',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: "Trouver l'opposé d'un nombre",
@@ -2868,6 +4139,7 @@ export default {
           solutions: [['-&1'], ['&1']],
           type: 'result',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: "Comparer deux nombres relatifs.",
@@ -2899,6 +4171,7 @@ export default {
           ],
           type: 'choice',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
 
       ],
@@ -2933,6 +4206,7 @@ export default {
           ],
           type: 'choice',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
       ]
     },
@@ -2951,6 +4225,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: 'Compléter une égalité',
@@ -2975,6 +4250,7 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
       ],
       'Sommes algébriques': [
@@ -3007,6 +4283,7 @@ export default {
           ],
           type: 'choice',
           defaultDelay: 20,
+          grade: CINQUIEME,
 
         },
         {
@@ -3017,6 +4294,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: 'Compléter une égalité',
@@ -3041,6 +4319,7 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: "Transformer une soustraction en addition",
@@ -3061,6 +4340,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: "Simplifier l'écriture",
@@ -3085,6 +4365,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: 'Calculer',
@@ -3094,6 +4375,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[1;&1-1]' }],
           type: 'result',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
 
 
@@ -3120,6 +4402,7 @@ export default {
           ],
           type: 'choice',
           defaultDelay: 20,
+          grade: QUATRIEME,
 
         },
         {
@@ -3159,6 +4442,7 @@ export default {
           ],
           type: 'choice',
           defaultDelay: 20,
+          grade: QUATRIEME,
 
         },
 
@@ -3169,6 +4453,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: 'Multiplication à trou',
@@ -3185,6 +4470,7 @@ export default {
           solutions: [['&2'], ['-&2'], ['-&2'], ['&2'], ['-&2'], ['-&2']],
           type: 'trou',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
 
       ],
@@ -3207,7 +4493,7 @@ export default {
           ],
           type: 'choice',
           defaultDelay: 20,
-
+          grade: QUATRIEME,
         },
         {
           description: "Déterminer le signe dans un quotient",
@@ -3246,7 +4532,7 @@ export default {
           ],
           type: 'choice',
           defaultDelay: 20,
-
+          grade: QUATRIEME,
         },
         {
           description: 'Diviser',
@@ -3259,6 +4545,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
       ]
     }
@@ -3276,6 +4563,7 @@ export default {
           solutions: [['&1']],
           type: 'trou',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: "Définition d'un quotient",
@@ -3287,6 +4575,7 @@ export default {
           solutions: [['&1:&2']],
           type: 'trou',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: "Définition d'un quotient",
@@ -3299,9 +4588,96 @@ export default {
           details: [['&1:&2']],
           type: 'trou',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
       ],
+      Décomposition: [
+        {
+          description: "Décomposer une fraction",
+          subdescription: "En une somme d'un entier et d'une fraction inférieure à 1",
+          enounces: ["Décomposer une fraction en une somme d'un entier et d'une fraction inférieure à 1"],
+          expressions: ['#{&1*&2+&3}/&1'],
+          variables: [{ '&1': '$e[2;10]', '&2': '$e[2;9]', '&3':'$e[1;&1-1]' }],
+          // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
+          solutions: [['&2+&3/&1']],
+          type: 'decomposition',
+          defaultDelay: 30,
+          grade: CM1,
+        },
+        
+        
+      ],
       'Forme décimale': [
+        {
+          description: "Forme décimale d'une fraction",
+          subdescription: "Dixièmes",
+          enounces: ['Ecris la forme décimale de la fraction'],
+          expressions: ['&1/10'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: CM1,
+        },
+        {
+          description: "Forme décimale d'une fraction",
+          subdescription: "Centièmes",
+          enounces: ['Ecris la forme décimale de la fraction'],
+          expressions: ['&1/100'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: CM1,
+        },
+        {
+          description: "Forme décimale d'une fraction",
+          subdescription: "Millièmes",
+          enounces: ['Ecris la forme décimale de la fraction'],
+          expressions: ['&1/1000'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: CM1,
+        },
+        {
+          description: "Forme décimale d'une fraction",
+          subdescription: "Centièmes (2)" ,
+          enounces: ['Ecris la forme décimale de la fraction'],
+          expressions: ['#{&1}/100'],
+          variables: [{ '&1': '$e[1;9]*10+$e[1;9]' }],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: CM1,
+        },
+        {
+          description: "Forme décimale d'une fraction",
+          subdescription: "Millièmes (2)" ,
+          enounces: ['Ecris la forme décimale de la fraction'],
+          expressions: ['#{&1}/1000'],
+          variables: [{ '&1': '$e[1;9]*100+$e[0;9]*10+$e[1;9]' }],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: CM1,
+        },
+        {
+          description: "Forme décimale d'une fraction",
+          subdescription: "Fraction décimale" ,
+          enounces: ['Ecris la forme décimale de la fraction'],
+          expressions: ['&2/#{&3}'],
+          variables: [{
+            '&1': '$e[2;4]', // nombre de chiffre au numérateur
+            '&2': '$e{&1;&1}', // numérateur
+            '&3': '10^$e[1;3]' // dénominateur
+          }],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: CM1,
+        },
         {
           description: "Déterminer la forme décimale d'une fraction",
           subdescription: "La forme décimale est un entier",
@@ -3311,6 +4687,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: "Déterminer la forme décimale d'une fraction",
@@ -3321,6 +4698,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: 'Déterminer une forme fractionnaire',
@@ -3329,6 +4707,7 @@ export default {
           variables: [{ '&1': '$l{2;4;5;10}', '&2': '$e[1;&1-1]' }],
           type: 'result',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
       ],
       'Egalité de fractions': [
@@ -3353,6 +4732,7 @@ export default {
           solutions: [['#{&2*&3}'], ['#{&1*&3}'], ['#{&2*&3}'], ['#{&1*&3}']],
           type: 'trou',
           defaultDelay: 20,
+          grade: SIXIEME,
           help: `<section>
           <h3 class="orange-text">Compléter une égalité de fractions</h3>
           <div class="r-stretch d-flex flex-column justify-center">
@@ -3389,6 +4769,7 @@ export default {
           solutions: [['&2'], ['&1'], ['&2'], ['&1']],
           type: 'trou',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: 'Compléter une égalité de fractions',
@@ -3415,6 +4796,7 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: 'Compléter une égalité de fractions',
@@ -3441,6 +4823,7 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: 'Compléter une égalité de fractions',
@@ -3467,6 +4850,7 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
 
       ],
@@ -3491,6 +4875,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: 'Simplifier une fraction',
@@ -3506,6 +4891,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: 'Simplifier une fraction',
@@ -3521,6 +4907,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: 'Simplifier une fraction',
@@ -3530,6 +4917,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[1;&1-1]', '&3': '$e[2;9]' }],
           type: 'result',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: 'Simplifier une fraction',
@@ -3542,6 +4930,7 @@ export default {
           variables: [{ '&1': '$e[1;9]', '&2': '$e[2;9]\\{cd&1}' }],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: 'Simplifier une fraction',
@@ -3558,6 +4947,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[1;&1-1]', '&3': '$e[2;9]' }],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
       ],
       Comparer: [
@@ -3584,14 +4974,18 @@ export default {
           choices: [
             ['$$\\frac{&2}{&1}$$', '$$\\frac{&3}{&1}$$'],
           ],
-          corrections: [
-            'Entre $$\\frac{&2}{&1}$$ et $$\\frac{&3}{&1}$$ la plus petite fraction est  ',
-          ],
+         
+          correctionFormat: [{
+            correct: ['Entre $$\\frac{&2}{&1}$$ et $$\\frac{&3}{&1}$$ la plus petite fraction est &solution'],
+            uncorrect: ['Entre $$\\frac{&2}{&1}$$ et $$\\frac{&3}{&1}$$ la plus petite fraction est &solution'],
+            answer: 'Entre $$\\frac{&2}{&1}$$ et $$\\frac{&3}{&1}$$ la plus petite fraction est &answer'
+          }],
           solutions: [
             ['&4<&5 ?? 0 :: 1'],
           ],
           type: 'choice',
           defaultDelay: 20,
+          grade: CM1,
         },
         {
           description: "Comparer deux fractions",
@@ -3623,6 +5017,7 @@ export default {
           ],
           type: 'choice',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: "Comparer deux fractions",
@@ -3649,6 +5044,7 @@ export default {
           ],
           type: 'choice',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
       ]
     },
@@ -3703,6 +5099,7 @@ export default {
           solutions: [['&1'], ['&3'], ['&2'], ['&3'], ['&1'], ['&2']],
           type: 'trou',
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: 'Compléter une égalité',
@@ -3727,6 +5124,7 @@ export default {
           solutions: [['&1'], ['&3'], ['&2'], ['&3'], ['&1'], ['&2']],
           type: 'trou',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
       ],
       Multiplication: [
@@ -3752,6 +5150,7 @@ export default {
           solutions: [['&1'], ['&3'], ['&2'], ['&4']],
           type: 'trou',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: 'Compléter une égalité',
@@ -3778,11 +5177,41 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
       ],
     },
     Calculer: {
       'Addition et Soustraction': [
+        {
+          description: 'Additionner des fractions',
+          subdescription:
+            'Fractions décimales.',
+          enounces: ['Calcule.'],
+          expressions: ['&1/10+&2/10','&1/10+&2/10+&3/10', '&1/100+&2/100', ],
+          variables: [
+            {
+              '&1': '$e[2;13]',
+              '&2': '$e[2;13]',
+            
+            },
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9]',
+            },
+            {
+              '&1': '$e[1;80]',
+              '&2': '$e[1;50]',
+            },
+          ],
+          // solutions:[['#{&1+&2}/10'], ['#{&1+&2+&3}/10'], ['#{&1+&2}/100']],
+          type: 'result',
+          // details: [['\\frac{&1+&2}{&3}'], ['\\frac{&1-&2}{&3}']],
+          // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
+          defaultDelay: 30,
+          grade: CM1,
+        },
         {
           description: 'Additionner ou soustraire',
           subdescription:
@@ -3805,6 +5234,7 @@ export default {
           details: [['\\frac{&1+&2}{&3}'], ['\\frac{&1-&2}{&3}']],
           // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Additionner ou soustraire',
@@ -3847,6 +5277,7 @@ export default {
           // ],
           // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Additionner ou soustraire',
@@ -3879,6 +5310,7 @@ export default {
           ],
           // solutions: [['#{&1+&3}/&2'], ['#{&1-&2}/&3']],
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Additionner ou soustraire',
@@ -3896,6 +5328,7 @@ export default {
 
           type: 'result',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Additionner ou soustraire',
@@ -3930,6 +5363,7 @@ export default {
           type: 'result',
 
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: 'Additionner ou soustraire',
@@ -3964,6 +5398,7 @@ export default {
           type: 'result',
 
           defaultDelay: 20,
+          grade: CINQUIEME,
         },
         {
           description: 'Additionner ou soustraire',
@@ -4080,6 +5515,7 @@ export default {
           type: 'result',
 
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
 
       ],
@@ -4095,6 +5531,7 @@ export default {
           details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
           type: 'result',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: "Calculer une fraction d'une quantité",
@@ -4106,6 +5543,7 @@ export default {
           details: [['\\frac{#{&1*&3}}{&3} \\times &2', '&1 \\times &2']],
           type: 'result',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
         {
           description: "Calculer une fraction d'une quantité",
@@ -4117,9 +5555,34 @@ export default {
           details: [['&2 \\times &1'], ['&1 \\times &2']],
           type: 'result',
           defaultDelay: 20,
+          grade: SIXIEME,
         },
       ],
       Multiplication: [
+        {
+          description: 'Calculer un produit',
+          subdescription: 'un entier par un quotient',
+          expressions: ['&1*(1/&2)}', '(1/&2)*&1}'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;10]\\{cd(&1)}',
+            },
+          ],
+          details: [
+            [
+              '\\frac{&1}{1} \\times \\frac{&2}{&3}',
+              '\\frac{&1 \\times &2}{1 \\times &3}',
+            ],
+            [
+              '\\frac{&2}{&3} \\times \\frac{&1}{1}',
+              '\\frac{&2 \\times &1}{&3 \\times 1}',
+            ],
+          ],
+          type: 'result',
+          defaultDelay: 20,
+          grade: CM1,
+        },
         {
           description: 'Calculer un produit',
           subdescription: 'Pas de simplification',
@@ -4135,6 +5598,7 @@ export default {
           details: [['\\frac{&1 \\times &2}{&3 \\times &4}']],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: 'Calculer un produit',
@@ -4149,6 +5613,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: 'Calculer un produit',
@@ -4173,6 +5638,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: 'Calculer un produit',
@@ -4197,6 +5663,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: 'Calculer un produit',
@@ -4253,6 +5720,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
       ],
       Inverse: [
@@ -4269,6 +5737,7 @@ export default {
           solutions: [['1/&1'], ['&1'], ['&2/&1']],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: "Calculer l'inverse d'un nombre",
@@ -4278,6 +5747,7 @@ export default {
           solutions: [['1/&1'], ['&1'], ['&2/&1']],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
       ],
       Division: [
@@ -4302,6 +5772,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: 'Calculer un quotient',
@@ -4323,6 +5794,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
       ],
     },
@@ -4347,6 +5819,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: "Traduire une puissance en produit",
@@ -4368,6 +5841,7 @@ export default {
           type: 'result',
           options: ['no-penalty-for-explicit-products'],
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: "Définition d'une puissance à exposant négatif",
@@ -4385,6 +5859,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
 
       ]
@@ -4409,6 +5884,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: "Multiplier 2 puissances d'un même nombre.",
@@ -4428,6 +5904,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
       ],
       Diviser: [
@@ -4449,6 +5926,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
         {
           description: "Diviser 2 puissances d'un même nombre.",
@@ -4469,6 +5947,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
       ],
       'Puissance de puissance': [
@@ -4490,6 +5969,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
 
         {
@@ -4510,6 +5990,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 20,
+          grade: QUATRIEME,
         },
       ]
     }
@@ -4526,6 +6007,7 @@ export default {
           solutions: [['&1/100']],
           type: 'result',
           defaultDelay: 10,
+          grade: SIXIEME,
         },
         {
           description: "Définition d'un pourcentage",
@@ -4536,6 +6018,7 @@ export default {
           solutions: [['&1%']],
           type: 'result',
           defaultDelay: 10,
+          grade: SIXIEME,
         },
         {
           description: "Définition d'un pourcentage",
@@ -4545,6 +6028,7 @@ export default {
           variables: [{ '&1': '$l{10;20;30;40;50;60;70;80;90;100;25;75;200;300;400}' }],
           type: 'result',
           defaultDelay: 10,
+          grade: SIXIEME,
         },
 
       ],
@@ -4561,6 +6045,7 @@ export default {
           variables: [{ '&1': '$e[1;50]' }],
           type: 'result',
           defaultDelay: 10,
+          grade: SIXIEME,
         },
         {
           description: "Calculer le pourcentage d'une quantité",
@@ -4571,6 +6056,7 @@ export default {
           variables: [{ '&1': '$e[1;50]' }],
           type: 'result',
           defaultDelay: 10,
+          grade: SIXIEME,
         },
         {
           description: "Calculer le pourcentage d'une quantité",
@@ -4582,6 +6068,7 @@ export default {
           'result-type': 'decimal',
           type: 'result',
           defaultDelay: 10,
+          grade: SIXIEME,
         },
         {
           description: "Calculer le pourcentage d'une quantité",
@@ -4592,6 +6079,7 @@ export default {
           variables: [{ '&1': '$l{20;30;40}', '&2': '$e[1;40]' }],
           type: 'result',
           defaultDelay: 10,
+          grade: SIXIEME,
         },
         {
           description: "Calculer le pourcentage d'une quantité",
@@ -4602,6 +6090,7 @@ export default {
           variables: [{ '&1': '$e[1;15]' }],
           type: 'result',
           defaultDelay: 10,
+          grade: SIXIEME,
         },
         {
           description: "Calculer le pourcentage d'une quantité",
@@ -4612,6 +6101,7 @@ export default {
           variables: [{ '&1': '$e[1;12]' }],
           type: 'result',
           defaultDelay: 10,
+          grade: SIXIEME,
         },
 
       ],
@@ -4624,6 +6114,7 @@ export default {
           variables: [{ '&1': '$e[2;20]*10', '&2': '$l{10;20;50;100;200}' }],
           type: 'result',
           defaultDelay: 10,
+          grade: SIXIEME,
         },
         {
           description: "Diminution",
@@ -4633,6 +6124,7 @@ export default {
           variables: [{ '&1': '$e[2;20]*10', '&2': '$l{10;20;30;50;100}' }],
           type: 'result',
           defaultDelay: 10,
+          grade: SIXIEME,
         },
         {
           description: "Trouver le coefficient multiplicateur",
@@ -4644,6 +6136,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 10,
+          grade: SECONDE,
         },
         {
           description: "Trouver le coefficient multiplicateur",
@@ -4655,6 +6148,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 10,
+          grade: SECONDE,
         },
         {
           description: "Trouver le pourcentage d'augmentation",
@@ -4665,6 +6159,7 @@ export default {
           type: 'result',
           solutions: [['&1%']],
           defaultDelay: 10,
+          grade: SECONDE,
         },
         {
           description: "Trouver le pourcentage de diminution",
@@ -4680,6 +6175,7 @@ export default {
           }],
           solutions: [['&1%']],
           defaultDelay: 10,
+          grade: SECONDE,
         },
 
 
@@ -4722,6 +6218,7 @@ export default {
             ['&3 \\times &2', '#{&3*&1}',],
           ],
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Calculer en substituant les variables',
@@ -4749,6 +6246,7 @@ export default {
             ['&3 \\times &2', '#{&3*&1}',],
           ],
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Calculer en substituant les variables',
@@ -4788,6 +6286,7 @@ export default {
           ],
           // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
       ],
     },
@@ -4815,6 +6314,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Simplifier le symbole de multiplication',
@@ -4850,6 +6350,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Simplifier un produit par 0 ou 1',
@@ -4870,9 +6371,8 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
-
-
         {
           description: "Simplifier à l'aide d'un carré ou d'un cube",
           enounces: ["Simlifie l'écriture de cette expression littérale :"],
@@ -4888,8 +6388,8 @@ export default {
           solutions: [['&1^2'], ['&1^3']],
           type: 'rewrite',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
-
       ],
       Réduction: [
         {
@@ -4915,6 +6415,7 @@ export default {
           // solutions: [['#{&2+&3}&1']],
           type: 'result',
           defaultDelay: 30,
+          grade: CINQUIEME,
 
         },
         {
@@ -4932,7 +6433,7 @@ export default {
           // solutions: [['#{&2-&3}&1'], ['#{-&2+&3}&1'],['#{-&2-&3}&1']],
           type: 'result',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
         {
           description: 'Réduire une expression',
@@ -4956,7 +6457,7 @@ export default {
           details: [['(&2+&3)&1+(&5+&6)&4']],
           type: 'result',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
         {
           description: 'Réduire une expression',
@@ -4988,7 +6489,7 @@ export default {
           // ],
           type: 'result',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
         {
           description: 'Réduire une expression',
@@ -5013,7 +6514,7 @@ export default {
 
           type: 'result',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
         {
           description: 'Réduire un produit',
@@ -5038,7 +6539,7 @@ export default {
           type: 'result',
           // details: [['(&2+&3) \\times &1']],
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
         {
           description: 'Réduire un produit',
@@ -5075,7 +6576,7 @@ export default {
           type: 'result',
           // details: [['(&2+&3) \\times &1']],
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
       ],
       'Simplification de parenthèses': [
@@ -5096,7 +6597,7 @@ export default {
           type: 'result',
           solutions: [['#{&1&2}#s{&3&4}&5'], ['#{&1&2}#s{-(&3&4)}#s{-(&5)}']],
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
         {
           description: 'Réduire avec parenthèses',
@@ -5122,7 +6623,7 @@ export default {
           //     ['#{&1&2}#s{-&3&4}#s{-&5}'],
           // ],
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
       ],
       Développement: [
@@ -5150,6 +6651,7 @@ export default {
 
           type: 'result',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Développer',
@@ -5195,7 +6697,7 @@ export default {
           // ],
 
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
         {
           description: 'Développer',
@@ -5250,6 +6752,7 @@ export default {
 
           defaultDelay: 30,
           options: ['implicit'],
+          grade: CINQUIEME,
         },
         {
           description: 'Développer un double produit',
@@ -5275,6 +6778,7 @@ export default {
 
           defaultDelay: 30,
           options: ['implicit'],
+          grade: CINQUIEME,
         },
         {
           description: 'Développer un double produit',
@@ -5300,6 +6804,7 @@ export default {
 
           defaultDelay: 40,
           options: ['implicit'],
+          grade: CINQUIEME,
         },
         {
           description: 'Développer $$(a+b)^2$$',
@@ -5318,6 +6823,7 @@ export default {
 
           defaultDelay: 30,
           options: ['implicit'],
+          grade: CINQUIEME,
         },
         {
           description: 'Développer $$(a-b)^2$$',
@@ -5336,6 +6842,7 @@ export default {
 
           defaultDelay: 30,
           options: ['implicit'],
+          grade: CINQUIEME,
         },
         {
           description: 'Développer $$(a+b)(a-b)$$',
@@ -5359,6 +6866,7 @@ export default {
 
           defaultDelay: 30,
           options: ['implicit'],
+          grade: CINQUIEME,
         },
       ],
       Factorisation: [
@@ -5393,6 +6901,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Factoriser',
@@ -5425,9 +6934,10 @@ export default {
             ['&1(&2-&3)'],
             ['&1(&2-&3)'],
           ],
-          options:["no-penalty-for-explicit-products"],
+          options: ["no-penalty-for-explicit-products"],
           type: 'result',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Trouver un facteur commun',
@@ -5522,6 +7032,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Factoriser',
@@ -5609,6 +7120,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Trouver le plus grand facteur commun ',
@@ -5640,7 +7152,7 @@ export default {
           ],
           type: 'rewrite',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
         {
           description: 'Factoriser',
@@ -5668,7 +7180,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
         {
           description: 'Trouver le plus grand facteur commun',
@@ -5702,7 +7214,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
         {
           description: 'Factoriser',
@@ -5731,10 +7243,8 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
-        
-
         {
           description: 'Factoriser',
           subdescription: 'Cas particulier',
@@ -5760,7 +7270,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
         {
           description: 'Factoriser',
@@ -5791,9 +7301,9 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
-        
+
       ],
       'Factorisation avec identité remarquable': [
         {
@@ -5810,7 +7320,7 @@ export default {
           solutions: [['(&1+&3)(&1-&3)'], ['(&3+&1)(&3-&1)']],
           type: 'result',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
         {
           description: 'Factoriser une expression du second degré',
@@ -5825,13 +7335,12 @@ export default {
           solutions: [['(&3-&1)^2'], ['(&3+&1)^2']],
           type: 'result',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         },
-
         {
           description: 'Factoriser une expression du second degré (2)',
           enounces: ['Factoriser :'],
-          expressions: ['x^2-#{&1+&2}x+#{&1*&2}', 'x^2#s{&2-&1}x-#{&1*&2}', 'x^2+#{&1+&2}x+#{&1*&2}' ],
+          expressions: ['x^2-#{&1+&2}x+#{&1*&2}', 'x^2#s{&2-&1}x-#{&1*&2}', 'x^2+#{&1+&2}x+#{&1*&2}'],
           conditions: ['abs(&2-(&1))!=1'],
           variables: [
             {
@@ -5842,7 +7351,7 @@ export default {
           solutions: [['(x-&1)(x-&2)'], ['(x-&1)(x+&2)'], ['(x+&1)(x+&2)']],
           type: 'result',
           defaultDelay: 30,
-
+          grade: CINQUIEME,
         }],
     },
     'Equations': {
@@ -5853,7 +7362,6 @@ export default {
           expressions: [
             'x+&1=#{&1+&2}',
             '&1+x=#{&1+&2}',
-
           ],
           variables: [
             {
@@ -5867,6 +7375,7 @@ export default {
 
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Soustraction',
@@ -5885,6 +7394,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Soustraction (2)',
@@ -5903,6 +7413,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Multiplication',
@@ -5922,6 +7433,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Division',
@@ -5940,6 +7452,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Division (2)',
@@ -5958,6 +7471,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
       ],
       'Dans $$\\Z$$': [
@@ -5968,8 +7482,6 @@ export default {
             'x+&1=#{&1+(&2)}',
             '&1+x=#{&1+(&2)}',
             'x+(&1)=#{&1+(&2)}',
-
-
           ],
           variables: [
             {
@@ -5991,6 +7503,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Soustraction',
@@ -6009,6 +7522,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Soustraction (2)',
@@ -6027,6 +7541,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Multiplication',
@@ -6060,6 +7575,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Division',
@@ -6083,6 +7599,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Division (2)',
@@ -6101,6 +7618,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
       ],
       'Dans $$\\Q$$': [
@@ -6124,6 +7642,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Soustraction',
@@ -6143,6 +7662,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Soustraction (2)',
@@ -6162,6 +7682,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Multiplication',
@@ -6214,6 +7735,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Division',
@@ -6233,6 +7755,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Division (2)',
@@ -6259,6 +7782,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
       ],
       'Linéaire du premier degré': [
@@ -6282,6 +7806,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Equation linéaire du premier degré',
@@ -6303,6 +7828,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Equation linéaire du premier degré',
@@ -6326,6 +7852,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Equation linéaire du premier degré',
@@ -6349,6 +7876,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Equation linéaire du premier degré',
@@ -6371,6 +7899,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
         {
           description: 'Equation linéaire du premier degré',
@@ -6393,6 +7922,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
+          grade: CINQUIEME,
         },
       ]
     }
