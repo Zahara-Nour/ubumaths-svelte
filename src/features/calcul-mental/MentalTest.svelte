@@ -10,7 +10,7 @@
   import virtualKeyboard from './virtualKeyboard'
   import { calculMentalAssessment } from './stores'
   import { getLogger, shuffle } from '../../app/utils'
-  import { mode, testFontSize, classroomFontSize } from '../../app/stores'
+    handleKeydown,
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { math } from 'tinycas/build/math/math'
 
@@ -49,17 +49,36 @@
   let restart = false
   let classroom
   let selectionRef
+  let pause = false
+  let previous
+
+  const togglePause = () => {
+    if (pause) {
+      start = Date.now()
+    } else {
+      previous = elapsed
+    }
+    pause = !pause
+  }
 
   const regex = /\$\$(.*?)\$\$/g
   const replacement = (matched, p1) => Mathlive.convertLatexToMarkup(p1)
 
   function countDown() {
-    elapsed = Date.now() - start
+    if (!pause) {
+      elapsed = Date.now() - start + previous
+      if (delay >= elapsed) {
+        percentage = ((delay - elapsed) * 100) / delay
+      } else {
+        change()
+      }
+    }
   }
 
   onDestroy(() => {
     if (timer) clearInterval(timer)
-    if (timeout) clearTimeout(timeout)
+    // if (timeout) clearTimeout(timeout)
+    handleKeydown.set(() => {})
   })
 
   function initMathField() {
@@ -95,6 +114,13 @@
     theme = queryParams.theme
     level = queryParams.level
     classroom = queryParams.classroom === 'true'
+    if (classroom) {
+      handleKeydown.set((event) => {
+        if (event.code === 'Space') {
+          togglePause()
+        }
+      })
+    }
     $mode = classroom ? 'classroom' : 'test'
     assessmentId = queryParams.assessmentId
     questions = []
@@ -246,14 +272,14 @@
   // on passe à la question suivante
   async function change() {
     if (timer) clearInterval(timer)
-    if (timeout) clearTimeout(timeout)
+    // if (timeout) clearTimeout(timeout)
     
     if (current >= 0) {
       answers[current] = answer
       answers_latex[current] = answer_latex
       answers_choice[current] = answer_choice
-      let time = Math.min(Math.round(elapsed/1000), delay)
-      if (time ===0) time = 1
+      let time = Math.min(Math.round(elapsed / 1000), delay)
+      if (time === 0) time = 1
       times[current] = time
      
     }
@@ -269,9 +295,12 @@
       question = questions[current]
       generated = generate(question, generateds)
       if (generateds) generateds.push(generated)
-      delay = question.delay ? question.delay * 1000 : question.defaultDelay * 1000
+      delay = question.delay
+        ? question.delay * 1000
+        : question.defaultDelay * 1000
       percentage = 100
       start = Date.now()
+      previous = 0
       timer = setInterval(countDown, 10)
       timeout = setTimeout(change, delay)
     } else {
@@ -310,6 +339,8 @@
 
   // test pour vérifier que l'expression est bien formée à chaque frappe
   $: correct = math(answer).type !== '!! Error !!'
+
+
 </script>
 
 {#if finish}

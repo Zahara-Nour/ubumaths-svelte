@@ -6,5 +6,6 @@
   export const menuFontSize = writable(16)
   export const testFontSize = writable(20)
   export const classroomFontSize = writable(42)
+  export const handleKeydown=writable(()=>{})
   // menu, test, classroom
   export const mode = writable("menu")

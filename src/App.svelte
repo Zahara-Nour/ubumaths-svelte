@@ -52,6 +52,10 @@
   <link rel="stylesheet" href="css/reveal/theme/white.css" />
 </svelte:head>
 
+
+<svelte:window on:keydown={$handleKeydown}/>
+
+
 <MaterialApp theme="{theme}">
   <Router url="{url}">
     <!-- <button on:click="{toggleTheme}">Toggle Theme</button> -->
