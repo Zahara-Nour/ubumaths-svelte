@@ -45,9 +45,15 @@
   let messageResult
   let assessment
 
-
   // inititalisation
-  let {items, score, total} = assessItems(questions, answers, answers_latex, answers_choice, times, classroom)
+  let { items, score, total } = assessItems(
+    questions,
+    answers,
+    answers_latex,
+    answers_choice,
+    times,
+    classroom,
+  )
 
   // Quand le composant de correction a fini de s'afficher,
   // le score a déjà été calculé, on l'enregistre
@@ -97,10 +103,9 @@
           info(`progression updated for user ${$user.id}`, newProgression)
         }
       }
-    } 
+    }
     // évaluation à sauvegarder
     else if (assessment && assessment.type === 'assessment') {
-      
       const result = {
         mark: score,
         total: total,
@@ -115,7 +120,6 @@
       if (error) {
         fail(error)
       } else {
-      
         let { data: students_assessments, error_get_assessments } =
           await supabase
             .from('users')
@@ -148,9 +152,6 @@
       calculMentalAssessment.set(null)
     }
   })
-
-
-  
 
   // options revealjs
   const options = {
@@ -199,14 +200,21 @@
   $: isTeacher = isLoggedIn && $user.roles.includes('teacher')
   $: isStudent = isLoggedIn && $user.roles.includes('student')
 </script>
-<Snackbar class="justify-space-between green white-text" bind:active={congrats} right top timeout={4000}>
-  Bravo 🎉 
-  Tu as gagné un niveau !
+
+<Snackbar
+  class="justify-space-between green white-text"
+  bind:active="{congrats}"
+  right
+  top
+  timeout="{4000}"
+>
+  Bravo 🎉 Tu as gagné un niveau !
   <Button
     text
-    on:click={() => {
-      congrats = false;
-    }}>
+    on:click="{() => {
+      congrats = false
+    }}"
+  >
     Ok
   </Button>
 </Snackbar>
@@ -237,29 +245,69 @@
   {/if}
 
   {#if classroom}
-    <div class="d-flex" style="width:100%;overflow-x:auto;">
-      <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
-        <div>
-          {#each items.filter((item, i) => i % 2 == 1) as item, i}
-            <ListItem selectable="{false}">
-              <div class="d-flex justify-start align-start">
-                <div
-                  class="mr-4 d-flex  flex-column align-center justify-start"
+    <div
+      class="d-flex justify justify-space-around"
+      style="width:100%;overflow-x:auto;"
+    >
+      <div>
+        {#each items.filter((_, i) => i+1 <= items.length / 2) as item}
+          <ListItem selectable="{false}">
+            <div class="d-flex justify-start align-start">
+              <div class="mr-4 d-flex  flex-column align-center justify-start">
+                <Button
+                  fab
+                  depressed
+                  class="{item.status === STATUS_CORRECT
+                    ? good_class
+                    : item.status === STATUS_UNOPTIMAL_FORM
+                    ? not_complete_class
+                    : not_good_class}"
                 >
-                  <Button
-                    fab
-                    depressed
-                    class="{item.status === STATUS_CORRECT
-                      ? good_class
-                      : item.status === STATUS_UNOPTIMAL_FORM
-                      ? not_complete_class
-                      : not_good_class}"
-                  >
-                    <span style="font-size:{size}px;">{item.number}</span>
-                  </Button>
+                  <span style="font-size:{size}px;">{item.number}</span>
+                </Button>
 
-                  <!-- a div is necessary for the icon to center aligned -->
-                  <!-- <div>
+                <!-- a div is necessary for the icon to center aligned -->
+                <!-- <div>
+                {#if correct}
+                  <Icon
+                    class="mt-2 green-text"
+                    style="font-size:{$fontSize}px;"
+                    path="{mdiCheckCircle}"
+                  />
+                {:else}
+                  <Icon
+                    class="mt-2 red-text"
+                    style="font-size:{$fontSize}px;"
+                    path="{mdiCloseCircle}"
+                  />
+                {/if}
+              </div> -->
+                <div class="flex-grow-1"></div>
+              </div>
+              <CorrectionItem item="{item}" details="{details}" size="{size}" />
+            </div>
+          </ListItem>
+        {/each}
+      </div>
+      <div>
+        {#each items.filter((_, i) => i+1 > items.length/2) as item}
+          <ListItem selectable="{false}">
+            <div class="d-flex justify-start align-start">
+              <div class="mr-4 d-flex  flex-column align-center justify-start">
+                <Button
+                  fab
+                  depressed
+                  class="{item.status === STATUS_CORRECT
+                    ? good_class
+                    : item.status === STATUS_UNOPTIMAL_FORM
+                    ? not_complete_class
+                    : not_good_class}"
+                >
+                  <span style="font-size:{size}px;">{item.number}</span>
+                </Button>
+
+                <!-- a div is necessary for the icon to center aligned -->
+                <!-- <div>
                   {#if correct}
                     <Icon
                       class="mt-2 green-text"
@@ -274,18 +322,12 @@
                     />
                   {/if}
                 </div> -->
-                  <div class="flex-grow-1"></div>
-                </div>
-                <CorrectionItem
-                  item="{item}"
-                  details="{details}"
-                  size="{size}"
-              
-                />
+                <div class="flex-grow-1"></div>
               </div>
-            </ListItem>
-          {/each}
-        </div>
+              <CorrectionItem item="{item}" details="{details}" size="{size}" />
+            </div>
+          </ListItem>
+        {/each}
       </div>
     </div>
   {:else}
@@ -325,11 +367,7 @@
             </div> -->
                 <div class="flex-grow-1"></div>
               </div>
-              <CorrectionItem
-                item="{item}"
-                details="{details}"
-                size="{size}"
-              />
+              <CorrectionItem item="{item}" details="{details}" size="{size}" />
             </div>
           </ListItem>
         {/each}

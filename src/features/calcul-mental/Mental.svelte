@@ -7,7 +7,7 @@
     TabContent,
     ExpansionPanels,
     ExpansionPanel,
-    Snackbar
+    Badge,
   } from 'svelte-materialify/src'
 
   import { navigate } from 'svelte-routing'
@@ -51,7 +51,6 @@
   let classroom = false
   let modified = false
   let available
- 
 
   $mode = 'menu'
 
@@ -94,8 +93,6 @@
       levelIdx = level - 1
     }
   }
-
-  
 
   function onChangeTheme(e) {
     themeIdx = e.detail
@@ -241,8 +238,6 @@
   $: isStudent = isLoggedIn && $user.roles.includes('student')
   $: disable = !theme || !domain || !subdomain || !(level >= 0)
   $: generated = generateExemple(theme, domain, subdomain, level)
- 
- 
 </script>
 
 <h4 class="mt-5 pa-3 mb-5 amber white-text">Calcul mental</h4>
@@ -288,14 +283,14 @@
   >
     <div slot="tabs">
       {#each themes as item}
-        {#if !isStudent ||  $user.available && $user.available[item]}
+        {#if !isStudent || ($user.available && $user.available[item])}
           <Tab><span style="font-size:{$menuFontSize}px;">{item}</span></Tab>
         {/if}
       {/each}
     </div>
 
     {#each themes as them, them_i}
-      {#if !isStudent || $user.available && $user.available[them]}
+      {#if !isStudent || ($user.available && $user.available[them])}
         <TabContent>
           <ExpansionPanels on:change="{onChangeDomain}" value="{[domainIdx]}">
             {#each Object.keys(questions[them]) as d, d_i}
@@ -317,28 +312,32 @@
                             <div>
                               {#each questions[them][d][t] as q, i}
                                 {#if !isStudent || gradeMatchesClass(q.grade, $user.grade)}
-                                  <Button
-                                    outlined="{isStudent &&
-                                      subdomainIdx === t_i &&
-                                      levelIdx === i}"
-                                    class="{getClassColor(
-                                      theme,
-                                      domain,
-                                      t,
-                                      i + 1,
-                                      isStudent,
-                                      $user.progression,
-                                      subdomain,
-                                      level,
-                                    ) + ' ma-1'}"
-                                    fab
-                                    size="x-small"
-                                    depressed
-                                    on:click="{() => onChangeLevel(t, t_i, i)}"
-                                    ><span style="font-size:{$menuFontSize}px;"
-                                      >{i + 1}</span
-                                    ></Button
-                                  >
+                                  <Badge class="info-color" value="{q.grade}">
+                                    <Button
+                                      outlined="{isStudent &&
+                                        subdomainIdx === t_i &&
+                                        levelIdx === i}"
+                                      class="{getClassColor(
+                                        theme,
+                                        domain,
+                                        t,
+                                        i + 1,
+                                        isStudent,
+                                        $user.progression,
+                                        subdomain,
+                                        level,
+                                      ) + ' ma-1'}"
+                                      fab
+                                      size="x-small"
+                                      depressed
+                                      on:click="{() =>
+                                        onChangeLevel(t, t_i, i)}"
+                                      ><span
+                                        style="font-size:{$menuFontSize}px;"
+                                        >{i + 1}</span
+                                      ></Button
+                                    >
+                                  </Badge>
                                 {/if}
                               {/each}
                             </div>
@@ -370,5 +369,3 @@
     <Exemple question="{generated}" />
   </div>
 {/if}
-
-

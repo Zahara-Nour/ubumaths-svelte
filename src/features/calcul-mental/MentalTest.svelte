@@ -2,7 +2,7 @@
   import Question from './Question.svelte'
   import generate from './generateQuestion'
   import CircularProgress from '../../components/CircularProgress.svelte'
-  import { Button } from 'svelte-materialify/src'
+  import { Button, Icon } from 'svelte-materialify/src'
   import { onDestroy, onMount } from 'svelte'
   import Correction from './Correction.svelte'
   import qs from './questions'
@@ -18,7 +18,8 @@
   } from '../../app/stores'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { math } from 'tinycas/build/math/math'
-  import { detach_after_dev } from 'svelte/internal'
+  import Exemple from './Exemple.svelte'
+  import { mdiRocketLaunchOutline, mdiRestart } from '@mdi/js'
 
   export let location
 
@@ -56,6 +57,9 @@
   let selectionRef
   let pause = false
   let previous
+  let showExemple = false
+  let showCorrection = false
+  let generatedExemple
 
   const togglePause = () => {
     if (pause) {
@@ -119,13 +123,7 @@
     theme = queryParams.theme
     level = queryParams.level
     classroom = queryParams.classroom === 'true'
-    if (classroom) {
-      handleKeydown.set((event) => {
-        if (event.code === 'Space') {
-          togglePause()
-        }
-      })
-    }
+    showCorrection = !classroom
     $mode = classroom ? 'classroom' : 'test'
     assessmentId = queryParams.assessmentId
     questions = []
@@ -176,7 +174,13 @@
 
       shuffle(questions)
     }
-    change()
+    if (classroom && theme) {
+      console.log('showExemple')
+      showExemple = true
+      generatedExemple = generate(getQuestion(theme, domain, subdomain, level))
+    } else {
+      change()
+    }
     info('Begining test with questions :', questions)
   }
 
@@ -206,6 +210,22 @@
 
   function commit() {
     recordAnswer()
+    change()
+  }
+
+  function beginTest() {
+    if (classroom) {
+      handleKeydown.set((event) => {
+        event.preventDefault()
+        console.log(event.code)
+        if (event.code === 'Space') {
+          togglePause()
+        } else if (event.code === 'ArrowRight') {
+          change()
+        }
+      })
+    }
+    showExemple = false
     change()
   }
 
@@ -334,27 +354,61 @@
   }
 
   // test pour vérifier que l'expression est bien formée à chaque frappe
-  $: correct = math(answer).type !== '!! Error !!'
-
-
+  $: if (answer) {
+    correct = math(answer).type !== '!! Error !!'
+  }
 </script>
 
-{#if finish}
-  <Correction
-    questions="{generateds}"
-    answers="{answers}"
-    answers_latex="{answers_latex}"
-    answers_choice="{answers_choice}"
-    times="{times}"
-    query="{location.search}"
-    classroom="{classroom}"
-    size="{classroom ? $classroomFontSize : $testFontSize}"
-    bind:restart
-    theme="{theme}"
-    domain="{domain}"
-    subdomain="{subdomain}"
-    level="{level}"
-  />
+{#if showExemple}
+  <Exemple question="{generatedExemple}" classroom="{true}" />
+  <div class="mt-2 d-flex justify-end">
+    <Button
+      class="ml-2 mr-2 amber darken-2 white-text"
+      fab
+      on:click="{() => {
+        generatedExemple = generate(
+          getQuestion(theme, domain, subdomain, level),
+        )
+      }}"
+    >
+      <Icon path="{mdiRestart}" />
+    </Button>
+    <Button
+      class="ml-2 mr-2 amber darken-2 white-text"
+      fab
+      on:click="{() => beginTest()}"
+    >
+      <Icon path="{mdiRocketLaunchOutline}" />
+    </Button>
+  </div>
+{:else if finish}
+  {#if showCorrection}
+    <Correction
+      questions="{generateds}"
+      answers="{answers}"
+      answers_latex="{answers_latex}"
+      answers_choice="{answers_choice}"
+      times="{times}"
+      query="{location.search}"
+      classroom="{classroom}"
+      size="{classroom ? $classroomFontSize : $testFontSize}"
+      bind:restart
+      theme="{theme}"
+      domain="{domain}"
+      subdomain="{subdomain}"
+      level="{level}"
+    />
+  {:else}
+    <div style="height:90vh" class="d-flex justify-center align-center">
+      <Button
+        on:click="{() => {
+          showCorrection = true
+        }}"
+      >
+        Afficher la correction
+      </Button>
+    </div>
+  {/if}
 {:else if generated}
   <div class="mt-6 mb-6">
     <CircularProgress
@@ -377,8 +431,13 @@
       <div class="mt-3 d-flex justify-space-around" style="width:100%;">
         {#each choices as choice, i}
           <!-- <Button size="x-large" class="ml-3 mr-3" on:click="{() => onChoice(i)}"> -->
-          <div >
-            <button class="rounded-lg pa-5 yellow lighten-4 ml-3 mr-3" on:click="{() => onChoice(i)}">
+          <div>
+            <button
+              class="rounded-lg pa-5 yellow lighten-4 ml-3 mr-3"
+              on:click="{() => {
+                if (!classroom) onChoice(i)
+              }}"
+            >
               <div
                 style="font-size:{classroom
                   ? $classroomFontSize
