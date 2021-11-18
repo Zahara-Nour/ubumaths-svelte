@@ -3,6 +3,7 @@
 
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { onMount } from 'svelte'
+  import { fetchImage } from './images'
   import {
     STATUS_BAD_FORM,
     STATUS_CORRECT,
@@ -18,12 +19,15 @@
   let number,
     options = '',
     qexp_latex,
+    qexp2_latex,
     solutions,
     answer_latex,
     answer_choice,
     correctionFormat,
     coms,
-    status
+    status,
+    image,
+    imageBase64
 
   let answerColor = 'green'
   const regex = /\$\$(.*?)\$\$/g
@@ -36,12 +40,6 @@
 
   let penalty = false
   const details_latex = item.details // details are in latex form
-
-  if (status === STATUS_BAD_FORM || status == STATUS_INCORRECT) {
-    answerColor = 'red'
-  } else if (status === STATUS_UNOPTIMAL_FORM) {
-    answerColor = 'orange'
-  }
 
   let correction
   let detailedCorrection
@@ -57,13 +55,23 @@
       number,
       options,
       qexp_latex,
+      qexp2_latex,
       solutions,
       answer_latex,
       answer_choice,
       correctionFormat,
       coms,
       status,
+      image,
     } = item)
+    if (image) {
+      imageBase64 = fetchImage(image)
+    }
+    if (status === STATUS_BAD_FORM || status === STATUS_INCORRECT) {
+      answerColor = 'red'
+    } else if (status === STATUS_UNOPTIMAL_FORM) {
+      answerColor = 'orange'
+    }
 
     solutions_latex = item.solutions
       ? item.solutions.map((solution) => {
@@ -106,6 +114,7 @@
         correctionFormat.correct.forEach((format) => {
           line = format
             .replace('&exp', qexp_latex)
+            .replace('&exp2', qexp2_latex)
             .replace(
               '&solution',
               () =>
@@ -120,16 +129,19 @@
         })
       } else {
         correctionFormat.uncorrect.forEach((format) => {
-          line = format.replace('&exp', qexp_latex).replace(
-            '&solution',
+          line = format
+            .replace('&exp', qexp_latex)
+            .replace('&exp2', qexp2_latex)
+            .replace(
+              '&solution',
 
-            () =>
-              '<span style="color:green;">' +
-              (item.type === 'choice'
-                ? item.choices[solutions[0]]
-                : '$$' + solutions_latex[0] + '$$') +
-              '</span>',
-          )
+              () =>
+                '<span style="color:green;">' +
+                (item.type === 'choice'
+                  ? item.choices[solutions[0]]
+                  : '$$' + solutions_latex[0] + '$$') +
+                '</span>',
+            )
           lines.push(line)
         })
         if (status === STATUS_INCORRECT) {
@@ -137,6 +149,7 @@
             'Ta réponse : ' +
               correctionFormat.answer
                 .replace('&exp', qexp_latex)
+                .replace('&exp2', qexp2_latex)
                 .replace(
                   '&answer',
                   () =>
@@ -155,6 +168,7 @@
             'Ta réponse : ' +
               correctionFormat.answer
                 .replace('&exp', qexp_latex)
+                .replace('&exp2', qexp2_latex)
                 .replace(
                   '&answer',
                   () =>
@@ -183,10 +197,11 @@
               line +=
                 `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
                 `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
-            } else if (
-              status === STATUS_BAD_FORM ||
-              status === STATUS_UNOPTIMAL_FORM
-            ) {
+            } else if (status === STATUS_BAD_FORM) {
+              line +=
+                `&= \\textcolor{red}{${answer_latex}}` +
+                `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
+            } else if (status === STATUS_UNOPTIMAL_FORM) {
               line +=
                 `&= \\textcolor{orange}{${answer_latex}}` +
                 `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
@@ -432,7 +447,24 @@
 </script>
 
 {#if correction}
-  <div id="{`correction${number}`}" class="flex-shrink-2">
+  <div
+    id="{`correction${number}`}"
+    style="word-break: break-word ;min-width: 0;;white-space: normal;"
+  >
+    {#if image}
+      {#await imageBase64}
+        loading image
+      {:then base64}
+        <img
+          src="{base64}"
+          class="mt-3 mb-3"
+          style="max-width:90%;max-height:40vh;"
+          alt="Alright Buddy!"
+        />
+      {:catch error}
+        {error}
+      {/await}
+    {/if}
     {#if details && item.details}
       {#each detailedCorrection as line}
         <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{size}px;">
@@ -441,19 +473,22 @@
       {/each}
     {:else}
       {#each correction as line}
-        <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{size}px;">
+        <p
+          class="ml-2 mr-2 mt-2 mb-2"
+          style="font-size:{size}px;"
+        >
           {@html line}
-        </div>
+        </p>
       {/each}
 
       {#if coms.length}
         {#each coms as com}
-          <div
+          <p
             class="ml-2 mr-2 mt-2 mb-2"
             style="font-size:{size}px;font-family: 'Handlee', cursive;"
           >
             {@html com}
-          </div>
+          </p>
         {/each}
       {/if}
     {/if}

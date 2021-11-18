@@ -19,7 +19,7 @@ const FACTORE_ZERO =
 const NULL_TERMS =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> contient un terme nul que tu peux enlever."
 const BRACKETS =
-    "<span style='color:#_COLORANSWER_'>Ta réponse</span> contient des parenthèses inutiles."
+    "<span style='color:_COLORANSWER_'>Ta réponse</span> contient des parenthèses inutiles."
 const SPACES =
     "Les chiffres sont mal espacés dans <span style='color:_COLORANSWER_'>ta réponse</span>."
 const SIGNS =
@@ -28,6 +28,8 @@ const BAD =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> n'est pas mathématiquement correcte."
 const PRODUCTS =
     "Tu peux simplifier les symboles de multiplication dans <span style='color:_COLORANSWER_'>ta réponse</span>."
+const FRACTIONS =
+    "<span style='color:_COLORANSWER_'>Ta réponse</span> contient une ou des fractions non simplifiées."
 const FORM =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> n'est pas écrite sous la forme demandée."
 
@@ -87,6 +89,11 @@ function checkConstraints(item) {
             function: checkNullTerms,
             com: NULL_TERMS,
         },
+        {
+            option: ['no-penalty-for-non-reduced-fractions', 'require-reduced-fractions'],
+            function: checkFractions,
+            com: FRACTIONS,
+        },
     ]
 
     checks.forEach((check) => {
@@ -99,7 +106,6 @@ function checkConstraints(item) {
                 if (item.status !== STATUS_BAD_FORM) item.status = STATUS_UNOPTIMAL_FORM
             }
         }
-       
     })
 }
 
@@ -123,12 +129,15 @@ function checkAnswer(item) {
 
         let sols = item.solutions.map((solution) => math(solution))
 
-        // Les tests de contraintes ont été faits. Il faut simplifier la réonse pour pouvoir
+        // Les tests de contraintes ont été faits. Il faut simplifier la réponse pour pouvoir
         // la comparer à la solution : on enlève les parenthèses inutiles, les signes inutiles....
 
         e = e.removeUnecessaryBrackets()
         sols = sols.map((solution) => solution.removeUnecessaryBrackets())
         // }
+
+        e = e.reduceFractions()
+        sols = sols.map((solution) => solution.reduceFractions())
 
         e = e.removeFactorsOne()
         sols = sols.map((solution) => solution.removeFactorsOne())
@@ -165,7 +174,7 @@ function checkAnswer(item) {
             sols = sols.map((solution) => solution.sortTermsAndFactors())
         }
 
-       
+
         if (!sols.some((sol) => sol.strictlyEquals(e))) {
             item.status = STATUS_BAD_FORM
         } else if (item.status !== STATUS_UNOPTIMAL_FORM) {
@@ -181,14 +190,29 @@ function checkProducts(item) {
     return e.removeMultOperator().string === e.string
 }
 
+function checkFractions(item) {
+    const e = math(item.answer)
+    return e.reduceFractions().string === e.string
+}
+
 function checkNullTerms(item) {
     const e = math(item.answer)
     return e.removeNullTerms().string === e.string
 }
 
 function checkBrackets(item) {
-    const e = math(item.answer)
-    return e.removeUnecessaryBrackets().string === e.string
+    let e
+    switch (item.type) {
+        case 'trou':
+            e = math(item.qexp.replace('?', item.answer))
+            console.log('e check', e.string)
+            break
+        default:
+            e = math(item.answer)
+    }
+    const check = e.removeUnecessaryBrackets().string === e.string
+    item.checkBrackets = check
+    return check
 }
 
 function checkSigns() {
@@ -264,6 +288,8 @@ export function assessItems(questions, answers, answers_latex, answers_choice, t
         items[i] = {
             qexp: question.expression,
             qexp_latex: question.expression_latex,
+            qexp2: question.expression2,
+            qexp2_latex: question.expression2_latex,
             answer: answers[i],
             answer_latex: answers_latex[i],
             answer_choice: answers_choice[i],
@@ -280,7 +306,8 @@ export function assessItems(questions, answers, answers_latex, answers_choice, t
             testAnswer: question.testAnswer,
             choices: question.choices,
             coms: [],
-            status: null
+            status: null,
+            image: question.image
         }
 
         assessItem(items[i], classroom)
@@ -313,7 +340,7 @@ export function assessItem(item, classroom) {
         if (!classroom) item.coms.push(EMPTY_ANSWER)
         item.status = STATUS_EMPTY
     } else {
-      
+
         switch (item.type) {
             case 'choice':
                 item.status =
@@ -324,24 +351,32 @@ export function assessItem(item, classroom) {
                 break
 
             default: {
-                const badExpression =
-                    item.type !== 'choice' && math(item.answer).type === '!! Error !!'
-                const equivalent =
-                    item.testAnswer ||
-                    (!badExpression &&
-                        item.solutions.some((solution) =>
-                            math(item.answer).equals(math(solution)),
-                        ))
-                if (badExpression) {
+
+                let isNotWellFormedExpression
+
+                const expressionFormToBeChecked = item.type === 'trou'
+                    ? item.qexp.replace('?', item.answer)
+                    : item.answer
+                isNotWellFormedExpression = math(expressionFormToBeChecked).isIncorrect()
+
+
+                if (isNotWellFormedExpression) {
                     item.coms.push(BAD)
                     item.status = STATUS_INCORRECT
-                } else if (!equivalent) {
-                    item.status = STATUS_INCORRECT
                 } else {
-                    // vérification des contraintes de forme
-                    checkConstraints(item)
-                    if (item.status !== STATUS_BAD_FORM) {
-                        checkAnswer(item)
+                    const equivalent =
+                        item.testAnswer ||
+                        item.solutions.some((solution) =>
+                            math(item.answer).equals(math(solution)),
+                        )
+                    if (!equivalent) {
+                        item.status = STATUS_INCORRECT
+                    } else {
+                        // vérification des contraintes de forme
+                        checkConstraints(item)
+                        if (item.status !== STATUS_BAD_FORM) {
+                            checkAnswer(item)
+                        }
                     }
                 }
             }

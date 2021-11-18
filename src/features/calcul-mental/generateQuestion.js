@@ -3,7 +3,7 @@ import emptyQuestion from './emptyQuestion'
 import { getLogger, lexicoSort } from '../../app/utils'
 import questions from './questions'
 
-let {fail, warn, info} = getLogger('generateQuestion', 'info')
+let { fail, warn, info } = getLogger('generateQuestion', 'info')
 
 export default function generateQuestion(question, generateds) {
   // firestore returns objects with read-only properties
@@ -19,12 +19,14 @@ export default function generateQuestion(question, generateds) {
   let letters
   let correction
   let testAnswer
+  let image
 
   const { options = [] } = question
 
   const generatedExpressions = generateds ? generateds.map((g) => g.expression) : []
   const generatedEnounces = generateds ? generateds.map((g) => g.enounce) : []
   const generatedChoices = generateds ? generateds.map((g) => g.choices) : []
+  const generatedImages = generateds ? generateds.map((g) => g.image) : []
   const regexExact = /#\{(.*?)\}/g
   const regexExactSigned = /#s\{(.*?)\}/g
   const regexDecimal = /##\{(.*?)\}/g
@@ -82,8 +84,11 @@ export default function generateQuestion(question, generateds) {
   let doItAgain = false
   const n = Math.max(question.choices && question.choices.length || 0,
     question.expressions && question.expressions.length || 0,
+    question.expressions2 && question.expressions2.length || 0,
     question.enounces && question.enounces.length || 0,
-    question.variables && question.variables.length || 0)
+    question.variables && question.variables.length || 0,
+    question.images && question.images.length || 0
+  )
 
   do {
     count++
@@ -91,7 +96,10 @@ export default function generateQuestion(question, generateds) {
 
     // first select an expression
     i = Math.floor(n * Math.random())
-  
+
+    if (question.images) {
+      image = question.images[question.images.length === 1 ? 0 : i]
+    }
 
     if (question.expressions) {
       expression = question.expressions[question.expressions.length === 1 ? 0 : i]
@@ -126,6 +134,7 @@ export default function generateQuestion(question, generateds) {
 
           }
 
+          generated = generated.replace(regexDecimal, replacementDecimal)
           generated = generated.replace(regexExact, replacementExact)
 
           generated = math(generated).generate().string
@@ -147,12 +156,14 @@ export default function generateQuestion(question, generateds) {
         }
       })
 
+
       if (expression) {
         expression = expression.replace(regexDecimal, replacementDecimal)
         expression = expression.replace(regexExactSigned, replacementExactSigned)
         expression = expression.replace(regexExact, replacementExact)
         if (options.includes('remove-null-terms')) {
           expression = math(expression).removeNullTerms().string
+          console.log(expression)
         }
 
         if (options.includes('shuffle-terms-and-factors')) {
@@ -160,6 +171,7 @@ export default function generateQuestion(question, generateds) {
         }
         else if (options.includes('shuffle-terms')) {
           expression = math(expression).shuffleTerms().string
+          console.log(expression)
         }
         else if (options.includes('shuffle-factors')) {
           expression = math(expression).shuffleFactors().string
@@ -199,8 +211,13 @@ export default function generateQuestion(question, generateds) {
         doItAgain = generatedEnounces.includes(enounce) &&
           generatedChoices.some(gcs => JSON.stringify(choices) == JSON.stringify(gcs))
       }
-      else {
+      else if (enounce) {
         doItAgain = generatedEnounces.includes(enounce)
+      }
+
+      if (image) {
+        console.log('includes generated?', image, generatedImages, generatedImages.includes(image))
+        doItAgain = doItAgain || generatedImages.includes(image)
       }
 
       if (!doItAgain && question.conditions) {
@@ -222,8 +239,11 @@ export default function generateQuestion(question, generateds) {
   } while (doItAgain && count < 1000)
 
   if (count >= 1000) {
-     warn("can't generate a different question from others")
+    warn("can't generate a different question from others")
   }
+
+
+
 
   if (question.solutions) {
 
@@ -260,6 +280,7 @@ export default function generateQuestion(question, generateds) {
   }
   // Il faut évaluer l'expression
   else if (expression) {
+
     let params = { decimal: question['result-type'] === 'decimal' }
 
     // 
@@ -282,6 +303,7 @@ export default function generateQuestion(question, generateds) {
     }
 
     solutions = [math(expression).eval(params).removeMultOperator().removeFactorsOne().string]
+
   }
 
   if (question.details) {
@@ -334,6 +356,7 @@ export default function generateQuestion(question, generateds) {
     })
     expression2 = expression2.replace(regexDecimalLatex, replacementDecimalLatex)
     expression2 = expression2.replace(regexDecimal, replacementDecimal)
+    expression2 = expression2.replace(regexExactSigned, replacementExactSigned)
     expression2 = expression2.replace(regexExactLatex, replacementExactLatex)
     expression2 = expression2.replace(regexExact, replacementExact)
   }
@@ -374,18 +397,28 @@ export default function generateQuestion(question, generateds) {
 
     })
   }
+  let expression2_latex
+  if (expression2) {
+    expression2_latex = math(expression2).toLatex({
+      addSpaces: !(question.options && question.options.includes('exp-no-spaces')),
+      keepUnecessaryZeros: question.options && question.options.includes('exp-allow-unecessary-zeros')
+
+    })
+  }
 
   let correctionFormat
   if (question.correctionFormat) {
     correctionFormat = question.correctionFormat[question.correctionFormat.length === 1 ? 0 : i]
-   
+
     let { correct, uncorrect, answer } = correctionFormat
 
     correct = correct.map(format => {
-      Object.getOwnPropertyNames(variables).forEach((name) => {
-        const regex = new RegExp(name, 'g')
-        format = format.replace(regex, variables[name])
-      })
+      if (variables) {
+        Object.getOwnPropertyNames(variables).forEach((name) => {
+          const regex = new RegExp(name, 'g')
+          format = format.replace(regex, variables[name])
+        })
+      }
       return format
     })
 
@@ -395,10 +428,12 @@ export default function generateQuestion(question, generateds) {
     correct = correct.map(format => format.replace(regexExact, replacementExact))
 
     uncorrect = uncorrect.map(format => {
-      Object.getOwnPropertyNames(variables).forEach((name) => {
-        const regex = new RegExp(name, 'g')
-        format = format.replace(regex, variables[name])
-      })
+      if (variables) {
+        Object.getOwnPropertyNames(variables).forEach((name) => {
+          const regex = new RegExp(name, 'g')
+          format = format.replace(regex, variables[name])
+        })
+      }
       return format
     })
 
@@ -407,12 +442,12 @@ export default function generateQuestion(question, generateds) {
     uncorrect = uncorrect.map(format => format.replace(regexExactLatex, replacementExactLatex))
     uncorrect = uncorrect.map(format => format.replace(regexExact, replacementExact))
 
-
-    Object.getOwnPropertyNames(variables).forEach((name) => {
-      const regex = new RegExp(name, 'g')
-      answer = answer.replace(regex, variables[name])
-    })
-
+    if (variables) {
+      Object.getOwnPropertyNames(variables).forEach((name) => {
+        const regex = new RegExp(name, 'g')
+        answer = answer.replace(regex, variables[name])
+      })
+    }
 
     answer = answer.replace(regexDecimalLatex, replacementDecimalLatex)
     answer = answer.replace(regexDecimal, replacementDecimal)
@@ -430,6 +465,7 @@ export default function generateQuestion(question, generateds) {
     solutions,
     expression,
     expression_latex,
+    expression2_latex,
     choices
   }
 
@@ -440,7 +476,7 @@ export default function generateQuestion(question, generateds) {
   if (correctionFormat) generated.correctionFormat = correctionFormat
   if (expression2) generated.expression2 = expression2
   if (testAnswer) generated.testAnswer = testAnswer
-
+  if (image) generated.image = image
 
   return generated
 }

@@ -70,35 +70,7 @@
     // fetchingProgression = false
   }
 
-  function getAvailable() {
-    const available = {}
-    Object.keys(questions).forEach((theme) => {
-      available[theme] = {}
-      Object.keys(questions[theme]).forEach((domain) => {
-        available[theme][domain] = {}
-        Object.keys(questions[theme][domain]).forEach((subdomain) => {
-          available[theme][domain][subdomain] = []
-          questions[theme][domain][subdomain].forEach((q, i) => {
-            if (gradeMatchesClass(q.grade, $user.grade)) {
-              available[theme][domain][subdomain].push(i + 1)
-            }
-          })
-          if (!available[theme][domain][subdomain].length) {
-            delete available[theme][domain][subdomain]
-          }
-        })
-        if (!Object.keys(available[theme][domain]).length) {
-          delete available[theme][domain]
-        }
-      })
-      if (!Object.keys(available[theme]).length) {
-        delete available[theme]
-      }
-    })
-
-    console.log('available', available)
-    $user.available=available
-  }
+  
 
   function toggleTheme() {
     if (theme === 'light') theme = 'dark'
@@ -117,9 +89,7 @@
     fetchProgression()
   }
 
-  $: if (isStudent && !$user.available) {
-    getAvailable()
-  } 
+  
 </script>
 
 <svelte:head>

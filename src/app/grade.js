@@ -24,7 +24,26 @@ export const TERMINALE_SPE_MATHS = 'Tale spé Maths'
 export const MATHS_COMPLEMENTAIRES = 'Maths Complémentaires'
 export const MATHS_EXPERTES = 'Maths Expertes'
 
-
+export const grades = [
+    CP,
+    CE1,
+    CE2,
+    CM1,
+    CM2,
+    SIXIEME,
+    CINQUIEME,
+    QUATRIEME,
+    TROISIEME,
+    SECONDE,
+    PREMIERE_SPE_MATHS,
+    PREMIERE_STMG,
+    PREMIERE_GENERALE,
+    TERMINALE_GENERALE,
+    TERMINALE_SPE_MATHS,
+    TERMINALE_STMG,
+    MATHS_COMPLEMENTAIRES,
+    MATHS_EXPERTES
+]
 const cp = makeGrade(CP, null)
 const ce1 = makeGrade(CE1, cp)
 const ce2 = makeGrade(CE2, ce1)
@@ -45,28 +64,30 @@ const mathsComplementaires = makeGrade(MATHS_COMPLEMENTAIRES, premiereSpe)
 const mathsExpertes = makeGrade(MATHS_EXPERTES, terminaleSpe)
 
 
-const grades = {
-    [CP]: cp,
-    [CE1]: ce1,
-    [CE2]: ce2,
-    [CM1]: cm1,
-    [CM2]: cm2,
-    [SIXIEME]: sixieme,
-    [CINQUIEME]: cinquieme,
-    [QUATRIEME]: quatrieme,
-    [TROISIEME]: troisieme,
-    [SECONDE]: seconde,
-    [PREMIERE_GENERALE]: premiereGenerale,
-    [PREMIERE_SPE_MATHS]: premiereSpe,
-    [PREMIERE_STMG]: premiereSTMG,
-    [TERMINALE_GENERALE]: terminaleGenerale,
-    [TERMINALE_SPE_MATHS]: terminaleSpe,
-    [TERMINALE_STMG]: terminaleSTMG,
-    [MATHS_COMPLEMENTAIRES]: mathsComplementaires,
-    [MATHS_EXPERTES]: mathsExpertes,
-}
+
 
 export function gradeMatchesClass(gradeQuestion, gradeClass) {
+
+    const grades = {
+        [CP]: cp,
+        [CE1]: ce1,
+        [CE2]: ce2,
+        [CM1]: cm1,
+        [CM2]: cm2,
+        [SIXIEME]: sixieme,
+        [CINQUIEME]: cinquieme,
+        [QUATRIEME]: quatrieme,
+        [TROISIEME]: troisieme,
+        [SECONDE]: seconde,
+        [PREMIERE_GENERALE]: premiereGenerale,
+        [PREMIERE_SPE_MATHS]: premiereSpe,
+        [PREMIERE_STMG]: premiereSTMG,
+        [TERMINALE_GENERALE]: terminaleGenerale,
+        [TERMINALE_SPE_MATHS]: terminaleSpe,
+        [TERMINALE_STMG]: terminaleSTMG,
+        [MATHS_COMPLEMENTAIRES]: mathsComplementaires,
+        [MATHS_EXPERTES]: mathsExpertes,
+    }
     let grade = grades[gradeClass]
 
     while (grade && grade.name !== gradeQuestion) {

@@ -20,6 +20,7 @@
   import { math } from 'tinycas/build/math/math'
   import Exemple from './Exemple.svelte'
   import { mdiRocketLaunchOutline, mdiRestart } from '@mdi/js'
+  import { fetchImage } from './images'
 
   export let location
 
@@ -60,6 +61,8 @@
   let showExemple = false
   let showCorrection = false
   let generatedExemple
+  let images = []
+  let grade
 
   const togglePause = () => {
     if (pause) {
@@ -113,6 +116,7 @@
   }
 
   function initTest() {
+    info('init test')
     restart = false
     current = -1
     finish = false
@@ -174,6 +178,17 @@
 
       shuffle(questions)
     }
+    generateds = questions.reduce((acc, current) => {
+      const question = generate(current, acc)
+      acc.push(question)
+      return acc
+    }, [])
+    generateds.forEach((q) => {
+      if (q.image) {
+        q.imageBase64 = fetchImage(q.image)
+      }
+    })
+
     if (classroom && theme) {
       console.log('showExemple')
       showExemple = true
@@ -181,7 +196,8 @@
     } else {
       change()
     }
-    info('Begining test with questions :', questions)
+
+    info('Begining test with questions :', generateds)
   }
 
   function onChoice(choice) {
@@ -315,8 +331,9 @@
       answer_choice = null
       current++
       question = questions[current]
-      generated = generate(question, generateds)
-      if (generateds) generateds.push(generated)
+      generated = generateds[current]
+      // generated = generate(question, generateds)
+      // if (generateds) generateds.push(generated)
       delay = question.delay
         ? question.delay * 1000
         : question.defaultDelay * 1000
