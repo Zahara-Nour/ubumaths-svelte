@@ -66,6 +66,19 @@ const UNKNOWN = 'a determiner'
 // shallow-shuffle-terms = false
 // shallow-shuffle-factors = false
 
+// expression
+// exp-remove-unecessary-brackets = false
+
+
+
+//*  mélange des choix (mélangés par défaut)
+// no-shuffle-choices = false
+
+
+// * unicité des questions 
+// allow-same-expression = false
+// allow-same-enounce = false
+
 
 // TODO: options pour fractions non simplifiées
 export default {
@@ -74,7 +87,7 @@ export default {
       Ecriture: [
         {
           description: "Connaître la position décimale",
-          subdescriptions: ["Jusqu'aux dizaines."],
+          subdescription: "Jusqu'aux dizaines.",
           enounces: [
             "Dans le nombre $$&4$$,  quel est le chiffre des dizaines ?",
             "Dans le nombre $$&4$$, quel est le chiffre des unités ?"
@@ -106,7 +119,7 @@ export default {
         },
         {
           description: "Connaître la position décimale",
-          subdescriptions: ["Jusqu'aux centaines"],
+          subdescription: "Jusqu'aux centaines",
           enounces: [
             "Dans le nombre $$&4$$, quel est le chiffre des centaines ?",
             "Dans le nombre $$&4$$,  quel est le chiffre des dizaines ?",
@@ -156,7 +169,7 @@ export default {
 
           ],
           choices: [
-            ['pair', 'impair'],
+            [{ text: 'pair' }, { text: 'impair' }],
           ],
           correctionFormat: [{
             correct: ['Le nombre $$&exp$$ est &solution'],
@@ -169,13 +182,14 @@ export default {
           solutions: [
             [0], [1]
           ],
+          options: ['no-shuffle-choices'],
           type: 'choice',
           defaultDelay: 10,
           grade: CE1,
         },
         {
           description: "Connaître la position décimale",
-          subdescriptions: ["Jusqu'aux milliers"],
+          subdescription: "Jusqu'aux milliers",
           enounces: [
             "Dans le nombre $$%{&5}$$, quel est le chiffre des milliers ?",
             "Dans le nombre $$%{&5}$$, quel est le chiffre des centaines ?",
@@ -441,7 +455,7 @@ export default {
       Repérage: [
         {
           description: "Repérer sur une demi-droite graduée.",
-          subdescriptions: [""],
+
           // expressions:['1'],
           images: [
             'droite_graduee-10_en_10-0-600.png',
@@ -476,7 +490,7 @@ export default {
       Comparer: [
         {
           description: "Comparer deux nombres entiers",
-          subdescriptions: ["Nombres inférieurs à 100"],
+          subdescription: "Nombres inférieurs à 100",
           enounces: ["Quel est le plus petit de ces 2 nombres ?"],
           variables: [
             {
@@ -491,12 +505,12 @@ export default {
           ],
           conditions: ['&5!=&6'],
           choices: [
-            ['$$%%{&5}$$', '$$%%{&6}$$'],
+            [{ text: '$$%%{&5}$$' }, { text: '$$%%{&6}$$' }],
           ],
           correctionFormat: [{
             correct: ['Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est &solution'],
             uncorrect: ['Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est &solution'],
-            answer: 'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est &answer'
+            answer: 'Le plus petit est &answer'
           }],
           // corrections: [
           //   'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
@@ -510,7 +524,7 @@ export default {
         },
         {
           description: "Comparer deux nombres entiers",
-          subdescriptions: ["Nombres inférieurs à 1000"],
+          subdescription: "Nombres inférieurs à 1000",
           enounces: ["Quel est le plus petit de ces 2 nombres ?"],
           variables: [
             {
@@ -527,12 +541,12 @@ export default {
           ],
           conditions: ['&7!=&8'],
           choices: [
-            ['$$%%{&7}$$', '$$%%{&8}$$'],
+            [{ text: '$$%%{&7}$$' }, { text: '$$%%{&8}$$' }],
           ],
           correctionFormat: [{
             correct: ['Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &solution'],
             uncorrect: ['Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &solution'],
-            answer: 'Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &answer'
+            answer: 'Le plus petit est &answer'
           }],
           // corrections: [
           //   'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
@@ -546,7 +560,7 @@ export default {
         },
         {
           description: "Comparer deux nombres entiers",
-          subdescriptions: ["Nombres inférieurs à 10000"],
+          subdescription: "Nombres inférieurs à 10000",
           enounces: ["Quel est le plus petit de ces 2 nombres ?"],
           variables: [
             {
@@ -563,12 +577,12 @@ export default {
           ],
           conditions: ['#{&7}!=#{&8}'],
           choices: [
-            ['$$%%{&7}$$', '$$%%{&8}$$'],
+            [{ text: '$$%%{&7}$$' }, { text: '$$%%{&8}$$' }],
           ],
           correctionFormat: [{
             correct: ['Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &solution'],
             uncorrect: ['Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &solution'],
-            answer: 'Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &answer'
+            answer: 'Le plus petit est &answer'
           }],
           // corrections: [
           //   'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
@@ -582,6 +596,7 @@ export default {
         },
         {
           description: "Comparer deux nombres entiers",
+          subdescription: "Jusqu'au million",
           enounces: ["Quel est le plus petit de ces 2 nombres ?"],
           variables: [
             {
@@ -596,7 +611,7 @@ export default {
           ],
           conditions: ['&6!=&7'],
           choices: [
-            ['$$%%{&6}$$', '$$%%{&7}$$'],
+            [{ text: '$$%%{&6}$$' }, { text: '$$%%{&7}$$' }],
           ],
           correctionFormat: [{
             correct: ['Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est &solution'],
@@ -3096,7 +3111,7 @@ export default {
 
           type: 'choice',
           choices: [
-            ['Oui', 'Non'],
+            [{ text: 'Oui' }, { text: 'Non' }],
           ],
           // corrections: [
           //   'Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est ',
@@ -3109,7 +3124,7 @@ export default {
             uncorrect: ['$$2$$ est un diviseur de $$%{&1}$$ ? &solution'],
             answer: ' &answer'
           }],
-
+          options: ['no-shuffle-choices'],
           defaultDelay: 10,
           grade: CM1,
         },
@@ -3122,7 +3137,7 @@ export default {
 
           type: 'choice',
           choices: [
-            ['Oui', 'Non'],
+            [{ text: 'Oui' }, { text: 'Non' }],
           ],
           // corrections: [
           //   'Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est ',
@@ -3135,7 +3150,7 @@ export default {
             uncorrect: ['$$5$$ est un diviseur de $$%{&1}$$ ? &solution'],
             answer: ' &answer'
           }],
-
+          options: ['no-shuffle-choices'],
           defaultDelay: 10,
           grade: CM1,
         },
@@ -3148,7 +3163,7 @@ export default {
 
           type: 'choice',
           choices: [
-            ['Oui', 'Non'],
+            [{ text: 'Oui' }, { text: 'Non' }],
           ],
           // corrections: [
           //   'Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est ',
@@ -3161,7 +3176,7 @@ export default {
             uncorrect: ['$$10$$ est un diviseur de $$%{&1}$$ ? &solution'],
             answer: ' &answer'
           }],
-
+          options: ['no-shuffle-choices'],
           defaultDelay: 30,
           grade: CM1,
         },
@@ -3174,7 +3189,7 @@ export default {
 
           type: 'choice',
           choices: [
-            ['Oui', 'Non'],
+            [{ text: 'Oui' }, { text: 'Non' }],
           ],
           // corrections: [
           //   'Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est ',
@@ -3187,7 +3202,7 @@ export default {
             uncorrect: ['$$3$$ est un diviseur de $$%{&1}$$ ? &solution'],
             answer: ' &answer'
           }],
-
+          options: ['no-shuffle-choices'],
           defaultDelay: 15,
           grade: CM2,
         },
@@ -3200,7 +3215,7 @@ export default {
 
           type: 'choice',
           choices: [
-            ['Oui', 'Non'],
+            [{ text: 'Oui' }, { text: 'Non' }],
           ],
           // corrections: [
           //   'Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est ',
@@ -3213,7 +3228,7 @@ export default {
             uncorrect: ['$$9$$ est un diviseur de $$%{&1}$$ ? &solution'],
             answer: ' &answer'
           }],
-
+          options: ['no-shuffle-choices'],
           defaultDelay: 15,
           grade: CM2,
         },
@@ -3417,7 +3432,7 @@ export default {
       Ecriture: [
         {
           description: "Connaître la position décimale",
-          subdescriptions: ["Jusqu'aux centièmes"],
+          subdescription: "Jusqu'aux centièmes",
           enounces: [
             "Quel est le chiffre des <b>centièmes</b> dans le nombre $$%%{&4}$$ ?",
             "Quel est le chiffre des <b>dizièmes</b> dans le nombre $$%%{&4}$$ ?",
@@ -3781,12 +3796,12 @@ export default {
           ],
           conditions: ['&7!=&8'],
           choices: [
-            ['$$%%{&7}$$', '$$%%{&8}$$'],
+            [{ text: '$$%%{&7}$$' }, { text: '$$%%{&8}$$' }],
           ],
           correctionFormat: [{
             correct: ['Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &solution'],
             uncorrect: ['Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &solution'],
-            answer: 'Entre $$%%{&7}$$ et $$%%{&8}$$ le plus petit est &answer'
+            answer: 'Le plus petit est &answer'
           }],
           solutions: [
             ['&7<&8 ?? 0 :: 1'],
@@ -5103,19 +5118,30 @@ export default {
             { '&1': '$e[1;19]', '&2': '$e[&1+1;20]', },
           ],
           choices: [
-            ['$$-&1$$', '$$&2$$'],
-            ['$$&1$$', '$$-&2$$'],
-            ['$$-&1$$', '$$-&2$$'],
-            ['$$-&2$$', '$$-&1$$'],
+
+            [{ text: '$$&1$$' }, { text: '$$-&2$$' }],
+            [{ text: '$$-&1$$' }, { text: '$$-&2$$' }],
+            [{ text: '$$-&2$$' }, { text: '$$-&1$$' }],
           ],
-          corrections: [
-            'Entre $$-&1$$ et $$&2$$, le plus petit est ',
-            'Entre $$&1$$ et $$-&2$$, le plus petit est ',
-            'Entre $$-&1$$ et $$-&2$$, le plus petit est ',
-            'Entre $$-&2$$ et $$-&1$$, le plus petit est ',
-          ],
+          correctionFormat: [
+
+            {
+              correct: ['Entre $$&1$$ et $$-&2$$ le plus petit est &solution'],
+              uncorrect: ['Entre $$&1$$ et $$-&2$$ le plus petit est &solution'],
+              answer: 'Le plus petit est &answer'
+            },
+            {
+              correct: ['Entre $$-&1$$ et $$-&2$$ le plus petit est &solution'],
+              uncorrect: ['Entre $$-&1$$ et $$-&2$$ le plus petit est &solution'],
+              answer: 'Le plus petit est &answer'
+            },
+            {
+              correct: ['Entre $$-&2$$ et $$-&1$$ le plus petit est &solution'],
+              uncorrect: ['Entre $$-&2$$ et $$-&1$$ le plus petit est &solution'],
+              answer: 'Le plus petit est &answer'
+            }],
+
           solutions: [
-            [0],
             [1],
             [1],
             [0],
@@ -5151,11 +5177,16 @@ export default {
             },
           ],
           choices: [
-            ['$$%%{&6}$$', '$$%%{&7}$$'],
+            [{ text: '$$%%{&6}$$' }, { text: '$$%%{&7}$$' }],
 
           ],
-          corrections: [
-            'Entre $$%%{&6}$$ et $$%%{&7}$$, le plus petit est '
+          correctionFormat: [
+
+            {
+              correct: ['Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est &solution'],
+              uncorrect: ['Entre $$%%{&6}$$ et $$%%{&7}$$ le plus petit est &solution'],
+              answer: 'Le plus petit est &answer'
+            },
           ],
           solutions: [
             ['&6<&7 ?? 0 :: 1'],
@@ -5222,13 +5253,34 @@ export default {
             { '&1': '$e[30;99]', '&2': '$e[1;&1-1]' },
 
           ],
-          choices: [['positif', 'négatif']],
-          corrections: [
-            'Le résultat de $$(-&1)+&2$$ est ',
-            'Le résultat de $$(-&2)+&1$$ est ',
-            'Le résultat de $$(-&1)+(-&2)$$ est ',
-            'Le résultat de $$&1+(-&2)$$ est ',
-            'Le résultat de $$&2+(-&1)$$ est ',
+          choices: [[{ text: 'positif' }, { text: 'négatif' }]],
+          correctionFormat: [
+            {
+              correct: ['Le résultat de $$(-&1)+&2$$ est &solution'],
+              uncorrect: ['Le résultat de $$(-&1)+&2$$ est est &solution'],
+              answer: 'Le résultat est &answer'
+            },
+            {
+              correct: ['Le résultat de $$(-&2)+&1$$ est  &solution'],
+              uncorrect: ['Le résultat de $$(-&2)+&1$$ est  &solution'],
+              answer: 'Le résultat est &answer'
+            },
+            {
+              correct: ['Le résultat de $$(-&1)+(-&2)$$ est &solution'],
+              uncorrect: ['Le résultat de $$(-&1)+(-&2)$$ est  &solution'],
+              answer: 'Le résultat est &answer'
+            },
+            {
+              correct: ['Le résultat de $$&1+(-&2)$$ est &solution'],
+              uncorrect: ['Le résultat de $$&1+(-&2)$$ est &solution'],
+              answer: 'Le résultat est &answer'
+            },
+            {
+              correct: ['Le résultat de $$&2+(-&1)$$ est &solution'],
+              uncorrect: ['Le résultat de $$&2+(-&1)$$ est est &solution'],
+              answer: 'Le résultat est &answer'
+            },
+
           ],
           solutions: [
             [1],
@@ -5238,6 +5290,7 @@ export default {
             [1],
           ],
           type: 'choice',
+          options: ['no-shuffle-choices'],
           defaultDelay: 20,
           grade: CINQUIEME,
 
@@ -5342,21 +5395,24 @@ export default {
       Produit: [
         {
           description: "Déterminer le signe d'un produit",
+          subdescription: "2 facteurs",
           enounces: ['Quel est le signe de ce produit ?'],
-          expressions: ['(-&1)*&2', '(-&1)*(-&2)', '&1*(-&2)'],
-          variables: [{ '&1': '$e[30;99]', '&2': '$e[30;99]' }],
-          choices: [['positif', 'négatif']],
-          corrections: [
-            'Le résultat de $$(-&1) \\times &2$$ est ',
-            'Le résultat de $$(-&1)  \\times (-&2)$$ est ',
-            'Le résultat de $$&1  \\times (-&2)$$ est ',
+          expressions: ['(&1)*(&2)'],
+          conditions: ['&1<=0 || &2<=0'],
+          variables: [{ '&1': '$er[30;99]', '&2': '$er[30;99]' }],
+          choices: [[{ text: 'positif' }, { text: 'négatif' }]],
+          correctionFormat: [
+            {
+              correct: ['Le résultat de $$&exp$$ est &solution'],
+              uncorrect: ['Le résultat de $$&exp$$ est &solution'],
+              answer: 'Le résultat est &answer'
+            },
           ],
           solutions: [
-            [1],
-            [0],
-            [1],
+            ['(&1)*(&2) >0 ?? 0 :: 1'],
           ],
           type: 'choice',
+          options: ['no-shuffle-choices', 'exp-remove-unecessary-brackets'],
           defaultDelay: 20,
           grade: QUATRIEME,
 
@@ -5375,7 +5431,7 @@ export default {
             '?*&1=&2'
           ],
           variables: [{ '&1': '$e[30;99]', '&2': '$e[30;99]' }],
-          choices: [['positif', 'négatif']],
+          choices: [[{ text: 'positif' }, { text: 'négatif' }]],
           corrections: [
             "Dans l'égalité $$(-&1) \\times \\ldots=&2$$, le facteur manquant est ",
             "Dans l'égalité $$(-&1) \\times \\ldots=-&2$$, le facteur manquant est ",
@@ -5397,6 +5453,53 @@ export default {
             [0],
           ],
           type: 'choice',
+          defaultDelay: 20,
+          grade: QUATRIEME,
+
+        },
+
+        {
+          description: "Déterminer le signe d'un produit",
+          subdescription: "3 facteurs",
+          enounces: ['Quel est le signe de ce produit ?'],
+          expressions: ['(&1)*(&2)*(&3)'],
+          variables: [{ '&1': '$er[30;99]', '&2': '$er[30;99]', '&3': '$er[30;99]' }],
+          choices: [[{ text: 'positif' }, { text: 'négatif' }]],
+          correctionFormat: [
+            {
+              correct: ['Le résultat de $$&exp$$ est &solution'],
+              uncorrect: ['Le résultat de $$&exp$$ est &solution'],
+              answer: 'Le résultat est &answer'
+            },
+          ],
+          solutions: [
+            ['(&1)*(&2)*(&3) >0 ?? 0 :: 1'],
+          ],
+          type: 'choice',
+          options: ['no-shuffle-choices', 'exp-remove-unecessary-brackets'],
+          defaultDelay: 20,
+          grade: QUATRIEME,
+
+        },
+        {
+          description: "Déterminer le signe d'un produit",
+          subdescription: "4 facteurs",
+          enounces: ['Quel est le signe de ce produit ?'],
+          expressions: ['(&1)*(&2)*(&3)*(&4)'],
+          variables: [{ '&1': '$er[30;99]', '&2': '$er[30;99]', '&3': '$er[30;99]', '&4': '$er[30;99]' }],
+          choices: [[{ text: 'positif' }, { text: 'négatif' }]],
+          correctionFormat: [
+            {
+              correct: ['Le résultat de $$&exp$$ est &solution'],
+              uncorrect: ['Le résultat de $$&exp$$ est &solution'],
+              answer: 'Le résultat est &answer'
+            },
+          ],
+          solutions: [
+            ['(&1)*(&2)*(&3)*(&4) >0 ?? 0 :: 1'],
+          ],
+          type: 'choice',
+          options: ['no-shuffle-choices', 'exp-remove-unecessary-brackets'],
           defaultDelay: 20,
           grade: QUATRIEME,
 
@@ -5434,59 +5537,48 @@ export default {
         {
           description: "Déterminer le signe d'un quotient",
           enounces: ['Quel est le signe de ce quotient ?'],
-          expressions: ['(-&1):&2', '(-&1):(-&2)', '&1:(-&2)'],
-          variables: [{ '&1': '$e[30;99]', '&2': '$e[30;99]' }],
-          choices: [['positif', 'négatif']],
-          corrections: [
-            'Le résultat de $$(-&1) \\div &2$$ est ',
-            'Le résultat de $$(-&1)  \\div (-&2)$$ est ',
-            'Le résultat de $$&1  \\div (-&2)$$ est ',
+          expressions: ['(&1):(&2)'],
+          variables: [{ '&1': '$er[30;99]', '&2': '$er[30;99]' }],
+          conditions: ['&1<=0 || &2<0'],
+          choices: [[{ text: 'positif' }, { text: 'négatif' }]],
+          correctionFormat: [
+            {
+              correct: ['Le résultat de $$&exp$$ est &solution'],
+              uncorrect: ['Le résultat de $$&exp$$ est &solution'],
+              answer: 'Le résultat est &answer'
+            },
           ],
           solutions: [
-            [1],
-            [0],
-            [1],
+            ['(&1):(&2)>0 ?? 0 :: 1'],
           ],
           type: 'choice',
+          options: ['no-shuffle-choices', 'exp-remove-unecessary-brackets'],
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: "Déterminer le signe dans un quotient",
           enounces: ['Quel est le signe du nombre manquant ?'],
           expressions: [
-            '(-&1):?=&/2',
-            '(-&1):?=-&2',
-            '&1:?=-&2',
-            '&1:?=&2',
-            '?:(-&1)=&2',
-            '?:(-&1)=-&2',
-            '?:&1=-&2',
-            '?:&1=&2'
+            '(&1):?=(&2)', 
+            '?:(&1)=(&2)',
+      
           ],
-          variables: [{ '&1': '$e[30;99]', '&2': '$e[30;99]' }],
-          choices: [['positif', 'négatif']],
-          corrections: [
-            "Dans l'égalité $$(-&1) \\div \\ldots=&2$$, le facteur manquant est ",
-            "Dans l'égalité $$(-&1) \\div \\ldots=-&2$$, le facteur manquant est ",
-            "Dans l'égalité $$&1 \\div \\ldots=-&2$$, le facteur manquant est ",
-            "Dans l'égalité $$&1 \\div \\ldots=&2$$, le facteur manquant est ",
-            "Dans l'égalité $$\\ldots \\div (-&1)=&2$$, le facteur manquant est ",
-            "Dans l'égalité $$\\ldots \\div (-&1)=-&2$$, le facteur manquant est ",
-            "Dans l'égalité $$\\ldots \\div &1=-&2$$, le facteur manquant est ",
-            "Dans l'égalité $$\\ldots \\div &1=&2$$, le facteur manquant est ",
+          variables: [{ '&1': '$er[30;99]', '&2': '$er[30;99]' }],
+          conditions: ['&1<=0 || &2<0'],
+          choices: [[{ text: 'positif' }, { text: 'négatif' }]],
+          correctionFormat: [
+            {
+              correct: ["Dans $$&exp$$ le facteur manquant est &solution"],
+              uncorrect: ["Dans $$&exp$$ le facteur manquant est &solution"],
+              answer: 'Le facteur manquant est &answer'
+            },
           ],
           solutions: [
-            [1],
-            [0],
-            [1],
-            [0],
-            [1],
-            [0],
-            [1],
-            [0],
+            ['(&1)*(&2)>0 ?? 0 :: 1'],
           ],
           type: 'choice',
+          options: ['no-shuffle-choices', 'exp-remove-unecessary-brackets'],
           defaultDelay: 20,
           grade: QUATRIEME,
         },
@@ -5980,13 +6072,13 @@ export default {
             },
           ],
           choices: [
-            ['$$\\frac{&2}{&1}$$', '$$\\frac{&3}{&1}$$'],
+            [{ text: '$$\\frac{&2}{&1}$$' }, { text: '$$\\frac{&3}{&1}$$' }],
           ],
 
           correctionFormat: [{
             correct: ['Entre $$\\frac{&2}{&1}$$ et $$\\frac{&3}{&1}$$ la plus petite fraction est &solution'],
             uncorrect: ['Entre $$\\frac{&2}{&1}$$ et $$\\frac{&3}{&1}$$ la plus petite fraction est &solution'],
-            answer: 'Entre $$\\frac{&2}{&1}$$ et $$\\frac{&3}{&1}$$ la plus petite fraction est &answer'
+            answer: 'La plus petite fraction est &answer'
           }],
           solutions: [
             ['&4<&5 ?? 0 :: 1'],
@@ -6011,14 +6103,14 @@ export default {
 
           ],
           choices: [
-            ['$$\\frac{&2}{&1}$$', '$$\\frac{&4}{&3}$$'],
-            ['$$\\frac{&4}{&3}$$', '$$\\frac{&2}{&1}$$'],
+            [{ text: '$$\\frac{&2}{&1}$$' }, { text: '$$\\frac{&4}{&3}$$' }],
+            [{ text: '$$\\frac{&4}{&3}$$' }, { text: '$$\\frac{&2}{&1}$$' }],
           ],
-
-          corrections: [
-            'Entre $$\\frac{&2}{&1}$$ et $$\\frac{&4}{&3}$$ la plus petite fraction est  ',
-            'Entre $$\\frac{&4}{&3}$$ et $$\\frac{&2}{&1}$$ la plus petite fraction est  ',
-          ],
+          correctionFormat: [{
+            correct: ['Entre $$\\frac{&2}{&1}$$ et $$\\frac{&4}{&3}$$ la plus petite fraction est &solution'],
+            uncorrect: ['Entre $$\\frac{&2}{&1}$$ et $$\\frac{&4}{&3}$$ la plus petite fraction est &solution'],
+            answer: 'La plus petite fraction est &answer'
+          }],
           solutions: [
             ['&5<&6 ?? 0 :: 1'],
             ['&6<&5 ?? 0 :: 1'],
@@ -6034,19 +6126,37 @@ export default {
           variables: [
             {
               '&1': '$e[2;9]',
-              '&2': '$e[2;9]',
-              '&3': '$e[2;9]\\{&1}',
-              '&4': '$e[2;9]',
-              '&5': '&2/&1',
-              '&6': '(&3*&4)/(&1*&4)'
+              '&2': '$e[2;8]',
+              '&3': '$e[&2+1;9]',
+              '&4': '$e[&2*2;&3*&1-1]\\{&2*&1}',
+              '&5': '&2/&3',
+              '&6': '&4/(&3*&1)'
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;8]',
+              '&3': '$e[&2+1;9]',
+              '&4': '$e[&3*2;&2*&1-1]\\{&3*&1}',
+              '&5': '&3/&2',
+              '&6': '&4/(&2*&1)'
             },
           ],
           choices: [
-            ['$$\\frac{&2}{&1}$$', '$$\\frac{#{&3*&4}}{#{&4*&1}}$$'],
+            [{ text: '$$\\frac{&2}{&3}$$' }, { text: '$$\\frac{#{&4}}{#{&3*&1}}$$' }],
+            [{ text: '$$\\frac{&3}{&2}$$' }, { text: '$$\\frac{#{&4}}{#{&2*&1}}$$' }],
           ],
-          corrections: [
-            'Entre $$\\frac{&2}{&1}$$ et $$\\frac{#{&3*&4}}{#{&4*&1}}$$ la plus petite fraction est  ',
-          ],
+          correctionFormat: [{
+            correct: ['Entre $$\\frac{&2}{&3}$$ et $$\\frac{#{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
+            uncorrect: ['Entre $$$\\frac{&2}{&3}$$ et $$\\frac{#{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
+            answer: 'La plus petite fraction est &answer'
+          },
+          {
+            correct: ['Entre $$\\frac{&3}{&2}$$ et $$\\frac{#{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
+            uncorrect: ['Entre $$$\\frac{&3}{&2}$$ et $$\\frac{#{&4}}{#{&2*&1}}$$ la plus petite fraction est &solution'],
+            answer: 'La plus petite fraction est &answer'
+          }
+        ],
+          
           solutions: [
             ['&5<&6 ?? 0 :: 1'],
           ],
@@ -6054,6 +6164,7 @@ export default {
           defaultDelay: 20,
           grade: CINQUIEME,
         },
+       
       ]
     },
     'Egalité à compléter': {
@@ -7188,13 +7299,13 @@ export default {
 
     }
   },
-  
+
   'Fonctions': {
     'Fonctions affines': {
       Variations: [
         {
           description: "Déterminer le coefficient directeur",
-          subdescriptions: ["Graphiquement"],
+          subdescription: "Graphiquement",
           // expressions:['1'],
           images: [
             'trouver_coef_directeur-0-600.png',
@@ -7300,7 +7411,7 @@ export default {
             'f(x)=-&1x#s{&4}',
             'f(x)=#{&4}+&1x',
             'f(x)=#{&4}-&1x',
-            
+
             'f(x)={&3}x#s{&7}',
             'f(x)={-&3}x#s{&7}',
             'f(x)=#{&7}+{&3}x',
@@ -7311,72 +7422,72 @@ export default {
               '&1': '$e[2;9]',
               '&2': '$e[1;9]\\{&1}',
               '&3': '$l{-1;1}',
-              '&4':'&2*(&3)',
+              '&4': '&2*(&3)',
 
             },
             {
               '&1': '$e[2;9]',
               '&2': '$e[1;9]\\{&1}',
               '&3': '$l{-1;1}',
-              '&4':'&2*(&3)',
+              '&4': '&2*(&3)',
 
             },
             {
               '&1': '$e[2;9]',
               '&2': '$e[1;9]\\{&1}',
               '&3': '$l{-1;1}',
-              '&4':'&2*(&3)',
+              '&4': '&2*(&3)',
 
             },
             {
               '&1': '$e[2;9]',
               '&2': '$e[1;9]\\{&1}',
               '&3': '$l{-1;1}',
-              '&4':'&2*(&3)',
+              '&4': '&2*(&3)',
 
             },
-           
+
             {
               '&1': '$e[1;9]',
               '&2': '$e[2;9]\\{cd(&1)}',
-              '&3':'&1/&2',
+              '&3': '&1/&2',
               '&4': '$e[1;9]',
               '&5': '$e[2;9]\\{cd(&4)}',
               '&6': '$l{-1;1}',
-              '&7':'&6*&4/&5',
+              '&7': '&6*&4/&5',
             },
             {
               '&1': '$e[1;9]',
               '&2': '$e[2;9]\\{cd(&1)}',
-              '&3':'&1/&2',
+              '&3': '&1/&2',
               '&4': '$e[1;9]',
               '&5': '$e[2;9]\\{cd(&4)}',
               '&6': '$l{-1;1}',
-              '&7':'&6*&4/&5',
+              '&7': '&6*&4/&5',
             },
             {
               '&1': '$e[1;9]',
               '&2': '$e[2;9]\\{cd(&1)}',
-              '&3':'&1/&2',
+              '&3': '&1/&2',
               '&4': '$e[1;9]',
               '&5': '$e[2;9]\\{cd(&4)}',
               '&6': '$l{-1;1}',
-              '&7':'&6*&4/&5',
+              '&7': '&6*&4/&5',
             },
             {
               '&1': '$e[1;9]',
               '&2': '$e[2;9]\\{cd(&1)}',
-              '&3':'&1/&2',
+              '&3': '&1/&2',
               '&4': '$e[1;9]',
               '&5': '$e[2;9]\\{cd(&4)}',
               '&6': '$l{-1;1}',
-              '&7':'&6*&4/&5',
+              '&7': '&6*&4/&5',
             },
 
           ],
           type: 'choice',
           choices: [
-            ['croissante', 'décroissante'],
+            [{ text: 'croissante' }, { text: 'décroissante' }],
           ],
           correctionFormat: [
             {
@@ -7421,8 +7532,8 @@ export default {
             },
 
           ],
-     
-     
+
+
           solutions: [
             [0],
             [1],
@@ -7432,7 +7543,7 @@ export default {
             [1],
             [0],
             [1],
-           
+
           ],
 
           defaultDelay: 10,
@@ -7463,7 +7574,7 @@ export default {
           ],
           type: 'choice',
           choices: [
-            ['parallèles', '<b>non</b> parallèles'],
+            [{ text: 'parallèles' }, { text: '<b>non</b> parallèles' }],
           ],
           correctionFormat: [
             {
@@ -7471,20 +7582,20 @@ export default {
               uncorrect: ['Les droites représentatives des fonctions $$&exp$$ et $$&exp2$$ sont &solution.'],
               answer: 'Les droites sont &answer.'
             },
-            
-         
-         
+
+
+
 
           ],
-     
-     
+
+
           solutions: [
             [0],
             [0],
             [1],
             [1],
             [1],
-            [1], 
+            [1],
           ],
 
           defaultDelay: 10,
@@ -7515,16 +7626,161 @@ export default {
               answer: "La fonction $$&exp$$ s'annule en &answer."
             },
           ],
-     
-     
+
+
           solutions: [
-            ['#{-(&2)/(&1)}'],  
+            ['#{-(&2)/(&1)}'],
           ],
 
           defaultDelay: 10,
           grade: TROISIEME,
         },
-        
+        {
+          description: "Reconnaître le tableau de signe d'une fonction affine",
+          enounces: [
+            'Quel est le tableau de signe correspondant à la fonction affine:',
+          ],
+          expressions: [
+            "f(x)=-6x+7",
+            "f(x)=-9x-1",
+            "f(x)=-5x+9",
+            "f(x)=3x+3",
+            "f(x)=7x-8",
+            "f(x)=-2x-4",
+            "f(x)=6x+8",
+            "f(x)=4x+9",
+            "f(x)=-7x+2",
+            "f(x)=2x+5",
+            "f(x)=8x-1",
+            "f(x)=-4x",
+            "f(x)=-5x-1",
+            "f(x)=-1x+7",
+            "f(x)=1x-8",
+            "f(x)=-7x+6",
+            "f(x)=x",
+            "f(x)=-3x+4",
+            "f(x)=-5x-5",
+            "f(x)=5x-7"
+          ],
+
+          type: 'choice',
+          choices: [
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-0-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-0-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-0-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-1-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-1-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-1-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-2-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-2-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-2-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-3-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-3-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-3-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-4-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-4-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-4-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-5-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-5-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-5-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-6-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-6-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-6-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-7-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-7-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-7-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-8-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-8-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-8-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-9-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-9-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-9-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-10-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-10-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-10-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-11-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-11-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-11-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-12-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-12-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-12-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-13-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-13-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-13-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-14-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-14-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-14-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-15-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-15-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-15-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-16-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-16-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-16-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-17-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-17-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-17-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-18-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-18-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-18-600.png' },
+            ],
+            [
+              { image: 'tableau_de_signe_fonction_affine_correct-19-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect-19-600.png' },
+              { image: 'tableau_de_signe_fonction_affine_uncorrect2-19-600.png' },
+            ],
+
+          ],
+          correctionFormat: [
+            {
+              correct: ['Le tableau de signe de la fonction $$&exp$$ est :', 'image'],
+              uncorrect: ['Le tableau de signe de la fonction $$&exp$$ est :', 'image'],
+              answer: 'image'
+            },
+          ],
+
+          solutions: [[0]],
+
+          defaultDelay: 20,
+          grade: TROISIEME,
+        },
+
       ]
     }
   },

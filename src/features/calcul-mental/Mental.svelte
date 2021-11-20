@@ -65,7 +65,7 @@
   if (location.search) {
     queryParams = queryString.parse(location.search)
   }
-
+  console.log('queryParams', queryParams)
   if (queryParams.grade) {
     grade = queryParams.grade
     
@@ -193,7 +193,6 @@
   function generateExemple(theme, domain, subdomain, level) {
     let qs = questions[theme][domain][subdomain]
     const q = qs.find((q) => qs.indexOf(q) + 1 === parseInt(level, 10))
-    console.log('q', q)
     return generateQuestion(q)
   }
 
@@ -305,9 +304,7 @@
 
   $: if (isStudent) {
     grade = $user.grade
-  } else {
-    grade = CINQUIEME
-  }
+  } 
  
  
   $: if (theme && domain && subdomain && level >= 1) {
@@ -316,16 +313,8 @@
     console.log('exemple', generated)
   } else {
     disable = true
-    console.log('not generated')
   }
-  $: console.log('grade', grade)
-  $: console.log('value', value)
-  $: console.log('theme', theme)
-  $: console.log('domain', domain)
-  $: console.log('subdomain', subdomain)
-  $: console.log('level', level)
-  $: console.log('themeIdx', themeIdx)
-  $: console.log('disable', disable)
+
 </script>
 
 <h4 class="mt-5 pa-3 mb-5 amber white-text">Calcul mental</h4>

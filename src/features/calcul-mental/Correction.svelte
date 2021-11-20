@@ -331,7 +331,7 @@
       </div>
     </div>
   {:else}
-    <div class="d-flex flex-column" style="width:100%;overflow-x:auto;">
+    <div class="d-flex flex-column" style="width:100%;">
       <div>
         {#each items as item, i}
           <ListItem selectable="{false}">
@@ -349,22 +349,6 @@
                   <span style="font-size:{size}px;">{item.number}</span>
                 </Button>
 
-                <!-- a div is necessary for the icon to center aligned -->
-                <!-- <div>
-              {#if correct}
-                <Icon
-                  class="mt-2 green-text"
-                  style="font-size:{$fontSize}px;"
-                  path="{mdiCheckCircle}"
-                />
-              {:else}
-                <Icon
-                  class="mt-2 red-text"
-                  style="font-size:{$fontSize}px;"
-                  path="{mdiCloseCircle}"
-                />
-              {/if}
-            </div> -->
                 <div class="flex-grow-1"></div>
               </div>
               <CorrectionItem item="{item}" details="{details}" size="{size}" />

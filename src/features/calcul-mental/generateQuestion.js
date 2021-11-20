@@ -1,11 +1,12 @@
 import { math } from 'tinycas/build/math/math'
 import emptyQuestion from './emptyQuestion'
-import { getLogger, lexicoSort } from '../../app/utils'
+import { getLogger, lexicoSort, shuffle } from '../../app/utils'
 import questions from './questions'
+import { fetchImage } from './images'
 
 let { fail, warn, info } = getLogger('generateQuestion', 'info')
 
-export default function generateQuestion(question, generateds) {
+export default function generateQuestion(question, generateds = []) {
   // firestore returns objects with read-only properties
   let expression
   let expression2
@@ -20,6 +21,7 @@ export default function generateQuestion(question, generateds) {
   let correction
   let testAnswer
   let image
+  let solutionss
 
   const { options = [] } = question
 
@@ -108,10 +110,11 @@ export default function generateQuestion(question, generateds) {
     if (question.enounces) {
       enounce = question.enounces[question.enounces.length === 1 ? 0 : i]
     }
-
     if (question.choices) {
-      choices = question.choices[question.choices.length === 1 ? 0 : i]
+      choices = question.choices[question.choices.length === 1 ? 0 : i].map(choice => ({ ...choice }))
     }
+
+    console.log('question choices', JSON.stringify(question.choices))
 
     // generate variables which can depend on precedent ones
     if (question.variables) {
@@ -152,10 +155,16 @@ export default function generateQuestion(question, generateds) {
         }
         if (choices) {
 
-          choices = choices.map(c => c.replace(regex, variables[name]))
+          choices = choices.map(c => {
+            if (c.text) {
+              c.text = c.text.replace(regex, variables[name])
+            }
+            return c
+          })
+
         }
       })
-
+      console.log('choices', JSON.stringify(choices))
 
       if (expression) {
         expression = expression.replace(regexDecimal, replacementDecimal)
@@ -182,6 +191,12 @@ export default function generateQuestion(question, generateds) {
         else if (options.includes('shallow-shuffle-factors')) {
           expression = math(expression).shallowShuffleFactors().string
         }
+
+        if (options.includes('exp-remove-unecessary-brackets')) {
+          expression = math(expression).removeUnecessaryBrackets().string
+          console.log(expression)
+        }
+
       }
 
       if (enounce) {
@@ -193,60 +208,76 @@ export default function generateQuestion(question, generateds) {
       }
 
       if (choices) {
-        choices = choices.map(c => c.replace(regexDecimal, replacementDecimal))
-        choices = choices.map(c => c.replace(regexExactSigned, replacementExactSigned))
-        choices = choices.map(c => c.replace(regexExact, replacementExact))
-        choices = choices.map(c => c.replace(regexDecimalLatex, replacementDecimalLatex))
-        choices = choices.map(c => c.replace(regexExactLatex, replacementExactLatex))
+        choices = choices.map(c => {
+          if (c.text) {
+            c.text = c.text.replace(regexDecimal, replacementDecimal)
+            c.text = c.text.replace(regexExactSigned, replacementExactSigned)
+            c.text = c.text.replace(regexExact, replacementExact)
+            c.text = c.text.replace(regexDecimalLatex, replacementDecimalLatex)
+            c.text = c.text.replace(regexExactLatex, replacementExactLatex)
+          }
+          return c
+        })
       }
 
       if (expression && enounce) {
-        doItAgain = generatedExpressions.includes(expression) && generatedEnounces.includes(enounce)
+        doItAgain = generateds.some(g => g.expression === expression && g.enounce)
+        warn('même énoncé ET expression ', enounce, expression)
       }
 
-      else if (expression) {
+      else if (enounce && choices) {
+        doItAgain = generateds.some(g => {
+          const test = g.enounce === enounce && JSON.stringify(g.choices) === JSON.stringify(choices)
+          if (test) {
+            warn('même énoncé ET choix ', enounce, JSON.stringify(choices))
+          }
+          return test
+        })
+
+      }
+
+      else if (expression && !options.includes('allow-same-expression')) {
         doItAgain = generatedExpressions.includes(expression)
+        warn('même image expression', expression)
       }
-      else if (choices) {
-        doItAgain = generatedEnounces.includes(enounce) &&
-          generatedChoices.some(gcs => JSON.stringify(choices) == JSON.stringify(gcs))
-      }
-      else if (enounce) {
+
+      else if (enounce && !options.includes('allow-same-enounce')) {
         doItAgain = generatedEnounces.includes(enounce)
+        warn('même énoncé', enounce)
       }
 
       if (image) {
         console.log('includes generated?', image, generatedImages, generatedImages.includes(image))
         doItAgain = doItAgain || generatedImages.includes(image)
+        warn('même image pour la question', image)
       }
 
       if (!doItAgain && question.conditions) {
-        let tests =
-          question.conditions[question.conditions.length === 1 ? 0 : i].split('&&')
-        tests.forEach(test => {
-          Object.getOwnPropertyNames(variables).forEach((name) => {
-            const regex = new RegExp(name, 'g')
-            test = test.replace(regex, variables[name])
-          })
-          test = test.replace(regexExact, replacementExact)
+        let tests = question.conditions[question.conditions.length === 1 ? 0 : i]
 
-          if (math(test).eval().string === 'false') {
-            doItAgain = true
-          }
+        Object.getOwnPropertyNames(variables).forEach((name) => {
+          const regex = new RegExp(name, 'g')
+          tests = tests.replace(regex, variables[name])
         })
+        tests = tests.replace(regexExact, replacementExact)
+
+        if (tests.includes('||')) {
+          tests = tests.split('||')
+          doItAgain = !tests.some(test => math(test).eval().string === 'true')
+        } else {
+          tests = tests.split('||')
+          doItAgain = !tests.every(test => math(test).eval().string === 'true')
+        }
+        warn('tests non passé', tests)
       }
     }
-  } while (doItAgain && count < 1000)
+  } while (doItAgain && count < 100)
 
-  if (count >= 1000) {
+  if (count >= 100) {
     warn("can't generate a different question from others")
   }
 
-
-
-
   if (question.solutions) {
-
     solutions = question.solutions[question.solutions.length === 1 ? 0 : i]
     solutions = solutions.map((solution) => {
       if (typeof solution === 'string') {
@@ -280,10 +311,8 @@ export default function generateQuestion(question, generateds) {
   }
   // Il faut évaluer l'expression
   else if (expression) {
-
     let params = { decimal: question['result-type'] === 'decimal' }
 
-    // 
     if (question.letters) {
       letters = question.letters[question.letters.length === 1 ? 0 : i]
 
@@ -305,6 +334,41 @@ export default function generateQuestion(question, generateds) {
     solutions = [math(expression).eval(params).removeMultOperator().removeFactorsOne().string]
 
   }
+
+  if (choices) {
+
+    choices = choices.map(c => {
+      if (c.image) {
+        c.imageBase64 = fetchImage(c.image)
+      }
+      return c
+    })
+    if (!options.includes('no-shuffle-choices')) {
+
+      const a = []
+      for (let i = 0; i < choices.length; i++) {
+        a[i] = i
+      }
+      // les indices mélangés
+      shuffle(a)
+
+      choices = choices.map((_, i) => choices[a[i]])
+      solutions = solutions.map((solution) => {
+        if (typeof solution === 'number') {
+          // il faut retrouver le nouvel index de la solution
+          const new_solution = a.indexOf(solution)
+          return new_solution
+        }
+        else {
+          return solution
+        }
+      })
+
+    }
+  }
+
+
+
 
   if (question.details) {
     details = question.details[question.details.length === 1 ? 0 : i]
@@ -391,6 +455,7 @@ export default function generateQuestion(question, generateds) {
 
   let expression_latex
   if (expression) {
+    console.log('expression', expression, math(expression).string)
     expression_latex = math(expression).toLatex({
       addSpaces: !(question.options && question.options.includes('exp-no-spaces')),
       keepUnecessaryZeros: question.options && question.options.includes('exp-allow-unecessary-zeros')
@@ -476,7 +541,10 @@ export default function generateQuestion(question, generateds) {
   if (correctionFormat) generated.correctionFormat = correctionFormat
   if (expression2) generated.expression2 = expression2
   if (testAnswer) generated.testAnswer = testAnswer
-  if (image) generated.image = image
+  if (image) {
+    generated.image = image
+    generated.imageBase64 = fetchImage(image)
+  }
 
   return generated
 }

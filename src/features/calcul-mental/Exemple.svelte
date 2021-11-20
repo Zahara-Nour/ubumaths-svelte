@@ -27,7 +27,12 @@
     : ''
 
   $: if (question.choices) {
-    choices = question.choices.map((c) => c.replace(regex, replacement))
+    choices = question.choices.map((c) => {
+      if (c.text) {
+        c.text = c.text.replace(regex, replacement)
+      }
+      return c
+    })
   } else {
     choices = null
   }
@@ -43,10 +48,10 @@
       <CardSubtitle>{@html subdescription}</CardSubtitle>
     {/if}
   {/if}
-  <CardText style={classroom ? 'height:90%;' : ''}>
+  <CardText style="{classroom ? 'height:90%;' : ''}">
     <div
       class="d-flex flex-column align-center justify-space-around"
-      style={classroom ? 'height:100%;' : ''}
+      style="{classroom ? 'height:100%;' : ''}"
     >
       <Question
         size="{classroom ? $classroomFontSize : $menuFontSize}"
@@ -54,24 +59,42 @@
       />
 
       {#if choices}
-        <div class="mt-3 d-flex justify-space-around" style="width:100%;">
+        <div
+          class="mt-3 d-flex flex-wrap justify-space-around"
+          style="width:100%;"
+        >
           {#each choices as choice, i}
             <!-- <Button size="x-large" class="ml-3 mr-3" on:click="{() => onChoice(i)}"> -->
-            <div>
-              <button
-                class="rounded-lg pa-5 yellow lighten-4 ml-3 mr-3"
-                on:click="{() => {}}"
-              >
+
+            <button
+              class="rounded-lg  ma-2 pa-1"
+              style="border: 4px solid yellow;"
+              on:click="{() => {}}"
+            >
+              {#if choice.image}
+                {#await choice.imageBase64}
+                  loading image
+                {:then base64}
+                  <img
+                    class="white"
+                    src="{base64}"
+                    style="max-width:min(400px,80%);max-height:40vh;"
+                    alt="{`choice ${i}`}"
+                  />
+                {:catch error}
+                  {error}
+                {/await}
+              {/if}
+              {#if choice.text}
                 <div
                   style="font-size:{classroom
                     ? $classroomFontSize
                     : $menuFontSize}px;"
                 >
-                  {@html choice}
+                  {@html choice.text}
                 </div>
-              </button>
-            </div>
-            <!-- </Button> -->
+              {/if}
+            </button>
           {/each}
         </div>
       {/if}

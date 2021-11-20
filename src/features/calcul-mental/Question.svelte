@@ -25,14 +25,14 @@
     ? question.enounce.replace(regex, replacement)
     : null
 
-  $: expression = question.expression
-    ? Mathlive.convertLatexToMarkup(question.expression)
+  $: expression = question.expression_latex
+    ? Mathlive.convertLatexToMarkup(question.expression_latex)
     : null
 
-  $: expression2 = question.expression2
-    ? Mathlive.convertLatexToMarkup(question.expression2)
+  $: expression2 = question.expression2_latex
+    ? Mathlive.convertLatexToMarkup(question.expression2_latex)
     : null
-
+ 
   // changer le nom
   // $: if (mf && showExp) {
   //   const exp = question.expression2

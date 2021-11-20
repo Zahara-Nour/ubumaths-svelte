@@ -1,6 +1,5 @@
 <script>
   import { math } from 'tinycas/build/math/math'
-
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { onMount } from 'svelte'
   import { fetchImage } from './images'
@@ -27,6 +26,7 @@
     coms,
     status,
     image,
+    choices,
     imageBase64
 
   let answerColor = 'green'
@@ -63,6 +63,7 @@
       coms,
       status,
       image,
+      choices,
     } = item)
     if (image) {
       imageBase64 = fetchImage(image)
@@ -85,6 +86,7 @@
       : null
 
     correction = createCorrection(false)
+    console.log('correction', correction)
     detailedCorrection = item.details ? createCorrection(true) : null
   }
 
@@ -112,54 +114,72 @@
     if (correctionFormat) {
       if (status === STATUS_CORRECT) {
         correctionFormat.correct.forEach((format) => {
-          line = format
-            .replace('&exp', qexp_latex)
-            .replace('&exp2', qexp2_latex)
-            .replace(
-              '&solution',
-              () =>
-                '<span style="color:green;">' +
-                (item.type === 'choice'
-                  ? item.choices[solutions[0]]
-                  : '$$' + answer_latex + '$$') +
-                '</span>',
-            )
-          console.log('line', line)
+          if (format === 'image') {
+            let img = choices[solutions[0]].imageBase64
+            line = `<img src='${img}' style="max-width:400px;max-height:40vh;" alt='toto'>`
+          } else {
+            line = format
+              .replace('&exp', qexp_latex)
+              .replace('&exp2', qexp2_latex)
+              .replace(
+                '&solution',
+                () =>
+                  '<span style="color:green; border:2px solid green; border-radius: 5px; padding:3px;">' +
+                  (item.type === 'choice'
+                    ? Mathlive.convertLatexToMarkup(item.choices[solutions[0]].text)
+                    : Mathlive.convertLatexToMarkup(answer_latex)) +
+                  '</span>',
+              )
+          }
+
           lines.push(line)
         })
       } else {
         correctionFormat.uncorrect.forEach((format) => {
-          line = format
-            .replace('&exp', qexp_latex)
-            .replace('&exp2', qexp2_latex)
-            .replace(
-              '&solution',
+          if (format === 'image') {
+            let img = choices[solutions[0]].imageBase64
+            line = `<img style="max-width:400px;max-height:40vh;" src='${img}' alt='toto'>`
+          } else {
+            line = format
+              .replace('&exp', qexp_latex)
+              .replace('&exp2', qexp2_latex)
+              .replace(
+                '&solution',
+                () =>
+                  '<span style="color:green; border:2px solid green; border-radius: 5px; padding:3px;">' +
+                  (item.type === 'choice'
+                    ? Mathlive.convertLatexToMarkup(item.choices[solutions[0]].text)
+                    : Mathlive.convertLatexToMarkup(solutions_latex[0])) +
+                  '</span>',
+              )
+          }
 
-              () =>
-                '<span style="color:green;">' +
-                (item.type === 'choice'
-                  ? item.choices[solutions[0]]
-                  : '$$' + solutions_latex[0] + '$$') +
-                '</span>',
-            )
           lines.push(line)
         })
         if (status === STATUS_INCORRECT) {
-          coms.unshift(
-            'Ta réponse : ' +
-              correctionFormat.answer
-                .replace('&exp', qexp_latex)
-                .replace('&exp2', qexp2_latex)
-                .replace(
-                  '&answer',
-                  () =>
-                    '<span style="color:red;">' +
-                    (item.type === 'choice'
-                      ? item.choices[answer_choice]
-                      : '$$' + answer_latex + '$$') +
-                    '</span>',
-                ),
-          )
+          if (correctionFormat.answer === 'image') {
+            let img = choices[answer_choice].imageBase64
+            coms.unshift(
+              `<img src='${img}' style="padding:2px; border: 2px solid red ;max-width:400px;max-height:40vh;" alt='toto'>`,
+            )
+            coms.unshift('Ta réponse:')
+          } else {
+            coms.unshift(
+              'Ta réponse : ' +
+                correctionFormat.answer
+                  .replace('&exp', qexp_latex)
+                  .replace('&exp2', qexp2_latex)
+                  .replace(
+                    '&answer',
+                    () =>
+                      '<span style="color:red;">' +
+                      (item.type === 'choice'
+                        ? item.choices[answer_choice].text
+                        : '$$' + answer_latex + '$$') +
+                      '</span>',
+                  ),
+            )
+          }
         } else if (
           status === STATUS_BAD_FORM ||
           status === STATUS_UNOPTIMAL_FORM
@@ -174,7 +194,7 @@
                   () =>
                     '<span style="color:orange;">' +
                     (item.type === 'choice'
-                      ? item.choices[answer_choice]
+                      ? item.choices[answer_choice].text
                       : '$$' + answer_latex + '$$') +
                     '</span>',
                 ),
@@ -439,13 +459,28 @@
     coms = coms.map((com) =>
       com.replace(regex, replacement).replace(/_COLORANSWER_/g, answerColor),
     )
+
     return lines
   }
 
   $: if (item) updateItem()
   // console.log('item', item)
+  const test = '<img src="toto.png" alt="toto"/>'
 </script>
 
+<!-- 1
+<br/>
+<img src="toto.png" alt="toto"/>
+<br/>
+2
+<br/>
+{test}
+<br/>
+
+3
+<br/>
+{@html test}
+<br/> -->
 {#if correction}
   <div
     id="{`correction${number}`}"
@@ -473,10 +508,7 @@
       {/each}
     {:else}
       {#each correction as line}
-        <p
-          class="ml-2 mr-2 mt-2 mb-2"
-          style="font-size:{size}px;"
-        >
+        <p class="ml-2 mr-2 mt-2 mb-2" style="font-size:{size}px;">
           {@html line}
         </p>
       {/each}

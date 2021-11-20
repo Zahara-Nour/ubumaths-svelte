@@ -183,14 +183,23 @@
       acc.push(question)
       return acc
     }, [])
-    generateds.forEach((q) => {
+    generateds.forEach(async (q) => {
       if (q.image) {
-        q.imageBase64 = fetchImage(q.image)
+        q.imageBase64 = await fetchImage(q.image)
+      }
+    })
+
+    generateds.forEach((q) => {
+      if (q.choices) {
+        q.choices.forEach(async (choice) => {
+          if (choice.image) {
+            choice.imageBase64 = await fetchImage(choice.image)
+          }
+        })
       }
     })
 
     if (classroom && theme) {
-      console.log('showExemple')
       showExemple = true
       generatedExemple = generate(getQuestion(theme, domain, subdomain, level))
     } else {
@@ -365,7 +374,13 @@
 
   // mise en forme du LaTeX dans les choix des questions à choix
   $: if (generated && generated.choices) {
-    choices = generated.choices.map((c) => c.replace(regex, replacement))
+    choices = generated.choices.map((c) => {
+      const choice = {...c}
+      if (c.text) {
+        choice.text = c.text.replace(regex, replacement)
+      }
+      return choice
+    })
   } else {
     choices = null
   }
@@ -445,25 +460,45 @@
 
   <div class="d-flex align-center justify-center">
     {#if choices}
-      <div class="mt-3 d-flex justify-space-around" style="width:100%;">
+      <div
+        class="mt-3 d-flex flex-wrap justify-space-around"
+        style="width:100%;"
+      >
         {#each choices as choice, i}
           <!-- <Button size="x-large" class="ml-3 mr-3" on:click="{() => onChoice(i)}"> -->
-          <div>
-            <button
-              class="rounded-lg pa-5 yellow lighten-4 ml-3 mr-3"
-              on:click="{() => {
-                if (!classroom) onChoice(i)
-              }}"
-            >
+
+          <button
+            class="rounded-lg  ma-3 pa-3"
+            style='border: 5px solid yellow;'
+            on:click="{() => {
+              if (!classroom) onChoice(i)
+            }}"
+          >
+            {#if choice.image}
+              {#await choice.imageBase64}
+                loading image
+              {:then base64}
+                <img
+                  class="white"
+                  src="{base64}"
+                  style="max-width:400px;max-height:40vh;"
+                  alt="{`choice ${i}`}"
+                />
+              {:catch error}
+                {error}
+              {/await}
+            {/if}
+            {#if choice.text}
               <div
                 style="font-size:{classroom
                   ? $classroomFontSize
                   : $testFontSize + 4}px;"
               >
-                {@html choice}
+                {@html choice.text}
               </div>
-            </button>
-          </div>
+            {/if}
+          </button>
+
           <!-- </Button> -->
         {/each}
       </div>
