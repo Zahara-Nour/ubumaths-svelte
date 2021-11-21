@@ -6136,7 +6136,7 @@ export default {
               '&1': '$e[2;9]',
               '&2': '$e[2;8]',
               '&3': '$e[&2+1;9]',
-              '&4': '$e[&3*2;&2*&1-1]\\{&3*&1}',
+              '&4': '$e[&2*&1+1;80]\\{&2*&1}',
               '&5': '&3/&2',
               '&6': '&4/(&2*&1)'
             },
@@ -7304,8 +7304,108 @@ export default {
     'Fonctions affines': {
       Variations: [
         {
+          description: "Déterminer l'ordonnée à l'origine",
+          subdescription: "Graphiquement",
+          enounces: ["Quelle est l'ordonnée à l'origine de cette fonction affine ?"],
+          // expressions:['1'],
+          images: [
+            'trouver_coef_directeur-0-600.png',
+            'trouver_coef_directeur-1-600.png',
+            'trouver_coef_directeur-2-600.png',
+            'trouver_coef_directeur-3-600.png',
+            'trouver_coef_directeur-4-600.png',
+            'trouver_coef_directeur-5-600.png',
+            'trouver_coef_directeur-6-600.png',
+            'trouver_coef_directeur-7-600.png',
+            'trouver_coef_directeur-8-600.png',
+            'trouver_coef_directeur-9-600.png',
+            'trouver_coef_directeur-10-600.png',
+            'trouver_coef_directeur-11-600.png',
+            'trouver_coef_directeur-12-600.png',
+            'trouver_coef_directeur-13-600.png',
+            'trouver_coef_directeur-14-600.png',
+            'trouver_coef_directeur-15-600.png',
+            'trouver_coef_directeur-16-600.png',
+            'trouver_coef_directeur-17-600.png',
+            'trouver_coef_directeur-18-600.png',
+            'trouver_coef_directeur-19-600.png',
+            'trouver_coef_directeur-20-600.png',
+            'trouver_coef_directeur-21-600.png',
+            'trouver_coef_directeur-22-600.png',
+            'trouver_coef_directeur-23-600.png',
+            'trouver_coef_directeur-24-600.png',
+            'trouver_coef_directeur-25-600.png',
+            'trouver_coef_directeur-26-600.png',
+            'trouver_coef_directeur-27-600.png',
+            'trouver_coef_directeur-28-600.png',
+            'trouver_coef_directeur-29-600.png',
+            'trouver_coef_directeur-30-600.png',
+            'trouver_coef_directeur-31-600.png',
+            'trouver_coef_directeur-32-600.png',
+            'trouver_coef_directeur-33-600.png',
+            'trouver_coef_directeur-34-600.png',
+            'trouver_coef_directeur-35-600.png',
+            'trouver_coef_directeur-36-600.png',
+            'trouver_coef_directeur-37-600.png',
+            'trouver_coef_directeur-38-600.png',
+            'trouver_coef_directeur-39-600.png',
+          ],
+          solutions: [
+            ['0'],
+            ['1'],
+            ['0'],
+            ['2'],
+            ['1'],
+            ['-1'],
+            ['1'],
+            ['0'],
+            ['1'],
+            ['-2'],
+            ['2'],
+            ['2'],
+            ['2'],
+            ['0'],
+            ['2'],
+            ['-2'],
+            ['1'],
+            ['2'],
+            ['2'],
+            ['-1'],
+            ['-1'],
+            ['0'],
+            ['1'],
+            ['-1'],
+            ['-2'],
+            ['0'],
+            ['1'],
+            ['2'],
+            ['2'],
+            ['2'],
+            ['0'],
+            ['2'],
+            ['-1'],
+            ['1'],
+            ['0'],
+            ['2'],
+            ['0'],
+            ['0'],
+            ['-2'],
+            ['-1'],
+          ],
+          correctionFormat: [{
+            correct: ["L'ordonnée à l'origine est &solution."],
+            uncorrect: ["L'ordonnée à l'origine est &solution."],
+            answer: "L'ordonnée à l'origine est &answer."
+          }],
+          options: ['no-exp'],
+          type: 'result',
+          defaultDelay: 10,
+          grade: SECONDE,
+        },
+        {
           description: "Déterminer le coefficient directeur",
           subdescription: "Graphiquement",
+          enounces: ["Quel est le coefficient directeur de cette fonction affine ?"],
           // expressions:['1'],
           images: [
             'trouver_coef_directeur-0-600.png',
@@ -7485,7 +7585,7 @@ export default {
             },
 
           ],
-          type: 'choice',
+          
           choices: [
             [{ text: 'croissante' }, { text: 'décroissante' }],
           ],
@@ -7532,8 +7632,6 @@ export default {
             },
 
           ],
-
-
           solutions: [
             [0],
             [1],
@@ -7545,7 +7643,8 @@ export default {
             [1],
 
           ],
-
+          type: 'choice',
+          options:['no-shuffle-choices'],
           defaultDelay: 10,
           grade: TROISIEME,
         },
@@ -7576,16 +7675,13 @@ export default {
           choices: [
             [{ text: 'parallèles' }, { text: '<b>non</b> parallèles' }],
           ],
+          options:['no-shuffle-choices'],
           correctionFormat: [
             {
               correct: ['Les droites représentatives des fonctions $$&exp$$ et $$&exp2$$ sont &solution.'],
               uncorrect: ['Les droites représentatives des fonctions $$&exp$$ et $$&exp2$$ sont &solution.'],
               answer: 'Les droites sont &answer.'
             },
-
-
-
-
           ],
 
 
@@ -7632,7 +7728,7 @@ export default {
             ['#{-(&2)/(&1)}'],
           ],
 
-          defaultDelay: 10,
+          defaultDelay: 20,
           grade: TROISIEME,
         },
         {
@@ -7777,6 +7873,89 @@ export default {
 
           solutions: [[0]],
 
+          defaultDelay: 20,
+          grade: TROISIEME,
+        },
+        {
+          description: "Déterminer si un point appartient à la courbe représentative d'un fonction affine",
+          enounces: [
+            'Le point $$A(&3;#{&4})$$ appartient-il à la courbe représentatice de la fonction affine :',
+          ],
+          expressions: [
+            'f(x)=&1x#s{&2}',
+          ],
+         
+          variables: [
+            {
+              '&1': '$er[2;6]',
+              '&2': '$er[1;9]',
+              '&3': '$er[0;5]',
+              '&4': '&1*(&3)+(&2)'
+            },
+            {
+              '&1': '$er[2;6]',
+              '&2': '$er[1;9]',
+              '&3': '$er[0;5]',
+              '&4': '&1*(&3)+(&2)+($er[1;3])'
+            },
+          ],
+          type: 'choice',
+          choices: [
+            [{ text: 'Oui' }, { text: 'Non' }],
+          ],
+          options:['no-shuffle-choices'],
+          correctionFormat: [
+            {
+              correct: ['&solution, le point $$A(&3;#{&4})$$ est sur la courbe représentative de la fonction $$&exp$$.'],
+              uncorrect: ['&solution, le point $$A(&3;#{&4})$$ est sur la courbe représentative de la fonction $$&exp$$.'],
+              answer: "&answer, le point $$A$$ n'appartient pas à la courbe."
+            },
+            {
+              correct: ["&solution, le point $$A(&3;#{&4})$$ n'est pas sur la courbe représentative de la fonction $$&exp$$."],
+              uncorrect: ["&solution, le point $$A(&3;#{&4})$$ n'est pas sur la courbe représentative de la fonction $$&exp$$."],
+              answer: "&answer, le point $$A$$ appartient à la courbe."
+            },
+          ],
+
+
+          solutions: [
+            [0],
+            [1]
+          ],
+
+          defaultDelay: 10,
+          grade: TROISIEME,
+        },
+        {
+          description: "Déterminer une image par une fonction affine",
+          enounces: [
+            "Quelle est l'image de $$&3$$ par la fonction affine :"
+          ],
+          expressions: [
+            'f(x)=&1x#s{&2}',
+          ],
+         
+          variables: [
+            {
+              '&1': '$er[2;9]',
+              '&2': '$er[1;9]',
+              '&3': '$er[0;9]',
+              '&4': '&1*(&3)+(&2)'
+            },
+      
+          ],
+          type: 'rewrite',
+          solutions:[
+            ['#{&4}']
+          ],
+          
+          correctionFormat: [
+            {
+              correct: ["L'image de $$&3$$ par la fonction $$&exp$$ est &solution."],
+              uncorrect: ["L'image de $$&3$$ par la fonction $$&exp$$ est &solution."],
+              answer: "L'image de $$&3$$ est &answer."
+            },
+          ],
           defaultDelay: 20,
           grade: TROISIEME,
         },

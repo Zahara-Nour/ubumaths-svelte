@@ -44,6 +44,9 @@
   let correction
   let detailedCorrection
 
+  function convertToMarkup(s) {
+    return s.replace(regex, replacement)
+  }
   // const validateFractions = checkFractions()
 
   // if (seemsCorrect && !validateAnswer) {
@@ -124,10 +127,10 @@
               .replace(
                 '&solution',
                 () =>
-                  '<span style="color:green; border:2px solid green; border-radius: 5px; padding:3px;">' +
+                  '<span style="color:green; border:2px solid green; border-radius: 5px;  margin:2px; padding:5px;display:inline-block">' +
                   (item.type === 'choice'
-                    ? Mathlive.convertLatexToMarkup(item.choices[solutions[0]].text)
-                    : Mathlive.convertLatexToMarkup(answer_latex)) +
+                    ? convertToMarkup(item.choices[solutions[0]].text)
+                    : convertToMarkup('$$'+answer_latex+'$$')) +
                   '</span>',
               )
           }
@@ -146,10 +149,10 @@
               .replace(
                 '&solution',
                 () =>
-                  '<span style="color:green; border:2px solid green; border-radius: 5px; padding:3px;">' +
+                  '<span style="color:green; border:2px solid green; border-radius: 5px; margin:2px;padding:5px;display:inline-block">' +
                   (item.type === 'choice'
-                    ? Mathlive.convertLatexToMarkup(item.choices[solutions[0]].text)
-                    : Mathlive.convertLatexToMarkup(solutions_latex[0])) +
+                    ? convertToMarkup(item.choices[solutions[0]].text)
+                    : convertToMarkup('$$'+solutions_latex[0]+'$$')) +
                   '</span>',
               )
           }
@@ -172,10 +175,10 @@
                   .replace(
                     '&answer',
                     () =>
-                      '<span style="color:red;">' +
+                      '<span style="color:red;display:inline-block">' +
                       (item.type === 'choice'
-                        ? item.choices[answer_choice].text
-                        : '$$' + answer_latex + '$$') +
+                        ? convertToMarkup(item.choices[answer_choice].text)
+                        : convertToMarkup('$$' + answer_latex + '$$')) +
                       '</span>',
                   ),
             )

@@ -135,20 +135,21 @@
         <Home />
       </Route>
     </div>
-    <Footer>
-      <div class="d-flex align-center">
-        <a href="https://www.lyceevoltaire.org/">
-          <img
-            alt="logo voltaire"
-            src="/images/logo-voltaire.png"
-            height="60px"
-          />
-        </a>
-        <div class="flex-grow-1"></div>
-        <div class="text-body-2">D. Le Jolly</div>
-      </div>
-    </Footer>
+    
   </Router>
+  <Footer>
+    <div class="d-flex justify-space-between align-center" style='width:100%'>
+      <a href="https://www.lyceevoltaire.org/">
+        <img
+          alt="logo voltaire"
+          src="/images/logo-voltaire.png"
+          height="60px"
+        />
+      </a>
+      <!-- <div class="flex-grow-1"></div> -->
+      <div class="text-body-2">D. Le Jolly</div>
+    </div>
+  </Footer>
 </MaterialApp>
 
 
