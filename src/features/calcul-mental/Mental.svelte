@@ -235,7 +235,9 @@
   const fillBasket = () => addToBasket(theme, domain, subdomain, level, 1)
 
   function copyLink() {
-    const url = `https://ubumaths.net/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
+    let url = `https://ubumaths.net/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
+    url = encodeURI(url)
+    console.log('url', url)
     navigator.clipboard
       .writeText(url)
       .then(function () {
