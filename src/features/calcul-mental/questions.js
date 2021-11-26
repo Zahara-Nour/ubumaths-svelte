@@ -24,6 +24,7 @@ const UNKNOWN = 'a determiner'
 // 
 // require-no-extraneaous-brackets
 // no-penalty-for-extraneous-brackets
+// no-penalty-for-extraneous-brackets-in-first-negative-term
 
 
 
@@ -68,6 +69,7 @@ const UNKNOWN = 'a determiner'
 
 // expression
 // exp-remove-unecessary-brackets = false
+
 
 
 
@@ -5079,15 +5081,34 @@ export default {
     'Apprivoiser': {
       "La définition d'un nombre négatif": [
         {
+          description: "Une soustraction enfin possible",
+          enounces: ["Comment écrit-on le résultat de : "],
+          expressions: ['0-&1'],
+          variables: [
+            { '&1': '$e[2;20]' },
+          ],
+         
+          type: 'result',
+          defaultDelay: 20,
+          grade: CINQUIEME,
+        },
+        {
           description: "Nombre négatif défini par une soustraction",
-          enounces: ["Quel est le résultat de $$0-&1$$ ?", "Quelle est la soustraction définissant le nombre $$-&1$$ ?"],
-          expressions: ['-&1', '0-&1'],
+          enounces: ["Quelle est la soustraction définissant le nombre $$-&1$$ ?"],
+          expressions: ['0-&1',],
           options: ['no-exp'],
           variables: [
             { '&1': '$e[2;20]' },
           ],
-          solutions: [['-&1'], ['0-&1']],
-          type: 'result',
+          solutions: [['0-&1']],
+          correctionFormat: [
+            {
+              correct: ["$$-&1$$ est défini par la soustraction &solution."],
+              uncorrect: ["$$-&1$$ est défini par la soustraction &solution."],
+              answer: "$$-&1$$ est défini par la soustraction &answer."
+            },
+          ],
+          type: 'rewrite',
           defaultDelay: 20,
           grade: CINQUIEME,
         },
@@ -5100,7 +5121,19 @@ export default {
             { '&1': '$e[1;20]' },
           ],
           solutions: [['-&1'], ['&1']],
-          type: 'result',
+          correctionFormat: [
+            {
+              correct: ["L'opposé de $$&1$$ est &solution"],
+              uncorrect: ["L'opposé de $$&1$$ est &solution"],
+              answer: "L'opposé est &answer"
+            },
+            {
+              correct: ["L'opposé de $$-&1$$ est &solution"],
+              uncorrect: ["L'opposé de $$-&1$$ est &solution"],
+              answer: "L'opposé est &answer"
+            },
+          ],
+          type: 'rewrite',
           defaultDelay: 20,
           grade: CINQUIEME,
         },
@@ -5161,8 +5194,8 @@ export default {
             {
               '&1': '$e{1}',
               '&2': '$e[1;2]',
-              '&3': '$e{&2;&2}',
-              '&4': '$e{1}\\{&3}',
+              '&3': '$e{&2;&2}\\{m(10)}',
+              '&4': '$e{1;1}\\{&3}',
               '&6': '##{-&1,&3}',
               '&7': '##{-&1,&4}'
             },
@@ -5170,7 +5203,7 @@ export default {
               '&1': '$er{1}',
               '&2': '$er{1}',
               '&3': '$e[1;2]',
-              '&4': '$e{&3;&3}',
+              '&4': '$e{&3;&3}\\{m(10)}',
               '&5': '$e{1}\\{&4}',
               '&6': '##{&1,&4}',
               '&7': '##{&2,&5}'
@@ -5299,7 +5332,7 @@ export default {
           description: 'Calculer une somme',
           subdescription: 'Cas général',
           enounces: ["Calcule."],
-          expressions: ['-&1+&2', '-&1+(-&2)', '&1+(-&2)'],
+          expressions: ['(-&1)+&2', '(-&1)+(-&2)', '&1+(-&2)'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           type: 'result',
           defaultDelay: 20,
@@ -5310,8 +5343,8 @@ export default {
           subdescription: 'Cas général',
           enounces: ["Complète l'égalité avec le nombre manquant."],
           expressions: [
-            '-&1+?=#{(-&1)+&2}',
-            '-&1+?=#{(-&1)+(-&2)}',
+            '(-&1)+?=#{(-&1)+&2}',
+            '(-&1)+?=#{(-&1)+(-&2)}',
             '&1+?=#{&1+(-&2)}',
             '?+(-&1)=#{(-&1)+&2}',
             '?+(-&1)=#{(-&1)+(-&2)}',
@@ -5320,13 +5353,14 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           solutions: [
             ['&2'],
-            ['-&2'],
-            ['-&2'],
+            ['(-&2)'],
+            ['(-&2)'],
             ['&2'],
-            ['-&2'],
-            ['-&2'],
+            ['(-&2)'],
+            ['(-&2)'],
           ],
           type: 'trou',
+          options:['no-penalty-for-extraneous-brackets-in-first-negative-term'],
           defaultDelay: 20,
           grade: CINQUIEME,
         },
@@ -7304,94 +7338,276 @@ export default {
     'Fonctions affines': {
       Variations: [
         {
+          description: "Vocabulaire des fonctions affines",
+          enounces: [
+            "Dans la fonction affine $$f(x)=&1x#s{&2}$$, le nombre $$&1$$ s'appelle ...",
+            "Dans la fonction affine $$f(x)=&1x#s{&2}$$, le nombre $$&2$$ s'appelle ...",
+            "Dans la fonction affine $$f(x)=&2#s{&1}x$$, le nombre $$&1$$ s'appelle ...",
+            "Dans la fonction affine $$f(x)=&2#s{&1}x$$, le nombre $$&2$$ s'appelle ...",
+          ],
+          expressions:[
+            'f(x)=&1x#s{&2}',
+            'f(x)=&1x#s{&2}',
+            'f(x)=&2#s{&1}x',
+            'f(x)=&2#s{&1}x'
+          ],
+        
+          variables: [
+            {
+              '&1': '$er[2;9]',
+              '&2': '$e[1;9]\\{&1;-(&1)}',
+            },
+          ],
+          type: 'choice',
+          choices: [
+            [{ text: 'le coefficient directeur' }, { text: "l'ordonnée à l'origine "}],
+          ],
+          options:['no-exp','no-shuffle-choices'],
+          correctionFormat: [
+            {
+              correct: ["Dans la fonction affine $$&exp$$, le nombre $$&1$$ s'appelle &solution."],
+              uncorrect: ["Dans la fonction affine $$&exp$$, Le nombre $$&1$$ s'appelle &solution."],
+              answer: "Le nombre s'appelle &answer."
+            },
+            {
+              correct: ["Dans la fonction affine $$&exp$$, le nombre $$&2$$ s'appelle &solution."],
+              uncorrect: ["Dans la fonction affine $$&exp$$, le nombre $$&2$$ s'appelle &solution."],
+              answer: "Le nombre s'appelle &answer."
+            },
+            {
+              correct: ["Dans la fonction affine $$&exp$$, le nombre $$&1$$ s'appelle &solution."],
+              uncorrect: ["Dans la fonction affine $$&exp$$, Le nombre $$&1$$ s'appelle &solution."],
+              answer: "Le nombre s'appelle &answer."
+            },
+            {
+              correct: ["Dans la fonction affine $$&exp$$, le nombre $$&2$$ s'appelle &solution."],
+              uncorrect: ["Dans la fonction affine $$&exp$$, le nombre $$&2$$ s'appelle &solution."],
+              answer: "Le nombre s'appelle &answer."
+            },
+          ],
+
+
+          solutions: [
+            [0],
+            [1],
+            [0],
+            [1],
+          ],
+
+          defaultDelay: 10,
+          grade: TROISIEME,
+        },
+        {
           description: "Déterminer l'ordonnée à l'origine",
           subdescription: "Graphiquement",
           enounces: ["Quelle est l'ordonnée à l'origine de cette fonction affine ?"],
           // expressions:['1'],
           images: [
-            'trouver_coef_directeur-0-600.png',
-            'trouver_coef_directeur-1-600.png',
-            'trouver_coef_directeur-2-600.png',
-            'trouver_coef_directeur-3-600.png',
-            'trouver_coef_directeur-4-600.png',
-            'trouver_coef_directeur-5-600.png',
-            'trouver_coef_directeur-6-600.png',
-            'trouver_coef_directeur-7-600.png',
-            'trouver_coef_directeur-8-600.png',
-            'trouver_coef_directeur-9-600.png',
-            'trouver_coef_directeur-10-600.png',
-            'trouver_coef_directeur-11-600.png',
-            'trouver_coef_directeur-12-600.png',
-            'trouver_coef_directeur-13-600.png',
-            'trouver_coef_directeur-14-600.png',
-            'trouver_coef_directeur-15-600.png',
-            'trouver_coef_directeur-16-600.png',
-            'trouver_coef_directeur-17-600.png',
-            'trouver_coef_directeur-18-600.png',
-            'trouver_coef_directeur-19-600.png',
-            'trouver_coef_directeur-20-600.png',
-            'trouver_coef_directeur-21-600.png',
-            'trouver_coef_directeur-22-600.png',
-            'trouver_coef_directeur-23-600.png',
-            'trouver_coef_directeur-24-600.png',
-            'trouver_coef_directeur-25-600.png',
-            'trouver_coef_directeur-26-600.png',
-            'trouver_coef_directeur-27-600.png',
-            'trouver_coef_directeur-28-600.png',
-            'trouver_coef_directeur-29-600.png',
-            'trouver_coef_directeur-30-600.png',
-            'trouver_coef_directeur-31-600.png',
-            'trouver_coef_directeur-32-600.png',
-            'trouver_coef_directeur-33-600.png',
-            'trouver_coef_directeur-34-600.png',
-            'trouver_coef_directeur-35-600.png',
-            'trouver_coef_directeur-36-600.png',
-            'trouver_coef_directeur-37-600.png',
-            'trouver_coef_directeur-38-600.png',
-            'trouver_coef_directeur-39-600.png',
+            'fonction_affine-0-600.png',
+            'fonction_affine-1-600.png',
+            'fonction_affine-2-600.png',
+            'fonction_affine-3-600.png',
+            'fonction_affine-4-600.png',
+            'fonction_affine-5-600.png',
+            'fonction_affine-6-600.png',
+            'fonction_affine-7-600.png',
+            'fonction_affine-8-600.png',
+            'fonction_affine-9-600.png',
+            'fonction_affine-10-600.png',
+            'fonction_affine-11-600.png',
+            'fonction_affine-12-600.png',
+            'fonction_affine-13-600.png',
+            'fonction_affine-14-600.png',
+            'fonction_affine-15-600.png',
+            'fonction_affine-16-600.png',
+            'fonction_affine-17-600.png',
+            'fonction_affine-18-600.png',
+            'fonction_affine-19-600.png',
+            'fonction_affine-20-600.png',
+            'fonction_affine-21-600.png',
+            'fonction_affine-22-600.png',
+            'fonction_affine-23-600.png',
+            'fonction_affine-24-600.png',
+            'fonction_affine-25-600.png',
+            'fonction_affine-26-600.png',
+            'fonction_affine-27-600.png',
+            'fonction_affine-28-600.png',
+            'fonction_affine-29-600.png',
+            'fonction_affine-30-600.png',
+            'fonction_affine-31-600.png',
+            'fonction_affine-32-600.png',
+            'fonction_affine-33-600.png',
+            'fonction_affine-34-600.png',
+            'fonction_affine-35-600.png',
+            'fonction_affine-36-600.png',
+            'fonction_affine-37-600.png',
+            'fonction_affine-38-600.png',
+            'fonction_affine-39-600.png',
+          ],
+          imagesCorrection: [
+            'correction_ordonnee_origine-0-600.png',
+            'correction_ordonnee_origine-1-600.png',
+            'correction_ordonnee_origine-2-600.png',
+            'correction_ordonnee_origine-3-600.png',
+            'correction_ordonnee_origine-4-600.png',
+            'correction_ordonnee_origine-5-600.png',
+            'correction_ordonnee_origine-6-600.png',
+            'correction_ordonnee_origine-7-600.png',
+            'correction_ordonnee_origine-8-600.png',
+            'correction_ordonnee_origine-9-600.png',
+            'correction_ordonnee_origine-10-600.png',
+            'correction_ordonnee_origine-11-600.png',
+            'correction_ordonnee_origine-12-600.png',
+            'correction_ordonnee_origine-13-600.png',
+            'correction_ordonnee_origine-14-600.png',
+            'correction_ordonnee_origine-15-600.png',
+            'correction_ordonnee_origine-16-600.png',
+            'correction_ordonnee_origine-17-600.png',
+            'correction_ordonnee_origine-18-600.png',
+            'correction_ordonnee_origine-19-600.png',
+            'correction_ordonnee_origine-20-600.png',
+            'correction_ordonnee_origine-21-600.png',
+            'correction_ordonnee_origine-22-600.png',
+            'correction_ordonnee_origine-23-600.png',
+            'correction_ordonnee_origine-24-600.png',
+            'correction_ordonnee_origine-25-600.png',
+            'correction_ordonnee_origine-26-600.png',
+            'correction_ordonnee_origine-27-600.png',
+            'correction_ordonnee_origine-28-600.png',
+            'correction_ordonnee_origine-29-600.png',
+            'correction_ordonnee_origine-30-600.png',
+            'correction_ordonnee_origine-31-600.png',
+            'correction_ordonnee_origine-32-600.png',
+            'correction_ordonnee_origine-33-600.png',
+            'correction_ordonnee_origine-34-600.png',
+            'correction_ordonnee_origine-35-600.png',
+            'correction_ordonnee_origine-36-600.png',
+            'correction_ordonnee_origine-37-600.png',
+            'correction_ordonnee_origine-38-600.png',
+            'correction_ordonnee_origine-39-600.png',
           ],
           solutions: [
-            ['0'],
-            ['1'],
-            ['0'],
-            ['2'],
-            ['1'],
-            ['-1'],
-            ['1'],
-            ['0'],
-            ['1'],
-            ['-2'],
-            ['2'],
-            ['2'],
-            ['2'],
-            ['0'],
-            ['2'],
-            ['-2'],
-            ['1'],
-            ['2'],
-            ['2'],
-            ['-1'],
-            ['-1'],
-            ['0'],
-            ['1'],
-            ['-1'],
-            ['-2'],
-            ['0'],
-            ['1'],
-            ['2'],
-            ['2'],
-            ['2'],
-            ['0'],
-            ['2'],
-            ['-1'],
-            ['1'],
-            ['0'],
-            ['2'],
-            ['0'],
-            ['0'],
-            ['-2'],
-            ['-1'],
-          ],
+            [
+             "-2"
+            ],
+            [
+             "-2"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "2"
+            ],
+            [
+             "-2"
+            ],
+            [
+             "-2"
+            ],
+            [
+             "0"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "1"
+            ],
+            [
+             "0"
+            ],
+            [
+             "0"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "2"
+            ],
+            [
+             "1"
+            ],
+            [
+             "1"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "0"
+            ],
+            [
+             "1"
+            ],
+            [
+             "-2"
+            ],
+            [
+             "2"
+            ],
+            [
+             "0"
+            ],
+            [
+             "0"
+            ],
+            [
+             "2"
+            ],
+            [
+             "0"
+            ],
+            [
+             "0"
+            ],
+            [
+             "-2"
+            ],
+            [
+             "2"
+            ],
+            [
+             "2"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "2"
+            ],
+            [
+             "1"
+            ],
+            [
+             "-2"
+            ],
+            [
+             "1"
+            ],
+            [
+             "1"
+            ],
+            [
+             "-2"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "1"
+            ],
+            [
+             "-2"
+            ],
+            [
+             "-2"
+            ]
+           ],
           correctionFormat: [{
             correct: ["L'ordonnée à l'origine est &solution."],
             uncorrect: ["L'ordonnée à l'origine est &solution."],
@@ -7408,89 +7624,432 @@ export default {
           enounces: ["Quel est le coefficient directeur de cette fonction affine ?"],
           // expressions:['1'],
           images: [
-            'trouver_coef_directeur-0-600.png',
-            'trouver_coef_directeur-1-600.png',
-            'trouver_coef_directeur-2-600.png',
-            'trouver_coef_directeur-3-600.png',
-            'trouver_coef_directeur-4-600.png',
-            'trouver_coef_directeur-5-600.png',
-            'trouver_coef_directeur-6-600.png',
-            'trouver_coef_directeur-7-600.png',
-            'trouver_coef_directeur-8-600.png',
-            'trouver_coef_directeur-9-600.png',
-            'trouver_coef_directeur-10-600.png',
-            'trouver_coef_directeur-11-600.png',
-            'trouver_coef_directeur-12-600.png',
-            'trouver_coef_directeur-13-600.png',
-            'trouver_coef_directeur-14-600.png',
-            'trouver_coef_directeur-15-600.png',
-            'trouver_coef_directeur-16-600.png',
-            'trouver_coef_directeur-17-600.png',
-            'trouver_coef_directeur-18-600.png',
-            'trouver_coef_directeur-19-600.png',
-            'trouver_coef_directeur-20-600.png',
-            'trouver_coef_directeur-21-600.png',
-            'trouver_coef_directeur-22-600.png',
-            'trouver_coef_directeur-23-600.png',
-            'trouver_coef_directeur-24-600.png',
-            'trouver_coef_directeur-25-600.png',
-            'trouver_coef_directeur-26-600.png',
-            'trouver_coef_directeur-27-600.png',
-            'trouver_coef_directeur-28-600.png',
-            'trouver_coef_directeur-29-600.png',
-            'trouver_coef_directeur-30-600.png',
-            'trouver_coef_directeur-31-600.png',
-            'trouver_coef_directeur-32-600.png',
-            'trouver_coef_directeur-33-600.png',
-            'trouver_coef_directeur-34-600.png',
-            'trouver_coef_directeur-35-600.png',
-            'trouver_coef_directeur-36-600.png',
-            'trouver_coef_directeur-37-600.png',
-            'trouver_coef_directeur-38-600.png',
-            'trouver_coef_directeur-39-600.png',
+            'fonction_affine-0-600.png',
+            'fonction_affine-1-600.png',
+            'fonction_affine-2-600.png',
+            'fonction_affine-3-600.png',
+            'fonction_affine-4-600.png',
+            'fonction_affine-5-600.png',
+            'fonction_affine-6-600.png',
+            'fonction_affine-7-600.png',
+            'fonction_affine-8-600.png',
+            'fonction_affine-9-600.png',
+            'fonction_affine-10-600.png',
+            'fonction_affine-11-600.png',
+            'fonction_affine-12-600.png',
+            'fonction_affine-13-600.png',
+            'fonction_affine-14-600.png',
+            'fonction_affine-15-600.png',
+            'fonction_affine-16-600.png',
+            'fonction_affine-17-600.png',
+            'fonction_affine-18-600.png',
+            'fonction_affine-19-600.png',
+            'fonction_affine-20-600.png',
+            'fonction_affine-21-600.png',
+            'fonction_affine-22-600.png',
+            'fonction_affine-23-600.png',
+            'fonction_affine-24-600.png',
+            'fonction_affine-25-600.png',
+            'fonction_affine-26-600.png',
+            'fonction_affine-27-600.png',
+            'fonction_affine-28-600.png',
+            'fonction_affine-29-600.png',
+            'fonction_affine-30-600.png',
+            'fonction_affine-31-600.png',
+            'fonction_affine-32-600.png',
+            'fonction_affine-33-600.png',
+            'fonction_affine-34-600.png',
+            'fonction_affine-35-600.png',
+            'fonction_affine-36-600.png',
+            'fonction_affine-37-600.png',
+            'fonction_affine-38-600.png',
+            'fonction_affine-39-600.png',
+          ],
+          imagesCorrection: [
+            'correction_coef_directeur-0-600.png',
+            'correction_coef_directeur-1-600.png',
+            'correction_coef_directeur-2-600.png',
+            'correction_coef_directeur-3-600.png',
+            'correction_coef_directeur-4-600.png',
+            'correction_coef_directeur-5-600.png',
+            'correction_coef_directeur-6-600.png',
+            'correction_coef_directeur-7-600.png',
+            'correction_coef_directeur-8-600.png',
+            'correction_coef_directeur-9-600.png',
+            'correction_coef_directeur-10-600.png',
+            'correction_coef_directeur-11-600.png',
+            'correction_coef_directeur-12-600.png',
+            'correction_coef_directeur-13-600.png',
+            'correction_coef_directeur-14-600.png',
+            'correction_coef_directeur-15-600.png',
+            'correction_coef_directeur-16-600.png',
+            'correction_coef_directeur-17-600.png',
+            'correction_coef_directeur-18-600.png',
+            'correction_coef_directeur-19-600.png',
+            'correction_coef_directeur-20-600.png',
+            'correction_coef_directeur-21-600.png',
+            'correction_coef_directeur-22-600.png',
+            'correction_coef_directeur-23-600.png',
+            'correction_coef_directeur-24-600.png',
+            'correction_coef_directeur-25-600.png',
+            'correction_coef_directeur-26-600.png',
+            'correction_coef_directeur-27-600.png',
+            'correction_coef_directeur-28-600.png',
+            'correction_coef_directeur-29-600.png',
+            'correction_coef_directeur-30-600.png',
+            'correction_coef_directeur-31-600.png',
+            'correction_coef_directeur-32-600.png',
+            'correction_coef_directeur-33-600.png',
+            'correction_coef_directeur-34-600.png',
+            'correction_coef_directeur-35-600.png',
+            'correction_coef_directeur-36-600.png',
+            'correction_coef_directeur-37-600.png',
+            'correction_coef_directeur-38-600.png',
+            'correction_coef_directeur-39-600.png',
           ],
           solutions: [
-            ['0'],
-            ['3'],
-            ['-1'],
-            ['-4'],
-            ['0'],
-            ['-3'],
-            ['2'],
-            ['-4'],
-            ['4'],
-            ['0'],
-            ['0'],
-            ['-1'],
-            ['-2'],
-            ['4'],
-            ['2'],
-            ['1'],
-            ['1'],
-            ['1'],
-            ['3'],
-            ['4'],
-            ['4/3'],
-            ['4/3'],
-            ['-4/3'],
-            ['3/4'],
-            ['-2/3'],
-            ['-1/3'],
-            ['-2/3'],
-            ['-3/4'],
-            ['3/2'],
-            ['1/3'],
-            ['2/3'],
-            ['-2/3'],
-            ['-4/3'],
-            ['1/4'],
-            ['3/2'],
-            ['2/3'],
-            ['1/4'],
-            ['-3/4'],
-            ['1/4'],
-            ['1/3'],
+            [
+             "-4"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "0"
+            ],
+            [
+             "2"
+            ],
+            [
+             "3"
+            ],
+            [
+             "0"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "1"
+            ],
+            [
+             "-4"
+            ],
+            [
+             "-3"
+            ],
+            [
+             "0"
+            ],
+            [
+             "-4"
+            ],
+            [
+             "0"
+            ],
+            [
+             "0"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "2"
+            ],
+            [
+             "4"
+            ],
+            [
+             "4"
+            ],
+            [
+             "4"
+            ],
+            [
+             "1"
+            ],
+            [
+             "3/2"
+            ],
+            [
+             "-4/3"
+            ],
+            [
+             "-2/3"
+            ],
+            [
+             "-1/3"
+            ],
+            [
+             "4/3"
+            ],
+            [
+             "1/4"
+            ],
+            [
+             "4/3"
+            ],
+            [
+             "-3/2"
+            ],
+            [
+             "-4/3"
+            ],
+            [
+             "1/3"
+            ],
+            [
+             "2/3"
+            ],
+            [
+             "3/4"
+            ],
+            [
+             "2/3"
+            ],
+            [
+             "-4/3"
+            ],
+            [
+             "2/3"
+            ],
+            [
+             "1/3"
+            ],
+            [
+             "2/3"
+            ],
+            [
+             "-3/2"
+            ],
+            [
+             "-1/2"
+            ],
+            [
+             "1/2"
+            ]
+           ],
+          correctionFormat: [{
+            correct: ["Le coefficent directeur est &solution."],
+            uncorrect: ["Le coefficent directeur est &solution."],
+            answer: "Le coefficent directeur est &answer."
+          }],
+          options: ['no-exp'],
+          type: 'result',
+          defaultDelay: 20,
+          grade: SECONDE,
+        },
+        {
+          description: "Résoudre l'équation $$f(x)=k$$",
+          subdescription: "Graphiquement",
+          enounces: ["Résoudre graphiquement l'équation $$f(x)=&1$$"],
+          // expressions:['1'],
+          images: [
+            'fonction_affine-0-600.png',
+            'fonction_affine-1-600.png',
+            'fonction_affine-2-600.png',
+            'fonction_affine-3-600.png',
+            'fonction_affine-4-600.png',
+            'fonction_affine-5-600.png',
+            'fonction_affine-6-600.png',
+            'fonction_affine-7-600.png',
+            'fonction_affine-8-600.png',
+            'fonction_affine-9-600.png',
+            'fonction_affine-10-600.png',
+            'fonction_affine-11-600.png',
+            'fonction_affine-12-600.png',
+            'fonction_affine-13-600.png',
+            'fonction_affine-14-600.png',
+            'fonction_affine-15-600.png',
+            'fonction_affine-16-600.png',
+            'fonction_affine-17-600.png',
+            'fonction_affine-18-600.png',
+            'fonction_affine-19-600.png',
+            'fonction_affine-20-600.png',
+            'fonction_affine-21-600.png',
+            'fonction_affine-22-600.png',
+            'fonction_affine-23-600.png',
+            'fonction_affine-24-600.png',
+            'fonction_affine-25-600.png',
+            'fonction_affine-26-600.png',
+            'fonction_affine-27-600.png',
+            'fonction_affine-28-600.png',
+            'fonction_affine-29-600.png',
+            'fonction_affine-30-600.png',
+            'fonction_affine-31-600.png',
+            'fonction_affine-32-600.png',
+            'fonction_affine-33-600.png',
+            'fonction_affine-34-600.png',
+            'fonction_affine-35-600.png',
+            'fonction_affine-36-600.png',
+            'fonction_affine-37-600.png',
+            'fonction_affine-38-600.png',
+            'fonction_affine-39-600.png',
           ],
+          imagesCorrection: [
+            'correction_coef_directeur-0-600.png',
+            'correction_coef_directeur-1-600.png',
+            'correction_coef_directeur-2-600.png',
+            'correction_coef_directeur-3-600.png',
+            'correction_coef_directeur-4-600.png',
+            'correction_coef_directeur-5-600.png',
+            'correction_coef_directeur-6-600.png',
+            'correction_coef_directeur-7-600.png',
+            'correction_coef_directeur-8-600.png',
+            'correction_coef_directeur-9-600.png',
+            'correction_coef_directeur-10-600.png',
+            'correction_coef_directeur-11-600.png',
+            'correction_coef_directeur-12-600.png',
+            'correction_coef_directeur-13-600.png',
+            'correction_coef_directeur-14-600.png',
+            'correction_coef_directeur-15-600.png',
+            'correction_coef_directeur-16-600.png',
+            'correction_coef_directeur-17-600.png',
+            'correction_coef_directeur-18-600.png',
+            'correction_coef_directeur-19-600.png',
+            'correction_coef_directeur-20-600.png',
+            'correction_coef_directeur-21-600.png',
+            'correction_coef_directeur-22-600.png',
+            'correction_coef_directeur-23-600.png',
+            'correction_coef_directeur-24-600.png',
+            'correction_coef_directeur-25-600.png',
+            'correction_coef_directeur-26-600.png',
+            'correction_coef_directeur-27-600.png',
+            'correction_coef_directeur-28-600.png',
+            'correction_coef_directeur-29-600.png',
+            'correction_coef_directeur-30-600.png',
+            'correction_coef_directeur-31-600.png',
+            'correction_coef_directeur-32-600.png',
+            'correction_coef_directeur-33-600.png',
+            'correction_coef_directeur-34-600.png',
+            'correction_coef_directeur-35-600.png',
+            'correction_coef_directeur-36-600.png',
+            'correction_coef_directeur-37-600.png',
+            'correction_coef_directeur-38-600.png',
+            'correction_coef_directeur-39-600.png',
+          ],
+          solutions: [
+            [
+             "-4"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "0"
+            ],
+            [
+             "2"
+            ],
+            [
+             "3"
+            ],
+            [
+             "0"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "1"
+            ],
+            [
+             "-4"
+            ],
+            [
+             "-3"
+            ],
+            [
+             "0"
+            ],
+            [
+             "-4"
+            ],
+            [
+             "0"
+            ],
+            [
+             "0"
+            ],
+            [
+             "-1"
+            ],
+            [
+             "2"
+            ],
+            [
+             "4"
+            ],
+            [
+             "4"
+            ],
+            [
+             "4"
+            ],
+            [
+             "1"
+            ],
+            [
+             "3/2"
+            ],
+            [
+             "-4/3"
+            ],
+            [
+             "-2/3"
+            ],
+            [
+             "-1/3"
+            ],
+            [
+             "4/3"
+            ],
+            [
+             "1/4"
+            ],
+            [
+             "4/3"
+            ],
+            [
+             "-3/2"
+            ],
+            [
+             "-4/3"
+            ],
+            [
+             "1/3"
+            ],
+            [
+             "2/3"
+            ],
+            [
+             "3/4"
+            ],
+            [
+             "2/3"
+            ],
+            [
+             "-4/3"
+            ],
+            [
+             "2/3"
+            ],
+            [
+             "1/3"
+            ],
+            [
+             "2/3"
+            ],
+            [
+             "-3/2"
+            ],
+            [
+             "-1/2"
+            ],
+            [
+             "1/2"
+            ]
+           ],
           correctionFormat: [{
             correct: ["Le coefficent directeur est &solution."],
             uncorrect: ["Le coefficent directeur est &solution."],

@@ -183,21 +183,21 @@
       acc.push(question)
       return acc
     }, [])
-    generateds.forEach(async (q) => {
-      if (q.image) {
-        q.imageBase64 = await fetchImage(q.image)
-      }
-    })
+    // generateds.forEach(async (q) => {
+    //   if (q.image) {
+    //     q.imageBase64 = await fetchImage(q.image)
+    //   }
+    // })
 
-    generateds.forEach((q) => {
-      if (q.choices) {
-        q.choices.forEach(async (choice) => {
-          if (choice.image) {
-            choice.imageBase64 = await fetchImage(choice.image)
-          }
-        })
-      }
-    })
+    // generateds.forEach((q) => {
+    //   if (q.choices) {
+    //     q.choices.forEach(async (choice) => {
+    //       if (choice.image) {
+    //         choice.imageBase64 = await fetchImage(choice.image)
+    //       }
+    //     })
+    //   }
+    // })
 
     if (classroom && theme) {
       showExemple = true

@@ -58,6 +58,15 @@ function checkConstraints(item) {
             function: checkBrackets,
             com: BRACKETS,
         },
+
+        {
+            option: [
+                'no-penalty-for-extraneous-brackets-in-first-negative-term',
+                'require-no-extraneaous-brackets',
+            ],
+            function: checkBrackets,
+            com: BRACKETS,
+        },
         {
             option: [
                 'no-penalty-for-extraneous-zeros',
@@ -210,7 +219,10 @@ function checkBrackets(item) {
         default:
             e = math(item.answer)
     }
-    const check = e.removeUnecessaryBrackets().string === e.string
+    const allowBracketsInFirstNegativeTerm = item.options.includes('no-penalty-for-extraneous-brackets-in-first-negative-term')
+    const check = e.removeUnecessaryBrackets(allowBracketsInFirstNegativeTerm
+    )
+        .string === e.string
     item.checkBrackets = check
     return check
 }
@@ -307,7 +319,11 @@ export function assessItems(questions, answers, answers_latex, answers_choice, t
             choices: question.choices,
             coms: [],
             status: null,
-            image: question.image
+            image: question.image,
+            imageBase64: question.imageBase64,
+            imageCorrection: question.imageCorrection,
+            imageCorrectionBase64: question.imageCorrectionBase64,
+
         }
 
         assessItem(items[i], classroom)

@@ -26,8 +26,10 @@
     coms,
     status,
     image,
-    choices,
-    imageBase64
+    imageBase64,
+    imageCorrection,
+    imageCorrectionBase64,
+    choices
 
   let answerColor = 'green'
   const regex = /\$\$(.*?)\$\$/g
@@ -66,11 +68,14 @@
       coms,
       status,
       image,
+      imageBase64,
+      imageCorrection,
+      imageCorrectionBase64,
       choices,
     } = item)
-    if (image) {
-      imageBase64 = fetchImage(image)
-    }
+    // if (image) {
+    //   imageBase64 = fetchImage(image)
+    // }
     if (status === STATUS_BAD_FORM || status === STATUS_INCORRECT) {
       answerColor = 'red'
     } else if (status === STATUS_UNOPTIMAL_FORM) {
@@ -89,7 +94,6 @@
       : null
 
     correction = createCorrection(false)
-    console.log('correction', correction)
     detailedCorrection = item.details ? createCorrection(true) : null
   }
 
@@ -130,7 +134,7 @@
                   '<span style="color:green; border:2px solid green; border-radius: 5px;  margin:2px; padding:5px;display:inline-block">' +
                   (item.type === 'choice'
                     ? convertToMarkup(item.choices[solutions[0]].text)
-                    : convertToMarkup('$$'+answer_latex+'$$')) +
+                    : convertToMarkup('$$' + answer_latex + '$$')) +
                   '</span>',
               )
           }
@@ -152,7 +156,7 @@
                   '<span style="color:green; border:2px solid green; border-radius: 5px; margin:2px;padding:5px;display:inline-block">' +
                   (item.type === 'choice'
                     ? convertToMarkup(item.choices[solutions[0]].text)
-                    : convertToMarkup('$$'+solutions_latex[0]+'$$')) +
+                    : convertToMarkup('$$' + solutions_latex[0] + '$$')) +
                   '</span>',
               )
           }
@@ -490,18 +494,33 @@
     style="word-break: break-word ;min-width: 0;;white-space: normal;"
   >
     {#if image}
-      {#await imageBase64}
-        loading image
-      {:then base64}
-        <img
-          src="{base64}"
-          class="mt-3 mb-3"
-          style="max-width:90%;max-height:40vh;"
-          alt="Alright Buddy!"
-        />
-      {:catch error}
-        {error}
-      {/await}
+      {#if imageCorrection}
+        {#await imageCorrectionBase64}
+          loading image
+        {:then base64}
+          <img
+            src="{base64}"
+            class="mt-3 mb-3"
+            style="max-width:90%;max-height:40vh;"
+            alt="Alright Buddy!"
+          />
+        {:catch error}
+          {error}
+        {/await}
+      {:else}
+        {#await imageBase64}
+          loading image
+        {:then base64}
+          <img
+            src="{base64}"
+            class="mt-3 mb-3"
+            style="max-width:90%;max-height:40vh;"
+            alt="Alright Buddy!"
+          />
+        {:catch error}
+          {error}
+        {/await}
+      {/if}
     {/if}
     {#if details && item.details}
       {#each detailedCorrection as line}

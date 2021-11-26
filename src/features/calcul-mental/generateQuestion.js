@@ -21,6 +21,7 @@ export default function generateQuestion(question, generateds = []) {
   let correction
   let testAnswer
   let image
+  let imageCorrection
   let solutionss
 
   const { options = [] } = question
@@ -368,7 +369,9 @@ export default function generateQuestion(question, generateds = []) {
   }
 
 
-
+if (question.imagesCorrection) {
+  imageCorrection = question.imagesCorrection[question.imagesCorrection.length === 1 ? 0 : i]
+}
 
   if (question.details) {
     details = question.details[question.details.length === 1 ? 0 : i]
@@ -544,6 +547,10 @@ export default function generateQuestion(question, generateds = []) {
   if (image) {
     generated.image = image
     generated.imageBase64 = fetchImage(image)
+  }
+  if (imageCorrection) {
+    generated.imageCorrection = imageCorrection
+    generated.imageCorrectionBase64 = fetchImage(imageCorrection)
   }
 
   return generated

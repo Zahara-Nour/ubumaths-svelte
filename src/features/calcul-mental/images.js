@@ -1,6 +1,6 @@
 import { supabase } from '../../app/db'
 import { getLogger } from '../../app/utils'
-let { info, fail, trace } = getLogger('images', 'info')
+let { info, fail, warn } = getLogger('images', 'info')
 export async function fetchImage(name) {
     const img = sessionStorage.getItem(name)
     if (!img) {
@@ -10,7 +10,7 @@ export async function fetchImage(name) {
             .download(name)
 
         if (error) {
-            fail.log('error', error)
+            fail('error', error)
             return Promise.reject('error', error)
         } else {
 
@@ -18,7 +18,12 @@ export async function fetchImage(name) {
                 let reader = new FileReader()
                 reader.readAsDataURL(blob)
                 reader.onload = () => {
+                    try {
                     sessionStorage.setItem(name, reader.result)
+                    }
+                    catch(error) {
+                        warn('error',error)
+                    }
                     info('image loaded', name)
                     return resolve(reader.result)
                 }
