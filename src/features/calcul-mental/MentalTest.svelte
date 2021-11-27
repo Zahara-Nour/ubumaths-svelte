@@ -156,33 +156,50 @@
       }
       // on, répète 10 fois la question de l'exercice
       else {
-        for (let i = 0; i < 10; i++) questions.push(question)
+        const count = 10
+        for (let i = 0; i < count; i++) questions.push(question)
+        generateds = generateds.concat(
+          questions.reduce((acc, current) => {
+            const q = generate(current, acc, count)
+            acc.push(q)
+            return acc
+          }, []),
+        )
       }
     }
 
     // les questions ont été passée par un store
     else {
       $calculMentalAssessment.questions.forEach((element) => {
+        questions = []
+        const question = getQuestion(
+          element.theme,
+          element.domain,
+          element.subdomain,
+          element.level,
+        )
+
         for (let i = 0; i < element.count; i++) {
           questions.push({
-            ...getQuestion(
-              element.theme,
-              element.domain,
-              element.subdomain,
-              element.level,
-            ),
+            ...question,
             delay: element.delay,
           })
+          generateds = generateds.concat(
+            questions.reduce((acc, current) => {
+              const q = generate(current, acc, element.count)
+              acc.push(q)
+              return acc
+            }, []),
+          )
         }
       })
-
-      shuffle(questions)
     }
-    generateds = questions.reduce((acc, current) => {
-      const question = generate(current, acc)
-      acc.push(question)
-      return acc
-    }, [])
+    shuffle(generateds)
+    // generateds = questions.reduce((acc, current) => {
+    //   const question = generate(current, acc)
+    //   acc.push(question)
+    //   return acc
+    // }, [])
     // generateds.forEach(async (q) => {
     //   if (q.image) {
     //     q.imageBase64 = await fetchImage(q.image)
@@ -375,7 +392,7 @@
   // mise en forme du LaTeX dans les choix des questions à choix
   $: if (generated && generated.choices) {
     choices = generated.choices.map((c) => {
-      const choice = {...c}
+      const choice = { ...c }
       if (c.text) {
         choice.text = c.text.replace(regex, replacement)
       }
@@ -469,7 +486,7 @@
 
           <button
             class="rounded-lg  ma-3 pa-3"
-            style='border: 5px solid yellow;'
+            style="border: 5px solid yellow;"
             on:click="{() => {
               if (!classroom) onChoice(i)
             }}"
