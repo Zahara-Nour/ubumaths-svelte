@@ -6,7 +6,7 @@ export async function fetchImage(name) {
     if (!img) {
         info('fetching image', name)
         const { data: blob, error } = await supabase.storage
-            .from('public/public/mental-images')
+            .from('public/mental')
             .download(name)
 
         if (error) {

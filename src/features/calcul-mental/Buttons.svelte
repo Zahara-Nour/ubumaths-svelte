@@ -74,7 +74,8 @@
       >
         <Icon path="{mdiLink}" />
       </Button>
-
+    {/if}
+    {#if !isStudent}
       <Button
         class="ml-2 mr-2 amber darken-2 white-text"
         fab

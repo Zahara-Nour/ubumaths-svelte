@@ -192,7 +192,7 @@
 
   function generateExemple(theme, domain, subdomain, level) {
     let qs = questions[theme][domain][subdomain]
-    const q = qs.find((q) => qs.indexOf(q) + 1 === parseInt(level, 10))
+    const q = {...qs.find((q) => qs.indexOf(q) + 1 === parseInt(level, 10))}
     return generateQuestion(q)
   }
 

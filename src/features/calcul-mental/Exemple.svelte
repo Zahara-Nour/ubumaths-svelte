@@ -72,7 +72,7 @@
               on:click="{() => {}}"
             >
               {#if choice.image}
-                {#await choice.imageBase64}
+                {#await choice.imageBase64P}
                   loading image
                 {:then base64}
                   <img

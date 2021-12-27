@@ -26,7 +26,7 @@
     coms,
     status,
     image,
-    imageBase64,
+    imageBase64P,
     imageCorrection,
     imageCorrectionBase64,
     choices
@@ -68,13 +68,13 @@
       coms,
       status,
       image,
-      imageBase64,
+      imageBase64P,
       imageCorrection,
       imageCorrectionBase64,
       choices,
     } = item)
     // if (image) {
-    //   imageBase64 = fetchImage(image)
+    //   imageBase64P = fetchImage(image)
     // }
     if (status === STATUS_BAD_FORM || status === STATUS_INCORRECT) {
       answerColor = 'red'
@@ -508,7 +508,7 @@
           {error}
         {/await}
       {:else}
-        {#await imageBase64}
+        {#await imageBase64P}
           loading image
         {:then base64}
           <img

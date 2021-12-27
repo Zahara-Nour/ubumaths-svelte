@@ -63,7 +63,7 @@
     if (percent === 1) {
       colorResult = good_class
       messageResult = 'Perfect !'
-    } else if (percent >= 0.9) {
+    } else if (percent >= 0.8) {
       colorResult = good_class
       messageResult = 'Good Job !'
     } else if (percent >= 0.5) {

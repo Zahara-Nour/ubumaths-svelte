@@ -94,12 +94,15 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     question.images && question.images.length || 0
   )
 
-
   if (question.expressions && !question.limits) {
+
     question.limits = { limits: [] }
     let nbuniques = 0
-    question.expressions.forEach((e, i) => {
+    for (let i = 0; i < n; i++) {
+
       question.limits.limits[i] = {}
+      const e = question.expressions[i] || ''
+      console.log('e', e)
       if (!(e.includes('$e') || e.includes('$d') || e.includes('$l') || e.includes('&'))) {
         console.log('unique')
         nbuniques += 1
@@ -107,7 +110,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       }
       question.limits.limits[i].count = 0
 
-    })
+    }
     question.limits.nbuniques = nbuniques
     const nbrandoms = question.expressions.length - nbuniques
     question.limits.nbrandoms = nbrandoms
@@ -119,16 +122,17 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
     // recherche des expressions qui ont déjà été utilisées
     // un nombre maximum de fois (à part celles qui sont uniques)
-    question.expressions.forEach((_, i) => {
+    for (let i = 0; i < n; i++) {
+
       if (question.limits.limits[i].limit
         && question.limits.limits[i].limit !== 1
         && question.limits.limits[i].limit === question.limits.limits[i].count) {
         question.limits.nbmax += 1
         question.limits.reached += question.limits.limits[i].limit
       }
-    })
+    }
     // on met à jour les limites des expressions aléatoires
-    question.expressions.forEach((_, i) => {
+    for (let i = 0; i < n; i++) {
       // si l'initialisation n'a pas été encore faire
       if (!question.limits.limits[i].limit) {
 
@@ -139,15 +143,15 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       // ont pu atteindre leur maximum
       else if (question.limits.limits[i].limit !== 1
         && question.limits.limits[i].limit !== question.limits.limits[i].count) {
-        
+
         const limit = Math
           .ceil(1 / (question.limits.nbrandoms - question.limits.nbmax)
             * (nbquestions - question.limits.nbuniques - question.limits.reached)
           )
         question.limits.limits[i].limit = limit
       }
-    })
-    // console.log('limits', JSON.parse(JSON.stringify(question.limits)))
+    }
+    console.log('limits', JSON.parse(JSON.stringify(question.limits)))
   }
 
   do {
@@ -160,11 +164,12 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       do {
         i = Math.floor(n * Math.random())
         count2 += 1
-      } while (question.limits.limits[i].count >= question.limits.limits[i].limit && count2 < 1000)
+      } while (question.limits.limits[i].count >= question.limits.limits[i].limit
+        && count2 < 1000)
       if (count2 >= 1000) warn('fail to chose an expression', count2)
-  
+
       question.limits.limits[i].count += 1
-      // console.log('limits', JSON.parse(JSON.stringify(question.limits)))
+      console.log('limits', JSON.parse(JSON.stringify(question.limits)))
     } else {
       i = Math.floor(n * Math.random())
     }
@@ -288,57 +293,80 @@ export default function generateQuestion(question, generateds = [], nbquestions 
           return c
         })
       }
-
-      if (expression && enounce) {
-        doItAgain = generateds.some(g => g.expression === expression && g.enounce === enounce)
-        if (doItAgain) warn('même énoncé ET expression: ', enounce, expression)
-      }
-
-      else if (enounce && choices) {
-        doItAgain = generateds.some(g => g.enounce === enounce
-          && JSON.stringify(g.choices) === JSON.stringify(choices))
-        if (doItAgain) warn('même énoncé ET choix ', enounce, JSON.stringify(choices))
-
-      }
-
-      else if (expression && !options.includes('allow-same-expression')) {
-
-        doItAgain = generatedExpressions.includes(expression)
-        if (doItAgain) warn('même image expression', expression)
-      }
-
-      else if (enounce && !options.includes('allow-same-enounce')) {
-        doItAgain = generatedEnounces.includes(enounce)
-        if (doItAgain) warn('même énoncé', enounce)
-      }
-
-      if (image) {
-        console.log('includes generated?', image, generatedImages, generatedImages.includes(image))
-        const test = generatedImages.includes(image)
-        if (test) warn('même image pour la question', image)
-        doItAgain = doItAgain || test
-
-      }
-
-      if (!doItAgain && question.conditions) {
-        let tests = question.conditions[question.conditions.length === 1 ? 0 : i]
-
-        Object.getOwnPropertyNames(variables).forEach((name) => {
-          const regex = new RegExp(name, 'g')
-          tests = tests.replace(regex, variables[name])
-        })
-        tests = tests.replace(regexExact, replacementExact)
-
-        if (tests.includes('||')) {
-          tests = tests.split('||')
-          doItAgain = !tests.some(test => math(test).eval().string === 'true')
-        } else {
-          tests = tests.split('||')
-          doItAgain = !tests.every(test => math(test).eval().string === 'true')
-        }
-        if (doItAgain) warn('tests non passé', tests)
-      }
     }
+    if (expression && enounce && choices) {
+      doItAgain = generateds.some(g => g.enounce === enounce
+        && JSON.stringify(g.choices) === JSON.stringify(choices)
+        && g.expression === expression)
+      if (doItAgain) warn('même énoncé ET choix ET image', enounce, JSON.stringify(choices), expression)
+
+    }
+
+    else if (image && enounce && choices) {
+      doItAgain = generateds.some(g => g.enounce === enounce
+        && JSON.stringify(g.choices) === JSON.stringify(choices)
+        && g.image === image)
+      if (doItAgain) warn('même énoncé ET choix ET image', enounce, JSON.stringify(choices), image)
+
+    }
+
+    else if (expression && enounce) {
+      doItAgain = generateds.some(g => g.expression === expression && g.enounce === enounce)
+      if (doItAgain) warn('même énoncé ET expression: ', enounce, expression)
+    }
+
+    else if (enounce && choices) {
+      doItAgain = generateds.some(g => g.enounce === enounce
+        && JSON.stringify(g.choices) === JSON.stringify(choices))
+      if (doItAgain) warn('même énoncé ET choix ', enounce, JSON.stringify(choices))
+
+    }
+
+    else if (enounce && image) {
+      doItAgain = generateds.some(g => g.enounce === enounce
+        && g.image === image)
+      if (doItAgain) warn('même énoncé ET image', enounce, image)
+
+    }
+
+    else if (expression && !options.includes('allow-same-expression')) {
+
+      doItAgain = generatedExpressions.includes(expression)
+      if (doItAgain) warn('même image expression', expression)
+    }
+
+    else if (enounce && !options.includes('allow-same-enounce')) {
+      doItAgain = generatedEnounces.includes(enounce)
+      if (doItAgain) warn('même énoncé', enounce)
+    }
+
+    else if (image) {
+      console.log('includes generated?', image, generatedImages, generatedImages.includes(image))
+      const test = generatedImages.includes(image)
+      if (test) warn('même image pour la question', image)
+      doItAgain = doItAgain || test
+
+    }
+
+    if (!doItAgain && question.conditions) {
+      let tests = question.conditions[question.conditions.length === 1 ? 0 : i]
+
+      Object.getOwnPropertyNames(variables).forEach((name) => {
+        const regex = new RegExp(name, 'g')
+        tests = tests.replace(regex, variables[name])
+      })
+      tests = tests.replace(regexExact, replacementExact)
+
+      if (tests.includes('||')) {
+        tests = tests.split('||')
+        doItAgain = !tests.some(test => math(test).eval().string === 'true')
+      } else {
+        tests = tests.split('||')
+        doItAgain = !tests.every(test => math(test).eval().string === 'true')
+      }
+      if (doItAgain) warn('tests non passé', tests)
+    }
+
   } while (doItAgain && count < 100)
 
   if (count >= 100) {
@@ -407,7 +435,8 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
     choices = choices.map(c => {
       if (c.image) {
-        c.imageBase64 = fetchImage(c.image)
+        c.imageBase64P = fetchImage(c.image)
+        c.imageBase64P.then(base64 => { c.imageBase64 = base64 })
       }
       return c
     })
@@ -525,7 +554,6 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
   let expression_latex
   if (expression) {
-    console.log('expression', expression, math(expression).string)
     expression_latex = math(expression).toLatex({
       addSpaces: !(question.options && question.options.includes('exp-no-spaces')),
       keepUnecessaryZeros: question.options && question.options.includes('exp-allow-unecessary-zeros')
@@ -613,7 +641,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
   if (testAnswer) generated.testAnswer = testAnswer
   if (image) {
     generated.image = image
-    generated.imageBase64 = fetchImage(image)
+    generated.imageBase64P = fetchImage(image)
   }
   if (imageCorrection) {
     generated.imageCorrection = imageCorrection

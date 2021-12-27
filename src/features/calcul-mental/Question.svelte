@@ -42,8 +42,8 @@
   //   // $: console.log('enounce', question.enounce)
   // }
 
-  $: if (question.image && !question.imageBase64) {
-    question.imageBase64 = fetchImage(question.image)
+  $: if (question.image && !question.imageBase64P) {
+    question.imageBase64P = fetchImage(question.image)
   }
 </script>
 
@@ -82,7 +82,7 @@
     </div>
   {/if}
   {#if question.image}
-    {#await question.imageBase64}
+    {#await question.imageBase64P}
       loading image
     {:then base64}
       <img

@@ -20,6 +20,8 @@ const NULL_TERMS =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> contient un terme nul que tu peux enlever."
 const BRACKETS =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> contient des parenthèses inutiles."
+const BRACKETS_FIRST_TERM =
+    "<span style='color:_COLORANSWER_'>Ta réponse</span> contient des parenthèses inutiles en début de somme."
 const SPACES =
     "Les chiffres sont mal espacés dans <span style='color:_COLORANSWER_'>ta réponse</span>."
 const SIGNS =
@@ -58,15 +60,17 @@ function checkConstraints(item) {
             function: checkBrackets,
             com: BRACKETS,
         },
+        
+        // la vérifiaction pour le premiet terme se fait dans check_brackets
 
-        {
-            option: [
-                'no-penalty-for-extraneous-brackets-in-first-negative-term',
-                'require-no-extraneaous-brackets',
-            ],
-            function: checkBrackets,
-            com: BRACKETS,
-        },
+        // {
+        //     option: [
+        //         'no-penalty-for-extraneous-brackets-in-first-negative-term',
+        //         'require-no-extraneaous-brackets',
+        //     ],
+        //     function: checkBrackets,
+        //     com: BRACKETS_FIRST_TERM,
+        // },
         {
             option: [
                 'no-penalty-for-extraneous-zeros',
@@ -107,6 +111,7 @@ function checkConstraints(item) {
 
     checks.forEach((check) => {
         if (!item.options.includes(check.option[0]) && !check.function(item)) {
+            console.log(check.option[0], 'not passed', item)
             item.coms.push(check.com)
             if (item.options.includes(check.option[1])) {
                 item.status = STATUS_BAD_FORM
@@ -320,7 +325,7 @@ export function assessItems(questions, answers, answers_latex, answers_choice, t
             coms: [],
             status: null,
             image: question.image,
-            imageBase64: question.imageBase64,
+            imageBase64P: question.imageBase64P,
             imageCorrection: question.imageCorrection,
             imageCorrectionBase64: question.imageCorrectionBase64,
 

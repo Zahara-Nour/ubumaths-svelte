@@ -2,7 +2,7 @@
   import Question from './Question.svelte'
   import generate from './generateQuestion'
   import CircularProgress from '../../components/CircularProgress.svelte'
-  import { Button, Icon } from 'svelte-materialify/src'
+  import { Button, Icon, Slider } from 'svelte-materialify/src'
   import { onDestroy, onMount } from 'svelte'
   import Correction from './Correction.svelte'
   import qs from './questions'
@@ -24,7 +24,8 @@
 
   export let location
 
-  let { info, fail, trace } = getLogger('MentalTest', 'info')
+  let audio = new Audio('sounds/ressort.mp3')
+  let { info, fail, trace } = getLogger('MentalTest', 'trace')
   let question = {}
   let questions
   let current = -1
@@ -63,6 +64,10 @@
   let generatedExemple
   let images = []
   let grade
+  let alert
+  let slider
+  let min = 0,
+    max = 60
 
   const togglePause = () => {
     if (pause) {
@@ -81,6 +86,7 @@
       elapsed = Date.now() - start + previous
       if (delay >= elapsed) {
         percentage = ((delay - elapsed) * 100) / delay
+        if (delay - elapsed < 5000) alert = true
       } else {
         change()
       }
@@ -94,6 +100,7 @@
   })
 
   function initMathField() {
+    console.log('initfield')
     mf.setOptions({
       // virtualKeyboardMode: 'onfocus',
       virtualKeyboardMode: 'auto',
@@ -109,10 +116,13 @@
   }
 
   function getQuestion(theme, domain, subdomain, level) {
-    return qs[theme][domain][subdomain].find(
-      (q) =>
-        qs[theme][domain][subdomain].indexOf(q) + 1 === parseInt(level, 10),
-    )
+    // on retourne une copie car on doit modifier les questions à la volée
+    return {
+      ...qs[theme][domain][subdomain].find(
+        (q) =>
+          qs[theme][domain][subdomain].indexOf(q) + 1 === parseInt(level, 10),
+      ),
+    }
   }
 
   function initTest() {
@@ -202,7 +212,7 @@
     // }, [])
     // generateds.forEach(async (q) => {
     //   if (q.image) {
-    //     q.imageBase64 = await fetchImage(q.image)
+    //     q.imageBase64P = await fetchImage(q.image)
     //   }
     // })
 
@@ -210,7 +220,7 @@
     //   if (q.choices) {
     //     q.choices.forEach(async (choice) => {
     //       if (choice.image) {
-    //         choice.imageBase64 = await fetchImage(choice.image)
+    //         choice.imageBase64P = await fetchImage(choice.image)
     //       }
     //     })
     //   }
@@ -238,8 +248,9 @@
       .getValue()
       .replace(/(\\,){2,}/g, '\\,')
       .trim()
-    answer = mf
-      .getValue('ascii-math')
+    answer = mf.getValue('ascii-math')
+    trace(`answer latex: ${answer_latex} asccii: ${answer}`)
+    answer = answer
       // .replace(/xx/g, '*')
       .replace(/÷/g, ':')
       .replace(/\((\d+(,\d+)*)\)\//g, (_, p1) => p1 + '/')
@@ -274,6 +285,7 @@
   function onKeystroke(mathfield, keystroke, e) {
     const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%'
     trace('keystroke', keystroke)
+    trace('e.key', e.key)
     if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
       // if (elapsed > 3000) commit()
 
@@ -336,6 +348,7 @@
 
   // on passe à la question suivante
   async function change() {
+    audio.play()
     if (timer) clearInterval(timer)
     // if (timeout) clearTimeout(timeout)
 
@@ -360,10 +373,16 @@
       generated = generateds[current]
       // generated = generate(question, generateds)
       // if (generateds) generateds.push(generated)
-      delay = question.delay
-        ? question.delay * 1000
-        : question.defaultDelay * 1000
-      percentage = 100
+      if (slider && theme && domain && subdomain && level) {
+        delay = slider * 1000
+      } else {
+        delay = question.delay
+          ? question.delay * 1000
+          : question.defaultDelay * 1000
+        slider = delay / 1000
+      }
+      percentage = 0
+      alert = false
       start = Date.now()
       previous = 0
       timer = setInterval(countDown, 10)
@@ -406,6 +425,8 @@
   $: if (answer) {
     correct = math(answer).type !== '!! Error !!'
   }
+
+  $: delay = slider * 1000
 </script>
 
 {#if showExemple}
@@ -459,89 +480,103 @@
     </div>
   {/if}
 {:else if generated}
-  <div class="mt-6 mb-6">
-    <CircularProgress
-      number="{current + 1}"
-      fontSize="{classroom ? $classroomFontSize : $testFontSize + 8}"
-      strokeWidth="{5}"
-      percentage="{percentage}"
-    />
-  </div>
-  <div class="mt-5 mb-5">
-    <Question
-      size="{classroom ? $classroomFontSize : $testFontSize}"
-      question="{generated}"
-    />
-  </div>
-  <!-- <div class:error> -->
+  <div class="{(alert ? 'alert' : 'noalert') + ' pa-2'}">
+    <div class="mt-6 mb-6 d-flex">
 
-  <div class="d-flex align-center justify-center">
-    {#if choices}
-      <div
-        class="mt-3 d-flex flex-wrap justify-space-around"
-        style="width:100%;"
-      >
-        {#each choices as choice, i}
-          <!-- <Button size="x-large" class="ml-3 mr-3" on:click="{() => onChoice(i)}"> -->
+      <CircularProgress
+        number="{current + 1}"
+        fontSize="{classroom ? $classroomFontSize : $testFontSize + 8}"
+        strokeWidth="{7}"
+        percentage="{percentage}"
+      />
+      {#if slider && classroom}
+        <Slider
+          min="{min}"
+          max="{max}"
+          style="width:100px;"
+          thumb
+          bind:value="{slider}"
+          color='orange'
+          thumbClass='orange'
+        />
+      {/if}
+    </div>
+    <div class="mt-5 mb-5">
+      <Question
+        size="{classroom ? $classroomFontSize : $testFontSize}"
+        question="{generated}"
+      />
+    </div>
+    <!-- <div class:error> -->
 
-          <button
-            class="rounded-lg  ma-3 pa-3"
-            style="border: 5px solid yellow;"
-            on:click="{() => {
-              if (!classroom) onChoice(i)
-            }}"
-          >
-            {#if choice.image}
-              {#await choice.imageBase64}
-                loading image
-              {:then base64}
-                <img
-                  class="white"
-                  src="{base64}"
-                  style="max-width:400px;max-height:40vh;"
-                  alt="{`choice ${i}`}"
-                />
-              {:catch error}
-                {error}
-              {/await}
-            {/if}
-            {#if choice.text}
-              <div
-                style="font-size:{classroom
-                  ? $classroomFontSize
-                  : $testFontSize + 4}px;"
-              >
-                {@html choice.text}
-              </div>
-            {/if}
-          </button>
-
-          <!-- </Button> -->
-        {/each}
-      </div>
-    {:else if !classroom}
-      <div
-        class="mt-16 d-flex flex-row align-center justify-center"
-        style="max-width:500px;width:100%"
-      >
-        <span class="mr-4" style="font-size:{$testFontSize}px;"
-          >Ta réponse:</span
+    <div class="d-flex align-center justify-center">
+      {#if choices}
+        <div
+          class="mt-3 d-flex flex-wrap justify-space-around"
+          style="width:100%;"
         >
-        <div class="flex-grow-1">
-          <math-field
-            style="width:100%;font-size:{$testFontSize}px;"
-            class="{correct
-              ? 'pa-2 light-green lighten-5'
-              : 'pa-2 deep-orange lighten-5'}"
-            virtual-keyboard-theme="apple"
-            on:input="{onChangeMathField}"
-            on:change="{commit}"
-            bind:this="{mf}"
-          >
-          </math-field>
+          {#each choices as choice, i}
+            <!-- <Button size="x-large" class="ml-3 mr-3" on:click="{() => onChoice(i)}"> -->
+
+            <button
+              class="rounded-lg  ma-3 pa-3"
+              style="border: 5px solid yellow;"
+              on:click="{() => {
+                if (!classroom) onChoice(i)
+              }}"
+            >
+              {#if choice.image}
+                {#await choice.imageBase64P}
+                  loading image
+                {:then base64}
+                  <img
+                    class="white"
+                    src="{base64}"
+                    style="max-width:400px;max-height:40vh;"
+                    alt="{`choice ${i}`}"
+                  />
+                {:catch error}
+                  {error}
+                {/await}
+              {/if}
+              {#if choice.text}
+                <div
+                  style="font-size:{classroom
+                    ? $classroomFontSize
+                    : $testFontSize + 4}px;"
+                >
+                  {@html choice.text}
+                </div>
+              {/if}
+            </button>
+
+            <!-- </Button> -->
+          {/each}
         </div>
-      </div>
-    {/if}
+      {:else if !classroom}
+        <div
+          class="mt-16 d-flex flex-row align-center justify-center"
+          style="max-width:500px;width:100%"
+        >
+          <span class="mr-4" style="font-size:{$testFontSize}px;"
+            >Ta réponse:</span
+          >
+          <div class="flex-grow-1">
+            <math-field
+              style="width:100%;font-size:{$testFontSize}px;"
+              class="{correct
+                ? 'pa-2 light-green lighten-5'
+                : 'pa-2 deep-orange lighten-5'}"
+              virtual-keyboard-theme="apple"
+              on:input="{onChangeMathField}"
+              on:change="{commit}"
+              bind:this="{mf}"
+            >
+            </math-field>
+          </div>
+        </div>
+      {/if}
+    </div>
   </div>
 {:else}
   Pas de questions
@@ -550,5 +585,12 @@
 <style>
   .error {
     border: 5px solid red;
+  }
+  .alert {
+    border: 5px solid red;
+    border-radius: 20px;
+  }
+  .noalert {
+    border: 5px solid white;
   }
 </style>
