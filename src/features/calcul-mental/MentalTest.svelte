@@ -480,14 +480,14 @@
     </div>
   {/if}
 {:else if generated}
-  <div class="{(alert ? 'alert' : 'noalert') + ' pa-2'}">
-    <div class="mt-6 mb-6 d-flex">
-
+  <div class=" pa-2 ">
+    <div class="{' mt-1 mb-1 d-flex justify-start'}">
       <CircularProgress
         number="{current + 1}"
         fontSize="{classroom ? $classroomFontSize : $testFontSize + 8}"
         strokeWidth="{7}"
         percentage="{percentage}"
+        pulse="{alert}"
       />
       {#if slider && classroom}
         <Slider
@@ -496,20 +496,16 @@
           style="width:100px;"
           thumb
           bind:value="{slider}"
-          color='orange'
-          thumbClass='orange'
+          color="orange"
+          thumbClass="orange"
         />
       {/if}
     </div>
-    <div class="mt-5 mb-5">
+    <div class="mt-1 mb-1 elevation-{4} rounded-lg">
       <Question
         size="{classroom ? $classroomFontSize : $testFontSize}"
         question="{generated}"
       />
-    </div>
-    <!-- <div class:error> -->
-
-    <div class="d-flex align-center justify-center">
       {#if choices}
         <div
           class="mt-3 d-flex flex-wrap justify-space-around"
@@ -553,7 +549,12 @@
             <!-- </Button> -->
           {/each}
         </div>
-      {:else if !classroom}
+      {/if}
+    </div>
+    <!-- <div class:error> -->
+
+    <div class="d-flex align-center justify-center">
+      {#if !choices && !classroom}
         <div
           class="mt-16 d-flex flex-row align-center justify-center"
           style="max-width:500px;width:100%"
@@ -585,12 +586,5 @@
 <style>
   .error {
     border: 5px solid red;
-  }
-  .alert {
-    border: 5px solid red;
-    border-radius: 20px;
-  }
-  .noalert {
-    border: 5px solid white;
   }
 </style>

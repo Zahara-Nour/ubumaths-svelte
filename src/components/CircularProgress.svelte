@@ -3,6 +3,7 @@
   export let fontSize
   export let strokeWidth
   export let percentage
+  export let pulse
 
   let sqSize
   let radius
@@ -58,11 +59,10 @@
   // SVG centers the stroke width on the radius, subtract out so circle fits in square
   //   const sqSize = sqSize
 
-  $: sqSize = fontSize * 1.8
+  $: sqSize = fontSize * 3
 
-  $: radius = (sqSize - strokeWidth) / 2
-  // Enclose cicle in a circumscribing square
-  $: viewBox = `0 0 ${sqSize} ${sqSize}`
+  $: radius = sqSize / 3.6
+
   // Arc length at 100% coverage is the circle circumference
   $: dashArray = radius * Math.PI * 2
   // Scale 100% coverage overlay with the actual percent
@@ -71,23 +71,24 @@
   $: color=gradient[Math.floor((100-percentage)/100*40)]
 </script>
 
-<div style="--theme-color: {color};position: relative;display: inline-block;text-align: center;">
-  <svg width="{sqSize}" height="{sqSize}" viewBox="{viewBox}">
+<div  style=" --theme-color: {color};position: relative;display: inline-block;text-align: center;">
+  <svg width={sqSize} height={sqSize}>
+    <circle class={pulse ? "pulse" : ''} fill='red' cx = "50%" cy = "50%" r = "{radius}"></circle>
     <circle
-      class="circle-background"
-      cx="{sqSize / 2}"
-      cy="{sqSize / 2}"
+      class= "circle-background"
+      cx="50%"
+      cy="50%"
       r="{radius}"
       stroke-width="{`${strokeWidth}px`}"
     >
     </circle>
     <circle
       class="circle-progress"
-      cx="{sqSize / 2}"
-      cy="{sqSize / 2}"
+      cx="50%"
+      cy="50%"
       r="{radius}"
       stroke-width="{`${strokeWidth}px`}"
-      transform="{`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}"
+      transform="rotate(-90)"
       style="{`stroke-dasharray: ${dashArray};stroke-dashoffset: ${dashOffset};`}"
     >
     </circle>
@@ -100,13 +101,15 @@
 </div>
 
 <style>
-  .circle-background,
+  
   .circle-progress {
     fill: none;
+    transform-origin: 50% 50%;
   }
 
   .circle-background {
     stroke: #ddd;
+    fill:white;
   }
 
   .circle-progress {
@@ -114,4 +117,31 @@
     stroke-linecap: round;
     stroke-linejoin: round;
   }
+
+  .pulse {
+    animation: pulse 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+     transform-origin: 50% 50%;
+    /*animation-duration: 1.5s;
+  animation-name: pulse;
+  animation-iteration-count: infinite; */
+    /* border: 5px solid red */
+  }
+  
+  @keyframes pulse {
+  from {
+    
+    fill-opacity: 1;
+    transform: scale(1);
+    /* box-shadow: 0 0 0 0 rgba(232, 76, 61, 0.7); */
+    /* stroke : blue */
+  }
+  to {
+ 
+    fill-opacity: 0;
+    transform: scale(1.8);
+    /* box-shadow: 0 0 0 45px rgba(232, 76, 61, 0); */
+    /* stroke: red */
+  }
+}
+  /* @keyframes pulse {to {box-shadow: 0 0 0 45px rgba(232, 76, 61, 0);}} */
 </style>
