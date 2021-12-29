@@ -8835,8 +8835,8 @@ export default {
           subdescription: 'Entiers relatifs',
           enounces: [
             'Calculer $$&3&1#s{&4}$$ avec $$&1=&2$$',
-            'Calculer $$&4#{&3}&1$$ avec $$&1=&2$$',
-            'Calculer $$&4&5#{&3}&1$$ avec $$&1=&2$$ et $$&5=&6$$',
+            'Calculer $$&4#s{&3}&1$$ avec $$&1=&2$$',
+            'Calculer $$&4&5#s{&3}&1$$ avec $$&1=&2$$ et $$&5=&6$$',
           ],
           expressions: ['&3&1#s{&4}', '&4#s{&3}&1', '&4&5#s{&3}&1'],
           variables: [
@@ -8869,7 +8869,7 @@ export default {
           // ],
           // solutions: [['#{&1+&3}/&2'],['#{&1-&2}/&3']],
           defaultDelay: 30,
-          grade: QUATRIEME,
+          grade: CINQUIEME,
         },
       ],
     },
@@ -8879,7 +8879,7 @@ export default {
           description: 'Simplifier le symbole de multiplication',
           subdescription: 'Devant une lettre',
 
-          enounces: ["Enlève, quand c'est possible, le symbole de la multiplication:"],
+          enounces: ["Simplifie l'expression en enlevant, quand c'est possible,  le symbole de la multiplication."],
           expressions: [
             '&2*&1',
             '&1*&2'
@@ -8890,20 +8890,20 @@ export default {
               '&2': '$e[2;9]',
             },
           ],
-          options: ['shallow-shuffle-factors', 'require-implicit-products', 'disallow-factors-permutation'],
-          solutions: [
-            ['&2&1'],
-            ['&1*&2']
-          ],
+          options: [ 'require-implicit-products'],
+          // solutions: [
+          //   ['&2&1'],
+          //   ['&1*&2']
+          // ],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
           description: 'Simplifier le symbole de multiplication',
           subdescription: 'Devant une parenthèse',
 
-          enounces: ["Enlève, quand c'est possible, le symbole de la multiplication:"],
+          enounces: ["Simplifie l'expression en enlève, quand c'est possible, le symbole de la multiplication."],
           expressions: [
             '&3*(&1+&2)',
             '&3*(&1+&4)',
@@ -8921,19 +8921,19 @@ export default {
               '&5': '$e[2;9]',
             },
           ],
-          options: ['shuffle-terms', 'require-implicit-products', 'disallow-factors-permutation'],
-          solutions: [
-            ['&3(&1+&2)'],
-            ['&3(&1+&4)'],
-            ['&5(&1+&2)'],
-            ['&5(&1+&4)'],
-            ['(&1+&2)*&5'],
-            ['(&1+&4)*&5']
+          options: ['require-implicit-products'],
+          // solutions: [
+          //   ['&3(&1+&2)'],
+          //   ['&3(&1+&4)'],
+          //   ['&5(&1+&2)'],
+          //   ['&5(&1+&4)'],
+          //   ['(&1+&2)*&5'],
+          //   ['(&1+&4)*&5']
 
-          ],
+          // ],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Simplifier un produit par 0 ou 1',

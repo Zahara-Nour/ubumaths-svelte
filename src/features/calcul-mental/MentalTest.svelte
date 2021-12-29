@@ -21,6 +21,8 @@
   import Exemple from './Exemple.svelte'
   import { mdiRocketLaunchOutline, mdiRestart } from '@mdi/js'
   import { fetchImage } from './images'
+  import { flip } from 'svelte/animate'
+  import { fly } from 'svelte/transition'
 
   export let location
 
@@ -36,7 +38,7 @@
   let answers_latex = []
   let answers_choice = []
   let times = []
-  let generated
+  // let generated
   let generateds = []
   let delay
   let elapsed
@@ -52,7 +54,7 @@
   let theme
   let level
   let assessmentId
-  let choices
+  // let choices
   let correct = false
   let restart = false
   let classroom
@@ -68,6 +70,8 @@
   let slider
   let min = 0,
     max = 60
+  let cards
+  let card
 
   const togglePause = () => {
     if (pause) {
@@ -128,9 +132,11 @@
   function initTest() {
     info('init test')
     restart = false
-    current = -1
     finish = false
     generateds = []
+    answers = []
+    answers_latex = []
+    answers_choice = []
     queryParams = queryString.parse(location.search)
     subdomain = queryParams.subdomain
     domain = queryParams.domain
@@ -226,6 +232,20 @@
     //   }
     // })
 
+    cards = generateds.map((generated) => {
+      const card = { ...generated }
+      if (card.choices) {
+        card.choices = card.choices.map((c) => {
+          const choice = { ...c }
+          if (c.text) {
+            choice.markup = c.text.replace(regex, replacement)
+          }
+          return choice
+        })
+      }
+      return card
+    })
+    cards.unshift(null)
     if (classroom && theme) {
       showExemple = true
       generatedExemple = generate(getQuestion(theme, domain, subdomain, level))
@@ -351,16 +371,16 @@
     audio.play()
     if (timer) clearInterval(timer)
     // if (timeout) clearTimeout(timeout)
-
-    if (current >= 0) {
-      answers[current] = answer
-      answers_latex[current] = answer_latex
-      answers_choice[current] = answer_choice
+    console.log('cards', cards)
+    if (cards.length <= generateds.length) {
+      answers.push(answer)
+      answers_latex.push(answer_latex)
+      answers_choice.push(answer_choice)
       let time = Math.min(Math.round(elapsed / 1000), delay)
       if (time === 0) time = 1
-      times[current] = time
+      times.push(time)
     }
-    if (current < questions.length - 1) {
+    if (cards.length > 1) {
       if (mf) {
         mf.setValue('')
         if (!mf.hasFocus()) mf.focus()
@@ -368,17 +388,17 @@
       answer = ''
       answer_latex = ''
       answer_choice = null
-      current++
-      question = questions[current]
-      generated = generateds[current]
+
+      cards = [...cards.slice(1, cards.length)]
+      card = cards[0]
+
+      console.log('card', card)
       // generated = generate(question, generateds)
       // if (generateds) generateds.push(generated)
       if (slider && theme && domain && subdomain && level) {
         delay = slider * 1000
       } else {
-        delay = question.delay
-          ? question.delay * 1000
-          : question.defaultDelay * 1000
+        delay = card.delay ? card.delay * 1000 : card.defaultDelay * 1000
         slider = delay / 1000
       }
       percentage = 0
@@ -404,21 +424,8 @@
     initMathField()
   }
 
-  $: if (generated && mf && !mf.hasFocus()) {
+  $: if (card && mf && !mf.hasFocus()) {
     mf.focus()
-  }
-
-  // mise en forme du LaTeX dans les choix des questions à choix
-  $: if (generated && generated.choices) {
-    choices = generated.choices.map((c) => {
-      const choice = { ...c }
-      if (c.text) {
-        choice.text = c.text.replace(regex, replacement)
-      }
-      return choice
-    })
-  } else {
-    choices = null
   }
 
   // test pour vérifier que l'expression est bien formée à chaque frappe
@@ -479,11 +486,11 @@
       </Button>
     </div>
   {/if}
-{:else if generated}
+{:else if card}
   <div class=" pa-2 ">
     <div class="{' mt-1 mb-1 d-flex justify-start'}">
       <CircularProgress
-        number="{current + 1}"
+        number="{questions.length - cards.length + 1}"
         fontSize="{classroom ? $classroomFontSize : $testFontSize + 8}"
         strokeWidth="{7}"
         percentage="{percentage}"
@@ -501,7 +508,71 @@
         />
       {/if}
     </div>
-    <div class="mt-1 mb-1 elevation-{4} rounded-lg">
+    {#if cards}
+      <div id="cards-container">
+        <div id="cards">
+          {#each cards as card (card.num)}
+            <div
+              class="card"
+              animate:flip="{{ duration: 700 }}"
+              out:fly="{{ x: -500, duration: cards.length > 1 ? 700 : 0 }}"
+            >
+              <div class="mt-1 mb-1 elevation-{4} rounded-lg">
+                <Question
+                  size="{classroom ? $classroomFontSize : $testFontSize}"
+                  question="{card}"
+                />
+                {#if card.choices}
+                  <div
+                    class="mt-3 d-flex flex-wrap justify-space-around"
+                    style="width:100%;"
+                  >
+                    {#each card.choices as choice, i}
+                      <!-- <Button size="x-large" class="ml-3 mr-3" on:click="{() => onChoice(i)}"> -->
+
+                      <button
+                        class="rounded-lg  ma-3 pa-3"
+                        style="border: 5px solid yellow;"
+                        on:click="{() => {
+                          if (!classroom) onChoice(i)
+                        }}"
+                      >
+                        {#if choice.image}
+                          {#await choice.imageBase64P}
+                            loading image
+                          {:then base64}
+                            <img
+                              class="white"
+                              src="{base64}"
+                              style="max-width:400px;max-height:40vh;"
+                              alt="{`choice ${i}`}"
+                            />
+                          {:catch error}
+                            {error}
+                          {/await}
+                        {/if}
+                        {#if choice.markup}
+                          <div
+                            style="font-size:{classroom
+                              ? $classroomFontSize
+                              : $testFontSize + 4}px;"
+                          >
+                            {@html choice.markup}
+                          </div>
+                        {/if}
+                      </button>
+
+                      <!-- </Button> -->
+                    {/each}
+                  </div>
+                {/if}
+              </div>
+            </div>
+          {/each}
+        </div>
+      </div>
+    {/if}
+    <!-- <div class="mt-1 mb-1 elevation-{4} rounded-lg">
       <Question
         size="{classroom ? $classroomFontSize : $testFontSize}"
         question="{generated}"
@@ -512,8 +583,7 @@
           style="width:100%;"
         >
           {#each choices as choice, i}
-            <!-- <Button size="x-large" class="ml-3 mr-3" on:click="{() => onChoice(i)}"> -->
-
+            
             <button
               class="rounded-lg  ma-3 pa-3"
               style="border: 5px solid yellow;"
@@ -546,15 +616,15 @@
               {/if}
             </button>
 
-            <!-- </Button> -->
+            
           {/each}
         </div>
       {/if}
-    </div>
+    </div> -->
     <!-- <div class:error> -->
 
     <div class="d-flex align-center justify-center">
-      {#if !choices && !classroom}
+      {#if !card.choices && !classroom}
         <div
           class="mt-16 d-flex flex-row align-center justify-center"
           style="max-width:500px;width:100%"
@@ -586,5 +656,31 @@
 <style>
   .error {
     border: 5px solid red;
+  }
+
+  #cards-container {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    position: relative;
+    /* display: flex; */
+    /* flex-direction: column; */
+    overflow-x: hidden;
+    /* height: 500px; */
+    /* max-height: 70vh; */
+    width: 100%;
+  }
+  #cards {
+    display: flex;
+    flex-wrap: nowrap;
+    /* height: 600px; */
+    overflow-x: hidden;
+    /* height: 100%; */
+    width: 100%;
+  }
+  .card {
+    min-width: calc(100% - 8px);
+    /* min-width: 400px; */
+    margin: 4px;
+    /* height: 100%; */
   }
 </style>
