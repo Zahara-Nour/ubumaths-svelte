@@ -13,9 +13,9 @@ const EMPTY_ANSWER = "Tu n'as rien répondu."
 const ZEROS =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> contient des des zéros inutiles"
 const FACTORE_ONE =
-    "<span style='color:_COLORANSWER_'>Ta réponse</span> contient un facteur égal à 1 que tu peux simplifier."
+    "Dans <span style='color:_COLORANSWER_'>ta réponse</span>, tu peux enlever un facteur égal à 1."
 const FACTORE_ZERO =
-    "<span style='color:_COLORANSWER_'>Ta réponse</span> contient un produit nul que tu peux simplifier."
+    "Tu peux simplifier <span style='color:_COLORANSWER_'>ta réponse</span> qui contient un facteur nul."
 const NULL_TERMS =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> contient un terme nul que tu peux enlever."
 const BRACKETS =
@@ -29,11 +29,20 @@ const SIGNS =
 const BAD =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> n'est pas mathématiquement correcte."
 const PRODUCTS =
-    "Tu peux simplifier les symboles de multiplication dans <span style='color:_COLORANSWER_'>ta réponse</span>."
+    "Tu peux simplifier certains symboles de multiplication dans <span style='color:_COLORANSWER_'>ta réponse</span>."
 const FRACTIONS =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> contient une ou des fractions non simplifiées."
 const FORM =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> n'est pas écrite sous la forme demandée."
+
+const TERMS_PERMUTATION =
+    "Dans <span style='color:_COLORANSWER_'>ta réponse</span> les termes doivent être écrits dans un certain ordre."
+
+const FACTORS_PERMUTATION =
+    "Dans <span style='color:_COLORANSWER_'>ta réponse</span> les facteurs doivent être écrits dans un certain ordre."
+
+const TERMS_FACTORS_PERMUTATION =
+    "Dans <span style='color:_COLORANSWER_'>ta réponse</span> les termes et facteurs doivent être écrits dans un certain ordre."
 
 // retourne un tableau des contraintes non respectées
 function checkConstraints(item) {
@@ -60,7 +69,7 @@ function checkConstraints(item) {
             function: checkBrackets,
             com: BRACKETS,
         },
-        
+
         // la vérifiaction pour le premiet terme se fait dans check_brackets
 
         // {
@@ -146,52 +155,110 @@ function checkAnswer(item) {
         // Les tests de contraintes ont été faits. Il faut simplifier la réponse pour pouvoir
         // la comparer à la solution : on enlève les parenthèses inutiles, les signes inutiles....
 
-        e = e.removeUnecessaryBrackets()
-        sols = sols.map((solution) => solution.removeUnecessaryBrackets())
+        e = e
+            .reduceFractions()
+            .simplifyNullProducts()
+            .removeNullTerms()
+            .removeFactorsOne()
+            .removeSigns()
+            .removeUnecessaryBrackets()
+            .removeMultOperator()
+        sols = sols.map((solution) => solution
+            .reduceFractions()
+            .simplifyNullProducts()
+            .removeNullTerms()
+            .removeFactorsOne()
+            .removeSigns()
+            .removeUnecessaryBrackets()
+            .removeMultOperator()
+        )
+
+        console.log('e', e.string)
+        console.log('sols', sols.map(s => s.string))
         // }
+        // il reste a tester la permutation des termes et facteurs qui est autorisée par défaut
 
-        e = e.reduceFractions()
-        sols = sols.map((solution) => solution.reduceFractions())
+        const e2 = e.sortTermsAndFactors()
+        const sols2 = sols.map((solution) => solution.sortTermsAndFactors())
+        console.log('e2', e2.string)
+        console.log('sols2', sols2.map(s => s.string))
+        if (!sols2.some((sol) => sol.strictlyEquals(e2))) {
+            item.status = STATUS_BAD_FORM
+        }
 
-        e = e.removeFactorsOne()
-        sols = sols.map((solution) => solution.removeFactorsOne())
+        else if (item.options.includes('disallow-terms-and-factors-permutation') ||
+            item.options.includes('penalty-for-terms-and-factors-permutation')) {
 
-        e = e.simplifyNullProducts()
-        sols = sols.map((solution) => solution.simplifyNullProducts())
-
-        e = e.removeNullTerms()
-        sols = sols.map((solution) => solution.removeNullTerms())
-
-        e = e.removeMultOperator()
-        sols = sols.map((solution) => solution.removeMultOperator())
-
-        if (
-            item.options.includes('disallow-terms-and-factors-permutation') ||
-            item.options.includes('disallow-terms-permutation') ||
-            item.options.includes('disallow-factors-permutation')
-        ) {
-            if (
-                !item.options.includes('disallow-terms-permutation') &&
-                !item.options.includes('disallow-terms-and-factors-permutation')
-            ) {
-                e = e.sortTerms()
-                sols = sols.map((solution) => solution.sortTerms())
-            } else if (
-                !item.options.includes('disallow-factors-permutation') &&
-                !item.options.includes('disallow-terms-and-factors-permutation')
-            ) {
-                e = e.sortFactors()
-                sols = sols.map((solution) => solution.sortFactors())
+            if (!sols.some((sol) => sol.strictlyEquals(e))) {
+                if (item.options.includes('penalty-for-terms-and-factors-permutation')) {
+                    item.status = STATUS_UNOPTIMAL_FORM
+                    item.coms.push(TERMS_FACTORS_PERMUTATION)
+                } else {
+                    item.status = STATUS_BAD_FORM
+                }
             }
-        } else {
-            e = e.sortTermsAndFactors()
-            sols = sols.map((solution) => solution.sortTermsAndFactors())
+
+        }
+        else if (item.options.includes('disallow-terms-permutation') ||
+            item.options.includes('penalty-for-terms-permutation')) {
+            e = e.sortFactors()
+            sols = sols.map((solution) => solution.sortFactors())
+            if (!sols.some((sol) => sol.strictlyEquals(e))) {
+                if (item.options.includes('penalty-for-terms-permutation')) {
+                    item.status = STATUS_UNOPTIMAL_FORM
+                    item.coms.push(TERMS_PERMUTATION)
+                } else {
+                    item.status = STATUS_BAD_FORM
+                }
+            }
+
+        }
+        else if (item.options.includes('disallow-factors-permutation') ||
+            item.options.includes('penalty-for-factors-permutation')) {
+            e = e.sortTerms()
+            sols = sols.map((solution) => solution.sortTerms())
+            if (!sols.some((sol) => sol.strictlyEquals(e))) {
+                if (item.options.includes('penalty-for-factors-permutation')) {
+                    item.status = STATUS_UNOPTIMAL_FORM
+                    item.coms.push(FACTORS_PERMUTATION)
+                } else {
+                    item.status = STATUS_BAD_FORM
+                }
+            }
         }
 
 
-        if (!sols.some((sol) => sol.strictlyEquals(e))) {
-            item.status = STATUS_BAD_FORM
-        } else if (item.status !== STATUS_UNOPTIMAL_FORM) {
+        // if (
+        //     item.options.includes('disallow-terms-and-factors-permutation') ||
+        //     item.options.includes('disallow-terms-permutation') ||
+        //     item.options.includes('disallow-factors-permutation')
+        // ) {
+        //     if (
+        //         !item.options.includes('disallow-terms-permutation') &&
+        //         !item.options.includes('disallow-terms-and-factors-permutation')
+        //     ) {
+        //         e = e.sortTerms()
+        //         sols = sols.map((solution) => solution.sortTerms())
+        //     } else if (
+        //         !item.options.includes('disallow-factors-permutation') &&
+        //         !item.options.includes('disallow-terms-and-factors-permutation')
+        //     ) {
+        //         e = e.sortFactors()
+        //         sols = sols.map((solution) => solution.sortFactors())
+        //     }
+        // } else {
+        //     e = e.sortTermsAndFactors()
+        //     sols = sols.map((solution) => solution.sortTermsAndFactors())
+        // }
+
+
+        // if (!sols.some((sol) => sol.strictlyEquals(e))) {
+        //     item.status = STATUS_BAD_FORM
+        // } else if (item.status !== STATUS_UNOPTIMAL_FORM) {
+        //     item.status = STATUS_CORRECT
+        // }
+
+        if (item.status !== STATUS_UNOPTIMAL_FORM && item.status !== STATUS_BAD_FORM) {
             item.status = STATUS_CORRECT
         }
     }
@@ -232,8 +299,30 @@ function checkBrackets(item) {
     return check
 }
 
-function checkSigns() {
-    return true
+function checkSigns(item) {
+    const e1 = math(item.answer)
+        .reduceFractions()
+        .simplifyNullProducts()
+        .removeNullTerms()
+        .removeFactorsOne()
+        .removeUnecessaryBrackets()
+        .removeMultOperator()
+        .removeMultOperator()
+        .removeUnecessaryBrackets()
+        .string
+    const e2 = math(item.answer)
+        .reduceFractions()
+        .simplifyNullProducts()
+        .removeNullTerms()
+        .removeFactorsOne()
+        .removeSigns()
+        .removeUnecessaryBrackets()
+        .removeMultOperator()
+        .string
+    // il faut enlever les * inutiles
+    console.log("signs", e1, e2)
+    return e1 === e2
+
 }
 
 function checkFactorsOne(item) {

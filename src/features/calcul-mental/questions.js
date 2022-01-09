@@ -54,6 +54,9 @@ const UNKNOWN = 'a determiner'
 // disallow-terms-permutation=false
 // disallow-factors-permutation=false
 // disallow-terms-and-factors-permutation=false
+// penalty-for-terms-and-factors-permutation = false
+// penalty-for-terms-permutation = false
+// penalty-for-factors-permutation = false
 
 // * termes nuls
 // require-no-null-terms = false
@@ -785,7 +788,6 @@ export default {
           defaultDelay: 10,
           grade: CP,
         },
-
         {
           description: 'Calculer une somme',
           subdescription: 'Somme sans retenue. Au moins un nombre à 2 chiffres.',
@@ -1000,7 +1002,6 @@ export default {
           defaultDelay: 15,
           grade: CM1,
         },
-
         {
           description: 'Calculer une somme',
           subdescription: 'Nombres entiers à 3 chiffres (sans retenue)',
@@ -1020,9 +1021,6 @@ export default {
           defaultDelay: 30,
           grade: CM2,
         },
-
-
-
         {
           description: 'Calculer une somme',
           subdescription: 'Nombres entiers à 3 chiffres (avec retenue)',
@@ -1146,6 +1144,40 @@ export default {
         {
           description: 'Compléter une addition à trou',
           subdescription:
+            'Somme égale à 10',
+          enounces: ["Complète."],
+          expressions: ['&1 + ? = 10', '?+&1=10'],
+          variables: [
+            { '&1': '$e[1;9]' },
+          ],
+          solutions:[['#{10-&1}']],
+          type: 'trou',
+          defaultDelay: 20,
+          grade: CP,
+        },
+        {
+          description: 'Compléter une addition à trou',
+          subdescription:
+            'Nombres à 1 chiffre. Nombre plus grand en premier. Somme inférieure ou égale à 10',
+          enounces: ["Complète."],
+          expressions: [
+            '&1 + ? = #{&2+&1}',
+          ],
+          variables: [
+            {
+              '&1': '$e[3;8]',
+              '&2': '$e[2;#{mini(10-&1;&1-1)}]',
+              //  '&3':'$e[2;&2]'
+            },
+          ],
+          type: 'trou',
+          solutions:[['&2']],
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: 'Complète',
+          subdescription:
             'Nombres entiers à 1 chiffre. Somme inférieure à 10.',
           enounces: ["Quel est le terme manquant dans cette égalité ?"],
           expressions: [
@@ -1162,7 +1194,7 @@ export default {
           ],
           type: 'trou',
           solutions: [['&2']],
-          defaultDelay: 10,
+          defaultDelay: 15,
           grade: CP,
         },
         {
@@ -2627,7 +2659,7 @@ export default {
         },
       ],
 
-      'Carrés - Racines carrées': [
+      'Carrés': [
         {
           description: 'Calculer un carré',
           subdescription: 'Entier de 1 à 12',
@@ -2638,37 +2670,7 @@ export default {
           defaultDelay: 10,
           grade: CINQUIEME,
         },
-        {
-          description: 'Trouver une racine carré',
-          subdescription: 'Entier de 1 à 12',
-          enounces: ['Calcule.'],
-          expressions: ['?^2=#{&1^2}'],
-          variables: [{ '&1': '$e[1;15]' }],
-          solutions: [['&1']],
-          type: 'trou',
-          defaultDelay: 10,
-          grade: CINQUIEME,
-        },
-        {
-          description: 'Réduire une racine carré',
-          enounces: ['Réduis sous la forme $$a\\sqrt{b}$$'],
-          expressions: ['sqrt(#{&1*&1*&2})'],
-          variables: [{ '&1': '$l{2;3;5;10}', '&2': '$l{2;3;5}' }],
-          // solutions: [['&1sqrt(&2)']],
-          type: 'result',
-          defaultDelay: 20,
-          grade: SECONDE,
-        },
-        {
-          description: 'Réduire une expression avec des racines carré',
-          enounces: ['Réduis sous la forme $$a\\sqrt{b}$$'],
-          expressions: ['sqrt(#{&1*&1*&3})+sqrt(#{&2*&2*&3})'],
-          variables: [{ '&1': '$l{2;3;5;10}', '&2': '$l{2;3;5;10}\\{&1}', '&3': '$l{2;3;5}' }],
-          // solutions: [['&1sqrt(&2)']],
-          type: 'result',
-          defaultDelay: 20,
-          grade: SECONDE,
-        },
+
       ],
 
       'Produits astucieux': [
@@ -4568,7 +4570,7 @@ export default {
           type: 'trou',
           'result-type': 'decimal',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: SIXIEME,
         },
         {
           description: 'Convertir dans une autre unité',
@@ -4913,7 +4915,7 @@ export default {
           ],
           type: 'trou',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: SIXIEME,
         },
         {
           description: 'Calculer avec des unités',
@@ -4950,7 +4952,7 @@ export default {
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: SIXIEME,
         },
       ],
       'Unités composées': [
@@ -5010,7 +5012,7 @@ export default {
           type: 'trou',
           'result-type': 'decimal',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: SIXIEME,
         },
 
         {
@@ -5069,7 +5071,7 @@ export default {
           type: 'trou',
           'result-type': 'decimal',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: SIXIEME,
         },
 
       ]
@@ -7046,7 +7048,7 @@ export default {
           ],
           // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
-          options:['no-penalty-for-extraneous-brackets'] ,
+          options: ['no-penalty-for-extraneous-brackets'],
           type: 'result',
           defaultDelay: 20,
           grade: QUATRIEME,
@@ -7067,9 +7069,9 @@ export default {
             ['&1^(#{&2+&3})'],
 
           ],
-           // bug de mathlive sur les puissances
+          // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
-          options:['no-penalty-for-extraneous-brackets'] ,
+          options: ['no-penalty-for-extraneous-brackets'],
           type: 'result',
           defaultDelay: 20,
           grade: QUATRIEME,
@@ -7086,12 +7088,12 @@ export default {
             }
           ],
           solutions: [
-            ['10^{#{&1+(&2)}}', '10^(#{&1+(&2)})' ],
+            ['10^{#{&1+(&2)}}', '10^(#{&1+(&2)})'],
 
           ],
-           // bug de mathlive sur les puissances
+          // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
-          options:['no-penalty-for-extraneous-brackets'] ,
+          options: ['no-penalty-for-extraneous-brackets'],
           type: 'result',
           defaultDelay: 20,
           grade: QUATRIEME,
@@ -7113,9 +7115,9 @@ export default {
 
           ],
           type: 'result',
-           // bug de mathlive sur les puissances
+          // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
-          options:['no-penalty-for-extraneous-brackets'] ,
+          options: ['no-penalty-for-extraneous-brackets'],
           defaultDelay: 20,
           grade: QUATRIEME,
         },
@@ -7219,9 +7221,9 @@ export default {
             ['10^(#{&1*&2})'],
 
           ],
-           // bug de mathlive sur les puissances
+          // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
-          options:['no-penalty-for-extraneous-brackets'] ,
+          options: ['no-penalty-for-extraneous-brackets'],
           type: 'result',
           defaultDelay: 20,
           grade: QUATRIEME,
@@ -7242,13 +7244,13 @@ export default {
             ['&1^(#{&2*&3})'],
 
           ],
-           // bug de mathlive sur les puissances
+          // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
-          options:['no-penalty-for-extraneous-brackets'] ,
+          options: ['no-penalty-for-extraneous-brackets'],
           type: 'result',
           // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
-          options:['no-penalty-for-extraneous-brackets'] ,
+          options: ['no-penalty-for-extraneous-brackets'],
           defaultDelay: 20,
           grade: QUATRIEME,
         },
@@ -7270,7 +7272,7 @@ export default {
           type: 'result',
           // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
-          options:['no-penalty-for-extraneous-brackets'] ,
+          options: ['no-penalty-for-extraneous-brackets'],
           defaultDelay: 20,
           grade: QUATRIEME,
         },
@@ -7294,10 +7296,193 @@ export default {
           type: 'result',
           // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
-          options:['no-penalty-for-extraneous-brackets'] ,
+          options: ['no-penalty-for-extraneous-brackets'],
           defaultDelay: 20,
           grade: TROISIEME,
         },
+      ]
+    }
+  },
+  "Racines carré": {
+    Apprivoiser: {
+      Définition: [
+        {
+          description: 'Trouver un nombre de carré donné',
+          subdescription: 'Entier de 1 à 12',
+          enounces: ['Complète.'],
+          expressions: ['?^2=#{&1^2}'],
+          variables: [{ '&1': '$e[1;15]' }],
+          solutions: [['&1']],
+          type: 'trou',
+          defaultDelay: 10,
+          grade: CINQUIEME,
+        },
+        {
+          description: 'Trouver une racine carré',
+          subdescription: 'Entier de 1 à 12',
+          enounces: ['Calcule.'],
+          expressions: ['sqrt(#{&1*&1})'],
+          variables: [{ '&1': '$e[1;15]' }],
+          solutions: [['&1']],
+          type: 'result',
+          defaultDelay: 20,
+          grade: QUATRIEME,
+        },
+        {
+          description: "Existence d'une racine carré",
+          enounces: ["Est-ce que ce nombre existe ?"],
+          expressions: [
+            'sqrt(&1)',
+            'sqrt(-&1)',
+          ],
+          variables: [
+            {
+              '&1': '$e{2}',
+            },
+
+          ],
+          choices: [
+            [{ text: 'Oui' }, { text: 'Non' }],
+          ],
+          correctionFormat: [{
+            correct: ['<span style="color:green;"> Oui</span>, $$&exp$$ existe'],
+            uncorrect: ['<span style="color:green;"> Oui</span>, $$&exp$$ existe'],
+            answer: "<span style='color:red;'>Non</span>, ce nombre n'existe pas."
+          },
+          {
+            correct: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
+            uncorrect: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
+            answer: "<span style='color:red;'>Oui</span>, ce nombre existe."
+          }
+          ],
+          // corrections: [
+          //   'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
+          // ],
+          solutions: [
+            [0],
+            [1],
+          ],
+          type: 'choice',
+          options: ['no-shuffle-choices'],
+          defaultDelay: 10,
+          grade: QUATRIEME,
+        },
+
+        {
+          description: "Carré d'une racine",
+          enounces: ['Calcule.'],
+          expressions: [
+            '(sqrt(&1))^2',
+            'sqrt(&1)*sqrt(&1)',
+
+          ],
+          variables: [{ '&1': '$e{2}' }],
+          type: 'result',
+          defaultDelay: 20,
+          grade: QUATRIEME,
+        },
+
+
+      ]
+    },
+    Manipuler: {
+      Propriétés: [
+        {
+          description: "Vrai ou Faux : racines et opérations",
+          enounces: ["Vrai ou Faux ?"],
+          expressions: [
+            'sqrt(&1)+sqrt(&2)=sqrt(#{&1+&2})',
+            'sqrt(&1)*sqrt(&2)=sqrt(#{&1*&2})',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+            },
+          ],
+          choices: [
+            [{ text: 'Vrai' }, { text: 'Faux' }],
+          ],
+          correctionFormat: [{
+            correct: ["$$\\sqrt{&1}+\\sqrt{&2} \\textcolor{green}{\\ne} \\sqrt{#{&1+&2}}$$"],
+            uncorrect: ["$$\\sqrt{&1}+\\sqrt{&2} \\textcolor{green}{\\ne} \\sqrt{#{&1+&2}}$$"],
+            answer: "$$\\sqrt{&1}+\\sqrt{&2} \\textcolor{red}{=} \\sqrt{#{&1+&2}}$$"
+          },
+          {
+            correct: ["$$\\sqrt{&1} \\times \\sqrt{&2} \\textcolor{green}{=} \\sqrt{#{&1*&2}}$$"],
+            uncorrect: ["$$\\sqrt{&1} \\times \\sqrt{&2} \\textcolor{green}{=} \\sqrt{#{&1*&2}}$$"],
+            answer: "$$\\sqrt{&1} \\times \\sqrt{&2} \\textcolor{red}{\\ne} \\sqrt{#{&1*&2}}$$"
+          }],
+          // corrections: [
+          //   'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
+          // ],
+          solutions: [
+            [1],
+            [0]
+          ],
+          options: ['no-shuffle-choices'],
+          type: 'choice',
+          defaultDelay: 20,
+          grade: SECONDE,
+        },
+      ],
+      Réduire: [
+        {
+          description: 'Réduire une racine carré',
+          enounces: ['Réduis sous la forme $$a\\sqrt{b}$$'],
+          expressions: ['sqrt(#{&1*&1*&2})'],
+          variables: [{ '&1': '$l{2;3;5;10}', '&2': '$l{2;3;5}' }],
+          // solutions: [['&1sqrt(&2)']],
+          type: 'result',
+          options: ['penalty-for-factors-permutation'],
+          defaultDelay: 20,
+          grade: SECONDE,
+        },
+        {
+          description: 'Réduire une expression avec des racines carré',
+          enounces: ['Réduis sous la forme $$a\\sqrt{b}$$, avec $$b$$ le plus petit possible.'],
+          expressions: ['sqrt(#{&1*&1*&3})+sqrt(#{&2*&2*&3})'],
+          variables: [{ '&1': '$l{2;3;5;10}', '&2': '$l{2;3;5;10}\\{&1}', '&3': '$l{2;3;5}' }],
+          solutions: [['#{&1+&2}sqrt(&3)']],
+          type: 'result',
+          options: ['penalty-for-factors-permutation'],
+          defaultDelay: 40,
+          grade: SECONDE,
+        }
+      ],
+      Calculer: [
+        {
+          description: "Carré et racine carré",
+          enounces: ['Calcule.'],
+          expressions: [
+            '(sqrt(&1))^2',
+            'sqrt(&1^2)',
+            'sqrt((-&1)^2)',
+            'sqrt(&1)*sqrt(&1)',
+
+          ],
+          variables: [{ '&1': '$e[2;50]' }],
+          type: 'result',
+          defaultDelay: 20,
+          grade: QUATRIEME,
+        },
+        {
+          description: "Calculer avec des racines",
+          enounces: ['Calcule.'],
+          expressions: [
+            '(&2sqrt(&1))^2',
+            'sqrt(&1)*&3*sqrt(&1)'
+          ],
+          variables: [{
+            '&1': '$e[2;9]',
+            '&2': '$l{2;3}',
+            '&3': '$e[2;9]',
+          }],
+          type: 'result',
+          defaultDelay: 20,
+          grade: QUATRIEME,
+        },
+
       ]
     }
   },
@@ -8464,7 +8649,7 @@ export default {
           description: "Résoudre l'équation $$f(x)=k$$",
           subdescription: "Graphiquement",
           enounces: ["Résoudre graphiquement l'équation $$f(x)=&1$$"],
-          expressions:['f(x)=&1'],
+          expressions: ['f(x)=&1'],
           variables: [
             {
               '&1': "-3"
@@ -8847,7 +9032,7 @@ export default {
               '&4': '$er[2;9]',
               '&5': '$l{a;b;c}\\{&1}',
               '&6': '$er[2;9]',
-             
+
             },
           ],
           letters: [
@@ -8890,7 +9075,7 @@ export default {
               '&2': '$e[2;9]',
             },
           ],
-          options: [ 'require-implicit-products'],
+          options: ['require-implicit-products'],
           // solutions: [
           //   ['&2&1'],
           //   ['&1*&2']
@@ -8903,7 +9088,7 @@ export default {
           description: 'Simplifier le symbole de multiplication',
           subdescription: 'Devant une parenthèse',
 
-          enounces: ["Simplifie l'expression en enlève, quand c'est possible, le symbole de la multiplication."],
+          enounces: ["Simplifie l'écriture de cette expression en enlèvant, quand c'est possible, le symbole de la multiplication."],
           expressions: [
             '&3*(&1+&2)',
             '&3*(&1+&4)',
@@ -8922,18 +9107,18 @@ export default {
             },
           ],
           options: ['require-implicit-products'],
-          // solutions: [
-          //   ['&3(&1+&2)'],
-          //   ['&3(&1+&4)'],
-          //   ['&5(&1+&2)'],
-          //   ['&5(&1+&4)'],
-          //   ['(&1+&2)*&5'],
-          //   ['(&1+&4)*&5']
+          solutions: [
+            ['&3(&1+&2)'],
+            ['&3(&1+&4)'],
+            ['&5(&1+&2)'],
+            ['&5(&1+&4)'],
+            ['&5(&1+&2)'],
+            ['&5(&1+&4)']
 
-          // ],
+          ],
           type: 'result',
           defaultDelay: 30,
-          grade: QUATRIEME,
+          grade: CINQUIEME,
         },
         {
           description: 'Simplifier un produit par 0 ou 1',
@@ -8954,7 +9139,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
           description: "Simplifier à l'aide d'un carré ou d'un cube",
@@ -8971,13 +9156,13 @@ export default {
           solutions: [['&1^2'], ['&1^3']],
           type: 'rewrite',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
       ],
       Réduction: [
         {
-          description: 'Réduire une expression simple',
-          subscription: 'Coefficients positifs',
+          description: 'Réduire une somme',
+          subdescription: 'Coefficients positifs, 2 même littéraux',
           enounces: ['Réduire :'],
           expressions: [
             '#{&2&1}+#{&3&1}',
@@ -8997,29 +9182,69 @@ export default {
           ],
           // solutions: [['#{&2+&3}&1']],
           type: 'result',
+          options: ['penalty-for-factors-permutation'],
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
-          description: 'Réduire une expression simple',
-          subscription: 'Coefficients relatifs',
+          description: 'Réduire une somme',
+          subdescription: 'Coefficients positifs, deux même littéraux + un entier',
           enounces: ['Réduire :'],
-          expressions: ['#{&2&1}#s{&3&1}'],
+          expressions: [
+            '&4+#{&2&1}+#{&3&1}',
+            '#{&2&1}+&4+#{&3&1}',
+            '#{&2&1}+#{&3&1}+&4',
+            '&4+#{&3&1}-#{&2&1}',
+            '#{&3&1}+&4-#{&2&1}',
+            '#{&3&1}-#{&2&1}+&4',
+          ],
           variables: [
             {
               '&1': '$l{a;b;c}',
-              '&2': '$er[1;9]',
-              '&3': '$ers[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9]',
+              '&4': '$e[1;9]',
+            },
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9]',
+              '&4': '$e[1;9]',
+            },
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9]',
+              '&4': '$e[1;9]',
+            },
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$e[1;8]',
+              '&3': '$e[&2;9]',
+              '&4': '$e[1;9]',
+            },
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$e[1;8]',
+              '&3': '$e[&2;9]',
+              '&4': '$e[1;9]',
+            },
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$e[1;8]',
+              '&3': '$e[&2;9]',
+              '&4': '$e[1;9]',
             },
           ],
-          // solutions: [['#{&2-&3}&1'], ['#{-&2+&3}&1'],['#{-&2-&3}&1']],
+          // solutions: [['#{&2+&3}&1']],
           type: 'result',
+          options: ['penalty-for-factors-permutation'],
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
           description: 'Réduire une expression',
-          subscription: 'Coefficients positifs',
+          subdescription: 'Coefficients positifs',
           enounces: ['Réduire :'],
           expressions: [
             '&2&1+&3&1+&5&4+&6&4',
@@ -9037,13 +9262,59 @@ export default {
             },
           ],
           details: [['(&2+&3)&1+(&5+&6)&4']],
+          options: ['penalty-for-factors-permutation'],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
-          description: 'Réduire une expression',
-          subscription: 'Coefficients relatifs',
+          description: 'Réduire un produit',
+          subdescription: 'Coefficients positifs',
+          enounces: ['Réduire :'],
+          expressions: [
+            '&1*&2*&3',
+            '&2*&1*&3',
+            '&3*&2*&1',
+            '&1*&2*&1',
+            '&1*&1*&2',
+            '&2*&1*&1',
+          ],
+          variables: [
+            {
+              '&1': '$l{a;b;c;x;y;z}',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'result',
+          // details: [['(&2+&3) \\times &1']],
+          options: ['penalty-for-factors-permutation'],
+          defaultDelay: 30,
+          grade: CINQUIEME,
+        },
+        {
+          description: 'Réduire une somme',
+          subdescription: 'Coefficients relatifs',
+          enounces: ['Réduire :'],
+          expressions: ['#{&2&1}#s{&3&1}'],
+          variables: [
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$er[1;9]',
+              '&3': '$ers[1;9]',
+            },
+          ],
+          // solutions: [['#{&2-&3}&1'], ['#{-&2+&3}&1'],['#{-&2-&3}&1']],
+          type: 'result',
+          defaultDelay: 30,
+          options: ['penalty-for-factors-permutation'],
+          grade: TROISIEME,
+        },
+
+        {
+          description: 'Réduire une somme',
+          subdescription: 'Coefficients relatifs',
           enounces: ['Réduire :'],
           expressions: [
             '#{&2&1}#s{&3&1}#s{&5&4}#s{&6&4}',
@@ -9070,62 +9341,13 @@ export default {
 
           // ],
           type: 'result',
+          options: ['penalty-for-factors-permutation'],
           defaultDelay: 30,
-          grade: UNKNOWN,
-        },
-        {
-          description: 'Réduire une expression',
-          subscription: 'Coefficients relatifs, expression du second degré',
-          enounces: ['Réduire :'],
-          expressions: [
-            '#{&2&1^2}#s{&3&1}#s{&4}#s{&5&1^2}#s{&6&1}#s{&7}',
-            '#{&2&1}#s{&3&1^2}#s{&4}#s{&5&1^2}#s{&6&1}#s{&7}',
-            '#{&2&1}#s{&3}#s{&4^2}#s{&5&1^2}#s{&6&1}#s{&7}',
-          ],
-          variables: [
-            {
-              '&1': '$l{a;b;c}',
-              '&2': '$er[1;9]',
-              '&3': '$ers[1;9]',
-              '&4': '$ers[1;9]',
-              '&5': '$ers[1;9]',
-              '&6': '$ers[1;9]',
-              '&7': '$ers[1;9]',
-            },
-          ],
-
-          type: 'result',
-          defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: TROISIEME,
         },
         {
           description: 'Réduire un produit',
-          subscription: 'Coefficients positifs',
-          enounces: ['Réduire :'],
-          expressions: [
-            '&1*&2*&3',
-            '&2*&1*&3',
-            '&3*&2*&1',
-            '&1*&2*&1',
-            '&1*&1*&2',
-            '&2*&1*&1',
-          ],
-          variables: [
-            {
-              '&1': '$l{a;b;c;x;y;z}',
-              '&2': '$e[2;9]',
-              '&3': '$e[2;9]',
-            },
-          ],
-          // solutions: [['#{&2+&3}&1']],
-          type: 'result',
-          // details: [['(&2+&3) \\times &1']],
-          defaultDelay: 30,
-          grade: UNKNOWN,
-        },
-        {
-          description: 'Réduire un produit',
-          subscription: 'Coefficients relatifs',
+          subdescription: 'Coefficients relatifs',
           enounces: ['Réduire :'],
           expressions: [
             '&1*(-&2)*&3',
@@ -9156,15 +9378,90 @@ export default {
           ],
           // solutions: [['#{&2+&3}&1']],
           type: 'result',
+          options: ['penalty-for-factors-permutation'],
           // details: [['(&2+&3) \\times &1']],
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: TROISIEME,
         },
+        {
+          description: 'Réduire une expression',
+          subdescription: 'Coefficients relatifs, expression du second degré',
+          enounces: ['Réduire :'],
+          expressions: [
+            '#{&2&1^2}#s{&3&1}#s{&4}#s{&5&1^2}#s{&6&1}#s{&7}',
+            '#{&2&1}#s{&3&1^2}#s{&4}#s{&5&1^2}#s{&6&1}#s{&7}',
+            '#{&2&1}#s{&3}#s{&4^2}#s{&5&1^2}#s{&6&1}#s{&7}',
+          ],
+          variables: [
+            {
+              '&1': '$l{a;b;c}',
+              '&2': '$er[1;9]',
+              '&3': '$ers[1;9]',
+              '&4': '$ers[1;9]',
+              '&5': '$ers[1;9]',
+              '&6': '$ers[1;9]',
+              '&7': '$ers[1;9]',
+            },
+          ],
+          options: ['penalty-for-factors-permutation'],
+          type: 'result',
+          defaultDelay: 30,
+          grade: SECONDE,
+        },
+
+
       ],
-      'Simplification de parenthèses': [
+      "Opposé d'une expression": [
+        {
+          description: "Déterminer l'opposé d'une expression",
+          subdescription: "Expression simple",
+          enounces: ["Quel est l'opposé de cette expression ?"],
+          expressions: ['#{&1&2}'],
+          variables: [
+            {
+              '&1': '$er[1;9]',
+              '&2': '$l{a;b;x;y}',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'rewrite',
+          solutions: [['#{-(&1)&2}']],
+          options: ['penalty-for-factors-permutation'],
+          correctionFormat: [{
+            correct: ["L'opposé de $$&exp$$ est &solution"],
+            uncorrect: ["L'opposé de $$&exp$$ est &solution"],
+            answer: "L'opposé de $$&exp$$ est &answer"
+          }],
+          defaultDelay: 30,
+          grade: TROISIEME,
+        },
+        {
+          description: "Déterminer l'opposé d'une expression",
+          subdescription: "opposé d'une somme algébrique",
+          enounces: ["Quel est l'opposé de cette expression ?"],
+          expressions: ['#{&1&3}#s{&2}'],
+          variables: [
+            {
+              '&1': '$er[1;9]',
+              '&2': '$er[1;9]',
+              '&3': '$l{a;b;x;y}',
+            },
+          ],
+          // solutions: [['#{&2+&3}&1']],
+          type: 'rewrite',
+          solutions: [['#{-(&1)&3}#s{-(&2)}']],
+          options: ['penalty-for-factors-permutation'],
+          correctionFormat: [{
+            correct: ["L'opposé de $$&exp$$ est &solution"],
+            uncorrect: ["L'opposé de $$&exp$$ est &solution"],
+            answer: "L'opposé de $$&exp$$ est &answer"
+          }],
+          defaultDelay: 30,
+          grade: TROISIEME,
+        },
         {
           description: 'Enlever les parenthèses',
-          enounces: ["Réécrire l'expression en en elevant les parenthèses :"],
+          enounces: ["Réduire"],
           expressions: ['#{&1&2}+(#{&3&4}&5)', '#{&1&2}-(#{&3&4}&5)'],
           variables: [
             {
@@ -9178,35 +9475,36 @@ export default {
           // solutions: [['#{&2+&3}&1']],
           type: 'result',
           solutions: [['#{&1&2}#s{&3&4}&5'], ['#{&1&2}#s{-(&3&4)}#s{-(&5)}']],
+          options: ['penalty-for-factors-permutation'],
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: TROISIEME,
         },
-        {
-          description: 'Réduire avec parenthèses',
-          enounces: ['Réduire:'],
-          expressions: [
-            '#{&1&2}+(#{&3&2}#s{&4})',
-            '#{&1&2}+(#{&4}#s{&3&2})',
-            '#{&1&2}-(#{&3&2}#s{&4})',
-            '#{&1&2}-(#{&4}#s{&3&2})',
-          ],
-          variables: [
-            {
-              '&1': '$er[1;9]',
-              '&2': '$l{a;b;c;x;y;z}',
-              '&3': '$ers[1;9]',
-              '&4': '$ers[1;9]',
-            },
-          ],
-          // solutions: [['#{&2+&3}&1']],
-          type: 'result',
-          //   solutions:[
-          //     ['#{&1&2}#s{&3&4}&5'],
-          //     ['#{&1&2}#s{-&3&4}#s{-&5}'],
-          // ],
-          defaultDelay: 30,
-          grade: UNKNOWN,
-        },
+        // {
+        //   description: 'Réduire avec parenthèses',
+        //   enounces: ['Réduire:'],
+        //   expressions: [
+        //     '#{&1&2}+(#{&3&2}#s{&4})',
+        //     '#{&1&2}+(#{&4}#s{&3&2})',
+        //     '#{&1&2}-(#{&3&2}#s{&4})',
+        //     '#{&1&2}-(#{&4}#s{&3&2})',
+        //   ],
+        //   variables: [
+        //     {
+        //       '&1': '$er[1;9]',
+        //       '&2': '$l{a;b;c;x;y;z}',
+        //       '&3': '$ers[1;9]',
+        //       '&4': '$ers[1;9]',
+        //     },
+        //   ],
+        //   // solutions: [['#{&2+&3}&1']],
+        //   type: 'result',
+        //   //   solutions:[
+        //   //     ['#{&1&2}#s{&3&4}&5'],
+        //   //     ['#{&1&2}#s{-&3&4}#s{-&5}'],
+        //   // ],
+        //   defaultDelay: 30,
+        //   grade: TROISIEME,
+        // },
       ],
       Développement: [
         {
@@ -9230,10 +9528,20 @@ export default {
               '&4': '$l{a;b;c;x;y;z}',
             },
           ],
-
+          solutions: [
+            ['#{&1*&2}+&1&4'],
+            ['&1&4+#{&1*&2}'],
+            ['#{&2*&1}+&1&4'],
+            ['&1&4+#{&1*&2}'],
+            ['#{&2*&1}-&1&4'],
+            ['&1&4-#{&2*&1}'],
+            ['#{&2*&1}-&1&4'],
+            ['&1&4-#{&2*&1}'],
+          ],
           type: 'result',
+          options: ['penalty-for-factors-permutation'],
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Développer',
@@ -9267,19 +9575,27 @@ export default {
           ],
           // solutions: [['#{&2+&3}&1']],
           type: 'result',
-          // solutions: [
-          //   ['#{&1*&2}+#{&1*&3&4}'],
-          //   ['#{&1*&3&4}+#{&1*&2}'],
-          //   ['#{&1*&2}+#{&1*&3&4}'],
-          //   ['#{&1*&3&4}+#{&1*&2}'],
-          //   ['#{&4*&2}+#{&4*&3&4}'],
-          //   ['#{&4*&3&4}+#{&4*&2}'],
-          //   ['#{&4*&2}+#{&4*&3&4}'],
-          //   ['#{&4*&3&4}+#{&4*&2}'],
-          // ],
-
+          solutions: [
+            ['#{&1*&2}+#{&1*&3&4}'],
+            ['#{&1*&3&4}+#{&1*&2}'],
+            ['#{&1*&2}+#{&1*&3&4}'],
+            ['#{&1*&3&4}+#{&1*&2}'],
+            ['#{&2&4}+#{&3&4^2}'],
+            ['#{&3&4^2}+#{&2&4}'],
+            ['#{&2&4}+#{&3&4^2}'],
+            ['#{&3&4^2}+#{&2&4}'],
+            ['#{&1*&2}-#{&1*&3&4})'],
+            ['#{&1*&3&4}-#{&1*&2}'],
+            ['#{&1*&2}-#{&1*&3&4}'],
+            ['#{&1*&3&4}-#{&1*&2}'],
+            ['#{&2&4}-#{&3&4^2}'],
+            ['#{&3&4^2}-#{&2&4}'],
+            ['#{&2&4}-#{&3&4^2}'],
+            ['#{&3*&4^2}-#{&2&4}'],
+          ],
+          options: ['penalty-for-factors-permutation'],
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Développer',
@@ -9313,28 +9629,29 @@ export default {
           ],
           // solutions: [['#{&2+&3}&1']],
           type: 'result',
-          // solutions: [
-          //   ['#{&1*(&2)}#s{&1*(&3)&4}'], // (&2) à cause du signe
-          //   ['#{&1*(&3)&4}#s{&1*(&2)}'],
-          //   ['#{-&1*(&2)}#s{-&1*(&3)&4}'],
-          //   ['#{-&1*(&3)&4}#s{-&1*(&2)}'],
-          //   ['#{&1*(&2)}#s{&1*(&3)&4}'],
-          //   ['#{&1*(&3)&4}#s{&1*(&2)}'],
-          //   ['#{-&1*(&2)}#s{-&1*(&3)&4}'],
-          //   ['#{-&1*(&3)&4}#s{-&1*(&2)}'],
-          //   ['#{&4*(&2)}#s{&4*(&3)&4}'],
-          //   ['#{&4*(&3)&4}#s{&4*(&2)}'],
-          //   ['#{&4*(&2)}#s{&4*(&3)&4}'],
-          //   ['#{&4*(&3)&4}#s{&4*(&2)}'],
-          //   ['#{-&4*(&2)}#s{-&4*(&3)&4}'],
-          //   ['#{-&4*(&3)&4}#s{-&4*(&2)}'],
-          //   ['#{-&4*(&2)}#s{-&4*(&3)&4}'],
-          //   ['#{-&4*(&3)&4}#s{-&4*(&2)}'],
-          // ],
+          solutions: [
+            ['#{&2*&1}#s{&3&4*&1}'],
+            ['#{&3&4*&1}#s{&2*&1}'],
+            ['#{&2*(-&1)}#s{&3&4*(-&1)}'],
+            ['#{&3&4*(-&1)}#s{&2*(-&1)}'],
+            ['#{&2*&1}#s{&3&4*&1}'],
+            ['#{&3&4*&1}#s{&2*&1}'],
+            ['#{&2*(-&1)}#s{&3&4*(-&1)}'],
+            ['#{&3&4*(-&1)}#s{&2*(-&1)}'],
+            ['#{&2&4}#s{&3&4^2}'],
+            ['#{&3&4^2}#s{&2&4}'],
+            ['#{&2&4}#s{&3&4^2}'],
+            ['#{&3&4^2}#s{&2&4}'],
+            ['#{&2*(-&4)}#s{-(&3)&4^2}'],
+            ['#{-(&3)&4^2}#s{&2*(-&4)}'],
+            ['#{&2*(-&4)}#s{-(&3)&4^2}'],
+            ['#{-(&3)&4^2}#s{&2*(-&4)}'],
+
+          ],
 
           defaultDelay: 30,
-          options: ['implicit'],
-          grade: UNKNOWN,
+          options: ['penalty-for-factors-permutation'],
+          grade: TROISIEME,
         },
         {
           description: 'Développer un double produit',
@@ -9359,8 +9676,8 @@ export default {
           type: 'result',
 
           defaultDelay: 30,
-          options: ['implicit'],
-          grade: UNKNOWN,
+          options: ['penalty-for-factors-permutation'],
+          grade: TROISIEME,
         },
         {
           description: 'Développer un double produit',
@@ -9385,71 +9702,11 @@ export default {
           type: 'result',
 
           defaultDelay: 40,
-          options: ['implicit'],
-          grade: UNKNOWN,
+          options: ['penalty-for-factors-permutation'],
+          grade: TROISIEME,
         },
-        {
-          description: 'Développer $$(a+b)^2$$',
+        
 
-          enounces: ['Développer et réduire :'],
-          expressions: ['(&1+#{&2&3})^2', '(#{&2&3}+&1)^2'],
-          variables: [
-            {
-              '&1': '$e[1;9]',
-              '&2': '$e[1;9]',
-              '&3': '$l{a;b;c;x;y;z}',
-            },
-          ],
-          // solutions: [['#{&2+&3}&1']],
-          type: 'result',
-
-          defaultDelay: 30,
-          options: ['implicit'],
-          grade: UNKNOWN,
-        },
-        {
-          description: 'Développer $$(a-b)^2$$',
-
-          enounces: ['Développer et réduire :'],
-          expressions: ['(&1-#{&2&3})^2', '(#{&2&3}-&1)^2'],
-          variables: [
-            {
-              '&1': '$e[1;9]',
-              '&2': '$e[1;9]',
-              '&3': '$l{a;b;c;x;y;z}',
-            },
-          ],
-          // solutions: [['#{&2+&3}&1']],
-          type: 'result',
-
-          defaultDelay: 30,
-          options: ['implicit'],
-          grade: UNKNOWN,
-        },
-        {
-          description: 'Développer $$(a+b)(a-b)$$',
-          subdescription: 'Coefficients positifs',
-          enounces: ['Développer et réduire :'],
-          expressions: [
-            '(&1+#{&2&3})(&1-#{&2&3})',
-            '(&1-#{&2&3})(&1+#{&2&3})',
-            '(#{&2&3}+&1)(#{&2&3}-&1)',
-            '(#{&2&3}-&1)(#{&2&3}+&1)',
-          ],
-          variables: [
-            {
-              '&1': '$e[1;9]',
-              '&2': '$e[1;9]',
-              '&3': '$l{a;b;c;x;y;z}',
-            },
-          ],
-          // solutions: [['#{&2+&3}&1']],
-          type: 'result',
-
-          defaultDelay: 30,
-          options: ['implicit'],
-          grade: UNKNOWN,
-        },
       ],
       Factorisation: [
         {
@@ -9483,7 +9740,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Factoriser',
@@ -9516,52 +9773,29 @@ export default {
             ['&1(&2-&3)'],
             ['&1(&2-&3)'],
           ],
-          options: ["no-penalty-for-explicit-products"],
+          // options: ["no-penalty-for-explicit-products"],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Trouver un facteur commun',
           subdescription: 'Facteur commun apparent - littéral',
-          enounces: ['Trouve le plus grand facteur commun.'],
+          enounces: ['Trouve un facteur commun.'],
           expressions: [
-            '&1&3+&1&4',
-            '&1&3+&4*&1',
-            '&3*&1+&1&4',
-            '&3*&1+&4*&1',
             '&1*&2+&1&3',
-            '&2*&1+&1&3',
-            '&2*&1+&3*&1',
-            '&1*&2+&3*&1',
+            '&1&3+&1*&2',
+            '&1&3+&1&4',
             '&1&3-&1&4',
-            '&1&3-&4*&1',
-            '&3*&1-&1&4',
-            '&3*&1-&4*&1',
             '&1*&2-&1&3',
-            '&2*&1-&1&3',
-            '&2*&1-&3*&1',
-            '&1*&2-&3*&1',
+            '&1&3-&1*&2',
 
-            '&3*&1+&3*&2',
-            '&3*&1+&2&3',
-            '&1&3+&3*&2',
             '&1&3+&2&3',
-            '&3*&1+&3&4',
-            '&3*&1+&4&3',
-            '&4&3+&3*&1',
-            '&4&3+&1&3',
-            '&3*&1-&3*&2',
-            '&3*&1-&2&3',
-            '&1&3-&3*&2',
             '&1&3-&2&3',
-            '&3*&1-&3&4',
-            '&3*&1-&4&3',
-            '&4&3-&3*&1',
+            '&4&3+&1&3',
+            '&3&4+&1&3',
             '&4&3-&1&3',
-
-
-
+            '&3&4-&1&3',
           ],
           variables: [
             {
@@ -9569,7 +9803,6 @@ export default {
               '&2': '$e[2;9]\\{cd(&1)}',
               '&3': '$l{x;y;z}',
               '&4': '$l{x;y;z}\\{&3}',
-
             },
           ],
           correctionFormat: [{
@@ -9584,27 +9817,7 @@ export default {
             ['&1'],
             ['&1'],
             ['&1'],
-            ['&1'],
-            ['&1'],
-            ['&1'],
-            ['&1'],
-            ['&1'],
-            ['&1'],
-            ['&1'],
-            ['&1'],
-            ['&1'],
-            ['&1'],
 
-            ['&3'],
-            ['&3'],
-            ['&3'],
-            ['&3'],
-            ['&3'],
-            ['&3'],
-            ['&3'],
-            ['&3'],
-            ['&3'],
-            ['&3'],
             ['&3'],
             ['&3'],
             ['&3'],
@@ -9614,47 +9827,26 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Factoriser',
           subdescription: 'Facteur commun apparent - littéral',
-          enounces: ['Factoriser le plus possible.'],
+          enounces: ['Factoriser.'],
           expressions: [
-            '&1&3+&1&4',
-            '&1&3+&4*&1',
-            '&3*&1+&1&4',
-            '&3*&1+&4*&1',
             '&1*&2+&1&3',
-            '&2*&1+&1&3',
-            '&2*&1+&3*&1',
-            '&1*&2+&3*&1',
+            '&1&3+&1*&2',
+            '&1&3+&1&4',
             '&1&3-&1&4',
-            '&1&3-&4*&1',
-            '&3*&1-&1&4',
-            '&3*&1-&4*&1',
             '&1*&2-&1&3',
-            '&2*&1-&1&3',
-            '&2*&1-&3*&1',
-            '&1*&2-&3*&1',
+            '&1&3-&1*&2',
 
-            '&3*&1+&3*&2',
-            '&3*&1+&2&3',
-            '&1&3+&3*&2',
             '&1&3+&2&3',
-            '&3*&1+&3&4',
-            '&3*&1+&4&3',
-            '&4&3+&3*&1',
-            '&4&3+&1&3',
-            '&3*&1-&3*&2',
-            '&3*&1-&2&3',
-            '&1&3-&3*&2',
             '&1&3-&2&3',
-            '&3*&1-&3&4',
-            '&3*&1-&4&3',
-            '&4&3-&3*&1',
+            '&4&3+&1&3',
+            '&3&4+&1&3',
             '&4&3-&1&3',
-
+            '&3&4-&1&3',
           ],
           variables: [
             {
@@ -9666,47 +9858,28 @@ export default {
             },
           ],
           solutions: [
-            ['&1(&3+&4)'],
-            ['&1(&3+&4)'],
-            ['&1(&3+&4)'],
-            ['&1(&3+&4)'],
             ['&1(&2+&3)'],
-            ['&1(&2+&3)'],
-            ['&1(&2+&3)'],
-            ['&1(&2+&3)'],
-            ['&1(&3-&4)'],
-            ['&1(&3-&4)'],
-            ['&1(&3-&4)'],
+            ['&1(&3+&2)'],
+            ['&1(&3+&4)'],
             ['&1(&3-&4)'],
             ['&1(&2-&3)'],
-            ['&1(&2-&3)'],
-            ['&1(&2-&3)'],
-            ['&1(&2-&3)'],
+            ['&1(&3-&2)'],
 
             ['&3(&1+&2)'],
-            ['&3(&1+&2)'],
-            ['&3(&1+&2)'],
-            ['&3(&1+&2)'],
-            ['&3(&1+&4)'],
-            ['&3(&1+&4)'],
-            ['&3(&1+&4)'],
-            ['&3(&1+&4)'],
             ['&3(&1-&2)'],
-            ['&3(&1-&2)'],
-            ['&3(&1-&2)'],
-            ['&3(&1-&2)'],
-            ['&3(&1-&4)'],
-            ['&3(&1-&4)'],
+            ['&3(&4+&1)'],
+            ['&3(&4+&1)'],
             ['&3(&4-&1)'],
             ['&3(&4-&1)'],
+
           ],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Trouver le plus grand facteur commun ',
-          subdescription: 'Le facteur commun est apparent dans un des produits',
+          subdescription: 'Le facteur commun est apparent dans un seul des produits',
           enounces: ['Trouve le plus grand facteur commun.'],
           expressions: [
             '&1&3+#{&1*&2}&4',
@@ -9734,12 +9907,12 @@ export default {
           ],
           type: 'rewrite',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Factoriser',
-          subdescription: 'Le facteur commun est apparent dans un des produits',
-          enounces: ['Factoriser le plus possible.'],
+          subdescription: 'Le facteur commun est apparent dans un seul des produits',
+          enounces: ['Factoriser'],
           expressions: [
             '&1&3+#{&1*&2}&4',
             '#{&1*&2}&4+&1&3',
@@ -9748,8 +9921,8 @@ export default {
           ],
           variables: [
             {
-              '&1': '$e[2;9]',
-              '&2': '$e[2;9]',
+              '&1': '$l{2;3;5;7}',
+              '&2': '$e[2;9]\\{cd(&1)}',
               '&3': '$l{x;y;z}',
               '&4': '$l{x;y;z}\\{&3}',
             },
@@ -9762,7 +9935,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Trouver le plus grand facteur commun',
@@ -9796,7 +9969,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Factoriser',
@@ -9805,6 +9978,8 @@ export default {
           expressions: [
             '#{&1*&2}&5+#{&1*&3}&4',
             '#{&1*&2}&5-#{&1*&3}&4',
+            '#{&1*&2}&5+#{&1*&3}',
+            '#{&1*&2}&5-#{&1*&3}',
           ],
           variables: [
             {
@@ -9819,13 +9994,15 @@ export default {
             },
           ],
           solutions: [
-            ['#{&1}(#{&2*&5}+#{&3*&4})'],
-            ['#{&1}(#{&2*&5}-#{&3*&4})'],
+            ['&1(&2&5+&3&4)'],
+            ['&1(&2&5-&3&4)'],
+            ['&1(&2&5+&3)'],
+            ['&1(&2&5-&3)'],
 
           ],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Factoriser',
@@ -9852,7 +10029,7 @@ export default {
           ],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Factoriser',
@@ -9863,10 +10040,14 @@ export default {
             '#{&1*&2*&4}+#{&1*&3*&4^2}',
             '#{&1*&2*&4^2}-#{&1*&3*&4}',
             '#{&1*&2*&4}-#{&1*&3*&4^2}',
+            '#{&1*&2*&4^2}+#{&1*&3}',
+            '#{&1*&2}+#{&1*&3*&4^2}',
+            '#{&1*&2*&4^2}-#{&1*&3}',
+            '#{&1*&2}-#{&1*&3*&4^2}',
           ],
           variables: [
             {
-              '&1': '$e[1;9]',
+              '&1': '$e[2;9]',
               '&2': '$e[1;9]',
               '&3': '$e[1;9]\\{&2}',
               '&4': '$l{x;y;z}',
@@ -9879,15 +10060,77 @@ export default {
             ['#{&5&4}(#{&6*&4}+#{&7})'],
             ['#{&5&4}(#{&6}+#{&7*&4})'],
             ['#{&5&4}(#{&6*&4}-#{&7})'],
-            ['#{&5&4}(#{&6}-#{&7*&4})']
+            ['#{&5&4}(#{&6}-#{&7*&4})'],
+
+            ['#{&5}(#{&6*&4^2}+#{&7})'],
+            ['#{&5}(#{&6}+#{&7*&4^2})'],
+            ['#{&5}(#{&6*&4^2}-#{&7})'],
+            ['#{&5}(#{&6}-#{&7*&4^2})'],
           ],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
 
       ],
-      'Factorisation avec identité remarquable': [
+      'Identités remarquables': [
+        {
+          description: 'Développer $$(a+b)(a-b)$$',
+          subdescription: 'Coefficients positifs',
+          enounces: ['Développer et réduire :'],
+          expressions: [
+            '(&1+&2)(&1-&2)',
+            '(&1-&2)(&1+&2)',
+            '(&2+&1)(&2-&1)',
+            '(&2-&1)(&2+&1)',
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$l{a;b;c;x;y;z}',
+            },
+          ],
+          solutions: [
+            ['#{&1^2}-&2^2'],
+            ['#{&1^2}-&2^2'],
+            ['&2^2-#{&1^2}'],
+            ['&2^2-#{&1^2}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+          options: ['penalty-for-factors-permutation'],
+          grade: TROISIEME,
+        },
+        {
+          description: 'Développer $$(a+b)(a-b)$$',
+          subdescription: 'Coefficients positifs',
+          enounces: ['Développer et réduire :'],
+          expressions: [
+            '(&1+#{&2&3})(&1-#{&2&3})',
+            '(&1-#{&2&3})(&1+#{&2&3})',
+            '(#{&2&3}+&1)(#{&2&3}-&1)',
+            '(#{&2&3}-&1)(#{&2&3}+&1)',
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$l{a;b;c;x;y;z}',
+            },
+          ],
+          solutions: [
+            ['#{&1^2}-#{(&2&3)^2}'],
+            ['#{&1^2}-#{(&2&3)^2}'],
+            ['#{(&2&3)^2}-#{&1^2}'],
+            ['#{(&2&3)^2}-#{&1^2}'],
+
+          ],
+          type: 'result',
+
+          defaultDelay: 30,
+          options: ['penalty-for-factors-permutation'],
+          grade: TROISIEME,
+        },
         {
           description: 'Factoriser $$a^2-b^2$$',
           enounces: ['Factoriser :'],
@@ -9902,8 +10145,114 @@ export default {
           solutions: [['(&1+&3)(&1-&3)'], ['(&3+&1)(&3-&1)']],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: TROISIEME,
         },
+        {
+          description: 'Factoriser $$a^2-b^2$$',
+          enounces: ['Factoriser :'],
+          expressions: ['#{&1^2}-#{(&2&3)^2}', '#{(&2&3)^2}-#{&1^2}'],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]\\{&1}',
+              '&3': '$l{x;y;z}',
+            },
+          ],
+          solutions: [['(&1+#{&2&3})(&1-#{&2&3})'], ['(#{&2&3}+&1)(#{&2&3}-&1)']],
+          type: 'result',
+          defaultDelay: 30,
+          grade: TROISIEME,
+        },
+        {
+          description: 'Développer $$(a+b)^2$$',
+
+          enounces: ['Développer et réduire :'],
+          expressions: [
+            '(&1+&2)^2',
+            '(&2+&1)^2'
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$l{a;b;c;x;y;z}',
+            },
+          ],
+          solutions: [
+            ['#{&1^2}+#{2*&1*&2}+#{&2}^2'],
+            ['#{&2}^2+#{2*&1*&2}+#{&1^2}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+          options: ['penalty-for-factors-permutation'],
+          grade: SECONDE,
+        },
+        {
+          description: 'Développer $$(a-b)^2$$',
+          enounces: ['Développer et réduire :'],
+          expressions: ['(&1-&2)^2', '(&2-&1)^2'],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$l{a;b;c;x;y;z}',
+            },
+          ],
+          solutions: [
+            ['#{&1^2}-#{2*&1*&2}+#{&2}^2'],
+            ['#{&2}^2-#{2*&1*&2}+#{&1^2}'],
+          ],
+          type: 'result',
+          defaultDelay: 30,
+          options: ['penalty-for-factors-permutation'],
+          grade: SECONDE,
+        },
+        {
+          description: 'Développer $$(a+b)^2$$',
+
+          enounces: ['Développer et réduire :'],
+          expressions: [
+            '(&1+#{&2&3})^2',
+            '(#{&2&3}+&1)^2'
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$l{a;b;c;x;y;z}',
+            },
+          ],
+          solutions: [
+            ['#{&1^2}+#{2*&1*&2&3}+#{(&2&3)^2}'],
+            ['#{(&2&3)^2}+#{2*&1*&2&3}+#{&1^2}'],
+          ],
+          type: 'result',
+
+          defaultDelay: 30,
+          options: ['penalty-for-factors-permutation'],
+          grade: SECONDE,
+        },
+        {
+          description: 'Développer $$(a-b)^2$$',
+
+          enounces: ['Développer et réduire :'],
+          expressions: ['(&1-#{&2&3})^2', '(#{&2&3}-&1)^2'],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+              '&3': '$l{a;b;c;x;y;z}',
+            },
+          ],
+          solutions: [
+            ['#{&1^2}-#{2*&1*&2&3}+#{(&2&3)^2}'],
+            ['#{(&2&3)^2}-#{2*&1*&2&3}+#{&1^2}'],
+          ],
+          type: 'result',
+
+          defaultDelay: 30,
+          options: ['penalty-for-factors-permutation'],
+          grade: SECONDE,
+        },
+        
         {
           description: 'Factoriser une expression du second degré',
           enounces: ['Factoriser :'],
@@ -9917,29 +10266,15 @@ export default {
           solutions: [['(&3-&1)^2'], ['(&3+&1)^2']],
           type: 'result',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: SECONDE,
         },
-        {
-          description: 'Factoriser une expression du second degré (2)',
-          enounces: ['Factoriser :'],
-          expressions: ['x^2-#{&1+&2}x+#{&1*&2}', 'x^2#s{&2-&1}x-#{&1*&2}', 'x^2+#{&1+&2}x+#{&1*&2}'],
-          conditions: ['abs(&2-(&1))!=1'],
-          variables: [
-            {
-              '&1': '$e[1;5]',
-              '&2': '$e[1;5]\\{&1}',
-            },
-          ],
-          solutions: [['(x-&1)(x-&2)'], ['(x-&1)(x+&2)'], ['(x+&1)(x+&2)']],
-          type: 'result',
-          defaultDelay: 30,
-          grade: UNKNOWN,
-        }],
+       ],
     },
     'Equations': {
       'Dans $$\\N$$': [
+       
         {
-          description: 'Addition',
+          description: 'Addition $$a+x=b$$',
           enounces: ["Résouds cette équation."],
           expressions: [
             'x+&1=#{&1+&2}',
@@ -9957,10 +10292,10 @@ export default {
 
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
-          description: 'Soustraction',
+          description: 'Soustraction  $$x-a=b$$',
           enounces: ["Résouds cette équation."],
           expressions: [
             'x-&1=&2',
@@ -9976,10 +10311,10 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
-          description: 'Soustraction (2)',
+          description: 'Soustraction (2)  $$a-x=b$$',
           enounces: ["Résouds cette équation."],
           expressions: [
             '#{&1+&2}-x=&1',
@@ -9995,10 +10330,10 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
-          description: 'Multiplication',
+          description: 'Multiplication $$a \\times x=b$$',
           enounces: ["Résouds cette équation."],
           expressions: [
             '&1x=#{&1*&2}',
@@ -10015,10 +10350,10 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
-          description: 'Division',
+          description: 'Division $$x \\div a=b$$',
           enounces: ["Résouds cette équation."],
           expressions: [
             'x/&1=#{&2}',
@@ -10034,10 +10369,10 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
-          description: 'Division (2)',
+          description: 'Division (2) $$a \\div = b$$',
           enounces: ["Résouds cette équation."],
           expressions: [
             '#{&1*&2}/x=#{&2}',
@@ -10053,10 +10388,29 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
       ],
       'Dans $$\\Z$$': [
+        {
+          description: 'Opposé $$-x=a$$',
+          enounces: ["Résouds cette équation."],
+          expressions: [
+            '-x=&1',
+          ],
+          variables: [
+            {
+              '&1': '$er[1;9]',
+            },
+          ],
+          solutions: [
+            ['#{-(&1)}'],
+          ],
+
+          type: 'equation',
+          defaultDelay: 30,
+          grade: CINQUIEME,
+        },
         {
           description: 'Addition',
           enounces: ["Résouds cette équation."],
@@ -10085,10 +10439,10 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
-          description: 'Soustraction',
+          description: 'Soustraction $$x-a=b$$',
           enounces: ["Résouds cette équation."],
           expressions: [
             'x-&1=&2',
@@ -10104,10 +10458,10 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
-          description: 'Soustraction (2)',
+          description: 'Soustraction (2) $$a-x=b$$',
           enounces: ["Résouds cette équation."],
           expressions: [
             '#{&1+(&2)}-x=&1',
@@ -10123,7 +10477,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
           description: 'Multiplication',
@@ -10143,9 +10497,10 @@ export default {
               '&1': '$er[2;9]',
               '&2': '$er[2;9]',
             },
+          
             {
               '&1': '$e[2;9]',
-              '&2': '-$e[2;9]',
+              '&2': '$er[2;9]',
             },
             {
               '&1': '-$e[2;9]',
@@ -10157,7 +10512,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Division',
@@ -10181,10 +10536,10 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
-          description: 'Division (2)',
+          description: 'Division (2) $$a/x=b',
           enounces: ["Résouds cette équation."],
           expressions: [
             '(#{&1*(&2)})/x=#{&2}',
@@ -10200,7 +10555,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
       ],
       'Dans $$\\Q$$': [
@@ -10224,7 +10579,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
           description: 'Soustraction',
@@ -10244,7 +10599,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
           description: 'Soustraction (2)',
@@ -10260,11 +10615,11 @@ export default {
             },
           ],
           solutions: [
-            ['#{&2/&3}'],
+            ['#{&3/&1}'],
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: CINQUIEME,
         },
         {
           description: 'Multiplication',
@@ -10272,8 +10627,8 @@ export default {
           expressions: [
             '&2x=#{&2*&3}/&1',
             'x*&2=#{&2*&3}/&1',
-            '(&2/&1)x=#{&2*&3}/&1',
-            'x*(&2/&1)=#{&2*&3}/&1',
+            '{&2/&1}x=#{&2*&3}/&1',
+            'x*{&2/&1}=#{&2*&3}/&1',
             'x*&1=&2',
             '&1x=&2',
           ],
@@ -10317,7 +10672,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Division',
@@ -10337,7 +10692,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Division (2)',
@@ -10364,7 +10719,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
       ],
       'Linéaire du premier degré': [
@@ -10388,7 +10743,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Equation linéaire du premier degré',
@@ -10410,11 +10765,11 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Equation linéaire du premier degré',
-          subdescription: 'Coefficients positifs',
+          subdescription: 'Coefficients positifs  $$ax+b=c$$',
           enounces: ["Résouds cette équation."],
           expressions: [
             '&3x+&2=&1',
@@ -10434,7 +10789,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Equation linéaire du premier degré',
@@ -10458,7 +10813,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Equation linéaire du premier degré',
@@ -10481,11 +10836,11 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
         {
           description: 'Equation linéaire du premier degré',
-          subdescription: 'Coefficients positifs - Avec second membre',
+          subdescription: 'Coefficients relatifs - Avec second membre',
           enounces: ["Résouds cette équation."],
           expressions: [
             '&3x#s{&2}=&4x#s{&1}',
@@ -10504,7 +10859,7 @@ export default {
           ],
           type: 'equation',
           defaultDelay: 30,
-          grade: UNKNOWN,
+          grade: QUATRIEME,
         },
       ]
     }
