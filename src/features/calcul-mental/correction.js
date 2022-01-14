@@ -409,6 +409,7 @@ export function assessItems(questions, answers, answers_latex, answers_choice, t
             enounce: question.enounce,
             correction: question.correction,
             correctionFormat: question.correctionFormat,
+            correctionDetails: question.correctionDetails,
             testAnswer: question.testAnswer,
             choices: question.choices,
             coms: [],

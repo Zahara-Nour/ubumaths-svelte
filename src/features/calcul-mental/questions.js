@@ -63,22 +63,17 @@ const UNKNOWN = 'a determiner'
 // no-penalty-for-null-terms = false
 
 
-// * mélange des termes et facteurs
+// modifictaion de l'expression de la fonction
 // shuffle-terms = false
 // shuffle-factors = false
 // shuffle-terms-and-factors = false
 // shallow-shuffle-terms = false
 // shallow-shuffle-factors = false
-
-// expression
 // exp-remove-unecessary-brackets = false
-
-
 
 
 //*  mélange des choix (mélangés par défaut)
 // no-shuffle-choices = false
-
 
 // * unicité des questions 
 // allow-same-expression = false
@@ -1141,20 +1136,7 @@ export default {
 
       ],
       'A trou': [
-        {
-          description: 'Compléter une addition à trou',
-          subdescription:
-            'Somme égale à 10',
-          enounces: ["Complète."],
-          expressions: ['&1 + ? = 10', '?+&1=10'],
-          variables: [
-            { '&1': '$e[1;9]' },
-          ],
-          solutions:[['#{10-&1}']],
-          type: 'trou',
-          defaultDelay: 20,
-          grade: CP,
-        },
+
         {
           description: 'Compléter une addition à trou',
           subdescription:
@@ -1171,15 +1153,15 @@ export default {
             },
           ],
           type: 'trou',
-          solutions:[['&2']],
+          solutions: [['&2']],
           defaultDelay: 10,
           grade: CP,
         },
         {
-          description: 'Complète',
+          description: 'Compléter une addition à trou',
           subdescription:
             'Nombres entiers à 1 chiffre. Somme inférieure à 10.',
-          enounces: ["Quel est le terme manquant dans cette égalité ?"],
+          enounces: ["Complète."],
           expressions: [
             '&1+? = #{&1+&2}',
             '&1+?= #{&1+&2}',
@@ -1200,8 +1182,142 @@ export default {
         {
           description: 'Compléter une addition à trou',
           subdescription:
+            'Nombres à 1 chiffre. Nombre plus grand en premier.',
+          enounces: ["Complète."],
+          expressions: ['&1 + ? = #{&1+&2}'],
+          variables: [
+            {
+              '&1': '$e[3;9]',
+              '&2': '$e[1;&1-1]',
+              //  '&3':'$e[2;&2]'
+            },
+          ],
+          type: 'trou',
+          solutions: [['&2']],
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: 'Compléter une addition à trou',
+          subdescription: 'Somme sans retenue. Au moins un nombre à 2 chiffres.',
+          enounces: ["Complète."],
+          expressions: [
+            '#{&1*10 + &2} + ? = #{&1*10 + &2 + &3*10 + &4}',
+            '#{&1*10 + &2} + ? = #{&1*10 + &2 + &3*10 + &4}',
+            '#{&1*10 + &2} + ? = #{&1*10 + &2 + &3*10 + &4}',
+            '#{&1*10 + &2} + ? = #{&1*10 + &2 + &3*10 + &4}',
+            '#{&1*10 + &2} + ? = #{&1*10 + &2 + &4}',
+            '#{&1*10 + &2} + ? = #{&1*10 + &2 + &4}',
+            '#{&1*10 + &2} + ? = #{&1*10 + &2 + &4}',
+            '#{&1*10 + &2} + ? = #{&1*10 + &2 + &4}',
+          ],
+          variables: [
+            {
+              '&1': '$e[5;7]',
+              '&3': '$e[1;9-&1]',
+              '&2': '$e[5;7]',
+              '&4': '$e[2;9-&2]',
+            },
+            {
+              '&1': '$e[2;4]',
+              '&3': '$e[1;9-&1]',
+              '&2': '$e[2;4]',
+              '&4': '$e[2;9-&2]',
+            },
+            {
+              '&1': '$e[5;7]',
+              '&3': '$e[1;9-&1]',
+              '&2': '$e[2;4]',
+              '&4': '$e[2;9-&2]',
+            },
+            {
+              '&1': '$e[2;4]',
+              '&3': '$e[1;9-&1]',
+              '&2': '$e[5;7]]',
+              '&4': '$e[2;9-&2]',
+            },
+            {
+              '&1': '$e[5;7]',
+              '&2': '$e[5;7]',
+              '&4': '$e[2;9-&2]',
+            },
+            {
+              '&1': '$e[2;4]',
+              '&2': '$e[2;4]',
+              '&4': '$e[2;9-&2]',
+            },
+            {
+              '&1': '$e[5;7]',
+              '&2': '$e[2;4]',
+              '&4': '$e[2;9-&2]',
+            },
+            {
+              '&1': '$e[2;4]',
+              '&2': '$e[5;7]]',
+              '&4': '$e[2;9-&2]',
+            },
+          ],
+          type: 'trou',
+          solutions: [
+            ['#{&3*10 + &4}'],
+            ['#{&3*10 + &4}'],
+            ['#{&3*10 + &4}'],
+            ['#{&3*10 + &4}'],
+            ['&4'],
+            ['&4'],
+            ['&4'],
+            ['&4'],
+          ],
+          defaultDelay: 20,
+          grade: CP,
+        },
+        {
+          description: 'Compléter une addition à trou',
+          subdescription: 'Somme d’un nombre à deux chiffres et d’un nombre à un chiffre, avec franchissement de la dizaine',
+          enounces: ["Complète."],
+          expressions: [
+            '#{&1*10 + &2} + ? = #{&1*10 + &2 + &3}',
+
+          ],
+          variables: [
+            {
+              '&1': '$e[2;8]',
+              '&2': '$e[2;9]',
+              '&3': '$e[11-&2;9]',
+            },
+
+          ],
+          type: 'trou',
+          solutions: [['&3']],
+          defaultDelay: 20,
+          grade: CP,
+        },
+        {
+          description: 'Compléter une addition à trou',
+          subdescription: 'sommes d’un nombre à deux chiffres et de dizaines entières',
+          enounces: ["Complète."],
+          expressions: [
+            '#{&1*10 + &2} + ? = #{&1*10 + &2 + &3*10}',
+
+          ],
+          variables: [
+            {
+              '&1': '$e[2;8]',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9-&1]',
+            },
+
+          ],
+          type: 'trou',
+          solutions: [['#{&3*10}']],
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: 'Compléter une addition à trou',
+          subdescription:
             'Nombres entiers à 1 chiffre.',
-          enounces: ["Quel est le terme manquant dans cette égalité ?"],
+          enounces: ["Complète."],
           expressions: [
             '&1+? = #{&1+&2}',
             '?+&1 = #{&1+&2}',
@@ -1215,6 +1331,119 @@ export default {
           defaultDelay: 15,
           grade: CE1,
         },
+        {
+          description: 'Compléter une addition à trou.',
+          subdescription: 'Nombres entiers à 2 chiffres (sans retenue entre les unités et les dizaines)',
+          enounces: ["Complète."],
+          expressions: ['#{&1*10 + &2} + ? = #{&1*10 + &2 + &3*10+&4}'],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&3': '$e[1;9]',
+              '&2': '$e[1;8]',
+              '&4': '$e[1;9-&2]',
+            },
+          ],
+          type: 'trou',
+          solutions: [['#{&3*10+&4}']],
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: 'Compléter une addition à trou',
+          subdescription: 'Somme d’un nombre ayant au plus trois chiffres et d’un nombre ayant un seul chiffre non nul',
+          enounces: ["Complète."],
+          expressions: ['#{&1*100 + &2*10+&3} + ? = #{&1*100 + &2*10+&3 + &5*10^&4}'],
+          variables: [
+            {
+              '&1': '$e[0;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[1;9]',
+              '&4': '$e[0;2]',
+              '&5': '$e[1;9]'
+            },
+          ],
+          type: 'trou',
+          solutions: [['#{&5*10^&4}']],
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: 'Compléter une addition à trou',
+          subdescription:
+            'somme de deux termes dont le résultat est inférieur à 100',
+          enounces: ["Complète."],
+          expressions: ['&1 + ? =  #{&2+&1}', '? + &2 = #{&2+&1}'],
+          variables: [
+            { '&1': '$e[1;98]', '&2': '$e[1;99-&1]' },
+          ],
+          type: 'trou',
+          solutions: [
+            ['&2'],
+            ['&1']
+          ],
+          defaultDelay: 20,
+          grade: CE2,
+        },
+        {
+          description: 'Compléter une addition à trou',
+          subdescription: 'Somme d’un nombre ayant au plus 4 chiffres et d’un nombre ayant un seul chiffre non nul',
+          enounces: ["Complète."],
+          expressions: ['#{&1*1000 + &2*100+&3*10+&4} + ? = #{&1*1000 + &2*100+&3*10+&4 + &6*10^&5}'],
+          variables: [
+            {
+              '&1': '$e[0;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[1;9]',
+              '&5': '$e[0;3]',
+              '&6': '$e[1;9]'
+            },
+          ],
+          type: 'trou',
+          solutions:[['#{&6*10^&5}']],
+          defaultDelay: 15,
+          grade: CE2,
+        },
+        {
+          description: 'Compléter une addition',
+          subdescription: 'Nombres entiers à 2 chiffres (avec retenue)',
+          enounces: ["Complète."],
+          expressions: ['#{&1*10 + &2} + ? = #{&1*10 + &2 + &3*10+&4}'],
+          variables: [
+            {
+              '&1': '$e[1;7]',
+              '&3': '$e[1;8-&1]',
+              '&2': '$e[2;9]',
+              '&4': '$e[11-&2;9]',
+            },
+          ],
+          type: 'trou',
+          solutions:[['#{&3*10+&4}']],
+          defaultDelay: 15,
+          grade: CM1,
+        },
+        {
+          description: 'Compléter une addition à trou',
+          subdescription: 'Nombres entiers à 3 chiffres (sans retenue)',
+          enounces: ["Complète."],
+          expressions: ['#{&1*100 + &2*10 + &3} + ? = #{&1*100 + &2*10 + &3 + &4*100 + &5*10 + &6}'],
+          variables: [
+            {
+              '&1': '$e[1;8]',
+              '&4': '$e[1;9-&1]',
+              '&2': '$e[1;8]',
+              '&5': '$e[1;9-&2]',
+              '&3': '$e[1;8]',
+              '&6': '$e[1;9-&3]',
+            },
+          ],
+          type: 'trou',
+          solutions:[['#{&4*100 + &5*10 + &6}']],
+          defaultDelay: 30,
+          grade: CM2,
+        },
+
         {
           description: 'Compléter une égalité',
           subdescription: 'Nombres entiers à 2 chiffres (sans retenue)',
@@ -1987,7 +2216,7 @@ export default {
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
           subdescription: 'Nombres à 1 chiffre',
-          enounces: ['Quel est le nombre manquant dans cette égalité ?'],
+          enounces: ['Complète'],
           expressions: ['?-&1=&2', '&1-?=&2'],
           variables: [
             { '&1': '$e[2;8]', '&2': '$e[1;9-&1]' },
@@ -1997,8 +2226,186 @@ export default {
           details: [['&1+&2'], ['&1-&2']],
           type: 'trou',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: CP,
         },
+        {
+          description: 'Compléter une soustraction à trou',
+          subdescription: 'Soustraire un nombre à un chiffre à un nombre à deux chiffres, sans franchissement de la dizaine',
+          enounces: ['Complète.'],
+          expressions: ['#{&1*10+&3} - ? = #{&1*10+&3-&2}'],
+          variables: [{
+            '&1': '$e[1;9]',
+            '&2': '$e[1;8]',
+            '&3': '$e[&2+1;9]',
+          }],
+          type: 'trou',
+          solutions:[['&2']],
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: 'Compléter une soustraction à trou',
+          subdescription: 'Soustraire des dizaines entières à un nombre.',
+          enounces: ['Complète.'],
+          expressions: ['#{&2*10+&3} - ? = #{&2*10+&3 - &1*10}'],
+          variables: [{
+            '&1': '$e[1;8]',
+            '&2': '$e[&1+1;9]',
+            '&3': '$e[0;9]',
+          }],
+          type: 'trou',
+          solutions:[['#{&1*10}']],
+          defaultDelay: 10,
+          grade: CP,
+        },
+        {
+          description: 'Compléter une soustraction à trou',
+          subdescription: 'Une dizaine et un nombre à un chiffre (avec franchissement de la dizaine)',
+          enounces: ['Complète.'],
+          expressions: ['#{&1+&2} - ? = &2'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[11-&1;9]',
+            },
+          ],
+          type: 'trou',
+          solutions:[['&1']],
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: 'Compléter une soustraction à trou',
+          subdescription: 'Soustraire un nombre à un chiffre à un nombre à deux chiffres, avec franchissement de la dizaine',
+          enounces: ['Complète.'],
+          expressions: ['#{&1*10+&2} - ? = #{&1*10+&2-&3}'],
+          variables: [{
+            '&1': '$e[1;9]',
+            '&2': '$e[1;8]',
+            '&3': '$e[&2+1;9]',
+          }],
+          type: 'trou',
+          solutions:[['&3']],
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: 'Compléter une soustraction à trou',
+          subdescription: ' Soustraire un nombre à deux chiffres à un nombre à 3 chiffres, sans retenue',
+          enounces: ['Complète.'],
+          expressions: ['#{ &1*100 + &2*10 + &3 } - ? =  #{ &1*100 + &2*10 + &3 - (&4*10 + &5) }'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+              '&4': '$e[1;&2-1]',
+              '&5': '$e[0;&3-1]',
+            },
+          ],
+          type: 'trou',
+          solutions:[['#{ &4*10 + &5 }']],
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: 'Compléter une soustraction à trou',
+          subdescription: '  Soustraire des centaines entières à un nombre',
+          enounces: ['COmplète.'],
+          expressions: ['#{ &1*100 + &2*10 + &3 } - ? =  #{&1*100 + &2*10 + &3 - &4*100}'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[1;9]',
+              '&3': '$e[1;9]',
+              '&4': '$e[1;&1-1]',
+            },
+          ],
+          type: 'trou',
+          solutions:[['#{&4*100}']],
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: 'Compléter une soustraction à trou',
+          subdescription: "Soustraire un nombre d'au plus 3 chiffres à un nombre à 4 chiffres, sans retenue",
+          enounces: ['Complète.'],
+          expressions: ['#{ &1*1000 + &2*100 + &3*10+&4}- ? = #{&1*1000 + &2*100 + &3*10+&4-(&5*100 + &6*10+&7) }'],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[2;9]',
+              '&3': '$e[2;9]',
+              '&4': '$e[2;9]',
+              '&5': '$e[0;&2-1]',
+              '&6': '$e[0;&3-1]',
+              '&7': '$e[1;&4-1]',
+            },
+          ],
+          type: 'trou',
+          solutions:[['#{ &5*100 + &6*10+&7 }']],
+          defaultDelay: 15,
+          grade: CE1,
+        },
+        {
+          description: 'Compléter une soustraction à trou',
+          subdescription: 'Soustraire des dizaines entières, des centaines entières ou des milliers entiers à un nombre',
+          enounces: ['Complète.'],
+          expressions: [
+            '#{ &1*100 + &2*10 + &3 } - ? = #{&1*100 + &2*10 + &3 - &5*100}',
+            '#{ &1*100 + &2*10 + &3 } - ? = #{&1*100 + &2*10 + &3 - &5*10}',
+            '#{ &1*1000 + &2*100 + &3*10 + &4 } - ? = #{&1*1000 + &2*100 + &3*10 + &4 - &5*1000}',
+            '#{ &1*1000 + &2*100 + &3*10 + &4 } - ? = #{&1*1000 + &2*100 + &3*10 + &4 - &5*100}',
+            '#{ &1*1000 + &2*100 + &3*10 + &4 } - ? = #{&1*1000 + &2*100 + &3*10 + &4 - &5*10}',
+
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&5': '$e[1;&1-1]',
+            },
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&5': '$e[1;9]',
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[0;9]',
+              '&5': '$e[1;&1-1]',
+            },
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[0;9]',
+              '&5': '$e[1;9]',
+            },
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[0;9]',
+              '&3': '$e[0;9]',
+              '&4': '$e[0;9]',
+              '&5': '$e[1;9]',
+            },
+          ],
+          type: 'trou',
+          solutions:[
+            ['#{&5*100}'],
+            ['#{&5*10}'],
+            ['#{&5*1000}'],
+            ['#{&5*100}'],
+            ['#{&5*10}'],
+          ],
+          defaultDelay: 15,
+          grade: CE2,
+        },
+
         {
           description: 'Compléter une soustraction à trou (résultat positif)',
           subdescription: 'Nombres à 2 chiffres sans retenue.',
@@ -2447,7 +2854,7 @@ export default {
               '&1 \\times 100',
             ],
           ],
-          variables: [{ '&1': '$e[2;10]', '&2': '$e[1;3]' }],
+          variables: [{ '&1': '$e[2;5]', '&2': '$e[1;3]' }],
           defaultDelay: 20,
           grade: CM2,
         },
@@ -2489,7 +2896,7 @@ export default {
         {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Multiplication par 2',
-          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           expressions: ['?*2=#{&1*2}', '2*?=#{&1*2}'],
           variables: [{ '&1': '$e[2;9]' }],
           solutions: [['&1']],
@@ -2500,7 +2907,7 @@ export default {
         {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Multiplication par 3',
-          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           expressions: ['?*3=#{&1*3}', '3*?=#{&1*3}'],
           variables: [{ '&1': '$e[2;9]' }],
           solutions: [['&1']],
@@ -2511,7 +2918,7 @@ export default {
         {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Multiplication par 4',
-          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           expressions: ['?*4=#{&1*4}', '4*?=#{&1*4}'],
           variables: [{ '&1': '$e[2;9]' }],
           solutions: [['&1']],
@@ -2522,7 +2929,7 @@ export default {
         {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Multiplication par 5',
-          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           expressions: ['?*5=#{&1*5}', '5*?=#{&1*5}'],
           variables: [{ '&1': '$e[2;9]' }],
           solutions: [['&1']],
@@ -2533,7 +2940,7 @@ export default {
         {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Multiplication par 6',
-          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           expressions: ['?*6=#{&1*6}', '6*?=#{&1*6}'],
           variables: [{ '&1': '$e[2;9]' }],
           solutions: [['&1']],
@@ -2544,7 +2951,7 @@ export default {
         {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Multiplication par 7',
-          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           expressions: ['?*7=#{&1*7}', '7*?=#{&1*7}'],
           variables: [{ '&1': '$e[2;9]' }],
           solutions: [['&1']],
@@ -2555,7 +2962,7 @@ export default {
         {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Multiplication par 8',
-          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           expressions: ['?*8=#{&1*8}', '8*?=#{&1*8}'],
           variables: [{ '&1': '$e[2;9]' }],
           solutions: [['&1']],
@@ -2566,7 +2973,7 @@ export default {
         {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Multiplication par 9',
-          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           expressions: ['?*9=#{&1*9}', '9*?=#{&1*9}'],
           variables: [{ '&1': '$e[2;9]' }],
           solutions: [['&1']],
@@ -2577,7 +2984,7 @@ export default {
         {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Facteurs à 1 chiffre',
-          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           expressions: ['?*&1=#{&1*&2}', '&1*?=#{&1*&2}'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[3;9]' }],
           solutions: [['&2']],
@@ -2586,9 +2993,86 @@ export default {
           grade: CE2,
         },
         {
+          description: "Compléter une multiplication à trou",
+          subdescription: 'Multiplier par 20. Nombre à 1 chiffre',
+          enounces: ['Complète.'],
+          expressions: ['?*20=#{&1*20}', '20*?=#{20*&1}'],
+          variables: [{ '&1': '$e[0;9]' }],
+          type: 'trou',
+          solutions:[['&1']],
+          defaultDelay: 20,
+          grade: CE2,
+        },
+        {
+          description: "Compléter une multiplication à trou",
+          subdescription: 'Multiplier par 20.Nombre à 2 chiffres',
+          enounces: ['Complète.'],
+          expressions: ['?*20=#{&1*20}', '20*?=#{20*&1}'],
+          variables: [{ '&1': '$l{$e[11;15];$e[15;20];25;30;40;50}' }],
+          type: 'trou',
+          solutions:[['&1']],
+          defaultDelay: 20,
+          grade: CE2,
+        },
+        {
+          description: "Compléter une multiplication à trou.",
+          subdescription: 'Multiplier par 30, 40, 50, 60, 70, 80, 90. Nombre à 1 chiffres',
+          enounces: ['Complète.'],
+          expressions: ['#{&1*10}*? = #{&1*10*&2}', '?*#{&1*10} = #{&2*&1*10}'],
+          variables: [{ '&1': '$e[3;9]', '&2': '$e[2;9]' }],
+          type: 'trou',
+          solutions:[['&2']],
+          defaultDelay: 15,
+          grade: CM1,
+        },
+        {
+          description: "Compléter une multiplication à trou",
+          subdescription: "Multiplier deux multiples de 10",
+          enounces: ['Complète.'],
+          expressions: ['#{&1*10}* ?= #{&1*10*&2*10}', '?*#{&1*10}=#{&2*10*&1*10}'],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          type: 'trou',
+          solutions:[['#{&2*10}']],
+          defaultDelay: 15,
+          grade: CM1,
+        },
+        {
+          description: "Compléter une multiplication à trou.",
+          subdescription: 'Premiers multiples de 25 et 50',
+          enounces: ['Complète.'],
+          expressions: ['?*50=#{&1*50}', '?*25=#{&1*25}'],
+          type: 'trou',
+          solutions:[['&1']],
+          variables: [{ '&1': '$e[0;4]' }],
+          defaultDelay: 10,
+          grade: CM1,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription:
+            'Les 2 facteurs sont des multiples de 10, 100 ou 1000',
+          enounces: ['Complète.'],
+          expressions: [
+            '#{&1*10^&2}*?= #{&1*10^&2*&3*10^&4}',
+            '?*#{&1*10^&2}= #{&1*10^&2*&3*10^&4}',
+          ],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[1;3]',
+              '&3': '$e[2;9]',
+              '&4': '$e[1;3]',
+            },
+          ],
+          solutions: [['#{&3*10^&4}']],
+          type: 'trou',
+          defaultDelay: 20,
+          grade: CM2,
+        },
+        {
           description: 'Compléter une multiplication à trou',
           subdescription: 'Produits classiques',
-          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           expressions: [
             '?*4=100',
             '?*5=100',
@@ -2633,30 +3117,38 @@ export default {
           options: ['exhaust'],
           type: 'trou',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: CM2,
         },
         {
-          description: 'Compléter une multiplication à trou',
-          subdescription:
-            'Les 2 facteurs sont des multiples de 10, 100 ou 1000',
-          enounces: ['Quel est le facteur manquant dans cette égalité ?'],
-          expressions: [
-            '#{&1*10^&2}*?= #{&1*10^&2*&3*10^&4}',
-            '?*#{&1*10^&2}= #{&1*10^&2*&3*10^&4}',
-          ],
-          variables: [
-            {
-              '&1': '$e[2;9]',
-              '&2': '$e[1;3]',
-              '&3': '$e[2;9]',
-              '&4': '$e[1;3]',
-            },
-          ],
-          solutions: [['#{&3*10^&4}']],
+          description: "Compléter une multiplication à trou",
+          subdescription: 'Multiplication par 50',
+          enounces: ['Complète.'],
+          expressions: ['?*50=#{(&1*2+1)*50}', '?*50 = #{&1*2*50}'],
           type: 'trou',
+          solutions:[
+            ['#{&1*2+1}'],
+            ['#{&1*2}'],
+          ],
+          variables: [{ '&1': '$e[1;6]' }],
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: CM2,
         },
+        {
+          description: "Compléter une multiplication à trou",
+          subdescription: 'Multiplication par 50',
+          enounces: ['Complète.'],
+          expressions: ['?*25=#{(&1*4+&2)*25}', '?*25=#{&1*4*25}'],
+          type: 'trou',
+          solutions:[
+            ['#{&1*4+&2}'],
+            ['#{&1*4}'],
+
+        ],
+          variables: [{ '&1': '$e[2;5]', '&2': '$e[1;3]' }],
+          defaultDelay: 20,
+          grade: CM2,
+        },
+        
       ],
 
       'Carrés': [
@@ -3036,26 +3528,26 @@ export default {
         {
           description: 'Compléter une division à trou ',
           subdescription: 'Trouver le dividende',
-          enounces: ["Quel est le nombre manquant dans cette égalité ?"],
+          enounces: ["Complète."],
           expressions: ['?:&2=&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           solutions: [['#{&1*&2}']],
           details: [['&1 \\times &2']],
           type: 'trou',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: CE2,
         },
         {
           description: 'Compléter une division à trou ',
           subdescription: 'Trouver le diviseur',
-          enounces: ["Quel est le nombre manquant dans cette égalité ?"],
+          enounces: ["Complète."],
           expressions: ['#{&1*&2}:?=&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
           solutions: [['&2']],
           details: [['#{&1*&2} \\div &1']],
           type: 'trou',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: CE2,
         },
 
       ],
@@ -3909,7 +4401,7 @@ export default {
           description: 'Trouver le complément ',
           subdescription:
             "A l'entier supérieur",
-          enounces: ['Quel est le terme manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           variables: [
             {
               '&1': '$e[1;9]',
@@ -3926,7 +4418,7 @@ export default {
           description: 'Compléter une addition à trou ',
           subdescription:
             'Partie entière et partie décimale à 1 chiffre (pas de retenue)',
-          enounces: ['Quel est le terme manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           variables: [
             {
               '&1': '$e[1;8]',
@@ -3942,13 +4434,13 @@ export default {
           solutions: [['&6']],
           'result-type': 'decimal',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: CM1,
         },
         {
-          description: 'Calculer une somme ',
+          description: 'Compléter une addition à trou',
           subdescription:
             'Parties décimales à 1 et 2 chiffres (pas de retenue)',
-          enounces: ['Quel est le terme manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           variables: [
             {
               '&1': '$e[1;8]',
@@ -3965,13 +4457,13 @@ export default {
           type: 'trou',
           'result-type': 'decimal',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: CM1,
         },
         {
-          description: 'Calculer une somme ',
+          description: 'Compléter une addition à trou',
           subdescription:
             'Partie entière et partie décimale à 1 chiffre (avec retenue pour la partie decimale)',
-          enounces: ['Quel est le terme manquant dans cette égalité ?'],
+          enounces: ['Complète.'],
           variables: [
             {
               '&1': '$e[1;7]',
@@ -3987,13 +4479,13 @@ export default {
           solutions: [['&6']],
           'result-type': 'decimal',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: CM1,
         },
         {
-          description: 'Calculer une somme ',
+          description: 'Compléter une addition à trou',
           subdescription:
             'Partie entière et partie décimale à 1 chiffre (avec retenues)',
-          enounces: ['Quel est le terme manquant dans cette égalité ?'],
+          enounces: ['Complète'],
           variables: [
             {
               '&1': '$e[1;9]',
@@ -4009,7 +4501,7 @@ export default {
           type: 'trou',
           'result-type': 'decimal',
           defaultDelay: 20,
-          grade: UNKNOWN,
+          grade: CM1,
         },
       ],
       'Somme astucieuse': [
@@ -4392,6 +4884,181 @@ export default {
           grade: CM2,
         },
       ],
+      'A trou': [
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplication par 0,5',
+          enounces: ['Complète'],
+          variables: [
+            {
+              '&1': '$e[1;20]',
+            },
+          ],
+          expressions: ['?*0,5=##{&1*0,5}', '0,5*?=##{0,5*&1}'],
+          type: 'trou',
+          'solutions': [['&1']],
+          defaultDelay: 15,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplier par 0,5 un nombre décimal',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$l{2;4;6;8}',
+              '&2': '$e{1}',
+              '&3': '##{&1+&2/10}'
+            },
+          ],
+          expressions: ['?*0,5 = ##{&3*0,5}', '?*0,5 = ##{0,5*&3}'],
+          type: 'trou',
+          solutions:[['&3']],
+          // 'result-type': 'decimal',
+          defaultDelay: 15,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplier par 10',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$d{$e[0;2];$e[1;2]}',
+            },
+          ],
+          expressions: ['?*10=##{&1*10}', '10*?=##{&1*10}'],
+          type: 'trou',
+          // 'result-type': 'decimal',
+          solutions:[['&1']],
+          defaultDelay: 15,
+          grade: CM1,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplier par 100',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$d{$e[0;2];$e[1;2]}',
+            },
+          ],
+          expressions: ['?*100 = ##{&1*100}', '100*? = ##{&1*100}'],
+          type: 'trou',
+          solutions:[['&1']],
+          // 'result-type': 'decimal',
+          defaultDelay: 15,
+          grade: CM1,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplier par 1000',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$d{$e[0;2];$e[1;2]}',
+            },
+          ],
+          expressions: ['?*1000 = ##{&1*1000}', '1000*? = ##{&1*1000}'],
+          type: 'trou',
+          solutions:[['&1']],
+          // 'result-type': 'decimal',
+          defaultDelay: 15,
+          grade: CM1,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplier par 10, 100 ou 1000',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$e[1;3]',
+              '&2': '$d{$e[0;4-&1];$e[1;4]}',
+
+            },
+          ],
+          expressions: ['?*#{10^&1} = ##{10^&1*&2}', '#{10^&1}*? = ##{10^&1*&2}'],
+          type: 'trou',
+          solutions:[['&2']],
+          // 'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplier par 0,1 un nombre décimal',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$e[0;3]',
+              '&2': '$e[1;2]',
+              '&3': '$d{&1;&2}',
+            },
+          ],
+          expressions: ['?*0,1 = ##{&3*0,1}', '0,1*? = ##{0,1*&3}'],
+          type: 'trou',
+          solutions:[['&3']],
+          // 'result-type': 'decimal',
+          defaultDelay: 15,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplier par 0,01 un nombre décimal',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$e[0;3]',
+              '&2': '$e[1;2]',
+              '&3': '$d{&1;&2}',
+            },
+          ],
+          expressions: ['?*0,01 = ##{&3*0,01}', '0,01*? = ##{0,01*&3}'],
+          type: 'trou',
+          solutions:[['&3']],
+          // 'result-type': 'decimal',
+          defaultDelay: 15,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplier par 0,001 un nombre décimal',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$e[0;3]',
+              '&2': '$e[1;1]',
+              '&3': '$d{&1;&2}',
+            },
+          ],
+          expressions: ['?*0,001 = ##{&3*0,001}', '0,001*?=##{0,001*&3}'],
+          type: 'trou',
+          solutions:[['&3']],
+          // 'result-type': 'decimal',
+          defaultDelay: 15,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Compléter une multiplication à trou',
+          subdescription: 'Multiplier par 0,1 ; 0,01 ou 0,001',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$e[1;3]',
+              '&2': '$d{$e[1;3];$e[1;4-&1]}',
+
+            },
+          ],
+          expressions: ['##{10^(-&1)}*? = ##{10^(-&1)*&2}', '?*##{10^(-&1)} = ##{&2*10^(-&1)}'],
+          solutions:[['&2']],
+          type: 'trou',
+          // 'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        
+      ]
     },
     Diviser: {
       Quotient: [
@@ -4513,6 +5180,97 @@ export default {
           defaultDelay: 20,
           grade: SIXIEME,
         },
+      ],
+      'A trou': [
+        {
+          description: 'Compléter une division a trou',
+          subdescription: 'Diviser par 10',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$d{$e[0;3];$e[0;1]}',
+            },
+          ],
+          expressions: ['?:10 = ##{&1:10}'],
+          type: 'trou',
+          solutions:[['&1']],
+          // 'result-type': 'decimal',
+          defaultDelay: 15,
+          grade: CM1,
+        },
+        {
+          description: 'Compléter une division a trou',
+          subdescription: 'Diviser par 100',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$d{$e[0;3];$e[0;1]}',
+            },
+          ],
+          expressions: ['?:100 = ##{&1:100}'],
+          type: 'trou',
+          solutions:[['&1']],
+          // 'result-type': 'decimal',
+          defaultDelay: 15,
+          grade: CM2,
+        },
+        {
+          description: 'Compléter une division a trou',
+          subdescription: 'Diviser par 1000',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$e[0;4]',
+              '&2': '$e{&1;&1}'
+            },
+          ],
+          expressions: ['?:1000 = ##{&2:1000}'],
+          type: 'trou',
+          // 'result-type': 'decimal',
+          solutions:[['&2']],
+          defaultDelay: 15,
+          grade: CM2,
+        },
+        {
+          description: 'Compléter une division a trou',
+          subdescription: 'Diviser par 10, 100 ou 1000',
+          enounces: ['Complète.'],
+          variables: [
+            {
+
+              '&1': '$e[1;3]',
+              '&2': '$d{$e[0;4];$e[0;4-&1]}',
+
+            },
+          ],
+          expressions: ['?:#{10^&1}=##{&2:10^&1}'],
+          type: 'trou',
+          solutions:[['&2']],
+          // 'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: CM2,
+        },
+       
+        {
+          description: 'Compléter une division a trou',
+          subdescription: 'Diviser par 0,1 ; 0,01 ou 0,001',
+          enounces: ['Complète.'],
+          variables: [
+            {
+              '&1': '$d{$e[1;2];$e[0;3]}',
+              '&2': '$l{0.1;0.01;0.001}',
+              '&3': '$l{$e[1;9];$e[11;99];$e[101;999]}:1000',
+            },
+          ],
+          expressions: ['?:##{&2} = ##{&3:&2}', '?:##{&2} = ##{&1:&2}'],
+          type: 'trou',
+          solutions:[['##{&3}'], ['&1']],
+          // 'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+       
+
       ],
     },
     Unités: {
@@ -5239,24 +5997,71 @@ export default {
           description: 'Calculer une somme ou une différence',
           subdescription: "A l'aide de la droite graduée",
           enounces: ['Calcule.'],
+          expressions: ['(-&1)+&2', '(-&1)-&2', '&1-&2'],
+          variables: [
+            { '&1': '$e[1;4]', '&2': '$e[1;4]' },
+            { '&1': '$e[1;3]', '&2': '$e[1;4-&1]' },
+            { '&1': '$e[1;3]', '&2': '$e[&1+1;4]' },
+          ],
+          images: [
+            'relatifs/droite-graduee-operations/droite-graduee--4-4-600.png',
+          ],
+
+          type: 'result',
+          defaultDelay: 20,
+          grade: CINQUIEME,
+        },
+        {
+          description: 'Calculer une somme ou une différence',
+          subdescription: "A l'aide de la droite graduée",
+          enounces: ['Calcule.'],
           expressions: ['(-&1)+&2', '(-&1)-&2', '&2-&1'],
           variables: [
             { '&1': '$e[1;5]', '&2': '$e[1;3+&1]' },
             { '&1': '$e[1;3]', '&2': '$e[1;4-&1]' },
             { '&1': '$e[2;9]', '&2': '$e[1;&1-1]' },
           ],
+          images: [
+            'relatifs/droite-graduee-operations/droite-graduee--7-7-600.png',
+          ],
+
           type: 'result',
           defaultDelay: 20,
           grade: CINQUIEME,
         },
         {
-          description: 'Compléter une égalité',
+          description: 'Compléter une addition à trou',
           subdescription: "A l'aide de la droite graduée",
-          enounces: ["Complète l'égalité avec le nombre manquant."],
+          enounces: ["Complète."],
           expressions: [
             '-&1+?=#{(-&1)+&2}',
             '-&1+?=#{(-&1)+(-&2)}',
             '&1+?=#{&1+(-&2)}',
+            '?+(-&1)=#{(-&1)+&2}',
+            '?+(-&1)=#{(-&1)+(-&2)}',
+            '?+&1=#{&1+(-&2)}',
+          ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]' }],
+          solutions: [
+            ['&2'],
+            ['(-&2)'],
+            ['(-&2)'],
+            ['&2'],
+            ['-&2'],
+            ['-&2'],
+          ],
+          type: 'trou',
+          defaultDelay: 20,
+          grade: CINQUIEME,
+        },
+        {
+          description: 'Compléter une soustraction à trou',
+          subdescription: "A l'aide de la droite graduée",
+          enounces: ["Complète."],
+          expressions: [
+            '-&1-?=#{-&1-&2}',
+            '-&1-?=#{-&1+&2}',
+            '&1-?=#{&1-&2}',
             '?+(-&1)=#{(-&1)+&2}',
             '?+(-&1)=#{(-&1)+(-&2)}',
             '?+&1=#{&1+(-&2)}',
@@ -7325,6 +8130,11 @@ export default {
           variables: [{ '&1': '$e[1;15]' }],
           solutions: [['&1']],
           type: 'result',
+          correctionDetails: [
+            [
+              { text: '$$&exp=$$&solution car $$&1 \\times &1 = #{&1^2}$$.' }
+            ],
+          ],
           defaultDelay: 20,
           grade: QUATRIEME,
         },
@@ -7332,14 +8142,20 @@ export default {
           description: "Existence d'une racine carré",
           enounces: ["Est-ce que ce nombre existe ?"],
           expressions: [
+            'sqrt(#{&1^2})',
+            'sqrt(##{&1^2})',
             'sqrt(&1)',
+            'sqrt(-#{&1^2})',
+            'sqrt(-##{&1^2})',
             'sqrt(-&1)',
           ],
           variables: [
-            {
-              '&1': '$e{2}',
-            },
-
+            { '&1': '$e[2;15]' },
+            { '&1': '$d{1;1}' },
+            { '&1': '$l{2;3;5;7;10;11;13}' },
+            { '&1': '$e[2;15]' },
+            { '&1': '$d{1;1}' },
+            { '&1': '$l{2;3;5;7;10;11;13}' }
           ],
           choices: [
             [{ text: 'Oui' }, { text: 'Non' }],
@@ -7350,16 +8166,63 @@ export default {
             answer: "<span style='color:red;'>Non</span>, ce nombre n'existe pas."
           },
           {
+            correct: ['<span style="color:green;"> Oui</span>, $$&exp$$ existe'],
+            uncorrect: ['<span style="color:green;"> Oui</span>, $$&exp$$ existe'],
+            answer: "<span style='color:red;'>Non</span>, ce nombre n'existe pas."
+          },
+          {
+            correct: ['<span style="color:green;"> Oui</span>, $$&exp$$ existe'],
+            uncorrect: ['<span style="color:green;"> Oui</span>, $$&exp$$ existe'],
+            answer: "<span style='color:red;'>Non</span>, ce nombre n'existe pas."
+          },
+          {
             correct: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
             uncorrect: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
             answer: "<span style='color:red;'>Oui</span>, ce nombre existe."
-          }
+          },
+          {
+            correct: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
+            uncorrect: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
+            answer: "<span style='color:red;'>Oui</span>, ce nombre existe."
+          },
+          {
+            correct: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
+            uncorrect: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
+            answer: "<span style='color:red;'>Oui</span>, ce nombre existe."
+          },
           ],
-          // corrections: [
-          //   'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
-          // ],
+          correctionDetails: [
+            [
+              { text: '&solution, $$&exp$$ existe car $$#{&1^2}$$ est positif.' },
+              { text: '$$&exp=&1$$ car $$&1 \\times &1 = #{&1^2}$$.' }
+            ],
+            [
+              { text: '&solution, $$&exp$$ existe car $$%%{&1^2}$$ est positif.' },
+              { text: '$$&exp=%%{&1}$$ car $$%%{&1} \\times %%{&1} = %%{&1^2}$$.' }
+            ],
+            [
+              { text: '&solution, $$&exp$$ existe car $$&1$$ est positif.' },
+              { text: "On ne peut pas mettre $$&exp$$ sous la forme d'un nombre décimal." },
+              { text: "On peut seulement écrire que $$\\sqrt{&1} \\times \\sqrt{&1}=&1$$, et trouver une <b>valeur approchée</b> à la calculatrice : $$\\sqrt{&1} \\simeq %%{sqrt(&1)}$$." },
+
+            ],
+            [
+              { text: "&solution, $$&exp$$ n'existe pas car $$-#{&1^2}$$ est négatif." },
+            ],
+            [
+              { text: "&solution, $$&exp$$ n'existe pas car $$-%%{&1^2}$$ est négatif." },
+            ],
+            [
+              { text: "&solution, $$&exp$$ n'existe pas car $$-&1$$ est négatif." },
+            ],
+
+          ],
           solutions: [
             [0],
+            [0],
+            [0],
+            [1],
+            [1],
             [1],
           ],
           type: 'choice',
@@ -7404,15 +8267,29 @@ export default {
             [{ text: 'Vrai' }, { text: 'Faux' }],
           ],
           correctionFormat: [{
-            correct: ["$$\\sqrt{&1}+\\sqrt{&2} \\textcolor{green}{\\ne} \\sqrt{#{&1+&2}}$$"],
-            uncorrect: ["$$\\sqrt{&1}+\\sqrt{&2} \\textcolor{green}{\\ne} \\sqrt{#{&1+&2}}$$"],
+            correct: ["&solution, $$\\sqrt{&1}+\\sqrt{&2} \\textcolor{green}{\\ne} \\sqrt{#{&1+&2}}$$"],
+            uncorrect: ["&solution, $$\\sqrt{&1}+\\sqrt{&2} \\textcolor{green}{\\ne} \\sqrt{#{&1+&2}}$$"],
             answer: "$$\\sqrt{&1}+\\sqrt{&2} \\textcolor{red}{=} \\sqrt{#{&1+&2}}$$"
           },
           {
-            correct: ["$$\\sqrt{&1} \\times \\sqrt{&2} \\textcolor{green}{=} \\sqrt{#{&1*&2}}$$"],
-            uncorrect: ["$$\\sqrt{&1} \\times \\sqrt{&2} \\textcolor{green}{=} \\sqrt{#{&1*&2}}$$"],
+            correct: ["&solution, $$\\sqrt{&1} \\times \\sqrt{&2} \\textcolor{green}{=} \\sqrt{#{&1*&2}}$$"],
+            uncorrect: ["&solution, $$\\sqrt{&1} \\times \\sqrt{&2} \\textcolor{green}{=} \\sqrt{#{&1*&2}}$$"],
             answer: "$$\\sqrt{&1} \\times \\sqrt{&2} \\textcolor{red}{\\ne} \\sqrt{#{&1*&2}}$$"
           }],
+          correctionDetails: [
+            [
+              { text: '&solution, $$\\sqrt{&1} + \\sqrt{&2} \\gt \\sqrt{&1 + &2}$$ ' },
+              { text: "En effet, on peut comparer les carrés des 2 membres de l'inégalité :" },
+              { text: '$$\\begin{align} \\left(\\sqrt{&1} + \\sqrt{&2}\\right)^2 &= \\left(\\sqrt{&1}\\right)^2 +\\left(\\sqrt{&2}\\right)^2 + 2\\sqrt{&1}\\sqrt{&2} \\\\ &= &1 +&2\\textcolor{orange}{+2\\sqrt{#{&1*&2}}} \\\\ \\left(\\sqrt{&1+&2}\\right)^2 &= &1+&2\\end{align}$$' },
+            ],
+            [
+              { text: '&solution' },
+              { text: '$$\\begin{align} \\sqrt{&1} \\times \\sqrt{&2} &=  \\sqrt{&1 \\times &2} \\\\ &= \\sqrt{#{&1*&2}} \\\\ \\end{align}$$' },
+            ],
+
+
+
+          ],
           // corrections: [
           //   'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
           // ],
@@ -7431,9 +8308,17 @@ export default {
           description: 'Réduire une racine carré',
           enounces: ['Réduis sous la forme $$a\\sqrt{b}$$'],
           expressions: ['sqrt(#{&1*&1*&2})'],
-          variables: [{ '&1': '$l{2;3;5;10}', '&2': '$l{2;3;5}' }],
+          variables: [{
+            '&1': '$l{2;3;5;10}',
+            '&2': '$l{2;3;5}'
+          }],
           // solutions: [['&1sqrt(&2)']],
           type: 'result',
+          correctionDetails: [
+            [
+              { text: '$$\\begin{align} \\sqrt{#{&1*&1*&2}} &= \\sqrt{#{&1*&1} \\times &2} \\\\ &= \\sqrt{#{&1*&1}} \\times \\sqrt{&2} \\\\  &= &1 \\times \\sqrt{&2} \\\\  &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1 \\sqrt{&2}}} \\\\ \\end{align}$$' },
+            ],
+          ],
           options: ['penalty-for-factors-permutation'],
           defaultDelay: 20,
           grade: SECONDE,
@@ -7445,6 +8330,62 @@ export default {
           variables: [{ '&1': '$l{2;3;5;10}', '&2': '$l{2;3;5;10}\\{&1}', '&3': '$l{2;3;5}' }],
           solutions: [['#{&1+&2}sqrt(&3)']],
           type: 'result',
+          correctionDetails: [
+            [
+              {
+                text: '$$\\begin{align} \
+              \\sqrt{#{&1*&1*&3}} + \\sqrt{#{&2*&2*&3}} &= \\sqrt{#{&1*&1}} \\times \\sqrt{&3} + \\sqrt{#{&2*&2}} \\times \\sqrt{&3} \\\\ \
+              &= &1 \\times \\sqrt{&3} + &2 \\times \\sqrt{&3} \\\\ \
+              &= &1 \\sqrt{&3} + &2 \\sqrt{&3} \\\\ \
+              &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1+&2} \\sqrt{&3}}} \\\\ \
+              \\end{align}$$' },
+            ],
+          ],
+          options: ['penalty-for-factors-permutation'],
+          defaultDelay: 40,
+          grade: SECONDE,
+        }
+      ],
+      Egalité: [
+        {
+          description: "Vérifier l'égalité de deux expressions comportant des racines carrées",
+          enounces: ['Ces 2 expressions sont-elles égales ?'],
+          expressions: ['sqrt(#{&1*&1*&2})'],
+          expressions: ['sqrt(#{&1*&1*&2})'],
+
+          variables: [{
+            '&1': '2',
+            '&2': '$l{3;5}'
+          }],
+          // solutions: [['&1sqrt(&2)']],
+          type: 'result',
+          correctionDetails: [
+            [
+              { text: '$$\\begin{align} \\sqrt{#{&1*&1*&2}} &= \\sqrt{#{&1*&1} \\times &2} \\\\ &= \\sqrt{#{&1*&1}} \\times \\sqrt{&2} \\\\  &= &1 \\times \\sqrt{&2} \\\\  &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1 \\sqrt{&2}}} \\\\ \\end{align}$$' },
+            ],
+          ],
+          options: ['penalty-for-factors-permutation'],
+          defaultDelay: 20,
+          grade: SECONDE,
+        },
+        {
+          description: 'Réduire une expression avec des racines carré',
+          enounces: ['Réduis sous la forme $$a\\sqrt{b}$$, avec $$b$$ le plus petit possible.'],
+          expressions: ['sqrt(#{&1*&1*&3})+sqrt(#{&2*&2*&3})'],
+          variables: [{ '&1': '$l{2;3;5;10}', '&2': '$l{2;3;5;10}\\{&1}', '&3': '$l{2;3;5}' }],
+          solutions: [['#{&1+&2}sqrt(&3)']],
+          type: 'result',
+          correctionDetails: [
+            [
+              {
+                text: '$$\\begin{align} \
+              \\sqrt{#{&1*&1*&3}} + \\sqrt{#{&2*&2*&3}} &= \\sqrt{#{&1*&1}} \\times \\sqrt{&3} + \\sqrt{#{&2*&2}} \\times \\sqrt{&3} \\\\ \
+              &= &1 \\times \\sqrt{&3} + &2 \\times \\sqrt{&3} \\\\ \
+              &= &1 \\sqrt{&3} + &2 \\sqrt{&3} \\\\ \
+              &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1+&2} \\sqrt{&3}}} \\\\ \
+              \\end{align}$$' },
+            ],
+          ],
           options: ['penalty-for-factors-permutation'],
           defaultDelay: 40,
           grade: SECONDE,
@@ -7471,14 +8412,37 @@ export default {
           enounces: ['Calcule.'],
           expressions: [
             '(&2sqrt(&1))^2',
-            'sqrt(&1)*&3*sqrt(&1)'
+            'sqrt(&1)*&2*sqrt(&1)'
           ],
           variables: [{
             '&1': '$e[2;9]',
             '&2': '$l{2;3}',
-            '&3': '$e[2;9]',
+          },
+          {
+            '&1': '$e[2;9]',
+            '&2': '$e[2;9]',
           }],
           type: 'result',
+          correctionDetails: [
+            [
+              {
+                text: '$$\\begin{align} \
+              \\left(&2\\sqrt{&1}\\right)^2 &= &2^2 \\times \\left(\\sqrt{&1}\\right)^2 \\\\ \
+               &= #{&2^2} \\times &1 \\\\ \
+              &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&2^2*&1}}} \\\\ \
+              \\end{align}$$'
+              }
+            ],
+            [
+              {
+                text: '$$\\begin{align} \
+              \\left(&2\\sqrt{&1}\\right)^2 &= &2^2 \\times \\left(\\sqrt{&1}\\right)^2 \\\\ \
+               &= #{&2^2} \\times &1 \\\\ \
+              &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&2^2*&1}}} \\\\ \
+              \\end{align}$$'
+              }
+            ],
+          ],
           defaultDelay: 20,
           grade: QUATRIEME,
         },
@@ -9705,7 +10669,7 @@ export default {
           options: ['penalty-for-factors-permutation'],
           grade: TROISIEME,
         },
-        
+
 
       ],
       Factorisation: [
@@ -10252,7 +11216,7 @@ export default {
           options: ['penalty-for-factors-permutation'],
           grade: SECONDE,
         },
-        
+
         {
           description: 'Factoriser une expression du second degré',
           enounces: ['Factoriser :'],
@@ -10268,11 +11232,11 @@ export default {
           defaultDelay: 30,
           grade: SECONDE,
         },
-       ],
+      ],
     },
     'Equations': {
       'Dans $$\\N$$': [
-       
+
         {
           description: 'Addition $$a+x=b$$',
           enounces: ["Résouds cette équation."],
@@ -10497,7 +11461,7 @@ export default {
               '&1': '$er[2;9]',
               '&2': '$er[2;9]',
             },
-          
+
             {
               '&1': '$e[2;9]',
               '&2': '$er[2;9]',

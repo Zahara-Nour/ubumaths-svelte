@@ -7,35 +7,49 @@ import { fetchImage } from './images'
 let { fail, warn, info } = getLogger('generateQuestion', 'info')
 
 export default function generateQuestion(question, generateds = [], nbquestions = 1) {
+
+  
   // firestore returns objects with read-only properties
+
   let expression
   let expression2
   let solutions
   let variables
   let details
+  let correctionDetails
   let choices
   let i
   let enounce
-  let conditions
   let letters
   let correction
   let testAnswer
   let image
   let imageCorrection
-  let solutionss
+ 
 
   const { options = [] } = question
 
+
+  // les questions de la série déjà générées
   const generatedExpressions = generateds ? generateds.map((g) => g.expression) : []
   const generatedEnounces = generateds ? generateds.map((g) => g.enounce) : []
   const generatedChoices = generateds ? generateds.map((g) => g.choices) : []
   const generatedImages = generateds ? generateds.map((g) => g.image) : []
+
+
+  // les regex correpondant aux expressions à évaluer
+  // #{} : évaluation exacte
   const regexExact = /#\{(.*?)\}/g
+  // #s{} : évaluation exacte avec le signe rajouté devant (+  ou -)
   const regexExactSigned = /#s\{(.*?)\}/g
+  // ##{}: évaluation décimale
   const regexDecimal = /##\{(.*?)\}/g
+  // %{} : évaluation exacte mise sous format LaTeX
   const regexExactLatex = /%\{(.*?)\}/g
+  // %%{} : évaluation exacte mise sous format LaTeX
   const regexDecimalLatex = /%%\{(.*?)\}/g
 
+  // Fonction de remplacement associées
   const replacementExactSigned = (matched, p1) => {
     let e = math(p1)
     if (e.string === 'Error') {
@@ -80,12 +94,44 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       : math(p1).eval({ decimal: true }).latex
   }
 
+  function replaceVariablesAndExpressionsToBeEvaluated(o) {
+
+
+    function replace(s) {
+      let result = s
+      if (variables) {
+        Object.getOwnPropertyNames(variables).forEach((name) => {
+          const regex = new RegExp(name, 'g')
+          result = result.replace(regex, variables[name])
+        })
+      }
+  
+      // on évalue les #...{}
+      result = result.replace(regexDecimalLatex, replacementDecimalLatex)
+      result = result.replace(regexDecimal, replacementDecimal)
+      result = result.replace(regexExactSigned, replacementExactSigned)
+      result = result.replace(regexExactLatex, replacementExactLatex)
+      result = result.replace(regexExact, replacementExact)
+  
+      return result
+    }
+  
+    return Array.isArray(o)
+      ? o = o.map(s => replace(s))
+      : replace(o)
+  }
+  
+  function getSelectedElement(field) {
+    const length = question[field].length
+    return question[field][length === 1 ? 0 : i]
+  }
 
   if (!question) return emptyQuestion
 
   question.num = question.num ? question.num + 1 : 1
   let count = 0
-  let doItAgain = false
+  let repeat = false
+  // sur combien d'éléments peut-onchour une question
   const n = Math.max(question.choices && question.choices.length || 0,
     question.expressions && question.expressions.length || 0,
     question.expressions2 && question.expressions2.length || 0,
@@ -96,6 +142,9 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
   if (question.expressions && !question.limits) {
 
+    // les limites permettent que les différentes expressions possibles pour la question
+    // soient généréesà peu près dans la même proportion
+    // les limites sont mises à jours à chaque nouvelle génération, dans l'objet initial
     question.limits = { limits: [] }
     let nbuniques = 0
     for (let i = 0; i < n; i++) {
@@ -151,12 +200,12 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         question.limits.limits[i].limit = limit
       }
     }
-    console.log('limits', JSON.parse(JSON.stringify(question.limits)))
+    // console.log('limits', JSON.parse(JSON.stringify(question.limits)))
   }
 
   do {
     count++
-    doItAgain = false
+    repeat = false
 
     // first select an expression
     if (question.limits) {
@@ -169,56 +218,55 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       if (count2 >= 1000) warn('fail to chose an expression', count2)
 
       question.limits.limits[i].count += 1
-      console.log('limits', JSON.parse(JSON.stringify(question.limits)))
+      // console.log('limits', JSON.parse(JSON.stringify(question.limits)))
     } else {
       i = Math.floor(n * Math.random())
     }
     if (question.images) {
-      image = question.images[question.images.length === 1 ? 0 : i]
+      image = getSelectedElement("images")
     }
 
     if (question.expressions) {
-      expression = question.expressions[question.expressions.length === 1 ? 0 : i]
+      expression = getSelectedElement("expressions")
     }
 
     if (question.enounces) {
-      enounce = question.enounces[question.enounces.length === 1 ? 0 : i]
-    }
-    if (question.choices) {
-      choices = question.choices[question.choices.length === 1 ? 0 : i].map(choice => ({ ...choice }))
+      enounce = getSelectedElement("enounces")
     }
 
-    // console.log('question choices', JSON.stringify(question.choices))
+    if (question.choices) {
+      choices = getSelectedElement("choices").map(choice => ({ ...choice }))
+    }
 
     // generate variables which can depend on precedent ones
     if (question.variables) {
       variables = {
-        ...question.variables[question.variables.length === 1 ? 0 : i],
+        ...getSelectedElement("variables")
       }
 
+      // génération de la table des variables
       Object.getOwnPropertyNames(variables)
         .sort(lexicoSort)
         .forEach((name, i) => {
 
           let generated = variables[name]
 
-
           // replace the precedent variables by their generated value
           for (let j = 1; j < i + 1; j++) {
             const precedentName = `&${j}`
             const regex = new RegExp(precedentName, 'g')
             generated = generated.replace(regex, variables[precedentName])
-
           }
 
           generated = generated.replace(regexDecimal, replacementDecimal)
           generated = generated.replace(regexExact, replacementExact)
 
+          // on génère les valeurs aléatoires
           generated = math(generated).generate().string
           variables[name] = generated
-
         })
 
+      // on remplace dans expression, enounce et choices
       Object.getOwnPropertyNames(variables).forEach((name) => {
         const regex = new RegExp(name, 'g')
         if (expression) {
@@ -235,10 +283,9 @@ export default function generateQuestion(question, generateds = [], nbquestions 
             }
             return c
           })
-
         }
       })
-      console.log('choices', JSON.stringify(choices))
+
 
       if (expression) {
         expression = expression.replace(regexDecimal, replacementDecimal)
@@ -266,6 +313,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
           expression = math(expression).shallowShuffleFactors().string
         }
 
+        // TODO: ce ne doit plus être utile maintenant que j'ai rajouté la syntaxe {} dans tinycas
         if (options.includes('exp-remove-unecessary-brackets')) {
           expression = math(expression).removeUnecessaryBrackets().string
           console.log(expression)
@@ -295,60 +343,60 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       }
     }
     if (expression && enounce && choices) {
-      doItAgain = generateds.some(g => g.enounce === enounce
+      repeat = generateds.some(g => g.enounce === enounce
         && JSON.stringify(g.choices) === JSON.stringify(choices)
         && g.expression === expression)
-      if (doItAgain) warn('même énoncé ET choix ET image', enounce, JSON.stringify(choices), expression)
+      if (repeat) warn('même énoncé ET choix ET image', enounce, JSON.stringify(choices), expression)
 
     }
 
     else if (image && enounce && choices) {
-      doItAgain = generateds.some(g => g.enounce === enounce
+      repeat = generateds.some(g => g.enounce === enounce
         && JSON.stringify(g.choices) === JSON.stringify(choices)
         && g.image === image)
-      if (doItAgain) warn('même énoncé ET choix ET image', enounce, JSON.stringify(choices), image)
+      if (repeat) warn('même énoncé ET choix ET image', enounce, JSON.stringify(choices), image)
 
     }
 
     else if (expression && enounce) {
-      doItAgain = generateds.some(g => g.expression === expression && g.enounce === enounce)
-      if (doItAgain) warn('même énoncé ET expression: ', enounce, expression)
+      repeat = generateds.some(g => g.expression === expression && g.enounce === enounce)
+      if (repeat) warn('même énoncé ET expression: ', enounce, expression)
     }
 
     else if (enounce && choices) {
-      doItAgain = generateds.some(g => g.enounce === enounce
+      repeat = generateds.some(g => g.enounce === enounce
         && JSON.stringify(g.choices) === JSON.stringify(choices))
-      if (doItAgain) warn('même énoncé ET choix ', enounce, JSON.stringify(choices))
+      if (repeat) warn('même énoncé ET choix ', enounce, JSON.stringify(choices))
 
     }
 
     else if (enounce && image) {
-      doItAgain = generateds.some(g => g.enounce === enounce
+      repeat = generateds.some(g => g.enounce === enounce
         && g.image === image)
-      if (doItAgain) warn('même énoncé ET image', enounce, image)
+      if (repeat) warn('même énoncé ET image', enounce, image)
 
     }
 
     else if (expression && !options.includes('allow-same-expression')) {
 
-      doItAgain = generatedExpressions.includes(expression)
-      if (doItAgain) warn('même image expression', expression)
+      repeat = generatedExpressions.includes(expression)
+      if (repeat) warn('même image expression', expression)
     }
 
     else if (enounce && !options.includes('allow-same-enounce')) {
-      doItAgain = generatedEnounces.includes(enounce)
-      if (doItAgain) warn('même énoncé', enounce)
+      repeat = generatedEnounces.includes(enounce)
+      if (repeat) warn('même énoncé', enounce)
     }
 
     else if (image) {
       console.log('includes generated?', image, generatedImages, generatedImages.includes(image))
       const test = generatedImages.includes(image)
       if (test) warn('même image pour la question', image)
-      doItAgain = doItAgain || test
+      repeat = repeat || test
 
     }
 
-    if (!doItAgain && question.conditions) {
+    if (!repeat && question.conditions) {
       let tests = question.conditions[question.conditions.length === 1 ? 0 : i]
 
       Object.getOwnPropertyNames(variables).forEach((name) => {
@@ -359,22 +407,22 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
       if (tests.includes('||')) {
         tests = tests.split('||')
-        doItAgain = !tests.some(test => math(test).eval().string === 'true')
+        repeat = !tests.some(test => math(test).eval().string === 'true')
       } else {
         tests = tests.split('||')
-        doItAgain = !tests.every(test => math(test).eval().string === 'true')
+        repeat = !tests.every(test => math(test).eval().string === 'true')
       }
-      if (doItAgain) warn('tests non passé', tests)
+      if (repeat) warn('tests non passé', tests)
     }
 
-  } while (doItAgain && count < 100)
+  } while (repeat && count < 100)
 
   if (count >= 100) {
     warn("can't generate a different question from others")
   }
 
   if (question.solutions) {
-    solutions = question.solutions[question.solutions.length === 1 ? 0 : i]
+    solutions = getSelectedElement("solutions")
     solutions = solutions.map((solution) => {
       if (typeof solution === 'string') {
         let regex
@@ -410,8 +458,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     let params = { decimal: question['result-type'] === 'decimal' }
 
     if (question.letters) {
-      letters = question.letters[question.letters.length === 1 ? 0 : i]
-
+      letters = getSelectedElement('letters')
 
       Object.getOwnPropertyNames(letters).forEach((letter) => {
         if (letter.startsWith('&')) {
@@ -427,6 +474,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       params = { ...params, ...letters }
     }
 
+    // TODO : i lfaut surement purifier encore plus la solution, quoique c'est surement fait plus tard
     solutions = [math(expression).eval(params).removeMultOperator().removeFactorsOne().string]
 
   }
@@ -440,6 +488,8 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       }
       return c
     })
+
+    // mélange des choix
     if (!options.includes('no-shuffle-choices')) {
 
       const a = []
@@ -466,7 +516,20 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
 
   if (question.imagesCorrection) {
-    imageCorrection = question.imagesCorrection[question.imagesCorrection.length === 1 ? 0 : i]
+    imageCorrection = getSelectedElement('imagesCorrection')
+  }
+
+  if (question.correctionDetails) {
+    correctionDetails = getSelectedElement('correctionDetails')
+    console.log('variables', variables)
+    correctionDetails = correctionDetails.map(details => {
+      const d = {...details}
+      if (d.text) {
+        d.text= replaceVariablesAndExpressionsToBeEvaluated(d.text)
+      }
+      return d
+    })
+    console.log('correctionDetails', correctionDetails)
   }
 
   if (question.details) {
@@ -487,7 +550,6 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     })
 
     details = details.reduce((acc, d) => {
-
 
       const regex = /^(.*)\?\?/
       const found = d.match(regex)
@@ -510,20 +572,9 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
   if (question.expressions2) {
 
-    expression2 = question.expressions2[question.expressions2.length === 1 ? 0 : i]
-
-    Object.getOwnPropertyNames(variables).forEach((name) => {
-      const regex = new RegExp(name, 'g')
-
-      expression2 = expression2.replace(regex, variables[name])
-    })
-    expression2 = expression2.replace(regexDecimalLatex, replacementDecimalLatex)
-    expression2 = expression2.replace(regexDecimal, replacementDecimal)
-    expression2 = expression2.replace(regexExactSigned, replacementExactSigned)
-    expression2 = expression2.replace(regexExactLatex, replacementExactLatex)
-    expression2 = expression2.replace(regexExact, replacementExact)
+    expression2 = getSelectedElement('expressions2')
+    expression2 = replaceVariablesAndExpressionsToBeEvaluated(expression2)
   }
-
 
   // TODO : enlever doublon avec correctionFormat
   if (question.corrections) {
@@ -540,16 +591,8 @@ export default function generateQuestion(question, generateds = [], nbquestions 
   }
 
   if (question.testAnswer) {
-    testAnswer = question.testAnswer[question.testAnswer.length === 1 ? 0 : i]
-    Object.getOwnPropertyNames(variables).forEach((name) => {
-      const regex = new RegExp(name, 'g')
-
-      testAnswer = testAnswer.replace(regex, variables[name])
-    })
-    testAnswer = testAnswer.replace(regexDecimalLatex, replacementDecimalLatex)
-    testAnswer = testAnswer.replace(regexDecimal, replacementDecimal)
-    testAnswer = testAnswer.replace(regexExactLatex, replacementExactLatex)
-    testAnswer = testAnswer.replace(regexExact, replacementExact)
+    testAnswer = getSelectedElement('testAnswer')
+    testAnswer = replaceVariablesAndExpressionsToBeEvaluated(testAnswer)
   }
 
   let expression_latex
@@ -557,7 +600,6 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     expression_latex = math(expression).toLatex({
       addSpaces: !(question.options && question.options.includes('exp-no-spaces')),
       keepUnecessaryZeros: question.options && question.options.includes('exp-allow-unecessary-zeros')
-
     })
   }
   let expression2_latex
@@ -565,59 +607,17 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     expression2_latex = math(expression2).toLatex({
       addSpaces: !(question.options && question.options.includes('exp-no-spaces')),
       keepUnecessaryZeros: question.options && question.options.includes('exp-allow-unecessary-zeros')
-
     })
   }
 
   let correctionFormat
   if (question.correctionFormat) {
-    correctionFormat = question.correctionFormat[question.correctionFormat.length === 1 ? 0 : i]
-
+    correctionFormat = getSelectedElement('correctionFormat') 
     let { correct, uncorrect, answer } = correctionFormat
-
-    correct = correct.map(format => {
-      if (variables) {
-        Object.getOwnPropertyNames(variables).forEach((name) => {
-          const regex = new RegExp(name, 'g')
-          format = format.replace(regex, variables[name])
-        })
-      }
-      return format
-    })
-
-    correct = correct.map(format => format.replace(regexDecimalLatex, replacementDecimalLatex))
-    correct = correct.map(format => format.replace(regexDecimal, replacementDecimal))
-    correct = correct.map(format => format.replace(regexExactLatex, replacementExactLatex))
-    correct = correct.map(format => format.replace(regexExact, replacementExact))
-
-    uncorrect = uncorrect.map(format => {
-      if (variables) {
-        Object.getOwnPropertyNames(variables).forEach((name) => {
-          const regex = new RegExp(name, 'g')
-          format = format.replace(regex, variables[name])
-        })
-      }
-      return format
-    })
-
-    uncorrect = uncorrect.map(format => format.replace(regexDecimalLatex, replacementDecimalLatex))
-    uncorrect = uncorrect.map(format => format.replace(regexDecimal, replacementDecimal))
-    uncorrect = uncorrect.map(format => format.replace(regexExactLatex, replacementExactLatex))
-    uncorrect = uncorrect.map(format => format.replace(regexExact, replacementExact))
-
-    if (variables) {
-      Object.getOwnPropertyNames(variables).forEach((name) => {
-        const regex = new RegExp(name, 'g')
-        answer = answer.replace(regex, variables[name])
-      })
-    }
-
-    answer = answer.replace(regexDecimalLatex, replacementDecimalLatex)
-    answer = answer.replace(regexDecimal, replacementDecimal)
-    answer = answer.replace(regexExactLatex, replacementExactLatex)
-    answer = answer.replace(regexExact, replacementExact)
-
-
+    correct = replaceVariablesAndExpressionsToBeEvaluated(correct)
+    uncorrect = replaceVariablesAndExpressionsToBeEvaluated(uncorrect)
+    answer = replaceVariablesAndExpressionsToBeEvaluated(answer)
+  
     correctionFormat = { correct, uncorrect, answer }
   }
 
@@ -637,6 +637,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
   if (enounce) generated.enounce = enounce
   if (correction) generated.correction = correction
   if (correctionFormat) generated.correctionFormat = correctionFormat
+  if (correctionDetails) generated.correctionDetails = correctionDetails
   if (expression2) generated.expression2 = expression2
   if (testAnswer) generated.testAnswer = testAnswer
   if (image) {
@@ -648,6 +649,10 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     generated.imageCorrectionBase64 = fetchImage(imageCorrection)
   }
 
+  console.log('generated', generated)
 
   return generated
 }
+
+
+// o est une chaine ou un tableau

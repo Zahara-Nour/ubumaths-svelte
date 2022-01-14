@@ -211,6 +211,7 @@
       })
     }
     shuffle(generateds)
+
     // generateds = questions.reduce((acc, current) => {
     //   const question = generate(current, acc)
     //   acc.push(question)
@@ -371,7 +372,7 @@
     audio.play()
     if (timer) clearInterval(timer)
     // if (timeout) clearTimeout(timeout)
-    console.log('cards', cards)
+   
     if (cards.length <= generateds.length) {
       answers.push(answer)
       answers_latex.push(answer_latex)
@@ -392,7 +393,6 @@
       cards = [...cards.slice(1, cards.length)]
       card = cards[0]
 
-      console.log('card', card)
       // generated = generate(question, generateds)
       // if (generateds) generateds.push(generated)
       if (slider && theme && domain && subdomain && level) {

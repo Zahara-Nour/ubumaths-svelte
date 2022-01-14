@@ -10,9 +10,10 @@
     STATUS_UNOPTIMAL_FORM,
     STATUS_EMPTY,
   } from './correction'
+  import { mdiDistributeVerticalBottom } from '@mdi/js'
 
   export let item
-  export let details
+  export let displayDetails
   export let size
 
   let number,
@@ -23,6 +24,7 @@
     answer_latex,
     answer_choice,
     correctionFormat,
+    correctionDetails,
     coms,
     status,
     image,
@@ -41,7 +43,6 @@
   let solutions_latex
 
   let penalty = false
-  const details_latex = item.details // details are in latex form
 
   let correction
   let detailedCorrection
@@ -65,6 +66,7 @@
       answer_latex,
       answer_choice,
       correctionFormat,
+      correctionDetails,
       coms,
       status,
       image,
@@ -88,13 +90,14 @@
             return item.choices[solution]
           } else {
             const e = math(solution)
+            // TODO: verifier pourquoi implicit ?
             return e.type === '!! Error !!' ? solution : e.toLatex({ implicit })
           }
         })
       : null
 
-    correction = createCorrection(false)
-    detailedCorrection = item.details ? createCorrection(true) : null
+    correction = createCorrection()
+    detailedCorrection = correctionDetails ? createDetailedCorrection() : null
   }
 
   onMount(() => {
@@ -114,7 +117,36 @@
     // addPoints(score)
   })
 
-  function createCorrection(details) {
+  function createDetailedCorrection() {
+    let lines = []
+    let line
+
+    correctionDetails.forEach((detail) => {
+      if (detail.type === 'image') {
+        // le base64 de l'image a été préparé lors de la génération de la question
+        let img = detail.base64
+        line = `<img src='${img}' style="max-width:400px;max-height:40vh;" alt='toto'>`
+      } else {
+        line = detail.text
+          .replace('&exp', qexp_latex)
+          .replace('&exp2', qexp2_latex)
+          .replace(
+            '&solution',
+            () =>
+              '<span style="color:green; border:2px solid green; border-radius: 5px;  margin:2px; padding:5px;display:inline-block">' +
+              (item.type === 'choice'
+                ? convertToMarkup(item.choices[solutions[0]].text)
+                : convertToMarkup('$$' + solutions_latex[0] + '$$')) +
+              '</span>',
+          )
+      }
+      lines.push(line)
+    })
+    lines = lines.map((line) => line.replace(regex, replacement))
+    return lines
+  }
+
+  function createCorrection() {
     let line
     let lines = []
 
@@ -212,7 +244,7 @@
       switch (item.type) {
         case 'result':
         case 'rewrite': {
-          if (details) {
+          if (displayDetails) {
           } else {
             // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
 
@@ -241,7 +273,7 @@
         }
 
         case 'equation': {
-          if (details) {
+          if (displayDetails) {
           } else {
             // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
             line = `La solution de $$${qexp_latex}$$ est :`
@@ -305,7 +337,7 @@
           break
 
         case 'decomposition':
-          if (details) {
+          if (displayDetails) {
           } else {
             // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
 
@@ -329,7 +361,7 @@
             }
             lines.push(line)
           }
-          // if (details) {
+          // if (displayDetails) {
           // } else {
           //   line = '$$\\begin{align*}' + qexp_latex
           //   if (status===STATUS_EMPTY) {
@@ -360,7 +392,7 @@
           break
 
         // case 'result':
-        //   if (details) {
+        //   if (displayDetails) {
         //     line = '$$\\begin{align*}' + qexp_latex
         //     details_latex.forEach((detail, i) => {
         //       if (detail !== solutions_latex[0]) {
@@ -396,12 +428,12 @@
         // break
 
         case 'trou':
-          if (details) {
+          if (displayDetails) {
             line = '$$\\begin{align*}'
-            item.details.forEach((detail, i) => {
+            item.correctionDetails.forEach((detail, i) => {
               if (i === 0) line += detail
               if (i > 1) line += ' \\\\ '
-              if (i === item.details.length - 1) {
+              if (i === item.correctionDetails.length - 1) {
                 line +=
                   '& =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
                   solutions_latex[0] +
@@ -522,10 +554,10 @@
         {/await}
       {/if}
     {/if}
-    {#if details && item.details}
+    {#if displayDetails && item.correctionDetails}
       {#each detailedCorrection as line}
         <div class="ml-2 mr-2 mt-2 mb-2" style="font-size:{size}px;">
-          {line}
+          {@html line}
         </div>
       {/each}
     {:else}

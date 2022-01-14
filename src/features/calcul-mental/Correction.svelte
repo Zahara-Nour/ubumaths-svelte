@@ -39,8 +39,8 @@
   const { info, fail } = getLogger('Correction', 'info')
   const help = questions[0].help
   let percent
-  let details = false
-  const toggleDetails = () => (details = !details)
+  let displayDetails = false
+  const toggleDetails = () => (displayDetails = !displayDetails)
   let colorResult
   let messageResult
   let assessment
@@ -284,7 +284,7 @@
               </div> -->
                 <div class="flex-grow-1"></div>
               </div>
-              <CorrectionItem item="{item}" details="{details}" size="{size}" />
+              <CorrectionItem item="{item}" displayDetails="{displayDetails}" size="{size}" />
             </div>
           </ListItem>
         {/each}
@@ -324,7 +324,7 @@
                 </div> -->
                 <div class="flex-grow-1"></div>
               </div>
-              <CorrectionItem item="{item}" details="{details}" size="{size}" />
+              <CorrectionItem item="{item}" displayDetails="{displayDetails}" size="{size}" />
             </div>
           </ListItem>
         {/each}
@@ -351,7 +351,7 @@
 
                 <div class="flex-grow-1"></div>
               </div>
-              <CorrectionItem item="{item}" details="{details}" size="{size}" />
+              <CorrectionItem item="{item}" displayDetails="{displayDetails}" size="{size}" />
             </div>
           </ListItem>
         {/each}
