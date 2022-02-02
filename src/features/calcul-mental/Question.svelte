@@ -48,51 +48,51 @@
 </script>
 
 <div class="d-flex flex-column align-center">
-  {#if enounce}
-    <div
-      id="enounce"
-      class="mt-4 text-center"
-      style="font-size:{size}px;max-width:900px;"
-    >
-      {@html enounce}
-    </div>
-  {/if}
-  <!-- {#if question.expression2 || !(question.options && question.options.includes('no-exp'))} -->
-  {#if showExp}
-    <div
-      id="expressions"
-      class="mt-12 d-flex flex-column align-center justify-center"
-    >
-      <!-- <div id="expression" class="mt-12 d-flex align-center justify-center">
-      <math-field
-        style="font-size:{size + 8}px;display:inline-block"
-        read-only="true"
-        bind:this="{mf}"
-      >
-      </math-field>
-    </div> -->
-      <div id="expression" class="mt-4" style="font-size:{size + 8}px;">
-        {@html expression}
-      </div>
-      {#if expression2}
-        <div id="expression2" class="mt-4" style="font-size:{size + 8}px;">
-          {@html expression2}
+  {#each question.order_elements as element}
+    {#if element === 'enounce' && enounce}
+      
+        <div
+          id="enounce"
+          class="mt-4 text-center"
+          style="font-size:{size}px;max-width:900px;"
+        >
+          {@html enounce}
+        </div>
+       
+        <!-- {#if question.expression2 || !(question.options && question.options.includes('no-exp'))} -->
+    {:else if element === 'enounce-image' && question.image }
+     
+        {#await question.imageBase64P}
+         loading image
+        {:then base64}
+          <img
+            src="{base64}"
+            class="mt-3 mb-3"
+            style="max-width:500px;max-height:40vh;"
+            alt="Alright Buddy!"
+          />
+        {:catch error}
+          {error}
+        {/await}
+      
+    {:else if element==='expression' && expression}
+      {#if showExp}
+        <div
+          id="expressions"
+          class="mt-12 d-flex flex-column align-center justify-center"
+        >
+   
+          <div id="expression" class="mt-4" style="font-size:{size + 8}px;">
+            {@html expression}
+          </div>
+          {#if expression2}
+            <div id="expression2" class="mt-4" style="font-size:{size + 8}px;">
+              {@html expression2}
+            </div>
+          {/if}
         </div>
       {/if}
-    </div>
-  {/if}
-  {#if question.image}
-    {#await question.imageBase64P}
-      loading image
-    {:then base64}
-      <img
-        src="{base64}"
-        class="mt-3 mb-3"
-        style="max-width:90%;max-height:40vh;"
-        alt="Alright Buddy!"
-      />
-    {:catch error}
-      {error}
-    {/await}
-  {/if}
+    {/if}
+  {/each}
+  
 </div>

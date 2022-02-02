@@ -27,7 +27,7 @@
   export let location
 
   let audio = new Audio('sounds/ressort.mp3')
-  let { info, fail, trace } = getLogger('MentalTest', 'trace')
+  let { info, fail, trace } = getLogger('MentalTest', 'info')
   let question = {}
   let questions
   let current = -1
@@ -147,31 +147,36 @@
     $mode = classroom ? 'classroom' : 'test'
     assessmentId = queryParams.assessmentId
     questions = []
+    generateds = []
 
     // 1 seul exercice a été selectionné par l'intermédiaire du menu
     if (theme && domain && subdomain && level) {
       const question = getQuestion(theme, domain, subdomain, level)
 
       // cas où les différentes questions sont écrites en dur
-      if (question.options && question.options.includes('exhaust')) {
-        const n = Math.min(question.expressions.length, 10)
-        const indices = []
-        question.expressions.forEach((_, i) => {
-          indices.push(i)
-        })
-        shuffle(indices)
+      // if (question.options && question.options.includes('exhaust')) {
+      
+      //   const n = Math.min(question.expressions.length, 10)
+        
+      //   const indices = []
+      //   question.expressions.forEach((_, i) => {
+      //     indices.push(i)
+      //   })
+      //   shuffle(indices)
 
-        for (let i = 0; i < n; i++) {
-          const indice = indices.pop()
-          questions[i] = {
-            ...question,
-            expressions: [question.expressions[indice]],
-            solutions: question.solutions ? [question.solutions[indice]] : null,
-          }
-        }
-      }
-      // on, répète 10 fois la question de l'exercice
-      else {
+      //   for (let i = 0; i < n; i++) {
+      //     const indice = indices.pop()
+      //     generateds[i] = {
+      //       ...question,
+      //       expressions: [question.expressions[indice]],
+      //       solutions: question.solutions ? [question.solutions[indice]] : null,
+      //     }
+          
+      //   }
+        
+      // }
+      // // on, répète 10 fois la question de l'exercice
+      // else {
         const count = 10
         for (let i = 0; i < count; i++) questions.push(question)
         generateds = generateds.concat(
@@ -181,7 +186,7 @@
             return acc
           }, []),
         )
-      }
+      // }
     }
 
     // les questions ont été passée par un store
@@ -254,7 +259,7 @@
       change()
     }
 
-    info('Begining test with questions :', generateds)
+    info('Begining test with questions :', cards)
   }
 
   function onChoice(choice) {

@@ -140,32 +140,44 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     question.images && question.images.length || 0
   )
 
-  if (question.expressions && !question.limits) {
-
-    // les limites permettent que les différentes expressions possibles pour la question
-    // soient généréesà peu près dans la même proportion
+   // les limites permettent que les différentes expressions possibles pour la question
+    // soient générées à peu près dans la même proportion
     // les limites sont mises à jours à chaque nouvelle génération, dans l'objet initial
+  if (!question.limits) {
+
+   
     question.limits = { limits: [] }
     let nbuniques = 0
     for (let i = 0; i < n; i++) {
 
       question.limits.limits[i] = {}
-      const e = question.expressions[i] || ''
-      console.log('e', e)
-      if (!(e.includes('$e') || e.includes('$d') || e.includes('$l') || e.includes('&'))) {
-        console.log('unique')
+      question.limits.limits[i].count = 0
+      // dans certaines questions, il n'y a pas d'aléatoirisation
+      // on fixe la limite à 1
+
+      // const e = question.expressions[i] || ''
+      // console.log('e', e)
+      // if (!(e.includes('$e') || e.includes('$d') || e.includes('$l') || e.includes('&'))) {
+      //   console.log('unique')
+      //   nbuniques += 1
+      //   question.limits.limits[i].limit = 1
+      // }
+      if (question.options && question.options.includes('exhaust')) {
         nbuniques += 1
         question.limits.limits[i].limit = 1
       }
-      question.limits.limits[i].count = 0
+      
 
     }
     question.limits.nbuniques = nbuniques
-    const nbrandoms = question.expressions.length - nbuniques
+    // const nbrandoms = question.expressions.length - nbuniques
+    const nbrandoms = n - nbuniques
     question.limits.nbrandoms = nbrandoms
   }
 
+  
   if (question.limits) {
+  
     question.limits.nbmax = 0
     question.limits.reached = 0
 
@@ -200,8 +212,9 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         question.limits.limits[i].limit = limit
       }
     }
-    // console.log('limits', JSON.parse(JSON.stringify(question.limits)))
+    
   }
+  console.log('limits', JSON.parse(JSON.stringify(question.limits.limits)))
 
   do {
     count++
@@ -218,7 +231,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       if (count2 >= 1000) warn('fail to chose an expression', count2)
 
       question.limits.limits[i].count += 1
-      // console.log('limits', JSON.parse(JSON.stringify(question.limits)))
+      
     } else {
       i = Math.floor(n * Math.random())
     }
@@ -420,6 +433,8 @@ export default function generateQuestion(question, generateds = [], nbquestions 
   if (count >= 100) {
     warn("can't generate a different question from others")
   }
+
+  console.log('limits', JSON.parse(JSON.stringify(question.limits.limits)))
 
   if (question.solutions) {
     solutions = getSelectedElement("solutions")
@@ -649,7 +664,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     generated.imageCorrectionBase64 = fetchImage(imageCorrection)
   }
 
-  console.log('generated', generated)
+  generated.order_elements = question.order_elements || ['enounce', 'enounce-image', 'expression']
 
   return generated
 }

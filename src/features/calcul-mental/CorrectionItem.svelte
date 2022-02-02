@@ -251,19 +251,19 @@
             line = `$$\\begin{align*}  ${qexp_latex}`
             if (status === STATUS_EMPTY) {
               line +=
-                `=\\textcolor{green}{${solutions_latex[0]}}` + '\\end{align*}$$'
+                `=\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}` + '\\end{align*}$$'
             } else if (status === STATUS_INCORRECT) {
               line +=
                 `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
-                `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
+                `\\\\&= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}\\end{align*}$$`
             } else if (status === STATUS_BAD_FORM) {
               line +=
                 `&= \\textcolor{red}{${answer_latex}}` +
-                `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
+                `\\\\&= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}\\end{align*}$$`
             } else if (status === STATUS_UNOPTIMAL_FORM) {
               line +=
                 `&= \\textcolor{orange}{${answer_latex}}` +
-                `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
+                `\\\\&= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}\\end{align*}$$`
             } else {
               line += `=\\textcolor{green}{${answer_latex}}\\end{align*}$$`
             }
