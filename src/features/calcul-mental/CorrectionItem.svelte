@@ -128,8 +128,8 @@
         line = `<img src='${img}' style="max-width:400px;max-height:40vh;" alt='toto'>`
       } else {
         line = detail.text
-          .replace('&exp', qexp_latex)
-          .replace('&exp2', qexp2_latex)
+          .replace(new RegExp('&exp2', 'g'), qexp2_latex)
+          .replace(new RegExp('&exp', 'g'), qexp_latex)
           .replace(
             '&solution',
             () =>
@@ -158,8 +158,8 @@
             line = `<img src='${img}' style="max-width:400px;max-height:40vh;" alt='toto'>`
           } else {
             line = format
-              .replace('&exp', qexp_latex)
-              .replace('&exp2', qexp2_latex)
+              .replace(new RegExp('&exp2', 'g'), qexp2_latex)
+              .replace(new RegExp('&exp', 'g'), qexp_latex)
               .replace(
                 '&solution',
                 () =>
@@ -180,8 +180,8 @@
             line = `<img style="max-width:400px;max-height:40vh;" src='${img}' alt='toto'>`
           } else {
             line = format
-              .replace('&exp', qexp_latex)
-              .replace('&exp2', qexp2_latex)
+              .replace(new RegExp('&exp2', 'g'), qexp2_latex)
+              .replace(new RegExp('&exp', 'g'), qexp_latex)
               .replace(
                 '&solution',
                 () =>
@@ -206,8 +206,9 @@
             coms.unshift(
               'Ta réponse : ' +
                 correctionFormat.answer
-                  .replace('&exp', qexp_latex)
-                  .replace('&exp2', qexp2_latex)
+                  .replace(new RegExp('&exp2', 'g'), qexp2_latex)
+                  .replace(new RegExp('&exp', 'g'), qexp_latex)
+
                   .replace(
                     '&answer',
                     () =>
@@ -226,8 +227,8 @@
           coms.unshift(
             'Ta réponse : ' +
               correctionFormat.answer
-                .replace('&exp', qexp_latex)
-                .replace('&exp2', qexp2_latex)
+                .replace(new RegExp('&exp2', 'g'), qexp2_latex)
+                .replace(new RegExp('&exp', 'g'), qexp_latex)
                 .replace(
                   '&answer',
                   () =>
@@ -251,7 +252,8 @@
             line = `$$\\begin{align*}  ${qexp_latex}`
             if (status === STATUS_EMPTY) {
               line +=
-                `=\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}` + '\\end{align*}$$'
+                `=\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}` +
+                '\\end{align*}$$'
             } else if (status === STATUS_INCORRECT) {
               line +=
                 `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +

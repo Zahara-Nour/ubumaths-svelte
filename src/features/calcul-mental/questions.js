@@ -4438,7 +4438,7 @@ export default {
         {
           description: "Décomposer en unités, dixièmes, centièmes",
           subdescription: "avec fractions décimales",
-          enounces: ['Décomposer comme dans cet exemple : $$5,34=5+\\frac{3}{10}+\\frac{4}{100}$$.'],
+          enounces: ['Décomposer comme dans cet exemple : $$5,34=5+\\dfrac{3}{10}+\\dfrac{4}{100}$$.'],
           variables: [
             {
               '&1': '$e{1;1}',
@@ -4491,7 +4491,7 @@ export default {
         {
           description: "Décomposer en unités, dixièmes, centièmes, millièmes",
           subdescription: "avec des fractions décimales",
-          enounces: ['Décomposer comme dans cet exemple : $$5,346=5+\\frac{3}{10}+\\frac{4}{100}+\\frac{6}{1000}$$.'],
+          enounces: ['Décomposer comme dans cet exemple : $$5,346=5+\\dfrac{3}{10}+\\dfrac{4}{100}+\\dfrac{6}{1000}$$.'],
           variables: [
             {
               '&1': '$e{1;1}',
@@ -6974,10 +6974,10 @@ export default {
           type: 'trou',
           correctionDetails: [
             [
-              { text: "Dans $$&2 \\times \\cdots = &1$$, le nombre cherché est le résultat de $$&1 \\div &2$$ qui s'écrit $$\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{&1}{&2}}$$ car on ne peut pas le mettre sous forme décimale." },
+              { text: "Dans $$&2 \\times \\cdots = &1$$, le nombre cherché est le résultat de $$&1 \\div &2$$ qui s'écrit $$\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{&1}{&2}}$$ car on ne peut pas le mettre sous forme décimale." },
             ],
             [
-              { text: "Dans $$ \\cdots \\times &2 = &1$$, le nombre cherché est le résultat de $$&1 \\div &2$$ qui s'écrit $$\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{&1}{&2}}$$ car on ne peut pas le mettre sous forme décimale." },
+              { text: "Dans $$ \\cdots \\times &2 = &1$$, le nombre cherché est le résultat de $$&1 \\div &2$$ qui s'écrit $$\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{&1}{&2}}$$ car on ne peut pas le mettre sous forme décimale." },
             ],
           ],
           defaultDelay: 20,
@@ -6991,10 +6991,10 @@ export default {
           variables: [{ '&1': '$l{3;6;7;9;11;12;13}', '&2': '$e[2;10]\\{cd(&1)}' }],
           correctionDetails: [
             [
-              { text: "$$\\textcolor{teal}{\\frac{&2}{&1}} \\times &1=\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$ car $$\\textcolor{teal}{\\frac{&2}{&1}}$$ désigne le résultat de la division $$\\textcolor{teal}{&2 \\div &1}$$ et $$\\textcolor{teal}{&2 \\div &1} \\times &1 = &2$$. " },
+              { text: "$$\\textcolor{teal}{\\dfrac{&2}{&1}} \\times &1=\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$ car $$\\textcolor{teal}{\\dfrac{&2}{&1}}$$ désigne le résultat de la division $$\\textcolor{teal}{&2 \\div &1}$$ et $$\\textcolor{teal}{&2 \\div &1} \\times &1 = &2$$. " },
             ],
             [
-              { text: "$$&1 \\times \\textcolor{teal}{\\frac{&2}{&1}} =\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$ car $$\\textcolor{teal}{\\frac{&2}{&1}}$$ désigne le résultat de la division $$\\textcolor{teal}{&2 \\div &1}$$ et $$&1 \\times \\textcolor{teal}{&2 \\div &1} = &2$$. " },
+              { text: "$$&1 \\times \\textcolor{teal}{\\dfrac{&2}{&1}} =\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$ car $$\\textcolor{teal}{\\dfrac{&2}{&1}}$$ désigne le résultat de la division $$\\textcolor{teal}{&2 \\div &1}$$ et $$&1 \\times \\textcolor{teal}{&2 \\div &1} = &2$$. " },
             ],
           ],
           // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],       
@@ -7007,14 +7007,14 @@ export default {
         {
           description: "Décomposer une fraction",
           subdescription: "Une fraction décimale (jusqu'aux centièmes) en une somme d'un entier et d'une fraction décimale inférieure à 1",
-          enounces: ["Décomposer cette fraction en une somme d'un entier et d'une fraction décimale inférieure à 1, comme dans l'exemple : $$\\frac{345}{100} = 3 + \\frac{45}{100}$$. "],
+          enounces: ["Décomposer cette fraction en une somme d'un entier et d'une fraction décimale inférieure à 1, comme dans l'exemple : $$\\dfrac{345}{100} = 3 + \\dfrac{45}{100}$$. "],
           expressions: ['#{&1*&2+&3}/&1'],
           variables: [{ '&1': '$l{10;100}', '&2': '$e[2;9]', '&3': '$e[1;&1-1]' }],
           solutions: [['&2+&3/&1']],
           type: 'decomposition',
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{#{&1*&2+&3}}{&1} &= \\frac{#{&1*&2}}{&1} + \\frac{&3}{&1} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2 + \\frac{&3}{&1}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{#{&1*&2+&3}}{&1} &= \\dfrac{#{&1*&2}}{&1} + \\dfrac{&3}{&1} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2 + \\dfrac{&3}{&1}}} \\end{align}$$" },
             ],
 
           ],
@@ -7025,13 +7025,13 @@ export default {
         {
           description: "Décomposer une fraction",
           subdescription: "Une fraction décimale (jusqu'aux millièmes) en une somme d'un entier et d'une fraction décimale inférieure à 1",
-          enounces: ["Décomposer cette fraction en une somme d'un entier et d'une fraction décimale inférieure à 1, comme dans l'exemple : $$\\frac{3456}{1000} = 3 + \\frac{456}{1000}$$."],
+          enounces: ["Décomposer cette fraction en une somme d'un entier et d'une fraction décimale inférieure à 1, comme dans l'exemple : $$\\dfrac{3456}{1000} = 3 + \\dfrac{456}{1000}$$."],
           expressions: ['#{&1*&2+&3}/&1'],
           variables: [{ '&1': '$l{10;100;1000}', '&2': '$e[2;9]', '&3': '$e[1;&1-1]' }],
           solutions: [['&2+&3/&1']],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{#{&1*&2+&3}}{&1} &= \\frac{#{&1*&2}}{&1} + \\frac{&3}{&1} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2 + \\frac{&3}{&1}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{#{&1*&2+&3}}{&1} &= \\dfrac{#{&1*&2}}{&1} + \\dfrac{&3}{&1} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2 + \\dfrac{&3}{&1}}} \\end{align}$$" },
             ],
 
           ],
@@ -7043,14 +7043,14 @@ export default {
         {
           description: "Décomposer une fraction",
           subdescription: "Une fraction  en une somme d'un entier et d'une fraction inférieure à 1",
-          enounces: ["Décomposer cette fraction en une somme d'un entier et d'une fraction inférieure à 1, comme dans l'exemple : $$\\frac{14}{3} = 4 + \\frac{2}{3}$$"],
+          enounces: ["Décomposer cette fraction en une somme d'un entier et d'une fraction inférieure à 1, comme dans l'exemple : $$\\dfrac{14}{3} = 4 + \\dfrac{2}{3}$$"],
           expressions: ['#{&1*&2+&3}/&1'],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[1;&1-1]' }],
           // details: [['(#{&1*&3}:&3) \\times &2', '&1 \\times &2']],
           solutions: [['&2+&3/&1']],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{#{&1*&2+&3}}{&1} &= \\frac{#{&1*&2}}{&1} + \\frac{&3}{&1} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2 + \\frac{&3}{&1}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{#{&1*&2+&3}}{&1} &= \\dfrac{#{&1*&2}}{&1} + \\dfrac{&3}{&1} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2 + \\dfrac{&3}{&1}}} \\end{align}$$" },
             ],
           ],
           options: ['no-penalty-for-non-reduced-fractions'],
@@ -7180,7 +7180,7 @@ export default {
           type: 'result',
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{%{&2*&1}}{&1} &= %{&2*&1} \\div &1 \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{%{&2*&1}}{&1} &= %{&2*&1} \\div &1 \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}} \\end{align}$$" },
             ],
 
           ],
@@ -7196,7 +7196,7 @@ export default {
           variables: [{ '&1': '$l{2;4;5;10}', '&2': '$e[1;&1+1]\\{&1}' }],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{&2}{&1} &= &2 \\div &1 \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&2/&1}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&2}{&1} &= &2 \\div &1 \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&2/&1}}} \\end{align}$$" },
             ],
 
           ],
@@ -7238,16 +7238,16 @@ export default {
           solutions: [['#{&2*&3}'], ['#{&1*&3}'], ['#{&2*&3}'], ['#{&1*&3}']],
           correctionDetails: [
             [
-              { text: "$$\\frac{&2}{&1} = \\frac{\\textcolor{green}{%{&2*&3}}}{%{&1*&3}}$$ car $$&1 \\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&3}}}$$" },
+              { text: "$$\\dfrac{&2}{&1} = \\dfrac{\\textcolor{green}{%{&2*&3}}}{%{&1*&3}}$$ car $$&1 \\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&3}}}$$" },
             ],
             [
-              { text: "$$\\frac{&2}{&1} = \\frac{%{&2*&3}}{\\textcolor{green}{%{&1*&3}}}$$ car $$&2 \\textcolor{teal}{\\times &3} = %{&2*&3}$$ et $$&1 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&3}}}$$" },
+              { text: "$$\\dfrac{&2}{&1} = \\dfrac{%{&2*&3}}{\\textcolor{green}{%{&1*&3}}}$$ car $$&2 \\textcolor{teal}{\\times &3} = %{&2*&3}$$ et $$&1 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&3}}}$$" },
             ],
             [
-              { text: "$$\\frac{\\textcolor{green}{%{&2*&3}}}{%{&1*&3}} = \\frac{&2}{&1}$$ car $$&1 \\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&3}}}$$" },
+              { text: "$$\\dfrac{\\textcolor{green}{%{&2*&3}}}{%{&1*&3}} = \\dfrac{&2}{&1}$$ car $$&1 \\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&3}}}$$" },
             ],
             [
-              { text: "$$\\frac{%{&2*&3}}{\\textcolor{green}{%{&1*&3}}}  = \\frac{&2}{&1}$$ car $$&2 \\textcolor{teal}{\\times &3} = %{&2*&3}$$ et $$&1 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&3}}}$$" },
+              { text: "$$\\dfrac{%{&2*&3}}{\\textcolor{green}{%{&1*&3}}}  = \\dfrac{&2}{&1}$$ car $$&2 \\textcolor{teal}{\\times &3} = %{&2*&3}$$ et $$&1 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&3}}}$$" },
             ],
 
           ],
@@ -7257,14 +7257,14 @@ export default {
           help: `<section>
           <h3 class="orange-text">Compléter une égalité de fractions</h3>
           <div class="r-stretch d-flex flex-column justify-center">
-            $$\\frac{5}{4}=\\frac{\\ldots}{12}$$
+            $$\\dfrac{5}{4}=\\dfrac{\\ldots}{12}$$
           </div>
           <p>Pour passer de 4 à 12, je multiplie par 3</p>
         </section>
         <section>
           <h3 class="orange-text">Compléter une égalité de fractions</h3>
           <div class="r-stretch d-flex flex-column justify-center">
-            $$\\frac{5}{4}=\\frac{\\textcolor{green}{15}}{12}$$
+            $$\\dfrac{5}{4}=\\dfrac{\\textcolor{green}{15}}{12}$$
           </div>
           <p>Donc je multiplie également 5 par 4</p>
         </section>`
@@ -7290,16 +7290,16 @@ export default {
           solutions: [['&2'], ['&1'], ['&2'], ['&1']],
           correctionDetails: [
             [
-              { text: "$$\\frac{%{&2*&3}}{%{&1*&3}} = \\frac{\\textcolor{green}{&2}}{&1}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$" },
+              { text: "$$\\dfrac{%{&2*&3}}{%{&1*&3}} = \\dfrac{\\textcolor{green}{&2}}{&1}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$" },
             ],
             [
-              { text: "$$\\frac{%{&2*&3}}{%{&1*&3}} = \\frac{&2}{\\textcolor{green}{&1}}$$ car $$%{&2*&3} \\textcolor{teal}{\\div &3} = &2$$ et $$%{&1*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1}}$$" },
+              { text: "$$\\dfrac{%{&2*&3}}{%{&1*&3}} = \\dfrac{&2}{\\textcolor{green}{&1}}$$ car $$%{&2*&3} \\textcolor{teal}{\\div &3} = &2$$ et $$%{&1*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1}}$$" },
             ],
             [
-              { text: "$$\\frac{\\textcolor{green}{&2}}{&1}  = \\frac{%{&2*&3}}{%{&1*&3}}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$" },
+              { text: "$$\\dfrac{\\textcolor{green}{&2}}{&1}  = \\dfrac{%{&2*&3}}{%{&1*&3}}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$" },
             ],
             [
-              { text: "$$\\frac{&2}{\\textcolor{green}{&1}}  = \\frac{%{&2*&3}}{%{&1*&3}}$$ car $$%{&2*&3} \\textcolor{teal}{\\div &3} = &2$$ et $$%{&1*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1}}$$" },
+              { text: "$$\\dfrac{&2}{\\textcolor{green}{&1}}  = \\dfrac{%{&2*&3}}{%{&1*&3}}$$ car $$%{&2*&3} \\textcolor{teal}{\\div &3} = &2$$ et $$%{&1*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1}}$$" },
             ],
 
           ],
@@ -7329,16 +7329,16 @@ export default {
           ],
           correctionDetails: [
             [
-              { text: "$$\\frac{&1}{%{&1*&3}} = \\frac{&2}{\\textcolor{green}{%{&2*&3}}}$$ car $$&1 \\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&3}}}$$" },
+              { text: "$$\\dfrac{&1}{%{&1*&3}} = \\dfrac{&2}{\\textcolor{green}{%{&2*&3}}}$$ car $$&1 \\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&3}}}$$" },
             ],
             [
-              { text: "$$ \\frac{%{&1*&3}}{&1}  = \\frac{\\textcolor{green}{%{&2*&3}}}{&2}$$ car $$&1 \\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&3}}}$$" },
+              { text: "$$ \\dfrac{%{&1*&3}}{&1}  = \\dfrac{\\textcolor{green}{%{&2*&3}}}{&2}$$ car $$&1 \\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&3}}}$$" },
             ],
             [
-              { text: "$$\\frac{&2}{\\textcolor{green}{%{&2*&3}}}  = \\frac{&1}{%{&1*&3}}$$ car $$&1 \\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&3}}}$$" },
+              { text: "$$\\dfrac{&2}{\\textcolor{green}{%{&2*&3}}}  = \\dfrac{&1}{%{&1*&3}}$$ car $$&1 \\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&3}}}$$" },
             ],
             [
-              { text: "$$ \\frac{\\textcolor{green}{%{&2*&3}}}{&2} = \\frac{%{&1*&3}}{&1}$$ car $$&1 \\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&3}}}$$" },
+              { text: "$$ \\dfrac{\\textcolor{green}{%{&2*&3}}}{&2} = \\dfrac{%{&1*&3}}{&1}$$ car $$&1 \\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&3}}}$$" },
             ],
 
           ],
@@ -7368,16 +7368,16 @@ export default {
           ],
           correctionDetails: [
             [
-              { text: "$$\\frac{&1}{%{&1*&3}} = \\frac{\\textcolor{green}{&2}}{%{&2*&3}}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$" },
+              { text: "$$\\dfrac{&1}{%{&1*&3}} = \\dfrac{\\textcolor{green}{&2}}{%{&2*&3}}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$" },
             ],
             [
-              { text: "$$ \\frac{%{&1*&3}}{&1}  = \\frac{%{&2*&3}}{\\textcolor{green}{&2}}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$" },
+              { text: "$$ \\dfrac{%{&1*&3}}{&1}  = \\dfrac{%{&2*&3}}{\\textcolor{green}{&2}}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$" },
             ],
             [
-              { text: "$$\\frac{\\textcolor{green}{&2}}{%{&2*&3}}  = \\frac{&1}{%{&1*&3}}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$" },
+              { text: "$$\\dfrac{\\textcolor{green}{&2}}{%{&2*&3}}  = \\dfrac{&1}{%{&1*&3}}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$" },
             ],
             [
-              { text: "$$ \\frac{%{&2*&3}}{\\textcolor{green}{&2}}  = \\frac{%{&1*&3}}{&1}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$" },
+              { text: "$$ \\dfrac{%{&2*&3}}{\\textcolor{green}{&2}}  = \\dfrac{%{&1*&3}}{&1}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&2}}$$" },
             ],
 
           ],
@@ -7402,7 +7402,7 @@ export default {
           ],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{%{&1*&3}}{%{&2*&4}} &= \\frac{%{&1*&3} \\textcolor{teal}{\\div %{mini(&1;&2)}}}{%{&2*&4} \\textcolor{teal}{\\div %{mini(&1;&2)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&3/(&2*&4)}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{%{&1*&3}}{%{&2*&4}} &= \\dfrac{%{&1*&3} \\textcolor{teal}{\\div %{mini(&1;&2)}}}{%{&2*&4} \\textcolor{teal}{\\div %{mini(&1;&2)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&3/(&2*&4)}}} \\end{align}$$" },
             ],
           ],
           type: 'result',
@@ -7422,7 +7422,7 @@ export default {
           ],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{%{&1*&2}}{%{&1*&3}} &= \\frac{%{&1*&2} \\textcolor{teal}{\\div &1}}{%{&1*&3} \\textcolor{teal}{\\div &1}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2/&3}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{%{&1*&2}}{%{&1*&3}} &= \\dfrac{%{&1*&2} \\textcolor{teal}{\\div &1}}{%{&1*&3} \\textcolor{teal}{\\div &1}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2/&3}}} \\end{align}$$" },
             ],
           ],
           type: 'result',
@@ -7443,7 +7443,7 @@ export default {
           ],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{%{&1*&2}}{%{&1*&3}} &= \\frac{%{&1*&2} \\textcolor{teal}{\\div &1}}{%{&1*&3} \\textcolor{teal}{\\div &1}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2/&3}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{%{&1*&2}}{%{&1*&3}} &= \\dfrac{%{&1*&2} \\textcolor{teal}{\\div &1}}{%{&1*&3} \\textcolor{teal}{\\div &1}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2/&3}}} \\end{align}$$" },
             ],
           ],
           type: 'result',
@@ -7458,7 +7458,7 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[1;9]\\{&1}', '&3': '$e[2;9]' }],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{%{&2*&3}}{%{&1*&3}} &= \\frac{%{&2*&3} \\textcolor{teal}{\\div %{&3*pgcd(&1;&2)}}}{%{&1*&3} \\textcolor{teal}{\\div  %{&3*pgcd(&1;&2)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2/&1}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{%{&2*&3}}{%{&1*&3}} &= \\dfrac{%{&2*&3} \\textcolor{teal}{\\div %{&3*pgcd(&1;&2)}}}{%{&1*&3} \\textcolor{teal}{\\div  %{&3*pgcd(&1;&2)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2/&1}}} \\end{align}$$" },
             ],
           ],
           type: 'result',
@@ -7490,13 +7490,13 @@ export default {
           variables: [{ '&1': '$e[2;9]', '&2': '$e[1;9]\\{&1}', '&3': '$e[2;9]' }],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{-%{&2*&3}}{%{&1*&3}} &= -\\frac{%{&2*&3} \\textcolor{teal}{\\div %{&3*pgcd(&1;&2)}}}{%{&1*&3} \\textcolor{teal}{\\div  %{&3*pgcd(&1;&2)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{-%{&2/&1}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{-%{&2*&3}}{%{&1*&3}} &= -\\dfrac{%{&2*&3} \\textcolor{teal}{\\div %{&3*pgcd(&1;&2)}}}{%{&1*&3} \\textcolor{teal}{\\div  %{&3*pgcd(&1;&2)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{-%{&2/&1}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} \\frac{%{&2*&3}}{-%{&1*&3}} &= -\\frac{%{&2*&3} \\textcolor{teal}{\\div %{&3*pgcd(&1;&2)}}}{%{&1*&3} \\textcolor{teal}{\\div  %{&3*pgcd(&1;&2)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{-%{&2/&1}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{%{&2*&3}}{-%{&1*&3}} &= -\\dfrac{%{&2*&3} \\textcolor{teal}{\\div %{&3*pgcd(&1;&2)}}}{%{&1*&3} \\textcolor{teal}{\\div  %{&3*pgcd(&1;&2)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{-%{&2/&1}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} \\frac{-%{&2*&3}}{-%{&1*&3}} &= \\frac{%{&2*&3} \\textcolor{teal}{\\div %{&3*pgcd(&1;&2)}}}{%{&1*&3} \\textcolor{teal}{\\div  %{&3*pgcd(&1;&2)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2/&1}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{-%{&2*&3}}{-%{&1*&3}} &= \\dfrac{%{&2*&3} \\textcolor{teal}{\\div %{&3*pgcd(&1;&2)}}}{%{&1*&3} \\textcolor{teal}{\\div  %{&3*pgcd(&1;&2)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2/&1}}} \\end{align}$$" },
             ],
           ],
           type: 'result',
@@ -7526,17 +7526,17 @@ export default {
             },
           ],
           choices: [
-            [{ text: '$$\\frac{&2}{&1}$$' }, { text: '$$\\frac{&3}{&1}$$' }],
+            [{ text: '$$\\dfrac{&2}{&1}$$' }, { text: '$$\\dfrac{&3}{&1}$$' }],
           ],
 
           correctionFormat: [{
-            correct: ['Entre $$\\frac{&2}{&1}$$ et $$\\frac{&3}{&1}$$ la plus petite fraction est &solution'],
-            uncorrect: ['Entre $$\\frac{&2}{&1}$$ et $$\\frac{&3}{&1}$$ la plus petite fraction est &solution'],
+            correct: ['Entre $$\\dfrac{&2}{&1}$$ et $$\\dfrac{&3}{&1}$$ la plus petite fraction est &solution'],
+            uncorrect: ['Entre $$\\dfrac{&2}{&1}$$ et $$\\dfrac{&3}{&1}$$ la plus petite fraction est &solution'],
             answer: 'La plus petite fraction est &answer'
           }],
           correctionDetails: [
             [
-              { text: "&solution est plus petite que $$\\frac{%{maxi(&2;&3)}}{&1}$$ car les deux fractions ont <b>même dénominateur</b> et $$%{mini(&2;&3)}<%{maxi(&2;&3)}$$" },
+              { text: "&solution est plus petite que $$\\dfrac{%{maxi(&2;&3)}}{&1}$$ car les deux fractions ont <b>même dénominateur</b> et $$%{mini(&2;&3)}<%{maxi(&2;&3)}$$" },
             ],
           ],
           solutions: [
@@ -7567,17 +7567,17 @@ export default {
             },
           ],
           choices: [
-            [{ text: '$$\\frac{&1}{&2}$$' }, { text: '$$\\frac{&1}{&3}$$' }],
+            [{ text: '$$\\dfrac{&1}{&2}$$' }, { text: '$$\\dfrac{&1}{&3}$$' }],
           ],
 
           correctionFormat: [{
-            correct: ['Entre $$\\frac{&1}{&2}$$ et $$\\frac{&1}{&3}$$ la plus petite fraction est &solution'],
-            uncorrect: ['Entre $$\\frac{&1}{&2}$$ et $$\\frac{&1}{&3}$$ la plus petite fraction est &solution'],
+            correct: ['Entre $$\\dfrac{&1}{&2}$$ et $$\\dfrac{&1}{&3}$$ la plus petite fraction est &solution'],
+            uncorrect: ['Entre $$\\dfrac{&1}{&2}$$ et $$\\dfrac{&1}{&3}$$ la plus petite fraction est &solution'],
             answer: 'La plus petite fraction est &answer'
           }],
           correctionDetails: [
             [
-              { text: "&solution est plus petite que $$\\frac{&1}{%{mini(&2;&3)}}$$ car les deux fractions ont <b>même numérateur</b> et $$%{maxi(&2;&3)}>%{mini(&2;&3)}$$" },
+              { text: "&solution est plus petite que $$\\dfrac{&1}{%{mini(&2;&3)}}$$ car les deux fractions ont <b>même numérateur</b> et $$%{maxi(&2;&3)}>%{mini(&2;&3)}$$" },
             ],
           ],
           solutions: [
@@ -7603,12 +7603,12 @@ export default {
 
           ],
           choices: [
-            [{ text: '$$\\frac{&2}{&1}$$' }, { text: '$$\\frac{&4}{&3}$$' }],
-            [{ text: '$$\\frac{&4}{&3}$$' }, { text: '$$\\frac{&2}{&1}$$' }],
+            [{ text: '$$\\dfrac{&2}{&1}$$' }, { text: '$$\\dfrac{&4}{&3}$$' }],
+            [{ text: '$$\\dfrac{&4}{&3}$$' }, { text: '$$\\dfrac{&2}{&1}$$' }],
           ],
           correctionFormat: [{
-            correct: ['Entre $$\\frac{&2}{&1}$$ et $$\\frac{&4}{&3}$$ la plus petite fraction est &solution'],
-            uncorrect: ['Entre $$\\frac{&2}{&1}$$ et $$\\frac{&4}{&3}$$ la plus petite fraction est &solution'],
+            correct: ['Entre $$\\dfrac{&2}{&1}$$ et $$\\dfrac{&4}{&3}$$ la plus petite fraction est &solution'],
+            uncorrect: ['Entre $$\\dfrac{&2}{&1}$$ et $$\\dfrac{&4}{&3}$$ la plus petite fraction est &solution'],
             answer: 'La plus petite fraction est &answer'
           }],
           solutions: [
@@ -7647,17 +7647,17 @@ export default {
             },
           ],
           choices: [
-            [{ text: '$$\\frac{&2}{&3}$$' }, { text: '$$\\frac{#{&4}}{#{&3*&1}}$$' }],
-            [{ text: '$$\\frac{&3}{&2}$$' }, { text: '$$\\frac{#{&4}}{#{&2*&1}}$$' }],
+            [{ text: '$$\\dfrac{&2}{&3}$$' }, { text: '$$\\dfrac{#{&4}}{#{&3*&1}}$$' }],
+            [{ text: '$$\\dfrac{&3}{&2}$$' }, { text: '$$\\dfrac{#{&4}}{#{&2*&1}}$$' }],
           ],
           correctionFormat: [{
-            correct: ['Entre $$\\frac{&2}{&3}$$ et $$\\frac{#{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
-            uncorrect: ['Entre $$$\\frac{&2}{&3}$$ et $$\\frac{#{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
+            correct: ['Entre $$\\dfrac{&2}{&3}$$ et $$\\dfrac{#{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
+            uncorrect: ['Entre $$$\\dfrac{&2}{&3}$$ et $$\\dfrac{#{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
             answer: 'La plus petite fraction est &answer'
           },
           {
-            correct: ['Entre $$\\frac{&3}{&2}$$ et $$\\frac{#{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
-            uncorrect: ['Entre $$$\\frac{&3}{&2}$$ et $$\\frac{#{&4}}{#{&2*&1}}$$ la plus petite fraction est &solution'],
+            correct: ['Entre $$\\dfrac{&3}{&2}$$ et $$\\dfrac{#{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
+            uncorrect: ['Entre $$$\\dfrac{&3}{&2}$$ et $$\\dfrac{#{&4}}{#{&2*&1}}$$ la plus petite fraction est &solution'],
             answer: 'La plus petite fraction est &answer'
           }
           ],
@@ -7832,13 +7832,13 @@ export default {
           type: 'result',
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{&1}{\\textcolor{teal}{10}}+\\frac{&2}{\\textcolor{teal}{10}} &= \\frac{&1+&2}{\\textcolor{teal}{10}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&1+&2}}{10}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&1}{\\textcolor{teal}{10}}+\\dfrac{&2}{\\textcolor{teal}{10}} &= \\dfrac{&1+&2}{\\textcolor{teal}{10}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&1+&2}}{10}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} \\frac{&1}{\\textcolor{teal}{10}}+\\frac{&2}{\\textcolor{teal}{10}}+\\frac{&3}{\\textcolor{teal}{10}} &= \\frac{&1+&2+&3}{\\textcolor{teal}{10}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&1+&2+&3}}{10}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&1}{\\textcolor{teal}{10}}+\\dfrac{&2}{\\textcolor{teal}{10}}+\\dfrac{&3}{\\textcolor{teal}{10}} &= \\dfrac{&1+&2+&3}{\\textcolor{teal}{10}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&1+&2+&3}}{10}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} \\frac{&1}{\\textcolor{teal}{100}}+\\frac{&2}{\\textcolor{teal}{100}} &= \\frac{&1+&2}{\\textcolor{teal}{100}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&1+&2}}{100}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&1}{\\textcolor{teal}{100}}+\\dfrac{&2}{\\textcolor{teal}{100}} &= \\dfrac{&1+&2}{\\textcolor{teal}{100}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&1+&2}}{100}}} \\end{align}$$" },
             ],
 
           ],
@@ -7861,7 +7861,7 @@ export default {
           type: 'result',
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{&1}{\\textcolor{teal}{&3}}+\\frac{&2}{\\textcolor{teal}{&3}} &= \\frac{&1+&2}{\\textcolor{teal}{&3}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&1+&2}}{&3}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&1}{\\textcolor{teal}{&3}}+\\dfrac{&2}{\\textcolor{teal}{&3}} &= \\dfrac{&1+&2}{\\textcolor{teal}{&3}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&1+&2}}{&3}}} \\end{align}$$" },
             ],
           ],
 
@@ -7889,10 +7889,10 @@ export default {
           type: 'result',
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{&1}{\\textcolor{teal}{&3}}+\\frac{&2}{\\textcolor{teal}{&3}} &= \\frac{&1+&2}{\\textcolor{teal}{&3}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&1+&2}}{&3}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&1}{\\textcolor{teal}{&3}}+\\dfrac{&2}{\\textcolor{teal}{&3}} &= \\dfrac{&1+&2}{\\textcolor{teal}{&3}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&1+&2}}{&3}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} \\frac{&1}{\\textcolor{teal}{&3}}-\\frac{&2}{\\textcolor{teal}{&3}} &= \\frac{&1-&2}{\\textcolor{teal}{&3}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&1-&2}}{&3}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&1}{\\textcolor{teal}{&3}}-\\dfrac{&2}{\\textcolor{teal}{&3}} &= \\dfrac{&1-&2}{\\textcolor{teal}{&3}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&1-&2}}{&3}}} \\end{align}$$" },
             ],
           ],
           defaultDelay: 30,
@@ -7925,13 +7925,13 @@ export default {
           type: 'result',
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{&1}{&3} + \\frac{&2}{%{&3*&4}} &= \\frac{&1\\textcolor{orange}{\\times &4}}{&3\\textcolor{orange}{\\times &4}} + \\frac{&2}{%{&3*&4}} \\\\ &= \\frac{%{&1*&4}}{\\textcolor{teal}{%{&3*&4}}} + \\frac{&2}{\\textcolor{teal}{%{&3*&4}}} \\\\ &= \\frac{%{&1*&4}+&2}{\\textcolor{teal}{%{&3*&4}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&1*&4+&2}}{%{&3*&4}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&1}{&3} + \\dfrac{&2}{%{&3*&4}} &= \\dfrac{&1\\textcolor{orange}{\\times &4}}{&3\\textcolor{orange}{\\times &4}} + \\dfrac{&2}{%{&3*&4}} \\\\ &= \\dfrac{%{&1*&4}}{\\textcolor{teal}{%{&3*&4}}} + \\dfrac{&2}{\\textcolor{teal}{%{&3*&4}}} \\\\ &= \\dfrac{%{&1*&4}+&2}{\\textcolor{teal}{%{&3*&4}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&1*&4+&2}}{%{&3*&4}}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} \\frac{&2}{%{&3*&4}} + \\frac{&1}{&3} &= \\frac{&2}{%{&3*&4}} + \\frac{&1\\textcolor{orange}{\\times &4}}{&3\\textcolor{orange}{\\times &4}} \\\\ &= \\frac{&2}{\\textcolor{teal}{%{&3*&4}}} + \\frac{%{&1*&4}}{\\textcolor{teal}{%{&3*&4}}} \\\\ &= \\frac{&2+%{&1*&4}}{\\textcolor{teal}{%{&3*&4}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&1*&4+&2}}{%{&3*&4}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&2}{%{&3*&4}} + \\dfrac{&1}{&3} &= \\dfrac{&2}{%{&3*&4}} + \\dfrac{&1\\textcolor{orange}{\\times &4}}{&3\\textcolor{orange}{\\times &4}} \\\\ &= \\dfrac{&2}{\\textcolor{teal}{%{&3*&4}}} + \\dfrac{%{&1*&4}}{\\textcolor{teal}{%{&3*&4}}} \\\\ &= \\dfrac{&2+%{&1*&4}}{\\textcolor{teal}{%{&3*&4}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&1*&4+&2}}{%{&3*&4}}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} \\frac{&1}{&3} - \\frac{&2}{%{&3*&4}} &= \\frac{&1\\textcolor{orange}{\\times &4}}{&3\\textcolor{orange}{\\times &4}} - \\frac{&2}{%{&3*&4}} \\\\ &= \\frac{%{&1*&4}}{\\textcolor{teal}{%{&3*&4}}} - \\frac{&2}{\\textcolor{teal}{%{&3*&4}}} \\\\ &= \\frac{%{&1*&4}-&2}{\\textcolor{teal}{%{&3*&4}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&1*&4-&2}}{%{&3*&4}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&1}{&3} - \\dfrac{&2}{%{&3*&4}} &= \\dfrac{&1\\textcolor{orange}{\\times &4}}{&3\\textcolor{orange}{\\times &4}} - \\dfrac{&2}{%{&3*&4}} \\\\ &= \\dfrac{%{&1*&4}}{\\textcolor{teal}{%{&3*&4}}} - \\dfrac{&2}{\\textcolor{teal}{%{&3*&4}}} \\\\ &= \\dfrac{%{&1*&4}-&2}{\\textcolor{teal}{%{&3*&4}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&1*&4-&2}}{%{&3*&4}}}} \\end{align}$$" },
             ],
 
 
@@ -7957,10 +7957,10 @@ export default {
           type: 'result',
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{&1}{&3} + \\frac{%{&2*&4}}{%{&3*&4}} &= \\frac{&1}{&3} + \\frac{%{&2*&4}\\textcolor{orange}{\\div &4}}{%{&3*&4}\\textcolor{orange}{\\div &4}} \\\\ &= \\frac{&1}{\\textcolor{teal}{&3}} + \\frac{&2}{\\textcolor{teal}{&3}} \\\\ &= \\frac{&1+&2}{\\textcolor{teal}{&3}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&1+&2}}{&3}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&1}{&3} + \\dfrac{%{&2*&4}}{%{&3*&4}} &= \\dfrac{&1}{&3} + \\dfrac{%{&2*&4}\\textcolor{orange}{\\div &4}}{%{&3*&4}\\textcolor{orange}{\\div &4}} \\\\ &= \\dfrac{&1}{\\textcolor{teal}{&3}} + \\dfrac{&2}{\\textcolor{teal}{&3}} \\\\ &= \\dfrac{&1+&2}{\\textcolor{teal}{&3}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&1+&2}}{&3}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} \\frac{%{&2*&4}}{%{&3*&4}} + \\frac{&1}{&3} &= \\frac{%{&2*&4}\\textcolor{orange}{\\div &4}}{%{&3*&4}\\textcolor{orange}{\\div &4}} + \\frac{&1}{&3} \\\\ &= \\frac{&2}{\\textcolor{teal}{&3}} + \\frac{&1}{\\textcolor{teal}{&3}} \\\\ &= \\frac{&2+&1}{\\textcolor{teal}{&3}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&1+&2}}{&3}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{%{&2*&4}}{%{&3*&4}} + \\dfrac{&1}{&3} &= \\dfrac{%{&2*&4}\\textcolor{orange}{\\div &4}}{%{&3*&4}\\textcolor{orange}{\\div &4}} + \\dfrac{&1}{&3} \\\\ &= \\dfrac{&2}{\\textcolor{teal}{&3}} + \\dfrac{&1}{\\textcolor{teal}{&3}} \\\\ &= \\dfrac{&2+&1}{\\textcolor{teal}{&3}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&1+&2}}{&3}}} \\end{align}$$" },
             ],
 
           ],
@@ -7983,10 +7983,10 @@ export default {
 
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{&2}{&1} + &3 &= \\frac{&2}{&1} + \\frac{&3\\textcolor{orange}{\\times &1}}{\\textcolor{orange}{&1}} \\\\ &= \\frac{&2}{\\textcolor{teal}{&1}} + \\frac{%{&3*&1}}{\\textcolor{teal}{&1}} \\\\ &= \\frac{&2+%{&3*&1}}{\\textcolor{teal}{%{&1}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&3*&1+&2}}{&1}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&2}{&1} + &3 &= \\dfrac{&2}{&1} + \\dfrac{&3\\textcolor{orange}{\\times &1}}{\\textcolor{orange}{&1}} \\\\ &= \\dfrac{&2}{\\textcolor{teal}{&1}} + \\dfrac{%{&3*&1}}{\\textcolor{teal}{&1}} \\\\ &= \\dfrac{&2+%{&3*&1}}{\\textcolor{teal}{%{&1}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&3*&1+&2}}{&1}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} &3 + \\frac{&2}{&1} &= \\frac{&3\\textcolor{orange}{\\times &1}}{\\textcolor{orange}{&1}} + \\frac{&2}{&1} \\\\ &= \\frac{%{&3*&1}}{\\textcolor{teal}{&1}} + \\frac{&2}{\\textcolor{teal}{&1}} \\\\ &= \\frac{%{&3*&1}+&2}{\\textcolor{teal}{%{&1}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&3*&1+&2}}{&1}}} \\end{align}$$" },
+              { text: "$$\\begin{align} &3 + \\dfrac{&2}{&1} &= \\dfrac{&3\\textcolor{orange}{\\times &1}}{\\textcolor{orange}{&1}} + \\dfrac{&2}{&1} \\\\ &= \\dfrac{%{&3*&1}}{\\textcolor{teal}{&1}} + \\dfrac{&2}{\\textcolor{teal}{&1}} \\\\ &= \\dfrac{%{&3*&1}+&2}{\\textcolor{teal}{%{&1}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&3*&1+&2}}{&1}}} \\end{align}$$" },
             ],
           ],
           type: 'result',
@@ -8005,10 +8005,10 @@ export default {
 
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{%{&2*&4}}{\\textcolor{teal}{%{&1*&3}}} + \\frac{%{(&1-&2)*&4}}{\\textcolor{teal}{%{&1*&3}}} &= \\frac{%{&2*&4}+%{(&1-&2)*&4}}{\\textcolor{teal}{%{&1*&3}}} \\\\ &= \\frac{%{&1*&4}}{%{&1*&3}} \\\\ &=  \\frac{%{&1*&4}\\textcolor{orange}{\\div %{pgcd(&1*&3;&1*&4)}}}{%{&1*&3}\\textcolor{orange}{\\div %{pgcd(&1*&3;&1*&4)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&4/(&1*&3)}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{%{&2*&4}}{\\textcolor{teal}{%{&1*&3}}} + \\dfrac{%{(&1-&2)*&4}}{\\textcolor{teal}{%{&1*&3}}} &= \\dfrac{%{&2*&4}+%{(&1-&2)*&4}}{\\textcolor{teal}{%{&1*&3}}} \\\\ &= \\dfrac{%{&1*&4}}{%{&1*&3}} \\\\ &=  \\dfrac{%{&1*&4}\\textcolor{orange}{\\div %{pgcd(&1*&3;&1*&4)}}}{%{&1*&3}\\textcolor{orange}{\\div %{pgcd(&1*&3;&1*&4)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&4/(&1*&3)}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} \\frac{%{&1*&4}}{\\textcolor{teal}{%{&2*&3}}} - \\frac{%{(&1-&2)*&4}}{\\textcolor{teal}{%{&2*&3}}} &= \\frac{%{&1*&4}-%{(&1-&2)*&4}}{\\textcolor{teal}{%{&2*&3}}} \\\\ &= \\frac{%{&2*&4}}{%{&2*&3}} \\\\ &=  \\frac{%{&2*&4}\\textcolor{orange}{\\div %{pgcd(&2*&3;&2*&4)}}}{%{&2*&3}\\textcolor{orange}{\\div %{pgcd(&2*&3;&2*&4)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&4/(&2*&3)}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{%{&1*&4}}{\\textcolor{teal}{%{&2*&3}}} - \\dfrac{%{(&1-&2)*&4}}{\\textcolor{teal}{%{&2*&3}}} &= \\dfrac{%{&1*&4}-%{(&1-&2)*&4}}{\\textcolor{teal}{%{&2*&3}}} \\\\ &= \\dfrac{%{&2*&4}}{%{&2*&3}} \\\\ &=  \\dfrac{%{&2*&4}\\textcolor{orange}{\\div %{pgcd(&2*&3;&2*&4)}}}{%{&2*&3}\\textcolor{orange}{\\div %{pgcd(&2*&3;&2*&4)}}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&4/(&2*&3)}}} \\end{align}$$" },
             ],
           ],
           variables: [
@@ -8041,47 +8041,47 @@ export default {
 
         //   details: [
         //     [
-        //       '\\frac{-&1+(-&2)}{&3}',
-        //       '\\frac{#{-&1+(-&2)}}{&3}',
-        //       '&4>1 && &4<&3??\\frac{#{-&1+(-&2)}:#{&4}}{&3:#{&4}}',
+        //       '\\dfrac{-&1+(-&2)}{&3}',
+        //       '\\dfrac{#{-&1+(-&2)}}{&3}',
+        //       '&4>1 && &4<&3??\\dfrac{#{-&1+(-&2)}:#{&4}}{&3:#{&4}}',
         //     ],
         //     [
-        //       '\\frac{-&1+&2}{&3}',
-        //       '\\frac{#{-&1+&2}}{&3}',
-        //       '&4>1 && &4<&3??\\frac{#{-&1+&2}:#{&4}}{&3:#{&4}}',
+        //       '\\dfrac{-&1+&2}{&3}',
+        //       '\\dfrac{#{-&1+&2}}{&3}',
+        //       '&4>1 && &4<&3??\\dfrac{#{-&1+&2}:#{&4}}{&3:#{&4}}',
         //     ],
         //     [
-        //       '\\frac{&1+(-&2)}{&3}',
-        //       '\\frac{#{&1-&2}}{&3}',
-        //       '&4>1 && &4<&3??\\frac{#{&1-&2}:#{&4}}{&3:#{&4}}',
+        //       '\\dfrac{&1+(-&2)}{&3}',
+        //       '\\dfrac{#{&1-&2}}{&3}',
+        //       '&4>1 && &4<&3??\\dfrac{#{&1-&2}:#{&4}}{&3:#{&4}}',
         //     ],
         //     [
-        //       '\\frac{&1+&2}{&3}',
-        //       '\\frac{#{&1+&2}}{&3}',
-        //       '&4>1 && &4<&3??\\frac{#{&1+&2}:#{&4}}{&3:#{&4}}',
+        //       '\\dfrac{&1+&2}{&3}',
+        //       '\\dfrac{#{&1+&2}}{&3}',
+        //       '&4>1 && &4<&3??\\dfrac{#{&1+&2}:#{&4}}{&3:#{&4}}',
         //     ],
 
         //     [
-        //       '\\frac{-&1-(-&2)}{&3}',
-        //       '\\frac{-&1+&2}{&3}',
-        //       '\\frac{#{-&1+&2}}{&3}',
-        //       '&4>1 && &4<&3??\\frac{#{-&1+&2}:#{&4}}{&3:#{&4}}',
+        //       '\\dfrac{-&1-(-&2)}{&3}',
+        //       '\\dfrac{-&1+&2}{&3}',
+        //       '\\dfrac{#{-&1+&2}}{&3}',
+        //       '&4>1 && &4<&3??\\dfrac{#{-&1+&2}:#{&4}}{&3:#{&4}}',
         //     ],
         //     [
-        //       '\\frac{-&1-&2}{&3}',
-        //       '\\frac{#{-&1-&2}}{&3}',
-        //       '&4>1 && &4<&3??\\frac{#{-&1-&2}:#{&4}}{&3:#{&4}}',
+        //       '\\dfrac{-&1-&2}{&3}',
+        //       '\\dfrac{#{-&1-&2}}{&3}',
+        //       '&4>1 && &4<&3??\\dfrac{#{-&1-&2}:#{&4}}{&3:#{&4}}',
         //     ],
         //     [
-        //       '\\frac{&1-(-&2)}{&3}',
-        //       '\\frac{&1+&2}{&3}',
-        //       '\\frac{#{&1+&2}}{&3}',
-        //       '&4>1 && &4<&3??\\frac{#{&1+&2}:#{&4}}{&3:#{&4}}',
+        //       '\\dfrac{&1-(-&2)}{&3}',
+        //       '\\dfrac{&1+&2}{&3}',
+        //       '\\dfrac{#{&1+&2}}{&3}',
+        //       '&4>1 && &4<&3??\\dfrac{#{&1+&2}:#{&4}}{&3:#{&4}}',
         //     ],
         //     [
-        //       '\\frac{&1-&2}{&3}',
-        //       '\\frac{#{&1-&2}}{&3}',
-        //       '&4>1 && &4<&3??\\frac{#{&1-&2}:#{&4}}{&3:#{&4}}',
+        //       '\\dfrac{&1-&2}{&3}',
+        //       '\\dfrac{#{&1-&2}}{&3}',
+        //       '&4>1 && &4<&3??\\dfrac{#{&1-&2}:#{&4}}{&3:#{&4}}',
         //     ],
         //   ],
         //   variables: [
@@ -8145,7 +8145,7 @@ export default {
       "Fraction d'une quantité": [
         {
           description: "Calculer une fraction d'une quantité",
-          enounces: ['Calculer $$\\frac{&2}{&3}$$ de $$%{&1*&3}$$'],
+          enounces: ['Calculer $$\\dfrac{&2}{&3}$$ de $$%{&1*&3}$$'],
           expressions: ['(&2/&3)*#{&1*&3}'],
           options: ['no-exp'],
           variables: [
@@ -8153,7 +8153,7 @@ export default {
           ],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{\\textcolor{teal}{&2}}{\\textcolor{orange}{&3}} \\times %{&1*&3} &= %{&1*&3}\\textcolor{orange}{\\div &3} \\textcolor{teal}{\\times &2} \\\\ &= &1 \\textcolor{teal}{\\times &2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&2}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{\\textcolor{teal}{&2}}{\\textcolor{orange}{&3}} \\times %{&1*&3} &= %{&1*&3}\\textcolor{orange}{\\div &3} \\textcolor{teal}{\\times &2} \\\\ &= &1 \\textcolor{teal}{\\times &2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&2}}}} \\end{align}$$" },
             ],
 
           ],
@@ -8171,10 +8171,10 @@ export default {
           ],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{\\textcolor{teal}{&2}}{\\textcolor{orange}{&3}} \\times %{&1*&3} &= %{&1*&3}\\textcolor{orange}{\\div &3} \\textcolor{teal}{\\times &2} \\\\ &= &1 \\textcolor{teal}{\\times &2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&2}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{\\textcolor{teal}{&2}}{\\textcolor{orange}{&3}} \\times %{&1*&3} &= %{&1*&3}\\textcolor{orange}{\\div &3} \\textcolor{teal}{\\times &2} \\\\ &= &1 \\textcolor{teal}{\\times &2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&2}}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} %{&1*&3} \\times \\frac{\\textcolor{teal}{&2}}{\\textcolor{orange}{&3}}  &= %{&1*&3}\\textcolor{orange}{\\div &3} \\textcolor{teal}{\\times &2} \\\\ &= &1 \\textcolor{teal}{\\times &2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&2}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} %{&1*&3} \\times \\dfrac{\\textcolor{teal}{&2}}{\\textcolor{orange}{&3}}  &= %{&1*&3}\\textcolor{orange}{\\div &3} \\textcolor{teal}{\\times &2} \\\\ &= &1 \\textcolor{teal}{\\times &2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&2}}}} \\end{align}$$" },
             ],
 
           ],
@@ -8192,11 +8192,11 @@ export default {
           ],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{%{&2*&3}}{&3} \\times &1 &= %{&2*&3} \\div &3 \\times &1 \\\\ &= &2 \\times &1 \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&1}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{%{&2*&3}}{&3} \\times &1 &= %{&2*&3} \\div &3 \\times &1 \\\\ &= &2 \\times &1 \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&1}}}} \\end{align}$$" },
             ],
 
             [
-              { text: "$$\\begin{align} &1 \\times \\frac{%{&2*&3}}{&3} &= &1 \\times \\left(%{&2*&3} \\div &3 \\right) \\\\ &= &1 \\times &2 \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&1}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} &1 \\times \\dfrac{%{&2*&3}}{&3} &= &1 \\times \\left(%{&2*&3} \\div &3 \\right) \\\\ &= &1 \\times &2 \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&2*&1}}}} \\end{align}$$" },
             ],
 
           ],
@@ -8210,7 +8210,7 @@ export default {
         {
           description: 'Calculer un produit',
           subdescription: 'un entier par un quotient de numérateur 1',
-          expressions: ['&1*(1/&2)}', '(1/&2)*&1}'],
+          expressions: ['&1*{1/&2}', '{1/&2}*&1'],
           variables: [
             {
               '&1': '$e[2;9]',
@@ -8219,10 +8219,10 @@ export default {
           ],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} &1 \\times \\frac{1}{&2} &= \\frac{&1 \\times 1}{&2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1/&2}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} &1 \\times \\dfrac{1}{&2} &= \\dfrac{&1 \\times 1}{&2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1/&2}}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} \\frac{1}{&2} \\times &1 &= \\frac{1 \\times &1}{&2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1/&2}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{1}{&2} \\times &1 &= \\dfrac{1 \\times &1}{&2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1/&2}}}} \\end{align}$$" },
             ],
           ],
 
@@ -8233,7 +8233,7 @@ export default {
         {
           description: 'Calculer un produit',
           subdescription: 'un entier par un quotient',
-          expressions: ['&1*(&3/&2)}', '(&3/&2)*&1}'],
+          expressions: ['&1*{&3/&2}', '{&3/&2}*&1}'],
           variables: [
             {
               '&1': '$e[2;9]',
@@ -8243,10 +8243,10 @@ export default {
           ],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} &1 \\times \\frac{&3}{&2} &= \\frac{&1 \\times &3}{&2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&3/&2}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} &1 \\times \\dfrac{&3}{&2} &= \\dfrac{&1 \\times &3}{&2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&3/&2}}}} \\end{align}$$" },
             ],
             [
-              { text: "$$\\begin{align} \\frac{&3}{&2} \\times &1 &= \\frac{&3 \\times &1}{&2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&3/&2}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&3}{&2} \\times &1 &= \\dfrac{&3 \\times &1}{&2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&3/&2}}}} \\end{align}$$" },
             ],
           ],
 
@@ -8257,7 +8257,7 @@ export default {
         {
           description: 'Calculer un produit',
           subdescription: 'Pas de simplification',
-          expressions: ['(&1/&3)*(&2/&4)}'],
+          expressions: ['{&1/&3}*{&2/&4}'],
           variables: [
             {
               '&1': '$e[2;9]',
@@ -8268,10 +8268,10 @@ export default {
           ],
           correctionDetails: [
             [
-              { text: "$$\\begin{align} \\frac{&1}{&3} \\times \\frac{&2}{&4} &= \\frac{&1 \\times &2}{&3 \\times &4} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{%{&1* &2}}{%{&3*&4}}}} \\end{align}$$" },
+              { text: "$$\\begin{align} \\dfrac{&1}{&3} \\times \\dfrac{&2}{&4} &= \\dfrac{&1 \\times &2}{&3 \\times &4} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\dfrac{%{&1* &2}}{%{&3*&4}}}} \\end{align}$$" },
             ],
           ],
-          details: [['\\frac{&1 \\times &2}{&3 \\times &4}']],
+          details: [['\\dfrac{&1 \\times &2}{&3 \\times &4}']],
           type: 'result',
           defaultDelay: 20,
           grade: QUATRIEME,
@@ -8279,7 +8279,8 @@ export default {
         {
           description: 'Calculer un produit',
           subdescription: 'avec simplification simple',
-          expressions: ['(&1/&3)*(&2/&1)}', '(&3/&1)*(&1/&2)}'],
+          enounces:['Calcule en remarquant la simplification.'],
+          expressions: ['{&1/&3}*{&2/&1}', '{&3/&1}*{&1/&2}'],
           variables: [
             {
               '&1': '$e[2;9]',
@@ -8287,6 +8288,16 @@ export default {
               '&3': '$e[2;9]\\{&1;cd&2}',
             },
           ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} \\dfrac{&1}{&3} \\times \\dfrac{&2}{&1} &= \\dfrac{\\enclose{updiagonalstrike}[3px solid orange]{&1}}{&3} \\times \\dfrac{&2}{\\enclose{updiagonalstrike}[3px solid orange]{&1}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1/&2}}}} \\end{align}$$" },
+            ],
+            [
+              { text: "$$\\begin{align} \\dfrac{&3}{&1} \\times \\dfrac{&1}{&2} &= \\dfrac{&3}{\\enclose{updiagonalstrike}[3px solid orange]{&1}} \\times \\dfrac{\\enclose{updiagonalstrike}[3px solid orange]{&1}}{&2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1/&2}}}} \\end{align}$$" },
+            ],
+            
+          ],
+          
           type: 'result',
           defaultDelay: 20,
           grade: QUATRIEME,
@@ -8307,9 +8318,9 @@ export default {
           ],
           details: [
             [
-              '\\frac{&1 \\times &2}{&3 \\times &4}',
-              '\\frac{#{&1*&2}}{#{&3*&4}}',
-              '&5>1 && &5<&1*&2??\\frac{#{&1*&2}:#{&5}}{#{&3*&4}:#{&5}}',
+              '\\dfrac{&1 \\times &2}{&3 \\times &4}',
+              '\\dfrac{#{&1*&2}}{#{&3*&4}}',
+              '&5>1 && &5<&1*&2??\\dfrac{#{&1*&2}:#{&5}}{#{&3*&4}:#{&5}}',
             ],
           ],
           type: 'result',
@@ -8348,26 +8359,26 @@ export default {
             },
           ],
           details: [
-            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['\\dfrac{&1 \\times &2}{&3 \\times &4}'],
 
-            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
-            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
-            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
-            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\dfrac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\dfrac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\dfrac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\dfrac{&1 \\times &2}{&3 \\times &4}'],
 
-            ['\\frac{&1 \\times &2 }{&3 \\times &4}'],
+            ['\\dfrac{&1 \\times &2 }{&3 \\times &4}'],
 
-            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
-            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
-            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
-            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
-            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
-            ['\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['\\dfrac{&1 \\times &2}{&3 \\times &4}'],
+            ['\\dfrac{&1 \\times &2}{&3 \\times &4}'],
+            ['\\dfrac{&1 \\times &2}{&3 \\times &4}'],
+            ['\\dfrac{&1 \\times &2}{&3 \\times &4}'],
+            ['\\dfrac{&1 \\times &2}{&3 \\times &4}'],
+            ['\\dfrac{&1 \\times &2}{&3 \\times &4}'],
 
-            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
-            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
-            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
-            ['-\\frac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\dfrac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\dfrac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\dfrac{&1 \\times &2}{&3 \\times &4}'],
+            ['-\\dfrac{&1 \\times &2}{&3 \\times &4}'],
           ],
           type: 'result',
           defaultDelay: 20,
@@ -8378,15 +8389,20 @@ export default {
         {
           description: "Calculer l'inverse d'un nombre",
           enounces: [
-            "Calculer l'inverse de $$&1$$",
-            "Calculer l'inverse de $$\\frac{1}{&1}$$",
-            "Calculer l'inverse de $$\\frac{&1}{&2}$$",
+            "Quel est l'inverse de $$&1$$",
+            "Quel est l'inverse de $$\\dfrac{1}{&1}$$",
+            "Quel est l'inverse de $$\\dfrac{&1}{&2}$$",
           ],
           options: ['no-exp'],
           expressions: ['&1', '1/&1', '&1/&2'],
           variables: [{ '&1': '$e[2;19]', '&2': '$e[2;19]\\{cd(&1)}' }],
           solutions: [['1/&1'], ['&1'], ['&2/&1']],
-          type: 'result',
+          correctionFormat: [{
+            correct: ["L'inverse de $$&exp$$ est &solution"],
+            uncorrect: ["L'inverse de $$&exp$$ est &solution"],
+            answer: "L'inverse de $$&exp$$ est &answer"
+          }],
+          type: 'rewrite',
           defaultDelay: 20,
           grade: QUATRIEME,
         },
@@ -8396,6 +8412,7 @@ export default {
           expressions: ['&1^(-1)', '(1/&1)^(-1)', '(&1/&2)^(-1)'],
           variables: [{ '&1': '$e[2;19]', '&2': '$e[2;19]\\{cd(&1)}' }],
           solutions: [['1/&1'], ['&1'], ['&2/&1']],
+         
           type: 'result',
           defaultDelay: 20,
           grade: QUATRIEME,
@@ -8406,7 +8423,7 @@ export default {
           description: 'Calculer un quotient',
           subdescription:
             'Pas de simplification, avec le symbole de la division',
-          expressions: ['&1/&3:(&4/&2)}'],
+          expressions: ['{&1/&3}:{&4/&2}'],
           variables: [
             {
               '&1': '$e[2;9]',
@@ -8415,11 +8432,33 @@ export default {
               '&4': '$e[2;9]\\{cd(&2);cd(&1)}',
             },
           ],
-          details: [
+          correctionDetails: [
             [
-              '\\frac{&1}{&3} \\times \\frac{&2}{&4}',
-              '\\frac{&1 \\times &2}{&3 \\times &4}',
+              { text: "$$\\begin{align} \\dfrac{&1}{&3} \\textcolor{teal}{\\div \\dfrac{&4}{&2}} &= \\dfrac{&1}{&3} \\textcolor{teal}{\\times \\dfrac{&2}{&4}} \\\\ &= \\dfrac{&1 \\times &2}{&3 \\times &4}  \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&2/(&3*&4)}}}} \\end{align}$$" },
             ],
+          
+          ],
+          type: 'result',
+          defaultDelay: 20,
+          grade: QUATRIEME,
+        },
+        {
+          description: 'Calculer un quotient',
+          subdescription:
+            'Division par un entier, avec le symbole de la division',
+          expressions: ['{&1/&3}:&2'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{cd(&1)}',
+              '&3': '$e[2;9]\\{cd(&1)}',
+            },
+          ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} \\dfrac{&1}{&3} \\textcolor{teal}{\\div &2} &= \\dfrac{&1}{&3} \\textcolor{teal}{\\div \\dfrac{&2}{1}} \\\\ &= \\dfrac{&1}{&3} \\textcolor{teal}{\\times \\dfrac{1}{&2}} \\\\&= \\dfrac{&1 \\times 1}{&3 \\times &2}  \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1/(&3*&2)}}}} \\end{align}$$" },
+            ],
+          
           ],
           type: 'result',
           defaultDelay: 20,
@@ -8428,7 +8467,7 @@ export default {
         {
           description: 'Calculer un quotient',
           subdescription: 'Pas de simplification',
-          expressions: ['(&1/&3)/(&4/&2)}'],
+          expressions: ['{&1/&3}/{&4/&2}'],
           variables: [
             {
               '&1': '$e[2;9]',
@@ -8437,11 +8476,31 @@ export default {
               '&4': '$e[2;9]\\{cd(&2);cd(&1)}',
             },
           ],
-          details: [
+          correctionDetails: [
             [
-              '\\frac{&1}{&3} \\times \\frac{&2}{&4}',
-              '\\frac{&1 \\times &2}{&3 \\times &4}',
+              { text: "$$\\begin{align} \\dfrac{\\dfrac{&1}{&3}}{\\textcolor{teal}{\\dfrac{&4}{&2}}} &= \\dfrac{&1}{&3} \\textcolor{teal}{\\times \\dfrac{&2}{&4}} \\\\ &= \\dfrac{&1 \\times &2}{&3 \\times &4}  \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1*&2/(&3*&4)}}}} \\end{align}$$" },
             ],
+          ],
+          type: 'result',
+          defaultDelay: 20,
+          grade: QUATRIEME,
+        },
+        {
+          description: 'Calculer un quotient',
+          subdescription: 'Division par un entier, avec fraction',
+          expressions: ['{&1/&3}/&2'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]\\{cd(&1)}',
+              '&3': '$e[2;9]\\{cd(&1)}',
+            },
+          ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} \\dfrac{\\dfrac{&1}{&3}}{\\textcolor{teal}{&2}} &= \\dfrac{&1}{&3} \\textcolor{teal}{\\div \\dfrac{&2}{1}} \\\\ &= \\dfrac{&1}{&3} \\textcolor{teal}{\\times \\dfrac{1}{&2}} \\\\ &= \\dfrac{&1 \\times 1}{&3 \\times &2}  \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{&1/(&2*&3)}}}} \\end{align}$$" },
+            ],
+          
           ],
           type: 'result',
           defaultDelay: 20,
@@ -8546,7 +8605,11 @@ export default {
           ],
           solutions: [
             ['10^#{&2+&3}'],
-
+          ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} 10^&2 \\times 10^&3 &= 10^{&2+&3} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{10^{%{&2+&3}}}}}} \\end{align}$$" },
+            ],    
           ],
           // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
@@ -8569,7 +8632,11 @@ export default {
           ],
           solutions: [
             ['&1^(#{&2+&3})'],
-
+          ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} &1^&2 \\times &1^&3 &= &1^{&2+&3} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1^{%{&2+&3}}}}}} \\end{align}$$" },
+            ],  
           ],
           // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
@@ -8586,12 +8653,17 @@ export default {
           variables: [
             {
               '&1': '$er[2;5]',
-              '&2': '$er[2;5]\\{-(&1)}',
+              '&2': '$er[2;5]',
             }
           ],
           solutions: [
             ['10^{#{&1+(&2)}}', '10^(#{&1+(&2)})'],
-
+          ],
+          conditions:['abs(&1+(&2))>1'],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} 10^{&1} \\times 10^{&2} &= 10^{&1#s{&2}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{10^{%{&1+(&2)}}}}}} \\end{align}$$" },
+            ], 
           ],
           // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
@@ -8612,9 +8684,15 @@ export default {
               '&3': '$er[2;5]\\{-(&2)}',
             }
           ],
+          conditions:['abs(&2+(&3))>1'],
           solutions: [
             ['&1^{#{&2+(&3)}}', '&1^(#{&2+(&3)})'],
 
+          ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} &1^{&2} \\times &1^{&3} &= &1^{&2#s{&3}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1^{%{&2+(&3)}}}}}} \\end{align}$$" },
+            ], 
           ],
           type: 'result',
           // bug de mathlive sur les puissances
@@ -8640,6 +8718,11 @@ export default {
             ['10^#{&1-&2}'],
 
           ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} \\frac{10^{&1}}{10^{&2}} &= 10^{&1#s{-&2}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{10^{%{&1-(&2)}}}}}} \\end{align}$$" },
+            ], 
+          ],
           type: 'result',
           defaultDelay: 20,
           grade: QUATRIEME,
@@ -8660,6 +8743,11 @@ export default {
             ['&1^#{&2-&3}'],
 
           ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} \\frac{&1^{&2}}{&1^{&3}} &= &1^{&2#s{-&3}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1^{%{&2-(&3)}}}}}} \\end{align}$$" },
+            ], 
+          ],
           type: 'result',
           defaultDelay: 20,
           grade: TROISIEME,
@@ -8668,18 +8756,23 @@ export default {
           description: "Diviser 2 puissances de 10.",
           subdescription: "Exposants relatifs",
           enounces: ["Réécris sous la forme d'une seule puissance de 10."],
-          expressions: ['{&1^(&2)}/{&1^(&3)}'],
+          expressions: ['{10^{&1}}/{10^{&2}}'],
           variables: [
             {
-              '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}',
+              '&1': '$er[2;5]',
               '&2': '$er[2;5]',
-              '&3': '$er[2;5]',
             }
           ],
-          conditions: ['abs(&2-(&3))>1'],
+          conditions: ['abs(&1-(&2))>1'],
+          
           solutions: [
-            ['&1^(#{&2-(&3)})'],
+            ['10^(#{&1-(&2)})'],
 
+          ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} \\frac{10^{&1}}{10^{&2}} &= 10^{&1#s{-(&2)}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{10^{%{&1-(&2)}}}}}} \\end{align}$$" },
+            ], 
           ],
           type: 'result',
           defaultDelay: 20,
@@ -8689,7 +8782,7 @@ export default {
           description: "Diviser 2 puissances d'un même nombre.",
           subdescription: "Exposants relatifs",
           enounces: ["Calcule en écrivant le résultat sous la forme d'une puissance."],
-          expressions: ['{&1^(&2)}/{&1^(&3)}'],
+          expressions: ['{&1^{&2}}/{&1^{&3}}'],
           variables: [
             {
               '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}',
@@ -8700,7 +8793,11 @@ export default {
           conditions: ['abs(&2-(&3))>1'],
           solutions: [
             ['&1^(#{&2-(&3)})'],
-
+          ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} \\frac{&1^{&2}}{&1^{&3}} &= &1^{&2#s{-(&3)}} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1^{%{&2-(&3)}}}}}} \\end{align}$$" },
+            ], 
           ],
           type: 'result',
           defaultDelay: 20,
@@ -8721,7 +8818,11 @@ export default {
           ],
           solutions: [
             ['10^(#{&1*&2})'],
-
+          ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} \\left(10^&1\\right)^&2 &= 10^{&1 \\times &2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{10^{%{&1*&2}}}}}} \\end{align}$$" },
+            ],    
           ],
           // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
@@ -8744,7 +8845,11 @@ export default {
           ],
           solutions: [
             ['&1^(#{&2*&3})'],
-
+          ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} \\left(&1^&2\\right)^&3 &= &1^{&2 \\times &3} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1^{%{&2*&3}}}}}} \\end{align}$$" },
+            ],    
           ],
           // bug de mathlive sur les puissances
           // qui rajoute des parenthèses à l'exposant
@@ -8760,16 +8865,28 @@ export default {
           description: "Puissance d'une puissance de 10",
           subdescription: "Exposants relatifs",
           enounces: ["Réécris sous la forme d'une seule puissance de 10."],
-          expressions: ['(10^(&1))^(&2)'],
+          expressions: ['(10^{&1})^{&2}'],
           variables: [
             {
               '&1': '$er[2;9]',
-              '&2': '$er[2;9]',
+              '&2': '$e[2;9]',
+            },
+            {
+              '&1': '$er[2;9]',
+              '&2': '-$e[2;9]',
             }
           ],
           solutions: [
-            ['10^(#{&1*(&2)})'],
+            ['10^{#{&1*(&2)}}'],
 
+          ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} \\left(10^{&1}\\right)^{&2} &= 10^{&1 \\times &2} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{10^{%{&1*&2}}}}}} \\end{align}$$" },
+            ],
+            [
+              { text: "$$\\begin{align} \\left(10^{&1}\\right)^{&2} &= 10^{&1 \\times (&2)} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{10^{%{&1*(&2)}}}}}} \\end{align}$$" },
+            ],    
           ],
           type: 'result',
           // bug de mathlive sur les puissances
@@ -8783,17 +8900,29 @@ export default {
           description: "Puissance d'une puissance",
           subdescription: "Exposants relatifs",
           enounces: ["Calcule en écrivant le résultat sous la forme d'une puissance."],
-          expressions: ['(&1^(&2))^(&3)'],
+          expressions: ['(&1^{&2})^{&3}'],
           variables: [
             {
               '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}',
               '&2': '$er[2;9]',
-              '&3': '$er[2;9]',
+              '&3': '$e[2;9]',
+            },
+            {
+              '&1': '$l{a;b;c;x;y;2;3;4;5;6;7;8;9;10}',
+              '&2': '$er[2;9]',
+              '&3': '-$e[2;9]',
             }
           ],
           solutions: [
             ['&1^(#{&2*(&3)})'],
-
+          ],
+          correctionDetails: [
+            [
+              { text: "$$\\begin{align} \\left(&1^{&2}\\right)^{&3} &= &1^{&2 \\times &3} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1^{%{&2*&3}}}}}} \\end{align}$$" },
+            ],
+            [
+              { text: "$$\\begin{align} \\left(&1^{&2}\\right)^{&3} &= &1^{&2 \\times (&3)} \\\\ &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1^{%{&2*(&3)}}}}}} \\end{align}$$" },
+            ],
           ],
           type: 'result',
           // bug de mathlive sur les puissances
@@ -8845,6 +8974,8 @@ export default {
             'sqrt(-#{&1^2})',
             'sqrt(-##{&1^2})',
             'sqrt(-&1)',
+            'sqrt(&1)',
+            'sqrt(-&1)',
           ],
           variables: [
             { '&1': '$e[2;15]' },
@@ -8852,39 +8983,51 @@ export default {
             { '&1': '$l{2;3;5;7;10;11;13}' },
             { '&1': '$e[2;15]' },
             { '&1': '$d{1;1}' },
-            { '&1': '$l{2;3;5;7;10;11;13}' }
+            { '&1': '$l{2;3;5;7;10;11;13}' },
+            { '&1': 'pi'},
+            { '&1': 'pi' }
           ],
           choices: [
             [{ text: 'Oui' }, { text: 'Non' }],
           ],
           correctionFormat: [{
-            correct: ['<span style="color:green;"> Oui</span>, $$&exp$$ existe'],
-            uncorrect: ['<span style="color:green;"> Oui</span>, $$&exp$$ existe'],
+            correct: ['&solution, $$&exp$$ existe'],
+            uncorrect: ['&solution, $$&exp$$ existe'],
             answer: "<span style='color:red;'>Non</span>, ce nombre n'existe pas."
           },
           {
-            correct: ['<span style="color:green;"> Oui</span>, $$&exp$$ existe'],
-            uncorrect: ['<span style="color:green;"> Oui</span>, $$&exp$$ existe'],
+            correct: ['&solution, $$&exp$$ existe'],
+            uncorrect: ['&solution, $$&exp$$ existe'],
             answer: "<span style='color:red;'>Non</span>, ce nombre n'existe pas."
           },
           {
-            correct: ['<span style="color:green;"> Oui</span>, $$&exp$$ existe'],
-            uncorrect: ['<span style="color:green;"> Oui</span>, $$&exp$$ existe'],
+            correct: ['&solution, $$&exp$$ existe'],
+            uncorrect: ['&solution, $$&exp$$ existe'],
             answer: "<span style='color:red;'>Non</span>, ce nombre n'existe pas."
           },
           {
-            correct: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
-            uncorrect: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
+            correct: ["&solution, $$&exp$$ n'existe pas."],
+            uncorrect: ["&solution, $$&exp$$ n'existe pas."],
             answer: "<span style='color:red;'>Oui</span>, ce nombre existe."
           },
           {
-            correct: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
-            uncorrect: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
+            correct: ["&solution, $$&exp$$ n'existe pas."],
+            uncorrect: ["&solution, $$&exp$$ n'existe pas."],
             answer: "<span style='color:red;'>Oui</span>, ce nombre existe."
           },
           {
-            correct: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
-            uncorrect: ["<span style='color:green;'> Non</span>, $$&exp$$ n'existe pas"],
+            correct: ["&solution, $$&exp$$ n'existe pas."],
+            uncorrect: ["&solution, $$&exp$$ n'existe pas."],
+            answer: "<span style='color:red;'>Oui</span>, ce nombre existe."
+          },
+          {
+            correct: ['&solution, $$&exp$$ existe'],
+            uncorrect: ['&solution, $$&exp$$ existe'],
+            answer: "<span style='color:red;'>Non</span>, ce nombre n'existe pas."
+          },
+          {
+            correct: ["&solution, $$&exp$$ n'existe pas."],
+            uncorrect: ["&solution, $$&exp$$ n'existe pas."],
             answer: "<span style='color:red;'>Oui</span>, ce nombre existe."
           },
           ],
@@ -8900,7 +9043,7 @@ export default {
             [
               { text: '&solution, $$&exp$$ existe car $$&1$$ est positif.' },
               { text: "On ne peut pas mettre $$&exp$$ sous la forme d'un nombre décimal." },
-              { text: "On peut seulement écrire que $$\\sqrt{&1} \\times \\sqrt{&1}=&1$$, et trouver une <b>valeur approchée</b> à la calculatrice : $$\\sqrt{&1} \\simeq %%{sqrt(&1)}$$." },
+              { text: "On peut seulement écrire que $$&exp \\times &exp=%{&1}$$, et trouver une <b>valeur approchée</b> à la calculatrice : $$&exp \\simeq %%{sqrt(&1)}$$." },
 
             ],
             [
@@ -8912,7 +9055,15 @@ export default {
             [
               { text: "&solution, $$&exp$$ n'existe pas car $$-&1$$ est négatif." },
             ],
+            [
+              { text: '&solution, $$&exp$$ existe car $$\\pi$$ est positif.' },
+              { text: "On ne peut pas mettre $$&exp$$ sous la forme d'un nombre décimal." },
+              { text: "On peut seulement écrire que $$&exp \\times &exp=\\pi$$, et trouver une <b>valeur approchée</b> à la calculatrice : $$&exp \\simeq %%{sqrt(&1)}$$." },
 
+            ],
+            [
+              { text: "&solution, $$&exp$$ n'existe pas car $$-\\pi$$ est négatif." },
+            ],
           ],
           solutions: [
             [0],
@@ -8920,6 +9071,8 @@ export default {
             [0],
             [1],
             [1],
+            [1],
+            [0],
             [1],
           ],
           type: 'choice',
@@ -8935,6 +9088,13 @@ export default {
             '(sqrt(&1))^2',
             'sqrt(&1)*sqrt(&1)',
 
+          ],
+          correctionDetails: [
+            [
+              { text: '$$&exp =$$ &solution, car par définition,' },
+              { text: "$$\\sqrt{&1}$$ est le nombre positif dont le carré est $$%{(sqrt(&1))^2}$$." },
+            ],
+           
           ],
           variables: [{ '&1': '$e{2}' }],
           type: 'result',
@@ -8983,9 +9143,6 @@ export default {
               { text: '&solution' },
               { text: '$$\\begin{align} \\sqrt{&1} \\times \\sqrt{&2} &=  \\sqrt{&1 \\times &2} \\\\ &= \\sqrt{#{&1*&2}} \\\\ \\end{align}$$' },
             ],
-
-
-
           ],
           // corrections: [
           //   'Entre $$%%{&5}$$ et $$%%{&6}$$ le plus petit est ',
@@ -9032,8 +9189,8 @@ export default {
               {
                 text: '$$\\begin{align} \
               \\sqrt{#{&1*&1*&3}} + \\sqrt{#{&2*&2*&3}} &= \\sqrt{#{&1*&1}} \\times \\sqrt{&3} + \\sqrt{#{&2*&2}} \\times \\sqrt{&3} \\\\ \
-              &= &1 \\times \\sqrt{&3} + &2 \\times \\sqrt{&3} \\\\ \
-              &= &1 \\sqrt{&3} + &2 \\sqrt{&3} \\\\ \
+              &= &1 \\times \\textcolor{teal}{\\sqrt{&3}} + &2 \\times \\textcolor{teal}{\\sqrt{&3}} \\\\ \
+              &= &1 \\textcolor{teal}{\\sqrt{&3}} + &2 \\textcolor{teal}{\\sqrt{&3}} \\\\ \
               &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1+&2} \\sqrt{&3}}} \\\\ \
               \\end{align}$$' },
             ],
@@ -9047,46 +9204,48 @@ export default {
         {
           description: "Vérifier l'égalité de deux expressions comportant des racines carrées",
           enounces: ['Ces 2 expressions sont-elles égales ?'],
-          expressions: ['sqrt(#{&1*&1*&2})'],
-          expressions: ['sqrt(#{&1*&1*&2})'],
+          expressions: ['sqrt(#{&1*&1*&2})', 'sqrt(#{&1*&1*&2})'],
+          expressions2: ['&1sqrt(&2)', '&1sqrt(#{&2+(&3)})'],
 
           variables: [{
-            '&1': '2',
-            '&2': '$l{3;5}'
+            '&1': '$e[2;5]',
+            '&2': '$e[2;4]',
+            '&3': '$er[1;1]}'
+
           }],
-          // solutions: [['&1sqrt(&2)']],
-          type: 'result',
+          choices: [
+            [
+              { text: 'Oui' },
+              { text: 'Non' },
+            ],
+
+          ],
+          conditions:['true', '&2+(&3) !=1'],
+          solutions:[[0],[1]],
+          type: 'choice',
+          options:['no-shuffle-choices'],
+          correctionFormat: [
+            {
+              correct: ["&solution, $$&exp=&exp2$$"],
+              uncorrect: ["&solution, $$&exp=&exp2$$"],
+              answer: " C'est une fonction affine ? &answer"
+            },
+            {
+              correct: ["&solution, $$&exp \\neq &exp2$$"],
+              uncorrect: ["&solution, $$&exp\\neq &exp2$$"],
+              answer: " C'est une fonction affine ? &answer"
+            },
+          ],
           correctionDetails: [
             [
               { text: '$$\\begin{align} \\sqrt{#{&1*&1*&2}} &= \\sqrt{#{&1*&1} \\times &2} \\\\ &= \\sqrt{#{&1*&1}} \\times \\sqrt{&2} \\\\  &= &1 \\times \\sqrt{&2} \\\\  &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{&1 \\sqrt{&2}}} \\\\ \\end{align}$$' },
             ],
           ],
-          options: ['penalty-for-factors-permutation'],
+       
           defaultDelay: 20,
           grade: SECONDE,
         },
-        {
-          description: 'Réduire une expression avec des racines carré',
-          enounces: ['Réduis sous la forme $$a\\sqrt{b}$$, avec $$b$$ le plus petit possible.'],
-          expressions: ['sqrt(#{&1*&1*&3})+sqrt(#{&2*&2*&3})'],
-          variables: [{ '&1': '$l{2;3;5;10}', '&2': '$l{2;3;5;10}\\{&1}', '&3': '$l{2;3;5}' }],
-          solutions: [['#{&1+&2}sqrt(&3)']],
-          type: 'result',
-          correctionDetails: [
-            [
-              {
-                text: '$$\\begin{align} \
-              \\sqrt{#{&1*&1*&3}} + \\sqrt{#{&2*&2*&3}} &= \\sqrt{#{&1*&1}} \\times \\sqrt{&3} + \\sqrt{#{&2*&2}} \\times \\sqrt{&3} \\\\ \
-              &= &1 \\times \\sqrt{&3} + &2 \\times \\sqrt{&3} \\\\ \
-              &= &1 \\sqrt{&3} + &2 \\sqrt{&3} \\\\ \
-              &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1+&2} \\sqrt{&3}}} \\\\ \
-              \\end{align}$$' },
-            ],
-          ],
-          options: ['penalty-for-factors-permutation'],
-          defaultDelay: 40,
-          grade: SECONDE,
-        }
+        
       ],
       Calculer: [
         {
@@ -9369,6 +9528,7 @@ export default {
           ],
 
           type: 'choice',
+          
           choices: [
             [
               { text: 'Oui' },
