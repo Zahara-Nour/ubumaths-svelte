@@ -422,7 +422,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         tests = tests.split('||')
         repeat = !tests.some(test => math(test).eval().string === 'true')
       } else {
-        tests = tests.split('||')
+        tests = tests.split('&&')
         repeat = !tests.every(test => math(test).eval().string === 'true')
       }
       if (repeat) warn('tests non passé', tests)
