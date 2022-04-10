@@ -41,7 +41,7 @@
 <Card class="mt-2" style="{classroom ? 'height:60vh;' : ''}">
   {#if !classroom}
     <div class="d-flex align-center justify-start">
-      <CardTitle>{@html description}</CardTitle>
+      <CardTitle>{question.id} {@html description}</CardTitle>
       <span class="pa-1 ma-1 info-color rounded-lg">{question.grade}</span>
     </div>
     {#if subdescription}

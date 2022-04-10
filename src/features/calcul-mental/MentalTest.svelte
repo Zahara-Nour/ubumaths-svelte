@@ -5,7 +5,7 @@
   import { Button, Icon, Slider } from 'svelte-materialify/src'
   import { onDestroy, onMount } from 'svelte'
   import Correction from './Correction.svelte'
-  import qs from './questions'
+  import datas from './questions.js'
   import queryString from 'query-string'
   import virtualKeyboard from './virtualKeyboard'
   import { calculMentalAssessment } from './stores'
@@ -25,7 +25,8 @@
   import { fly } from 'svelte/transition'
 
   export let location
-
+  const qs = datas.questions
+  const ids = datas.ids
   let audio = new Audio('sounds/ressort.mp3')
   let { info, fail, trace } = getLogger('MentalTest', 'info')
   let question = {}
@@ -149,15 +150,36 @@
     questions = []
     generateds = []
 
+    if (queryParams.course) {
+      const course = JSON.parse(queryParams.course)
+      console.log(course)
+
+      course.forEach((id) => {
+        const { theme, domain, subdomain, level } = ids[id]
+        const question = getQuestion(theme, domain, subdomain, level)
+        questions.push({
+          ...question,
+          delay: 10,
+        })
+      })
+
+      generateds = generateds.concat(
+        questions.reduce((acc, current) => {
+          const q = generate(current, acc)
+          acc.push(q)
+          return acc
+        }, []),
+      )
+    }
     // 1 seul exercice a été selectionné par l'intermédiaire du menu
-    if (theme && domain && subdomain && level) {
+    else if (theme && domain && subdomain && level) {
       const question = getQuestion(theme, domain, subdomain, level)
 
       // cas où les différentes questions sont écrites en dur
       // if (question.options && question.options.includes('exhaust')) {
-      
+
       //   const n = Math.min(question.expressions.length, 10)
-        
+
       //   const indices = []
       //   question.expressions.forEach((_, i) => {
       //     indices.push(i)
@@ -171,21 +193,21 @@
       //       expressions: [question.expressions[indice]],
       //       solutions: question.solutions ? [question.solutions[indice]] : null,
       //     }
-          
+
       //   }
-        
+
       // }
       // // on, répète 10 fois la question de l'exercice
       // else {
-        const count = 10
-        for (let i = 0; i < count; i++) questions.push(question)
-        generateds = generateds.concat(
-          questions.reduce((acc, current) => {
-            const q = generate(current, acc, count)
-            acc.push(q)
-            return acc
-          }, []),
-        )
+      const count = 10
+      for (let i = 0; i < count; i++) questions.push(question)
+      generateds = generateds.concat(
+        questions.reduce((acc, current) => {
+          const q = generate(current, acc, count)
+          acc.push(q)
+          return acc
+        }, []),
+      )
       // }
     }
 
@@ -258,6 +280,7 @@
     } else {
       change()
     }
+    console.log('cards', cards)
 
     info('Begining test with questions :', cards)
   }
@@ -377,7 +400,7 @@
     audio.play()
     if (timer) clearInterval(timer)
     // if (timeout) clearTimeout(timeout)
-   
+
     if (cards.length <= generateds.length) {
       answers.push(answer)
       answers_latex.push(answer_latex)
@@ -516,7 +539,7 @@
     {#if cards}
       <div id="cards-container">
         <div id="cards">
-          {#each cards as card (card.num)}
+          {#each cards as card (card.id+card.num)}
             <div
               class="card"
               animate:flip="{{ duration: 700 }}"

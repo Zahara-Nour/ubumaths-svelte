@@ -12,7 +12,7 @@
   } from 'svelte-materialify/src'
 
   import { navigate } from 'svelte-routing'
-  import questions from './questions'
+  import datas from './questions.js'
   import generateQuestion from './generateQuestion'
   import { mode, menuFontSize, user } from '../../app/stores'
   import { calculMentalAssessment } from './stores'
@@ -25,7 +25,7 @@
   import { CINQUIEME, gradeMatchesClass, grades } from '../../app/grade'
 
   export let location
-
+ const questions = datas.questions
   const { info, trace, fail } = getLogger('Mental', 'info')
   let themes = []
   let queryParams={}

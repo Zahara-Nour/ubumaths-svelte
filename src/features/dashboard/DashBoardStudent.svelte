@@ -3,7 +3,7 @@
   import { user, testFontSize } from '../../app/stores'
   import StudentAssessment from './StudentAssessment.svelte'
   import { Select, ProgressLinear } from 'svelte-materialify/src'
-  import questions from '../calcul-mental/questions'
+  import questions from '../calcul-mental/questions.js'
 
   let assessment
   let value

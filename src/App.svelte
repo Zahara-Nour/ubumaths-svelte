@@ -18,7 +18,7 @@
   import { getLogger } from './app/utils'
   import { supabase } from './app/db'
   import { gradeMatchesClass, testGrades } from './app/grade'
-  import questions from './features/calcul-mental/questions'
+  import questions from './features/calcul-mental/questions.js'
 
   testGrades()
 

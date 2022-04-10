@@ -85,9 +85,9 @@ const UNKNOWN = 'a determiner'
 // allow-same-expression = false
 // allow-same-enounce = false
 
-const code = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-const questions = {
+
+export default {
   Entiers: {
     Apprivoiser: {
       Ecriture: [
@@ -1171,6 +1171,7 @@ const questions = {
           defaultDelay: 20,
           grade: CE2,
         },
+       
         {
           description: 'Trouver le complément',
           subdescription: 'Au millier supérieure',
@@ -1184,29 +1185,12 @@ const questions = {
         },
         {
           description: 'Trouver le complément',
-          subdescription: 'Complément à 10 000 - a trou',
+          subdescription: 'Complément à 10 000',
           enounces: ["Complète."],
           expressions: ['?+#{10000-(&3)}=10000', '#{10000-(&3)}+?=10000'],
           solutions: [['#{&3}']],
-          variables: [{ '&1': '$e[1;9]', '&2': '$e[1;9]', '&3': '&1*1000+&2*100' }],
+          variables: [{ '&1': '$e[1;9]', '&2':'$e[1;9]',  '&3': '&1*1000+&2*100' }],
           type: 'trou',
-          defaultDelay: 20,
-          grade: CM1,
-        },
-        {
-          description: 'Trouver le complément',
-          subdescription: 'Complément à 10 000 - description',
-          enounces: ["Combien faut-il ajouter à $$%{10000-(&3)}$$ pour obtenir $$10\\,000$$ ?"],
-          expressions: ['?+#{10000-(&3)}=10000', '#{10000-(&3)}+?=10000'],
-          solutions: [['#{&3}']],
-          variables: [{ '&1': '$e[1;9]', '&2': '$e[1;9]', '&3': '&1*1000+&2*100' }],
-          options:['no-exp'],
-          correctionFormat:[{
-            correct:["Il faut ajouter &answer à $$%{10000-(&3)}$$ pour obtenir $$10\\,000$$."],
-            uncorrect:["Il faut ajouter &solution à $$%{10000-(&3)}$$ pour obtenir $$10\\,000$$."],
-            answer:'Il faut ajouter &answer',
-          }],
-          type: 'rewrite',
           defaultDelay: 20,
           grade: CM1,
         },
@@ -5166,7 +5150,7 @@ const questions = {
             },
 
           ],
-          solutions: [['&1'], ['&2'], ['&3'], ['&4'], ['&5'], ['&6'], ['&7'],],
+          solutions: [['&1'], ['&2'], ['&3'], ['&4'],['&5'],['&6'],['&7'],],
           correctionFormat: [
             {
               correct: ['Dans $$%%{&8}$$ le chiffre des millièmes est &solution.'],
@@ -5426,17 +5410,17 @@ const questions = {
       'Comparer': [
         {
           description: "Trouver le plus entier supérieur",
-          enounces: ["Quel est le plus entier supérieur à $$%%{&3}$$ ?"],
+          enounces:["Quel est le plus entier supérieur à $$%%{&3}$$ ?"],
           variables: [
-
+  
             {
-              '&1': '$e[1;9]',
-              '&2': '$e[1;9]',
+              '&1': '$e[1;9]', 
+              '&2': '$e[1;9]', 
               '&3': '&1+&2*0,1',
             },
           ],
-          solutions: [['#{&1+1}']],
-
+          solutions:[['#{&1+1}']],
+       
           correctionFormat: [{
             correct: ['Le plus entier supérieur à $$%%{&3}$$ est &answer'],
             uncorrect: ['Le plus entier supérieur à $$%%{&3}$$ est &solution'],
@@ -5747,30 +5731,27 @@ const questions = {
           }],
           correctionDetails: [
             [
-              {
-                text: '$$\\begin{align} \
+              { text: '$$\\begin{align} \
               \\bold{\\textcolor{teal}{%%{&3}}} + \\bold{\\textcolor{teal}{%%{&4}}} + \\bold{\\textcolor{orange}{%%{&5}}} + \\bold{\\textcolor{orange}{%%{&6}}} \
               &=  \\bold{\\textcolor{teal}{%%{&3+&4}}} + \\bold{\\textcolor{orange}{%%{&5+&6}}} \\\\ \
               &=  \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&5+&6+&3+&4}}} \
               \\end{align}$$' },
             ],
             [
-              {
-                text: '$$\\begin{align} \
+              { text: '$$\\begin{align} \
               \\bold{\\textcolor{teal}{%%{&3}}} + \\bold{\\textcolor{orange}{%%{&5}}} + \\bold{\\textcolor{teal}{%%{&4}}} + \\bold{\\textcolor{orange}{%%{&6}}} \
               &=  \\bold{\\textcolor{teal}{%%{&3+&4}}} + \\bold{\\textcolor{orange}{%%{&5+&6}}} \\\\ \
               &=  \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&5+&6+&3+&4}}} \
               \\end{align}$$' },
             ],
             [
-              {
-                text: '$$\\begin{align} \
+              { text: '$$\\begin{align} \
               \\bold{\\textcolor{teal}{%%{&3}}} + \\bold{\\textcolor{orange}{%%{&5}}} + \\bold{\\textcolor{orange}{%%{&6}}} + \\bold{\\textcolor{teal}{%%{&4}}} \
               &=  \\bold{\\textcolor{teal}{%%{&3+&4}}} + \\bold{\\textcolor{orange}{%%{&5+&6}}} \\\\ \
               &=  \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&5+&6+&3+&4}}} \
               \\end{align}$$' },
             ]
-
+   
 
           ],
           type: 'result',
@@ -5835,14 +5816,14 @@ const questions = {
         {
           description: 'Calculer une différence ',
           subdescription:
-            'Partie entière à 2 chiffres et partie entière à 1 (retenue sur la partie entière)',
+            'Partie entière à 2 chiffres et partie entière à 1 (possible retenue sur la partie entière)',
           enounces: ['Calcule.'],
           variables: [
             {
-              '&1': '$e[1;8]',
-              '&2': '$e[2;9]',
+              '&1': '$e[1;9]',
+              '&2': '$e[2;5]',
               '&3': '1&1.&2',
-              '&4': '$e[&1+1;9]',
+              '&4': '$e[1;9]',
               '&5': '$e[1;&2-1]',
               '&7': '&4.&5',
             },
@@ -8808,9 +8789,9 @@ const questions = {
             { '&1': '$e[2;9]', '&2': '$e[2;9]', '&3': '$e[2;9]\\{cd(&2)}' },
           ],
           correctionFormat: [{
-            correct: ['$$\\dfrac{&2}{&3}$$ de $$%{&1*&3}$$ est égal à &answer'],
-            uncorrect: ['$$\\dfrac{&2}{&3}$$ de $$%{&1*&3}$$ est égal à &solution'],
-            answer: '$$\\dfrac{&2}{&3}$$ de $$%{&1*&3}$$ est égal à &answer',
+            correct:['$$\\dfrac{&2}{&3}$$ de $$%{&1*&3}$$ est égal à &answer'],
+            uncorrect:['$$\\dfrac{&2}{&3}$$ de $$%{&1*&3}$$ est égal à &solution'],
+            answer:'$$\\dfrac{&2}{&3}$$ de $$%{&1*&3}$$ est égal à &answer',
 
           }],
           correctionDetails: [
@@ -10261,7 +10242,7 @@ const questions = {
             "Quelle est la longueur du côté d'un <b>carré</b> d'aire $$%%{&1*&1}\\, dam^2$$ ?",
             "Quelle est la longueur du côté d'un <b>carré</b> d'aire $$%%{&1*&1}\\, hm^2$$ ?",
             "Quelle est la longueur du côté d'un <b>carré</b> d'aire $$%%{&1*&1}\\, km^2$$ ?",
-
+            
           ],
           variables: [
             {
@@ -10314,8 +10295,8 @@ const questions = {
               uncorrect: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,km^2$$ est &solution."],
               answer: "La longueur du côté est &answer."
             },
-
-
+           
+          
           ],
           correctionDetails: [
             [
@@ -10339,7 +10320,7 @@ const questions = {
             [
               { text: "La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,km^2$$ est &solution car $$&1\\,km \\times &1\\,km = #{&1*&1}\\,km^2$$." }
             ],
-
+           
           ],
           type: 'result',
           defaultDelay: 15,
@@ -10347,7 +10328,7 @@ const questions = {
         },
 
       ],
-
+      
       "Aire d'un rectangle": [
         {
           description: "Calcul de l'aire d'un rectangle.",
@@ -10438,7 +10419,7 @@ const questions = {
             [
               { text: "L'aire d'un rectangle de longueur $$&1\\,km$$ et de largeur $$&2\\,km$$  est $$&1\\,km \\times &2\\,km = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,km^2}$$." }
             ],
-
+           
           ],
           type: 'result',
           defaultDelay: 15,
@@ -10509,7 +10490,7 @@ const questions = {
               uncorrect: ["La largeur d'un rectangle de longueur $$&1\\,km$$ et d'aire $$%{&2*&1}\\,km^2$$ est &solution."],
               answer: "La largeur du rectangle est &answer."
             },
-
+            
 
           ],
           correctionDetails: [
@@ -10534,8 +10515,8 @@ const questions = {
             [
               { text: "La largeur d'un rectangle de longueur $$&1\\,km$$ et d'aire $$%{&2*&1}\\,km^2$$  est &solution car   $$&1\\,km \\times &2\\,km = #{&1*&2}\\,km^2$$." }
             ],
-
-
+          
+           
           ],
           type: 'result',
           defaultDelay: 20,
@@ -10632,7 +10613,7 @@ const questions = {
             [
               { text: "L'aire d'un triangle rectangle de longueur $$&1\\,km$$ et de largeur $$&2\\,km$$  est $$\\frac{&1\\,km \\times &2\\,km}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,km^2}$$." }
             ],
-
+           
           ],
           type: 'result',
           defaultDelay: 20,
@@ -10729,7 +10710,7 @@ const questions = {
             [
               { text: "L'aire d'un triangle de base $$&1\\,km$$ et de hauteur $$&2\\,km$$  est $$\\frac{&1\\,km \\times &2\\,km}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,km^2}$$." }
             ],
-
+           
           ],
           type: 'result',
           defaultDelay: 20,
@@ -10827,7 +10808,7 @@ const questions = {
             [
               { text: "L'aire d'un parallélogramme de base $$&1\\,km$$ et de hauteur $$&2\\,km$$  est $$&1\\,km \\times &2\\,km = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,km^2}$$." }
             ],
-
+           
           ],
           type: 'result',
           defaultDelay: 15,
@@ -16545,39 +16526,3 @@ const questions = {
     }
   },
 }
-
-const generateds = {}
-const ids = {}
-const themes = Object.getOwnPropertyNames(questions)
-
-themes.forEach((theme, t_id) => {
-  generateds[theme] = {}
-  
-
-  let domains = Object.getOwnPropertyNames(questions[theme])
-  domains.forEach((domain, d_id) => {
-    generateds[theme][domain] = {}
-    let subdomains = Object.getOwnPropertyNames(questions[theme][domain])
-    subdomains.forEach((subdomain, s_id) => {
-      generateds[theme][domain][subdomain] = []
-      let qs = questions[theme][domain][subdomain]
-      qs.forEach((q, q_id) => {
-        const id = code[t_id] + code[d_id] + code[s_id] + code[q_id+1]
-        const newq = { ...q, id }
-        console.log(theme, domain, subdomain,q_id+1, id)
-        generateds[theme][domain][subdomain].push(newq)
-        ids[id]={theme, domain, subdomain, level:q_id+1}
-      })
-    })
-  })
-})
-
-
-// let data = JSON.stringify(generateds, null, 2);
-// fs.writeFileSync('questionsWithIds.json', data);
-
-console.log('generateds', generateds)
-console.log('ids', ids)
-
-
-export default {questions:generateds, ids}

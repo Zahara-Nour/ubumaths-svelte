@@ -1,7 +1,7 @@
 import { math } from 'tinycas/build/math/math'
 import emptyQuestion from './emptyQuestion'
 import { getLogger, lexicoSort, shuffle } from '../../app/utils'
-import questions from './questions'
+import questions from './questions.js'
 import { fetchImage } from './images'
 
 let { fail, warn, info } = getLogger('generateQuestion', 'info')
@@ -194,7 +194,6 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     question.limits.nbrandoms = nbrandoms
   }
 
-
   if (question.limits) {
 
     // nombre de sous-expressions qui ont atteint leur maximum
@@ -217,8 +216,6 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     // on met à jour les limites des expressions aléatoires
     for (let i = 0; i < n; i++) {
 
-      // console.log('limit', question.limits.limits[i].limit)
-      // console.log('count', question.limits.limits[i].count)
       let limit = question.limits.limits[i].limit
       // si l'initialisation n'a pas été encore faite
       if (!limit) {
@@ -251,11 +248,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
     // first select an expression
     if (question.limits) {
-      console.log('availables', availables)
       i = availables[Math.floor(availables.length * Math.random())]
-      console.log('i', i)
-      
-
     } else {
       i = Math.floor(n * Math.random())
     }
@@ -310,7 +303,6 @@ export default function generateQuestion(question, generateds = [], nbquestions 
           expression = expression.replace(regex, variables[name])
         }
         if (enounce) {
-          console.log(name, variables[name])
           enounce = enounce.replace(regex, variables[name])
         }
         if (choices) {
@@ -331,7 +323,6 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         expression = expression.replace(regexExact, replacementExact)
         if (options.includes('remove-null-terms')) {
           expression = math(expression).removeNullTerms().string
-          console.log(expression)
         }
 
         if (options.includes('shuffle-terms-and-factors')) {
@@ -339,7 +330,6 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         }
         else if (options.includes('shuffle-terms')) {
           expression = math(expression).shuffleTerms().string
-          console.log(expression)
         }
         else if (options.includes('shuffle-factors')) {
           expression = math(expression).shuffleFactors().string
@@ -354,7 +344,6 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         // TODO: ce ne doit plus être utile maintenant que j'ai rajouté la syntaxe {} dans tinycas
         if (options.includes('exp-remove-unecessary-brackets')) {
           expression = math(expression).removeUnecessaryBrackets().string
-          console.log(expression)
         }
 
       }
