@@ -8,7 +8,7 @@ let { fail, warn, info } = getLogger('generateQuestion', 'info')
 
 export default function generateQuestion(question, generateds = [], nbquestions = 1) {
 
-  
+
   // firestore returns objects with read-only properties
 
   let expression
@@ -25,7 +25,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
   let testAnswer
   let image
   let imageCorrection
- 
+
 
   const { options = [] } = question
 
@@ -48,6 +48,8 @@ export default function generateQuestion(question, generateds = [], nbquestions 
   const regexExactLatex = /%\{(.*?)\}/g
   // %%{} : évaluation exacte mise sous format LaTeX
   const regexDecimalLatex = /%%\{(.*?)\}/g
+  // #s{} : évaluation exacte avec le signe rajouté devant (+  ou -), mise sous LaTeX
+  const regexExactSignedLatex = /%s\{(.*?)\}/g
 
   // Fonction de remplacement associées
   const replacementExactSigned = (matched, p1) => {
@@ -63,6 +65,21 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       e = e.positive()
     }
     return e.toString({ implicit: true })
+  }
+
+  const replacementExactSignedLatex = (matched, p1) => {
+    let e = math(p1)
+    if (e.string === 'Error') {
+      console.log('matched', matched)
+      console.log('p1', p1)
+      console.log('****ERROR ', e)
+      return 'Error2'
+    }
+    e = e.eval()
+    if (!e.isOpposite()) {
+      e = e.positive()
+    }
+    return e.toLatex({ implicit: true })
   }
 
   const replacementExact = (matched, p1) => {
@@ -105,22 +122,23 @@ export default function generateQuestion(question, generateds = [], nbquestions 
           result = result.replace(regex, variables[name])
         })
       }
-  
+
       // on évalue les #...{}
       result = result.replace(regexDecimalLatex, replacementDecimalLatex)
       result = result.replace(regexDecimal, replacementDecimal)
       result = result.replace(regexExactSigned, replacementExactSigned)
       result = result.replace(regexExactLatex, replacementExactLatex)
       result = result.replace(regexExact, replacementExact)
-  
+      result = result.replace(regexExactSignedLatex, replacementExactSignedLatex)
+
       return result
     }
-  
+
     return Array.isArray(o)
       ? o = o.map(s => replace(s))
       : replace(o)
   }
-  
+
   function getSelectedElement(field) {
     const length = question[field].length
     return question[field][length === 1 ? 0 : i]
@@ -131,6 +149,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
   question.num = question.num ? question.num + 1 : 1
   let count = 0
   let repeat = false
+  let availables = []
   // sur combien d'éléments peut-onchour une question
   const n = Math.max(question.choices && question.choices.length || 0,
     question.expressions && question.expressions.length || 0,
@@ -140,12 +159,12 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     question.images && question.images.length || 0
   )
 
-   // les limites permettent que les différentes expressions possibles pour la question
-    // soient générées à peu près dans la même proportion
-    // les limites sont mises à jours à chaque nouvelle génération, dans l'objet initial
+  // les limites permettent que les différentes expressions possibles pour la question
+  // soient générées à peu près dans la même proportion
+  // les limites sont mises à jours à chaque nouvelle génération, dans l'objet initial
   if (!question.limits) {
 
-   
+
     question.limits = { limits: [] }
     let nbuniques = 0
     for (let i = 0; i < n; i++) {
@@ -166,7 +185,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         nbuniques += 1
         question.limits.limits[i].limit = 1
       }
-      
+
 
     }
     question.limits.nbuniques = nbuniques
@@ -175,11 +194,14 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     question.limits.nbrandoms = nbrandoms
   }
 
-  
+
   if (question.limits) {
-  
+
+    // nombre de sous-expressions qui ont atteint leur maximum
     question.limits.nbmax = 0
+    // total atteint par ces questions
     question.limits.reached = 0
+
 
     // recherche des expressions qui ont déjà été utilisées
     // un nombre maximum de fois (à part celles qui sont uniques)
@@ -194,25 +216,32 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     }
     // on met à jour les limites des expressions aléatoires
     for (let i = 0; i < n; i++) {
-      // si l'initialisation n'a pas été encore faire
-      if (!question.limits.limits[i].limit) {
 
-        question.limits.limits[i].limit = Math
-          .ceil((1 / question.limits.nbrandoms) * nbquestions)
+      // console.log('limit', question.limits.limits[i].limit)
+      // console.log('count', question.limits.limits[i].count)
+      let limit = question.limits.limits[i].limit
+      // si l'initialisation n'a pas été encore faite
+      if (!limit) {
+        limit = Math.ceil((1 / question.limits.nbrandoms) * nbquestions)
       }
       // sinon on doit mettre à jour en prenant en compte les expressions qui 
       // ont pu atteindre leur maximum
-      else if (question.limits.limits[i].limit !== 1
-        && question.limits.limits[i].limit !== question.limits.limits[i].count) {
+      else if (limit !== 1
+        && limit !== question.limits.limits[i].count) {
 
-        const limit = Math
+        limit = Math
           .ceil(1 / (question.limits.nbrandoms - question.limits.nbmax)
             * (nbquestions - question.limits.nbuniques - question.limits.reached)
           )
-        question.limits.limits[i].limit = limit
+
       }
+      question.limits.limits[i].limit = limit
+      if (question.limits.limits[i].count !== limit) {
+        availables.push(i)
+      }
+
     }
-    
+
   }
   console.log('limits', JSON.parse(JSON.stringify(question.limits.limits)))
 
@@ -222,16 +251,11 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
     // first select an expression
     if (question.limits) {
-      let count2 = 0
-      do {
-        i = Math.floor(n * Math.random())
-        count2 += 1
-      } while (question.limits.limits[i].count >= question.limits.limits[i].limit
-        && count2 < 1000)
-      if (count2 >= 1000) warn('fail to chose an expression', count2)
-
-      question.limits.limits[i].count += 1
+      console.log('availables', availables)
+      i = availables[Math.floor(availables.length * Math.random())]
+      console.log('i', i)
       
+
     } else {
       i = Math.floor(n * Math.random())
     }
@@ -286,6 +310,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
           expression = expression.replace(regex, variables[name])
         }
         if (enounce) {
+          console.log(name, variables[name])
           enounce = enounce.replace(regex, variables[name])
         }
         if (choices) {
@@ -434,7 +459,11 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     warn("can't generate a different question from others")
   }
 
-  console.log('limits', JSON.parse(JSON.stringify(question.limits.limits)))
+  if (question.limits) {
+    question.limits.limits[i].count += 1
+  }
+
+  // console.log('limits', JSON.parse(JSON.stringify(question.limits.limits)))
 
   if (question.solutions) {
     solutions = getSelectedElement("solutions")
@@ -536,15 +565,44 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
   if (question.correctionDetails) {
     correctionDetails = getSelectedElement('correctionDetails')
-    console.log('variables', variables)
+
     correctionDetails = correctionDetails.map(details => {
-      const d = {...details}
+      const d = { ...details }
       if (d.text) {
-        d.text= replaceVariablesAndExpressionsToBeEvaluated(d.text)
+        d.text = replaceVariablesAndExpressionsToBeEvaluated(d.text)
       }
       return d
     })
-    console.log('correctionDetails', correctionDetails)
+    // console.log('correctionDetails', correctionDetails)
+
+    correctionDetails = correctionDetails.reduce((acc, d) => {
+
+      const regex = /\@\@(.*?)\?\?(.*?)\@\@/g
+
+      function replacement(matched, p1, p2) {
+        const tests = p1.split('&&')
+        let text
+        if (tests.every((t) => math(t).eval().string === 'true')) {
+          text = p2
+        }
+        else {
+          text = ''
+        }
+        console.log('text', text)
+        return text
+      }
+
+      if (d.text) {
+        acc.push({text:d.text.replace(regex, replacement)})
+      }
+      else {
+        acc.push(d)
+      }
+      
+      return acc
+    }, [])
+
+    console.log('details', correctionDetails)
   }
 
   if (question.details) {
@@ -627,12 +685,12 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
   let correctionFormat
   if (question.correctionFormat) {
-    correctionFormat = getSelectedElement('correctionFormat') 
+    correctionFormat = getSelectedElement('correctionFormat')
     let { correct, uncorrect, answer } = correctionFormat
     correct = replaceVariablesAndExpressionsToBeEvaluated(correct)
     uncorrect = replaceVariablesAndExpressionsToBeEvaluated(uncorrect)
     answer = replaceVariablesAndExpressionsToBeEvaluated(answer)
-  
+
     correctionFormat = { correct, uncorrect, answer }
   }
 

@@ -180,9 +180,11 @@ function checkAnswer(item) {
 
         const e2 = e.sortTermsAndFactors()
         const sols2 = sols.map((solution) => solution.sortTermsAndFactors())
+        console.log('sols2', sols2)
         console.log('e2', e2.string)
         console.log('sols2', sols2.map(s => s.string))
-        if (!sols2.some((sol) => sol.strictlyEquals(e2))) {
+        if (!e2.unit && !sols2.some((sol) => sol.strictlyEquals(e2))) {
+            console.log('*** BAD FORM ****')
             item.status = STATUS_BAD_FORM
         }
 
@@ -344,6 +346,9 @@ function checkSpaces(item) {
     const regex = /\d+[\d\s]*(\.[\d\s]*\d+)?/g
     const matches = a.match(regex)
 
+    
+    console.log('matches', matches)
+
     if (matches) {
         const regexsInt = [
             /\d{4}/,
@@ -364,11 +369,13 @@ function checkSpaces(item) {
         ]
         return !matches.some((match) => {
             let [int, dec] = match.split('.')
-
-            return (
-                regexsInt.some((regex) => int.match(regex)) ||
-                (dec && regexsDec.some((regex) => dec.match(regex)))
-            )
+            // Dans le cas des entiers, il peut y a voir un espace à la fin,
+            // il faut l'enlever
+            int = int.trim()
+            
+            const result  = regexsInt.some((regex) => int.match(regex) ||
+            (dec && regexsDec.some((regex) => dec.match(regex))))
+            return result
         })
     }
 
@@ -480,6 +487,9 @@ export function assessItem(item, classroom) {
                         item.solutions.some((solution) =>
                             math(item.answer).equals(math(solution)),
                         )
+                    console.log(item.answer, 'is equivalent to ', math(item.solutions[0]).string, equivalent)
+                    // console.log(math(item.solutions[0]).shallow())
+                    // console.log(math(item.solutions[0]))
                     if (!equivalent) {
                         item.status = STATUS_INCORRECT
                     } else {

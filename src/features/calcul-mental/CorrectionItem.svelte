@@ -169,6 +169,15 @@
                     : convertToMarkup('$$' + answer_latex + '$$')) +
                   '</span>',
               )
+              .replace(
+                '&answer',
+                () =>
+                  '<span style="color:green; border:2px solid green; border-radius: 5px;  margin:2px; padding:5px;display:inline-block">' +
+                  (item.type === 'choice'
+                    ? convertToMarkup(item.choices[answer_choice].text)
+                    : convertToMarkup('$$' + answer_latex + '$$')) +
+                  '</span>',
+              )
           }
 
           lines.push(line)
@@ -189,6 +198,15 @@
                   (item.type === 'choice'
                     ? convertToMarkup(item.choices[solutions[0]].text)
                     : convertToMarkup('$$' + solutions_latex[0] + '$$')) +
+                  '</span>',
+              )
+              .replace(
+                '&answer',
+                () =>
+                  '<span style="color:green; border:2px solid green; border-radius: 5px;  margin:2px; padding:5px;display:inline-block">' +
+                  (item.type === 'choice'
+                    ? convertToMarkup(item.choices[answer_choice].text)
+                    : convertToMarkup('$$' + answer_latex + '$$')) +
                   '</span>',
               )
           }
