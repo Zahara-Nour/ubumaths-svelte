@@ -9,6 +9,7 @@
   let mf
   let image
   let enounce
+  let enounce2
   const regex = /\$\$(.*?)\$\$/g
   const replacement = (matched, p1) => Mathlive.convertLatexToMarkup(p1)
 
@@ -23,6 +24,10 @@
 
   $: enounce = question.enounce
     ? question.enounce.replace(regex, replacement)
+    : null
+  
+  $: enounce2 = question.enounce2
+    ? question.enounce2.replace(regex, replacement)
     : null
 
   $: expression = question.expression_latex
@@ -57,6 +62,16 @@
           style="font-size:{size}px;max-width:900px;"
         >
           {@html enounce}
+        </div>
+
+    {:else if element === 'enounce2' && enounce2}
+      
+        <div
+          id="enounce2"
+          class="mt-4 text-center"
+          style="font-size:{size}px;max-width:900px;"
+        >
+          {@html enounce2}
         </div>
        
         <!-- {#if question.expression2 || !(question.options && question.options.includes('no-exp'))} -->

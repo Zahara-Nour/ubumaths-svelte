@@ -20,6 +20,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
   let choices
   let i
   let enounce
+  let enounce2
   let letters
   let correction
   let testAnswer
@@ -33,6 +34,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
   // les questions de la série déjà générées
   const generatedExpressions = generateds ? generateds.map((g) => g.expression) : []
   const generatedEnounces = generateds ? generateds.map((g) => g.enounce) : []
+  const generatedEnounces2 = generateds ? generateds.map((g) => g.enounce2) : []
   const generatedChoices = generateds ? generateds.map((g) => g.choices) : []
   const generatedImages = generateds ? generateds.map((g) => g.image) : []
 
@@ -155,6 +157,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     question.expressions && question.expressions.length || 0,
     question.expressions2 && question.expressions2.length || 0,
     question.enounces && question.enounces.length || 0,
+    question.enounces2 && question.enounces2.length || 0,
     question.variables && question.variables.length || 0,
     question.images && question.images.length || 0
   )
@@ -264,6 +267,10 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       enounce = getSelectedElement("enounces")
     }
 
+    if (question.enounces2) {
+      enounce2 = getSelectedElement("enounces2")
+    }
+
     if (question.choices) {
       choices = getSelectedElement("choices").map(choice => ({ ...choice }))
     }
@@ -304,6 +311,9 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         }
         if (enounce) {
           enounce = enounce.replace(regex, variables[name])
+        }
+        if (enounce2) {
+          enounce2 = enounce2.replace(regex, variables[name])
         }
         if (choices) {
 
@@ -356,6 +366,14 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         enounce = enounce.replace(regexExactLatex, replacementExactLatex)
       }
 
+      if (enounce2) {
+        enounce2 = enounce2.replace(regexDecimal, replacementDecimal)
+        enounce2 = enounce2.replace(regexExactSigned, replacementExactSigned)
+        enounce2 = enounce2.replace(regexExact, replacementExact)
+        enounce2 = enounce2.replace(regexDecimalLatex, replacementDecimalLatex)
+        enounce2 = enounce2.replace(regexExactLatex, replacementExactLatex)
+      }
+
       if (choices) {
         choices = choices.map(c => {
           if (c.text) {
@@ -369,7 +387,43 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         })
       }
     }
-    if (expression && enounce && choices) {
+
+    if (expression && enounce && enounce2 && choices) {
+      repeat = generateds.some(g => g.enounce === enounce && g.enounce2 === enounce2
+        && JSON.stringify(g.choices) === JSON.stringify(choices)
+        && g.expression === expression)
+      if (repeat) warn('même énoncé ET même énoncé2 ET choix ET image', enounce, enounce2, JSON.stringify(choices), expression)
+
+    }
+
+    else if (image && enounce && enounce2 && choices) {
+      repeat = generateds.some(g => g.enounce === enounce && g.enounce2 === enounce2
+        && JSON.stringify(g.choices) === JSON.stringify(choices)
+        && g.image === image)
+      if (repeat) warn('même énoncé ET même enoncé2 ET choix ET image', enounce, enounce2, JSON.stringify(choices), image)
+
+    }
+
+    else if (expression && enounce && enounce2) {
+      repeat = generateds.some(g => g.expression === expression && g.enounce === enounce && g.enounce2 === enounce2)
+      if (repeat) warn('même énoncé ET même énoncé2 ET expression: ', enounce, enounce2, expression)
+    }
+
+    else if (enounce && enounce2 && choices) {
+      repeat = generateds.some(g => g.enounce === enounce && g.enounce2 === enounce2
+        && JSON.stringify(g.choices) === JSON.stringify(choices))
+      if (repeat) warn('même énoncé ET même enoncé2 ET choix ', enounce, enounce2, JSON.stringify(choices))
+
+    }
+
+    else if (enounce && enounce2 && image) {
+      repeat = generateds.some(g => g.enounce === enounce && g.enounce2 === enounce2
+        && g.image === image)
+      if (repeat) warn('même énoncé ET même énoncé2 ET image', enounce, enounce, image)
+
+    }
+
+    else if (expression && enounce && choices) {
       repeat = generateds.some(g => g.enounce === enounce
         && JSON.stringify(g.choices) === JSON.stringify(choices)
         && g.expression === expression)
@@ -410,6 +464,11 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       if (repeat) warn('même image expression', expression)
     }
 
+    else if (enounce && enounce2 && !options.includes('allow-same-enounce')) {
+      repeat = generatedEnounces.includes(enounce) && generatedEnounces2.includes(enounce2)
+      if (repeat) warn('même énoncé ET même énoncé2', enounce, enounce2)
+    }
+
     else if (enounce && !options.includes('allow-same-enounce')) {
       repeat = generatedEnounces.includes(enounce)
       if (repeat) warn('même énoncé', enounce)
@@ -441,7 +500,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       }
       if (repeat) warn('tests non passé', tests)
     }
-
+  
   } while (repeat && count < 100)
 
   if (count >= 100) {
@@ -591,7 +650,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       return acc
     }, [])
 
-    console.log('details', correctionDetails)
+    
   }
 
   if (question.details) {
@@ -697,6 +756,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
   if (details) generated.details = details
   if (enounce) generated.enounce = enounce
+  if (enounce2) generated.enounce2 = enounce2
   if (correction) generated.correction = correction
   if (correctionFormat) generated.correctionFormat = correctionFormat
   if (correctionDetails) generated.correctionDetails = correctionDetails
@@ -711,7 +771,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     generated.imageCorrectionBase64 = fetchImage(imageCorrection)
   }
 
-  generated.order_elements = question.order_elements || ['enounce', 'enounce-image', 'expression']
+  generated.order_elements = question.order_elements || ['enounce', 'enounce2', 'enounce-image', 'expression']
 
   return generated
 }

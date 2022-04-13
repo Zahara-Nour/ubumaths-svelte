@@ -173,18 +173,14 @@ function checkAnswer(item) {
             .removeMultOperator()
         )
 
-        console.log('e', e.string)
-        console.log('sols', sols.map(s => s.string))
         // }
         // il reste a tester la permutation des termes et facteurs qui est autorisée par défaut
 
         const e2 = e.sortTermsAndFactors()
         const sols2 = sols.map((solution) => solution.sortTermsAndFactors())
-        console.log('sols2', sols2)
-        console.log('e2', e2.string)
-        console.log('sols2', sols2.map(s => s.string))
+      
         if (!e2.unit && !sols2.some((sol) => sol.strictlyEquals(e2))) {
-            console.log('*** BAD FORM ****')
+            
             item.status = STATUS_BAD_FORM
         }
 
@@ -288,7 +284,7 @@ function checkBrackets(item) {
     switch (item.type) {
         case 'trou':
             e = math(item.qexp.replace('?', item.answer))
-            console.log('e check', e.string)
+          
             break
         default:
             e = math(item.answer)
@@ -322,7 +318,7 @@ function checkSigns(item) {
         .removeMultOperator()
         .string
     // il faut enlever les * inutiles
-    console.log("signs", e1, e2)
+   
     return e1 === e2
 
 }
@@ -347,7 +343,7 @@ function checkSpaces(item) {
     const matches = a.match(regex)
 
     
-    console.log('matches', matches)
+    
 
     if (matches) {
         const regexsInt = [
@@ -487,7 +483,7 @@ export function assessItem(item, classroom) {
                         item.solutions.some((solution) =>
                             math(item.answer).equals(math(solution)),
                         )
-                    console.log(item.answer, 'is equivalent to ', math(item.solutions[0]).string, equivalent)
+                   
                     // console.log(math(item.solutions[0]).shallow())
                     // console.log(math(item.solutions[0]))
                     if (!equivalent) {

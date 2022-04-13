@@ -1200,11 +1200,11 @@ const questions = {
           expressions: ['?+#{10000-(&3)}=10000', '#{10000-(&3)}+?=10000'],
           solutions: [['#{&3}']],
           variables: [{ '&1': '$e[1;9]', '&2': '$e[1;9]', '&3': '&1*1000+&2*100' }],
-          options:['no-exp'],
-          correctionFormat:[{
-            correct:["Il faut ajouter &answer à $$%{10000-(&3)}$$ pour obtenir $$10\\,000$$."],
-            uncorrect:["Il faut ajouter &solution à $$%{10000-(&3)}$$ pour obtenir $$10\\,000$$."],
-            answer:'Il faut ajouter &answer',
+          options: ['no-exp'],
+          correctionFormat: [{
+            correct: ["Il faut ajouter &answer à $$%{10000-(&3)}$$ pour obtenir $$10\\,000$$."],
+            uncorrect: ["Il faut ajouter &solution à $$%{10000-(&3)}$$ pour obtenir $$10\\,000$$."],
+            answer: 'Il faut ajouter &answer',
           }],
           type: 'rewrite',
           defaultDelay: 20,
@@ -5425,8 +5425,8 @@ const questions = {
       ],
       'Comparer': [
         {
-          description: "Trouver le plus entier supérieur",
-          enounces: ["Quel est le plus entier supérieur à $$%%{&3}$$ ?"],
+          description: "Trouver le plus petit entier supérieur",
+          enounces: ["Quel est le plus petit entier supérieur à $$%%{&3}$$ ?"],
           variables: [
 
             {
@@ -5438,8 +5438,8 @@ const questions = {
           solutions: [['#{&1+1}']],
 
           correctionFormat: [{
-            correct: ['Le plus entier supérieur à $$%%{&3}$$ est &answer'],
-            uncorrect: ['Le plus entier supérieur à $$%%{&3}$$ est &solution'],
+            correct: ['Le plus petit entier supérieur à $$%%{&3}$$ est &answer'],
+            uncorrect: ['Le plus petit entier supérieur à $$%%{&3}$$ est &solution'],
             answer: 'Le plus petit entier est &answer'
           }],
           type: 'rewrite',
@@ -6480,6 +6480,70 @@ const questions = {
           'result-type': 'decimal',
           defaultDelay: 20,
           grade: CM2,
+        },
+      ],
+      Distributivité: [
+
+        {
+          description: 'Utiliser la distributivité',
+          subdescription: 'Factorisation pour obternir un facteur égal à 10',
+          enounces: ["Calcule."],
+          expressions: [
+            '&2*&1+#{10-&2}*&1',
+            '&1*&2+#{10-&2}*&1',
+            '&2*&1+&1*#{10-&2}',
+            '&1*&2+&1*#{10-&2}',
+          ],
+          variables: [{ '&1': '$d{1;1}', '&2': '$e[2;8]' }],
+          correctionDetails: [
+            [
+              { text: '$$\\begin{align} &2 \\times \\bold{\\textcolor{teal}{%%{&1}}} + %{10-&2} \\times \\bold{\\textcolor{teal}{%%{&1}}} &=  10 \\times \\bold{\\textcolor{teal}{%%{&1}}}\\\\  &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*10}}}\\end{align}$$' },
+            ],
+            [
+              { text: '$$\\begin{align} \\bold{\\textcolor{teal}{%%{&1}}} \\times &2 + %{10-&2} \\times \\bold{\\textcolor{teal}{%%{&1}}} &=  10 \\times \\bold{\\textcolor{teal}{%%{&1}}}\\\\  &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*10}}}\\end{align}$$' },
+            ],
+            [
+              { text: '$$\\begin{align} &2 \\times \\bold{\\textcolor{teal}{%%{&1}}} + \\bold{\\textcolor{teal}{%%{&1}}} \\times %{10-&2} &=  10 \\times \\bold{\\textcolor{teal}{%%{&1}}}\\\\  &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*10}}}\\end{align}$$' },
+            ],
+            [
+              { text: '$$\\begin{align}  \\bold{\\textcolor{teal}{%%{&1}}} \\times &2+ \\bold{\\textcolor{teal}{%%{&1}}} \\times %{10-&2} &=  10 \\times \\bold{\\textcolor{teal}{%%{&1}}}\\\\  &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*10}}}\\end{align}$$' },
+            ],
+
+          ],
+
+          type: 'result',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Utiliser la distributivité',
+          subdescription: 'Factorisation pour obtenir un facteur égal à 100',
+          enounces: ["Calculer"],
+          expressions: [
+            '&2*&1+#{100-&2}*&1',
+            '&1*&2+#{100-&2}*&1',
+            '&2*&1+&1*#{100-&2}',
+            '&1*&2+&1*#{100-&2}',
+          ],
+          variables: [{ '&1': '$d{$e[1;2];$e[1;2]}', '&2': '$e[2;98]' }],
+          correctionDetails: [
+            [
+              { text: '$$\\begin{align} &2 \\times \\bold{\\textcolor{teal}{%%{&1}}} + %{100-&2} \\times \\bold{\\textcolor{teal}{%%{&1}}} &=  100 \\times \\bold{\\textcolor{teal}{%%{&1}}}\\\\  &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*100}}}\\end{align}$$' },
+            ],
+            [
+              { text: '$$\\begin{align} \\bold{\\textcolor{teal}{%%{&1}}} \\times &2 + %{100-&2} \\times \\bold{\\textcolor{teal}{%%{&1}}} &=  100 \\times \\bold{\\textcolor{teal}{%%{&1}}}\\\\  &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*100}}}\\end{align}$$' },
+            ],
+            [
+              { text: '$$\\begin{align} &2 \\times \\bold{\\textcolor{teal}{%%{&1}}} + \\bold{\\textcolor{teal}{%%{&1}}} \\times %{100-&2} &=  100 \\times \\bold{\\textcolor{teal}{%%{&1}}}\\\\  &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*100}}}\\end{align}$$' },
+            ],
+            [
+              { text: '$$\\begin{align}  \\bold{\\textcolor{teal}{%%{&1}}} \\times &2+ \\bold{\\textcolor{teal}{%%{&1}}} \\times %{100-&2} &=  100 \\times \\bold{\\textcolor{teal}{%%{&1}}}\\\\  &= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*100}}}\\end{align}$$' },
+            ],
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+          grade: SIXIEME,
         },
       ],
       'A trou': [
@@ -7524,6 +7588,33 @@ const questions = {
 
 
       ],
+      Carré: [
+        {
+          description: "Carré et opposé d'un carré",
+          enounces: ['Calcule.'],
+          expressions: ['(&1)^2', '-&1^2'],
+
+          variables: [
+            { '&1': '-$e[1;9]' },
+            { '&1': '$e[1;9]' }
+          ],
+          correctionDetails: [
+            [{ text: '$$(&1)^2=(&1)\\times(&1)=\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%{(&1)*(&1)}}$$' }],
+            [
+              {
+                text: '$$-&1^2=-&1 \\times &1=\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{-%{&1*&1}}$$',
+              }
+            ]
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: QUATRIEME,
+
+        },
+
+
+
+      ],
       'Quotient': [
         {
           description: "Déterminer le signe d'un quotient",
@@ -8288,16 +8379,16 @@ const questions = {
             {
               '&1': '$e[2;9]',
               '&2': '$e[2;8]',
-              '&3': '$e[&2+1;9]',
-              '&4': '$e[&2*2;&3*&1-1]\\{&2*&1}',
+              '&3': '$e[&2+1;9]\\{d(&2);m(&2)}',
+              '&4': '$e[&2*2;&3*&1-1]\\{&2*&1;d(&3*&1);m(&3*&1)}',
               '&5': '&2/&3',
               '&6': '&4/(&3*&1)'
             },
             {
               '&1': '$e[2;9]',
               '&2': '$e[2;8]',
-              '&3': '$e[&2+1;9]',
-              '&4': '$e[&2*&1+1;80]\\{&2*&1}',
+              '&3': '$e[&2+1;9]\\{d(&2);m(&2)}',
+              '&4': '$e[&2*&1+1;80]\\{&3*&1;d(&2*&1);m(&2*&1)}',
               '&5': '&3/&2',
               '&6': '&4/(&2*&1)'
             },
@@ -8307,15 +8398,27 @@ const questions = {
             [{ text: '$$\\dfrac{&3}{&2}$$' }, { text: '$$\\dfrac{#{&4}}{#{&2*&1}}$$' }],
           ],
           correctionFormat: [{
-            correct: ['Entre $$\\dfrac{&2}{&3}$$ et $$\\dfrac{#{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
+            correct: ['Entre $$\\dfrac{&2}{&3}$$ et $$\\dfrac{%{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
             uncorrect: ['Entre $$$\\dfrac{&2}{&3}$$ et $$\\dfrac{#{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
             answer: 'La plus petite fraction est &answer'
           },
           {
-            correct: ['Entre $$\\dfrac{&3}{&2}$$ et $$\\dfrac{#{&4}}{#{&3*&1}}$$ la plus petite fraction est &solution'],
+            correct: ['Entre $$\\dfrac{&3}{&2}$$ et $$\\dfrac{#{&4}}{#{&2*&1}}$$ la plus petite fraction est &solution'],
             uncorrect: ['Entre $$$\\dfrac{&3}{&2}$$ et $$\\dfrac{#{&4}}{#{&2*&1}}$$ la plus petite fraction est &solution'],
             answer: 'La plus petite fraction est &answer'
           }
+          ],
+          correctionDetails: [
+            [
+              {
+                text: "@@ &5<&6 ?? $$\\frac{&2}{&3} = \\frac{&2 \\textcolor{teal}{\\times &1}}{&3 \\textcolor{teal}{\\times &1}} = \\frac{%{&2*&1}}{%{&3*&1}}$$ et $$\\frac{%{&2*&1}}{%{&3*&1}}<\\frac{&4}{%{&3*&1}}$$, donc $$\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{&2}{&3}}}<\\frac{&4}{%{&3*&1}$$@@ \
+              @@ &5>&6 ?? $$\\frac{&2}{&3} = \\frac{&2 \\textcolor{teal}{\\times &1}}{&3 \\textcolor{teal}{\\times &1}} = \\frac{%{&2*&1}}{%{&3*&1}}$$ et $$\\frac{%{&2*&1}}{%{&3*&1}}>\\frac{&4}{%{&3*&1}}$$, donc $$\\frac{&2}{&3}>\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{&4}{%{&3*&1}}}$$@@" },
+            ],
+            [
+              {
+                text: "@@ &5<&6 ?? $$\\frac{&3}{&2} = \\frac{&3 \\textcolor{teal}{\\times &1}}{&2 \\textcolor{teal}{\\times &1}} = \\frac{%{&3*&1}}{%{&2*&1}}$$ et $$\\frac{%{&3*&1}}{%{&2*&1}}<\\frac{&4}{%{&2*&1}}$$, donc $$\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{&3}{&2}}}<\\frac{&4}{%{&2*&1}$$@@ \
+              @@ &5>&6 ?? $$\\frac{&3}{&2} = \\frac{&3 \\textcolor{teal}{\\times &1}}{&2 \\textcolor{teal}{\\times &1}} = \\frac{%{&3*&1}}{%{&2*&1}}$$ et $$\\frac{%{&3*&1}}{%{&2*&1}}>\\frac{&4}{%{&2*&1}}$$, donc $$\\frac{&3}{&2}>\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{\\frac{&4}{%{&2*&1}}}$$@@" },
+            ],
           ],
 
           solutions: [
@@ -11211,6 +11314,672 @@ const questions = {
     }
   },
   Proportionnalité: {
+    'Tableaux de proportionnalité': {
+      Reconnaître: [
+        {
+          description: "Reconnaître si un tableau est un tableau de proportionnalité",
+          subdescription: "En regardant les colonnes",
+          enounces: ['Ce tableau est-il un tableau de proportionnalité ?'],
+          enounces2: ['$$\\begin{array}{c|c} \
+          &1  &   %{&1*&3} \\\\ \
+          &2  &   %{&2*&3} \
+        \\end{array}$$',
+            '$$\\begin{array}{c|c} \
+        &1  &   %{&1*&3} \\\\ \
+        &2  &   %{&2*(&3+1)} \
+      \\end{array}$$'],
+          choices: [
+            [
+              { text: 'Oui' },
+              { text: 'Non' },
+            ],
+
+          ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]\\{m(&1);d(&1)}', '&3': '$e[2;9]' }],
+          solutions: [[0], [1]],
+          correctionFormat: [
+            {
+              correct: ["&answer, $$\\begin{array}{c|c} \
+            &1  &   %{&1*&3} \\\\ \
+            &2  &   %{&2*&3} \
+          \\end{array}$$ est un tableau de proportionnalité."],
+              uncorrect: ["&solution, $$\\begin{array}{c|c} \
+              &1  &   %{&1*&3} \\\\ \
+              &2  &   %{&2*&3} \
+            \\end{array}$$ est un tableau de proportionnalité."],
+              answer: "&answer, ce n'est pas un tableau de proportionnalité."
+            },
+            {
+              correct: ["&answer, $$\\begin{array}{c|c} \
+            &1  &   %{&1*&3} \\\\ \
+            &2  &   %{&2*(&3+1)} \
+          \\end{array}$$ n'est pas un tableau de proportionnalité."],
+              uncorrect: ["&solution, $$\\begin{array}{c|c} \
+              &1  &   %{&1*&3} \\\\ \
+              &2  &   %{&2*(&3+1)} \
+            \\end{array}$$ n'est pas un tableau de proportionnalité."],
+              answer: "&answer, c'est un tableau de proportionnalité."
+            },
+
+          ],
+          correctionDetails: [
+            [
+              {
+                text: "&solution, $$\\begin{array}{c|c} \
+              &1  &   %{&1*&3} \\\\ \
+              &2  &   %{&2*&3} \
+            \\end{array}$$ est un tableau de proportionnalité, car $$ &1 \\textcolor{teal}{\\times &3}=%{&1*&3}$$ et $$ &2 \\textcolor{teal}{\\times &3}=%{&2*&3} $$" },
+            ],
+            [
+              {
+                text: "&solution, $$\\begin{array}{c|c} \
+              &1  &   %{&1*&3} \\\\ \
+              &2  &   %{&2*(&3+1)} \
+            \\end{array}$$ n'est pas un tableau de proportionnalité, car $$ &1 \\textcolor{teal}{\\times &3}=%{&1*&3}$$ et $$ &2 \\textcolor{orange}{\\times %{&3+1}}=%{&2*(&3+1)}$$. On n'a <b>pas</b> multiplié par le même nombre entre les 2 colonnes." },
+            ],
+          ],
+          type: 'choice',
+          options: ['no-shuffle-choices'],
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: "Reconnaître si un tableau est un tableau de proportionnalité",
+          subdescription: "En regardant les lignes",
+          enounces: ['Ce tableau est-il un tableau de proportionnalité ?'],
+          enounces2: ['$$\\begin{array}{c|c} \
+          &1        &   &2 \\\\ \
+          %{&1*&3}  &  %{&2*&3} \
+        \\end{array}$$',
+            '$$\\begin{array}{c|c} \
+        &1  &  &2  \\\\ \
+        %{&1*&3}  &   %{&2*(&3+1)} \
+      \\end{array}$$'],
+          choices: [
+            [
+              { text: 'Oui' },
+              { text: 'Non' },
+            ],
+
+          ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]\\{m(&1);d(&1)}', '&3': '$e[2;9]' }],
+          solutions: [[0], [1]],
+          correctionFormat: [
+            {
+              correct: ["&answer, $$\\begin{array}{c|c} \
+              &1        &   &2 \\\\ \
+              %{&1*&3}  &  %{&2*&3} \
+          \\end{array}$$ est un tableau de proportionnalité."],
+              uncorrect: ["&solution, $$\\begin{array}{c|c} \
+              &1        &   &2 \\\\ \
+              %{&1*&3}  &  %{&2*&3} \
+            \\end{array}$$ est un tableau de proportionnalité."],
+              answer: "&answer, ce n'est pas un tableau de proportionnalité."
+            },
+            {
+              correct: ["&answer, $$\\begin{array}{c|c} \
+              &1  &  &2  \\\\ \
+              %{&1*&3}  &   %{&2*(&3+1)} \
+          \\end{array}$$ n'est pas un tableau de proportionnalité."],
+              uncorrect: ["&solution, $$\\begin{array}{c|c} \
+              &1  &  &2  \\\\ \
+        %{&1*&3}  &   %{&2*(&3+1)} \
+            \\end{array}$$ n'est pas un tableau de proportionnalité."],
+              answer: "&answer, c'est un tableau de proportionnalité."
+            },
+
+          ],
+          correctionDetails: [
+            [
+              {
+                text: "&solution, $$\\begin{array}{c|c} \
+              &1        &   &2 \\\\ \
+              %{&1*&3}  &  %{&2*&3} \
+            \\end{array}$$ est un tableau de proportionnalité, car $$ &1 \\textcolor{teal}{\\times &3}=%{&1*&3}$$ et $$ &2 \\textcolor{teal}{\\times &3}=%{&2*&3} $$" },
+            ],
+            [
+              {
+                text: "&solution, $$\\begin{array}{c|c} \
+              &1  &  &2  \\\\ \
+        %{&1*&3}  &   %{&2*(&3+1)} \
+            \\end{array}$$ n'est pas un tableau de proportionnalité, car $$ &1 \\textcolor{teal}{\\times &3}=%{&1*&3}$$ et $$ &2 \\textcolor{orange}{\\times %{&3+1}}=%{&2*(&3+1)}$$. On n'a <b>pas</b> multiplié par le même nombre entre les 2 lignes." },
+            ],
+          ],
+          type: 'choice',
+          options: ['no-shuffle-choices'],
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: "Déterminer le coefficent de proportionnalité",
+          subdescription: "Valeur entière",
+          enounces: ['Quel est le coefficient de proportionnalité de ce tableau ?'],
+          enounces2: ['$$\\begin{array}{c|c} \
+          &1        &   &2 \\\\ \
+          %{&1*&3}  &  %{&2*&3} \
+        \\end{array}$$',
+          ],
+
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]\\{m(&1);d(&1)}', '&3': '$e[2;9]' }],
+          expressions: ['&3'],
+          correctionFormat: [
+            {
+              correct: ["Le coefficient de proportionnalité du tableau  $$\\begin{array}{c|c} \
+              &1        &   &2 \\\\ \
+              %{&1*&3}  &  %{&2*&3} \
+          \\end{array}$$ est &answer."],
+              uncorrect: ["Le coefficient de proportionnalité du tableau  $$\\begin{array}{c|c} \
+              &1        &   &2 \\\\ \
+              %{&1*&3}  &  %{&2*&3} \
+          \\end{array}$$ est &solution."],
+              answer: "Le coefficient de proportionnalité est &answer."
+            },
+
+          ],
+          correctionDetails: [
+            [
+              {
+                text: "Le coefficient de proportionnalité du tableau  $$\\begin{array}{c|c} \
+              &1        &   &2 \\\\ \
+              %{&1*&3}  &  %{&2*&3} \
+          \\end{array}$$ est &solution car $$%{&1*&3} \\div &1 = %{&2*&3} \\div &2 = \\textcolor{green}{&3}$$." },
+            ],
+
+          ],
+          type: 'result',
+          options: ['no-exp'],
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: "Déterminer le coefficent de proportionnalité",
+          subdescription: "Valeur fractionnaire",
+          enounces: ['Quel est le coefficient de proportionnalité de ce tableau ?'],
+          enounces2: ['$$\\begin{array}{c|c} \
+          &1  &  %{&1*&3} \\\\ \
+          &2  &  %{&2*&3} \
+        \\end{array}$$',
+          ],
+
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]\\{m(&1)}', '&3': '$e[2;9]' }],
+          expressions: ['&2/&1'],
+          correctionFormat: [
+            {
+              correct: ["Le coefficient de proportionnalité du tableau  $$\\begin{array}{c|c} \
+              &1  &   %{&1*&3} \\\\ \
+              &2  &  %{&2*&3} \
+          \\end{array}$$ est &answer."],
+              uncorrect: ["Le coefficient de proportionnalité du tableau  $$\\begin{array}{c|c} \
+              &1  &   %{&1*&3} \\\\ \
+              &2  &  %{&2*&3} \
+          \\end{array}$$ est &solution."],
+              answer: "Le coefficient de proportionnalité est &answer."
+            },
+
+
+          ],
+          correctionDetails: [
+            [
+              {
+                text: "Le coefficient de proportionnalité du tableau  $$\\begin{array}{c|c} \
+              &1  &   %{&1*&3} \\\\ \
+              &2  &  %{&2*&3} \
+          \\end{array}$$ est &solution car $$&2 \\div &1 = %{&2*&3} \\div %{&1*&3} = \\textcolor{green}{%{&2/&1}}$$." },
+            ],
+
+          ],
+          type: 'result',
+          options: ['no-exp'],
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+
+      ],
+      "Calculer une quatrième proportionnelle": [
+        {
+          description: "Calculer une quatrième proportionnelle",
+          subdescription: "En travaillant sur les colonnes",
+          enounces: ['Ce tableau est un tableau de proportionnalité. Détermine le nombre manquant.'],
+          enounces2: ['$$\\begin{array}{c|c} \
+                      &1  &  ?  \\\\ \
+                      &2  &   %{&2*&3} \
+                      \\end{array}$$',
+            '$$\\begin{array}{c|c} \
+                      &1  &   %{&1*&3} \\\\ \
+                      &2  &  ?  \
+                      \\end{array}$$',
+            '$$\\begin{array}{c|c} \
+                      &1  &   %{&1*&3} \\\\ \
+                      ?  &   %{&2*&3} \
+                      \\end{array}$$',
+            '$$\\begin{array}{c|c} \
+                       ?  &   %{&1*&3} \\\\ \
+                      &2  &   %{&2*&3} \
+                      \\end{array}$$',],
+
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]\\{m(&1);d(&1)}', '&3': '$e[2;9]' }],
+          expressions: ['&1*&3', '&2*&3', '&2', '&1'],
+          correctionFormat: [
+            {
+              correct: ["$$\\begin{array}{c|c} \
+            &1  &   &ans \\\\ \
+            &2  &   %{&2*&3} \
+          \\end{array}$$"],
+              uncorrect: ["$$\\begin{array}{c|c} \
+              &1  &   &sol \\\\ \
+              &2  &   %{&2*&3} \
+            \\end{array}$$"],
+              answer: "$$\\begin{array}{c|c} \
+              &1  &   &ans \\\\ \
+              &2  &   %{&2*&3} \
+            \\end{array}$$"
+            },
+            {
+              correct: ["$$\\begin{array}{c|c} \
+            &1  &   %{&1*&3} \\\\ \
+            &2  &   &ans \
+          \\end{array}$$"],
+              uncorrect: ["$$\\begin{array}{c|c} \
+              &1  &   %{&1*&3} \\\\ \
+              &2  &   &sol \
+            \\end{array}$$"],
+              answer: "$$\\begin{array}{c|c} \
+              &1  &   %{&1*&3} \\\\ \
+              &2  &   &ans \
+            \\end{array}$$"
+            },
+            {
+              correct: ["$$\\begin{array}{c|c} \
+              &1  &   %{&1*&3} \\\\ \
+                &ans  &  %{&2*&3}  \
+          \\end{array}$$"],
+              uncorrect: ["$$\\begin{array}{c|c} \
+              &1  &   %{&1*&3} \\\\ \
+              &sol  &  %{&2*&3}  \
+          \\end{array}$$"],
+              answer: "$$\\begin{array}{c|c} \
+               &1 & %{&1*&3} \\\\ \
+               &ans  & %{&2*&3}   \
+            \\end{array}$$"
+            },
+            {
+              correct: ["$$\\begin{array}{c|c} \
+              &ans  &   %{&1*&3} \\\\ \
+            &2  &  %{&2*&3}  \
+          \\end{array}$$"],
+              uncorrect: ["$$\\begin{array}{c|c} \
+              &sol  &   %{&1*&3} \\\\ \
+            &2  &  %{&2*&3}  \
+          \\end{array}$$"],
+              answer: "$$\\begin{array}{c|c} \
+              &ans & %{&1*&3} \\\\ \
+              &2  & %{&2*&3}   \
+            \\end{array}$$"
+            },
+
+
+          ],
+          correctionDetails: [
+            [
+              {
+                text: "$$\\begin{array}{c|c} \
+                &1  &   &sol \\\\ \
+                &2  &   %{&2*&3} \
+              \\end{array}$$ car $$&2 \\textcolor{teal}{\\times &3} = %{&2*&3}$$ et $$&1 \\textcolor{teal}{\\times &3} = &sol$$ " },
+            ],
+            [
+              {
+                text: "$$\\begin{array}{c|c} \
+                &1  &   %{&1*&3} \\\\ \
+                &2  &   &sol \
+              \\end{array}$$ car $$&1\\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = &sol$$ " },
+            ],
+            [
+              {
+                text: "$$\\begin{array}{c|c} \
+                &1  &  %{&1*&3}  \\\\ \
+                &sol  &   %{&2*&3} \
+              \\end{array}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = &sol$$ " },
+            ],
+            [
+              {
+                text: "$$\\begin{array}{c|c} \
+                &sol  &  %{&1*&3}  \\\\ \
+                 &2 &   %{&2*&3} \
+              \\end{array}$$ car $$%{&2*&3} \\textcolor{teal}{\\div &3} = &2$$ et $$%{&1*&3} \\textcolor{teal}{\\div &3} = &sol$$ " },
+            ],
+
+
+          ],
+
+          type: 'result',
+          options: ['no-exp'],
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: "Calculer une quatrième proportionnelle",
+          subdescription: "En utilisant le coefficient de proportionnalité",
+          enounces: ['Ce tableau est un tableau de proportionnalité. Détermine le nombre manquant.'],
+          enounces2: ['$$\\begin{array}{c|c} \
+                      &1  &  &2  \\\\ \
+                       ?  &   %{&2*&3} \
+                      \\end{array}$$',
+            '$$\\begin{array}{c|c} \
+                      &1  &  &2  \\\\ \
+                      %{&1*&3}  &  ?  \
+                      \\end{array}$$',
+            '$$\\begin{array}{c|c} \
+                      &1  &   ? \\\\ \
+                      %{&1*&3}  &   %{&2*&3} \
+                      \\end{array}$$',
+            '$$\\begin{array}{c|c} \
+                       ?  &   &2 \\\\ \
+                       %{&1*&3}  &   %{&2*&3} \
+                      \\end{array}$$',],
+
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]\\{m(&1);d(&1)}', '&3': '$e[2;9]' }],
+          expressions: ['&1*&3', '&2*&3', '&2', '&1'],
+          correctionFormat: [
+            {
+              correct: ["$$\\begin{array}{c|c} \
+            &1  &  &2  \\\\ \
+            &ans  &   %{&2*&3} \
+          \\end{array}$$"],
+              uncorrect: ["$$\\begin{array}{c|c} \
+              &1  &  &2  \\\\ \
+              &sol  &   %{&2*&3} \
+            \\end{array}$$"],
+              answer: "$$\\begin{array}{c|c} \
+              &1  &  &2  \\\\ \
+             &ans  &   %{&2*&3} \
+            \\end{array}$$"
+            },
+            {
+              correct: ["$$\\begin{array}{c|c} \
+            &1  &  &2  \\\\ \
+            %{&1*&3}  &  &ans \
+          \\end{array}$$"],
+              uncorrect: ["$$\\begin{array}{c|c} \
+              &1  &  &2  \\\\ \
+              %{&1*&3}  &  &sol \
+            \\end{array}$$"],
+              answer: "$$\\begin{array}{c|c} \
+              &1  &  &2  \\\\ \
+              %{&1*&3}  &  &ans \
+            \\end{array}$$"
+            },
+            {
+              correct: ["$$\\begin{array}{c|c} \
+              &1  &  &ans  \\\\ \
+              %{&1*&3}   &  %{&2*&3}  \
+          \\end{array}$$"],
+              uncorrect: ["$$\\begin{array}{c|c} \
+              &1  &  &sol  \\\\ \
+              %{&1*&3}   &  %{&2*&3}  \
+          \\end{array}$$"],
+              answer: "$$\\begin{array}{c|c} \
+               &1 & &ans \\\\ \
+               %{&1*&3} & %{&2*&3}   \
+            \\end{array}$$"
+            },
+            {
+              correct: ["$$\\begin{array}{c|c} \
+              &ans  &   &2 \\\\ \
+              %{&1*&3}  &  %{&2*&3}  \
+          \\end{array}$$"],
+              uncorrect: ["$$\\begin{array}{c|c} \
+              &sol  &   &2 \\\\ \
+              %{&1*&3}  &  %{&2*&3}  \
+          \\end{array}$$"],
+              answer: "$$\\begin{array}{c|c} \
+             &ans & &2 \\\\ \
+              %{&1*&3}  & %{&2*&3}   \
+            \\end{array}$$"
+            },
+          ],
+          correctionDetails: [
+            [
+              {
+                text: "$$\\begin{array}{c|c} \
+                &1  &  &2  \\\\ \
+                &sol  &   %{&2*&3} \
+              \\end{array}$$ car $$&2 \\textcolor{teal}{\\times &3} = %{&2*&3}$$ et $$&1 \\textcolor{teal}{\\times &3} = &sol$$ " },
+            ],
+            [
+              {
+                text: "$$\\begin{array}{c|c} \
+                &1  &   &2 \\\\ \
+                %{&1*&3} & &sol \
+              \\end{array}$$ car $$&1\\textcolor{teal}{\\times &3} = %{&1*&3}$$ et $$&2 \\textcolor{teal}{\\times &3} = &sol$$ " },
+            ],
+            [
+              {
+                text: "$$\\begin{array}{c|c} \
+                &1  &  &sol \\\\ \
+                %{&1*&3}  &   %{&2*&3} \
+              \\end{array}$$ car $$%{&1*&3} \\textcolor{teal}{\\div &3} = &1$$ et $$%{&2*&3} \\textcolor{teal}{\\div &3} = &sol$$ " },
+            ],
+            [
+              {
+                text: "$$\\begin{array}{c|c} \
+                &sol  &  &2  \\\\ \
+                %{&1*&3} &   %{&2*&3} \
+              \\end{array}$$ car $$%{&2*&3} \\textcolor{teal}{\\div &3} = &2$$ et $$%{&1*&3} \\textcolor{teal}{\\div &3} = &sol$$ " },
+            ],
+
+
+          ],
+
+          type: 'result',
+          options: ['no-exp'],
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: "Calculer une quatrième proportionnelle",
+          subdescription: "En utilisant le coefficient de proportionnalité qui est fractionnaire",
+          enounces: ['Ce tableau est un tableau de proportionnalité. Détermine le nombre manquant.'],
+          enounces2: ['$$\\begin{array}{c|c} \
+                      &1  &  &2  \\\\ \
+                       ?  &  &3 \
+                      \\end{array}$$',
+            '$$\\begin{array}{c|c} \
+                      &2  &  &1  \\\\ \
+                      &3  &  ?  \
+                      \\end{array}$$',
+            '$$\\begin{array}{c|c} \
+                      &2  &   ? \\\\ \
+                      &3  &  %{&1*&3/&2} \
+                      \\end{array}$$',
+            '$$\\begin{array}{c|c} \
+                       ?  &   &2 \\\\ \
+                       %{&1*&3/&2}  &   &3 \
+                      \\end{array}$$',],
+
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;9]\\{m(&1);d(&1)}', '&3': '$e[2;9]\\{m(&2)}' }],
+          expressions: ['&1*&3/&2', '&1*&3/&2', '&1', '&1'],
+          correctionFormat: [
+            {
+              correct: ["$$\\begin{array}{c|c} \
+            &1  &  &2  \\\\ \
+            &ans  &   &3 \
+          \\end{array}$$"],
+              uncorrect: ["$$\\begin{array}{c|c} \
+              &1  &  &2  \\\\ \
+              &sol  &   &3 \
+            \\end{array}$$"],
+              answer: "$$\\begin{array}{c|c} \
+              &1  &  &2  \\\\ \
+              &ans  &   &3 \
+            \\end{array}$$"
+            },
+            {
+              correct: ["$$\\begin{array}{c|c} \
+            &2  &  &1  \\\\ \
+            &3 & &ans \
+          \\end{array}$$"],
+              uncorrect: ["$$\\begin{array}{c|c} \
+              &2  &  &1  \\\\ \
+              &3 & &sol \
+            \\end{array}$$"],
+              answer: "$$\\begin{array}{c|c} \
+              &2  &  &1  \\\\ \
+              &3 & &ans \
+            \\end{array}$$"
+            },
+            {
+              correct: ["$$\\begin{array}{c|c} \
+              &2  &  &ans  \\\\ \
+              &3 & %{&1*&3/&2} \
+            \\end{array}$$"],
+              uncorrect: ["$$\\begin{array}{c|c} \
+              &2  &  &sol  \\\\ \
+              &3 & %{&1*&3/&2} \
+            \\end{array}$$"],
+              answer: "$$\\begin{array}{c|c} \
+              &2  &  &ans \\\\ \
+              &3 & %{&1*&3/&2} \
+            \\end{array}$$"
+            },
+            {
+              correct: ["$$\\begin{array}{c|c} \
+              &ans  &  &2  \\\\ \
+              %{&1*&3/&2} &  &3 \
+            \\end{array}$$"],
+              uncorrect: ["$$\\begin{array}{c|c} \
+              &sol  &  &2  \\\\ \
+              %{&1*&3/&2} &  &3 \
+            \\end{array}$$"],
+              answer: "$$\\begin{array}{c|c} \
+              &ans  &  &2  \\\\ \
+              %{&1*&3/&2} &  &3 \
+            \\end{array}$$"
+            },
+
+          ],
+          correctionDetails: [
+            [
+              {
+                text: "$$\\begin{array}{c|c} \
+                &1  &  &2  \\\\ \
+                &sol  &   &3 \
+              \\end{array}$$ car $$&2 \\textcolor{teal}{\\times &3} = %{&2*&3}$$ et $$&1 \\textcolor{teal}{\\times &3} = &sol$$ " },
+            ],
+            [
+              {
+                text: "$$\\begin{array}{c|c} \
+                &2 & &1  \\\\ \
+                &3 & &sol \
+              \\end{array}$$ car $$&2 \\textcolor{teal}{\\times &3} = %{&2*&3}$$ et $$&1 \\textcolor{teal}{\\times &3} = &sol$$ " },
+            ],
+            [
+              {
+                text: "$$\\begin{array}{c|c} \
+                &2 &  &sol \\\\ \
+                &3 & %{&1*&3/&2} \
+              \\end{array}$$ car $$%{&2*&3} \\textcolor{teal}{\\div &3} = &2$$ et $$%{&1*&3} \\textcolor{teal}{\\div &3} = &sol$$ " },
+            ],
+            [
+              {
+                text: "$$\\begin{array}{c|c} \
+                 &sol & &2 \\\\ \
+                %{&1*&3/&2} & &3 \
+              \\end{array}$$ car $$%{&2*&3} \\textcolor{teal}{\\div &3} = &2$$ et $$%{&1*&3} \\textcolor{teal}{\\div &3} = &sol$$ " },
+            ],
+
+
+
+
+          ],
+
+          type: 'result',
+          options: ['no-exp'],
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+
+
+      ],
+      Appliquer: [
+        {
+          description: "Résoudre un petit exercice de proportionnalité",
+          subdescription: "petits nombres",
+          enounces: [
+            '$$&2$$ shawarmas coûtent $$%{&2*&1}\\,€$$. Combien coûtent $$%{&3*&2}$$ shawarmas ?',
+            '$$&2$$ shawarmas coûtent $$%{&2*&1}\\,€$$. Combien puis-je acheter de shawarmas avec $$%{&3*&2*&1}\\,€$$ ?',
+            '$$&2\\,kg$$ de tomates coûtent $$%{&2*&1}\\,€$$. Combien coûtent $$%{&3*&2}\\,kg$$ de tomates ?',
+            '$$&2\\,kg$$ de tomates coûtent $$%{&2*&1}\\,€$$. Combien puis-je acheter de tomates avec $$%{&3*&2*&1}\\,€$$ ?',
+            "Une fuite d'eau laisse s'échapper $$%{&2*&1}\\,L$$ d'eau en $$&2\\,h$$. Combien de litres d'eau s'échappent en $$%{&3*&2}\\,h$$ ?",
+            "Une fuite d'eau laisse s'échapper $$%{&2*&1}\\,L$$ d'eau en $$&2\\,h$$. En combien de temps s'échappe-t-il $$%{&3*&2*&1}\\,L$$ d'eau ?",
+          ],
+          variables: [
+            { '&1': '$l{2,5;3,5}', '&2': '$l{2;4;6}}', '&3': '$e[2;5]' }, 
+          ],
+          expressions:['&1*&2*&3 €', '&2*&3', '&1*&2*&3 €', '&2*&3', '&1*&2*&3 L', '&2*&3 h'],
+          correctionFormat: [
+            {
+              correct: ["$$%{&3*&2}$$ shawarmas coûtent &answer."],
+              uncorrect: ["$$%{&3*&2}$$ shawarmas coûtent &solution."],
+              answer: "$$%{&3*&2}$$ shawarmas coûtent &answer."
+            },
+            {
+              correct: ["Je peux acheter &answer shawarmas pour $${&1*&2*&3}\\,€$$."],
+              uncorrect: ["Je peux acheter &solution shawarmas pour $${&1*&2*&3}\\,€."],
+              answer: "Je peux acheter &answer shawarmas."
+            },
+            {
+              correct: ["$$%{&3*&2}\\,kg$$ de tomates coûtent &answer."],
+              uncorrect: ["$$%{&3*&2}\\,kg$$ de tomates coûtent &solution."],
+              answer: "$$%{&3*&2\\,}kg$$ de tomates coûtent &answer."
+            },
+            {
+              correct: ["Je peux acheter &answer de tomates pour $$%{&3*&2*&1}\\,€$$."],
+              uncorrect: ["Je peux acheter &solution de tomates pour $$%{&3*&2*&1}\\,€$$."],
+              answer: "Je peux acheter &answer de tomates pour $$%{&3*&2*&1}\\,€$$."
+            },
+            {
+              correct: ["Il s'échappe $$%{&3*&2*&1}\\,L$$ d'eau en &answer."],
+              uncorrect: ["Il s'échappe $$%{&3*&2*&1}\\,L$$ d'eau en &solution."],
+              answer: "Il s'échappe $$%{&3*&2*&1}\\,L$$ d'eau en &answer."
+            },
+            {
+              correct: ["Il s'échappe &answer d'eau en $$%{&3*&2}\\,h$$."],
+              uncorrect: ["Il s'échappe &solution d'eau en $$%{&3*&2}\\,h$$."],
+              answer: "Il s'échappe &answer d'eau."
+            },
+          ],
+          correctionDetails: [
+            [
+              {text: "$$%{&3*&2}$$ shawarmas, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$&2$$ shawarmas à $$%{&1*&2 €}$$, donc le prix de $$%{&3*&2}$$ shawarmas est $$%{&1*&2 €}\\textcolor{teal}{\\times &3} = &sol$$."},
+            ],  
+            [
+              {text: "$$%{&3*&2*&1 €}$$, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$%{&2*&1 Qr}$$ pour $$&2$$ shawarmas, donc je peux acheter $$&2\\textcolor{teal}{\\times &3} = &sol$$ shawarmas."},
+            ],  
+            [
+              {text: "$$%{&3*&2}$$ shawarmas, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$&2$$ shawarmas à $$%{&1*&2 €}$$, donc le prix de $$%{&3*&2}$$ shawarmas est $$%{&1*&2 €}\\textcolor{teal}{\\times &3} = &sol$$."},
+            ],  
+            [
+              {text: "$$%{&3*&2*&1 €}$$, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$%{&2*&1 Qr}$$ pour $$&2$$ shawarmas, donc je peux acheter $$&2\\textcolor{teal}{\\times &3} = &sol$$ shawarmas."},
+            ], 
+            [
+              {text: "$$%{&3*&2}$$ shawarmas, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$&2$$ shawarmas à $$%{&1*&2 €}$$, donc le prix de $$%{&3*&2}$$ shawarmas est $$%{&1*&2 €}\\textcolor{teal}{\\times &3} = &sol$$."},
+            ],  
+            [
+              {text: "$$%{&3*&2*&1 €}$$, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$%{&2*&1 Qr}$$ pour $$&2$$ shawarmas, donc je peux acheter $$&2\\textcolor{teal}{\\times &3} = &sol$$ shawarmas."},
+            ], 
+          ],
+          type: 'result',
+          options: ['no-exp'],
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        
+
+      ],
+      
+
+    },
     'Pourcentages': {
       Définition: [
         {
@@ -16552,7 +17321,7 @@ const themes = Object.getOwnPropertyNames(questions)
 
 themes.forEach((theme, t_id) => {
   generateds[theme] = {}
-  
+
 
   let domains = Object.getOwnPropertyNames(questions[theme])
   domains.forEach((domain, d_id) => {
@@ -16562,11 +17331,11 @@ themes.forEach((theme, t_id) => {
       generateds[theme][domain][subdomain] = []
       let qs = questions[theme][domain][subdomain]
       qs.forEach((q, q_id) => {
-        const id = code[t_id] + code[d_id] + code[s_id] + code[q_id+1]
+        const id = code[t_id] + code[d_id] + code[s_id] + code[q_id + 1]
         const newq = { ...q, id }
-        console.log(theme, domain, subdomain,q_id+1, id)
+        console.log(theme, domain, subdomain, q_id + 1, id)
         generateds[theme][domain][subdomain].push(newq)
-        ids[id]={theme, domain, subdomain, level:q_id+1}
+        ids[id] = { theme, domain, subdomain, level: q_id + 1 }
       })
     })
   })
@@ -16580,4 +17349,4 @@ console.log('generateds', generateds)
 console.log('ids', ids)
 
 
-export default {questions:generateds, ids}
+export default { questions: generateds, ids }

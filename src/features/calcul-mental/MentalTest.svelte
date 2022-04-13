@@ -159,7 +159,7 @@
         const question = getQuestion(theme, domain, subdomain, level)
         questions.push({
           ...question,
-          delay: 10,
+          delay: 15,
         })
       })
 
@@ -332,7 +332,7 @@
   }
 
   function onKeystroke(mathfield, keystroke, e) {
-    const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%'
+    const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%€'
     trace('keystroke', keystroke)
     trace('e.key', e.key)
     if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
@@ -545,7 +545,7 @@
               animate:flip="{{ duration: 700 }}"
               out:fly="{{ x: -500, duration: cards.length > 1 ? 700 : 0 }}"
             >
-              <div class="mt-1 mb-1 elevation-{4} rounded-lg">
+              <div class="mt-1 mb-1 pt-4 pb-4 elevation-{4} rounded-lg">
                 <Question
                   size="{classroom ? $classroomFontSize : $testFontSize}"
                   question="{card}"
@@ -706,9 +706,10 @@
     width: 100%;
   }
   .card {
-    min-width: calc(100% - 8px);
+    min-width: calc(100% - 24px);
+    /* min-width: 95%; */
     /* min-width: 400px; */
-    margin: 4px;
+    margin: 12px;
     /* height: 100%; */
   }
 </style>

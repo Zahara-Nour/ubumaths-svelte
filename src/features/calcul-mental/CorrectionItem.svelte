@@ -139,6 +139,22 @@
                 : convertToMarkup('$$' + solutions_latex[0] + '$$')) +
               '</span>',
           )
+          .replace(
+            new RegExp('&sol', 'g'),
+            item.type === 'choice'
+              ? item.choices[solutions[0]].text
+              : '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' + solutions_latex[0] + '}}',
+          )
+          .replace(
+            new RegExp('&ans', 'g'),
+            status === STATUS_CORRECT
+              ? '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
+                  answer_latex +
+                  '}}'
+              : status === STATUS_UNOPTIMAL_FORM
+              ? '\\textcolor{yellow}{' + answer_latex + '}'
+              : '\\textcolor{red}{' + answer_latex + '}',
+          )
       }
       lines.push(line)
     })
@@ -170,6 +186,12 @@
                   '</span>',
               )
               .replace(
+                new RegExp('&sol', 'g'),
+                item.type === 'choice'
+                  ? item.choices[solutions[0]].text
+                  : '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' + solutions_latex[0] + '}}',
+              )
+              .replace(
                 '&answer',
                 () =>
                   '<span style="color:green; border:2px solid green; border-radius: 5px;  margin:2px; padding:5px;display:inline-block">' +
@@ -177,6 +199,16 @@
                     ? convertToMarkup(item.choices[answer_choice].text)
                     : convertToMarkup('$$' + answer_latex + '$$')) +
                   '</span>',
+              )
+              .replace(
+                new RegExp('&ans', 'g'),
+                status === STATUS_CORRECT
+                  ? '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
+                      answer_latex +
+                      '}}'
+                  : status === STATUS_UNOPTIMAL_FORM
+                  ? '\\textcolor{yellow}{' + answer_latex + '}'
+                  : '\\textcolor{red}{' + answer_latex + '}',
               )
           }
 
@@ -201,6 +233,12 @@
                   '</span>',
               )
               .replace(
+                new RegExp('&sol', 'g'),
+                item.type === 'choice'
+                  ? item.choices[solutions[0]].text
+                  : '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' + solutions_latex[0] + '}}',
+              )
+              .replace(
                 '&answer',
                 () =>
                   '<span style="color:green; border:2px solid green; border-radius: 5px;  margin:2px; padding:5px;display:inline-block">' +
@@ -208,6 +246,16 @@
                     ? convertToMarkup(item.choices[answer_choice].text)
                     : convertToMarkup('$$' + answer_latex + '$$')) +
                   '</span>',
+              )
+              .replace(
+                new RegExp('&ans', 'g'),
+                status === STATUS_CORRECT
+                  ? '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
+                      answer_latex +
+                      '}}'
+                  : status === STATUS_UNOPTIMAL_FORM
+                  ? '\\textcolor{yellow}{' + answer_latex + '}'
+                  : '\\textcolor{red}{' + answer_latex + '}',
               )
           }
 
@@ -235,6 +283,16 @@
                         ? convertToMarkup(item.choices[answer_choice].text)
                         : convertToMarkup('$$' + answer_latex + '$$')) +
                       '</span>',
+                  )
+                  .replace(
+                    new RegExp('&ans', 'g'),
+                    status === STATUS_CORRECT
+                      ? '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
+                          answer_latex +
+                          '}}'
+                      : status === STATUS_UNOPTIMAL_FORM
+                      ? '\\textcolor{yellow}{' + answer_latex + '}'
+                      : '\\textcolor{red}{' + answer_latex + '}',
                   ),
             )
           }
@@ -255,6 +313,16 @@
                       ? item.choices[answer_choice].text
                       : '$$' + answer_latex + '$$') +
                     '</span>',
+                )
+                .replace(
+                  new RegExp('&ans', 'g'),
+                  status === STATUS_CORRECT
+                    ? '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
+                        answer_latex +
+                        '}}'
+                    : status === STATUS_UNOPTIMAL_FORM
+                    ? '\\textcolor{yellow}{' + answer_latex + '}'
+                    : '\\textcolor{red}{' + answer_latex + '}',
                 ),
           )
         }
