@@ -1,3 +1,7 @@
+<script context="module">
+  import Viewport from 'svelte-viewport-info'
+</script>
+
 <script>
   import Question from './Question.svelte'
   import generate from './generateQuestion'
@@ -28,7 +32,7 @@
   const qs = datas.questions
   const ids = datas.ids
   let audio = new Audio('sounds/ressort.mp3')
-  let { info, fail, trace } = getLogger('MentalTest', 'info')
+  let { info, fail, trace } = getLogger('MentalTest', 'trace')
   let question = {}
   let questions
   let current = -1
@@ -73,6 +77,11 @@
     max = 60
   let cards
   let card
+  let orientation = Viewport.Orientation
+
+  console.log('Viewport Width x Height:     ',Viewport.Width+'x'+Viewport.Height)
+  console.log('standard Screen Orientation: ',Viewport.Orientation)
+  console.log('detailled Screen Orientation:',Viewport.detailledOrientation)
 
   const togglePause = () => {
     if (pause) {
@@ -332,7 +341,7 @@
   }
 
   function onKeystroke(mathfield, keystroke, e) {
-    const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%€'
+    const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%€L'
     trace('keystroke', keystroke)
     trace('e.key', e.key)
     if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
@@ -352,6 +361,9 @@
       )
     ) {
       mf.insert('\\,')
+      return false
+    } else if (e.key === '%') {
+      mf.insert('\\%')
       return false
     } else if (e.key === 'r') {
       mf.insert('\\sqrt')
@@ -441,6 +453,8 @@
     }
   }
 
+
+
   initTest()
 
   // le bouton restart a été appuyé après la correction
@@ -463,6 +477,22 @@
 
   $: delay = slider * 1000
 </script>
+
+<svelte:body
+  on:viewportchanged={() => {
+    console.log('Viewport Size changed to: ',Viewport.Width+'x'+Viewport.Height)
+  }}
+  
+  on:orientationchangeend={() => { 
+    orientation =  Viewport.Orientation + (
+      Viewport.detailledOrientation == null
+      ? ''
+      : '(' + Viewport.detailledOrientation + ')'
+    )
+    console.log(
+    'Screen Orientation changed to: ',orientation
+  ) }}
+/>
 
 {#if showExemple}
   <Exemple question="{generatedExemple}" classroom="{true}" />
@@ -515,6 +545,7 @@
     </div>
   {/if}
 {:else if card}
+orientation: {orientation}
   <div class=" pa-2 ">
     <div class="{' mt-1 mb-1 d-flex justify-start'}">
       <CircularProgress
