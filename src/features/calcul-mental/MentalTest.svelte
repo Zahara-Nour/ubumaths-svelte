@@ -79,9 +79,12 @@
   let card
   let orientation = Viewport.Orientation
 
-  console.log('Viewport Width x Height:     ',Viewport.Width+'x'+Viewport.Height)
-  console.log('standard Screen Orientation: ',Viewport.Orientation)
-  console.log('detailled Screen Orientation:',Viewport.detailledOrientation)
+  console.log(
+    'Viewport Width x Height:     ',
+    Viewport.Width + 'x' + Viewport.Height,
+  )
+  console.log('standard Screen Orientation: ', Viewport.Orientation)
+  console.log('detailled Screen Orientation:', Viewport.detailledOrientation)
 
   const togglePause = () => {
     if (pause) {
@@ -453,7 +456,21 @@
     }
   }
 
+  function handleViewportChanged() {
+    console.log(
+      'Viewport Size changed to: ',
+      Viewport.Width + 'x' + Viewport.Height,
+    )
+  }
 
+  function handleOrientationChanged() {
+    orientation =
+      Viewport.Orientation +
+      (Viewport.detailledOrientation == null
+        ? ''
+        : '(' + Viewport.detailledOrientation + ')')
+    console.log('$' + orientation + '$')
+  }
 
   initTest()
 
@@ -479,20 +496,8 @@
 </script>
 
 <svelte:body
-  on:viewportchanged={() => {
-    console.log('Viewport Size changed to: ',Viewport.Width+'x'+Viewport.Height)
-  }}
-  
-  on:orientationchangeend={() => { 
-    orientation =  Viewport.Orientation + (
-      Viewport.detailledOrientation == null
-      ? ''
-      : '(' + Viewport.detailledOrientation + ')'
-    )
-    console.log(
-    'Screen Orientation changed to: ',orientation
-  ) }}
-/>
+  on:viewportchanged="{handleViewportChanged}"
+  on:orientationchangeend="{handleOrientationChanged}" />
 
 {#if showExemple}
   <Exemple question="{generatedExemple}" classroom="{true}" />
@@ -545,8 +550,8 @@
     </div>
   {/if}
 {:else if card}
-orientation: {orientation}
-  <div class=" pa-2 ">
+  orientation: {orientation}
+  <div>
     <div class="{' mt-1 mb-1 d-flex justify-start'}">
       <CircularProgress
         number="{questions.length - cards.length + 1}"
@@ -567,71 +572,75 @@ orientation: {orientation}
         />
       {/if}
     </div>
-    {#if cards}
-      <div id="cards-container">
-        <div id="cards">
-          {#each cards as card (card.id+card.num)}
-            <div
-              class="card"
-              animate:flip="{{ duration: 700 }}"
-              out:fly="{{ x: -500, duration: cards.length > 1 ? 700 : 0 }}"
-            >
-              <div class="mt-1 mb-1 pt-4 pb-4 elevation-{4} rounded-lg">
-                <Question
-                  size="{classroom ? $classroomFontSize : $testFontSize}"
-                  question="{card}"
-                />
-                {#if card.choices}
-                  <div
-                    class="mt-3 d-flex flex-wrap justify-space-around"
-                    style="width:100%;"
-                  >
-                    {#each card.choices as choice, i}
-                      <!-- <Button size="x-large" class="ml-3 mr-3" on:click="{() => onChoice(i)}"> -->
+    <div class="{orientation === 'portrait' ? 'portrait' : 'landscape'}">
+      {#if cards}
+        <div
+          id="cards-container"
+          class="{orientation === 'landscape' ? 'column1' : ''}"
+        >
+          <div id="cards">
+            {#each cards as card (card.id + card.num)}
+              <div
+                class="card"
+                animate:flip="{{ duration: 700 }}"
+                out:fly="{{ x: -500, duration: cards.length > 1 ? 700 : 0 }}"
+              >
+                <div class=" pa-2 pb-2 elevation-{4} rounded-lg">
+                  <Question
+                    size="{classroom ? $classroomFontSize : $testFontSize}"
+                    question="{card}"
+                  />
+                  {#if card.choices}
+                    <div
+                      class="mt-3 d-flex flex-wrap justify-space-around"
+                      style="width:100%;"
+                    >
+                      {#each card.choices as choice, i}
+                        <!-- <Button size="x-large" class="ml-3 mr-3" on:click="{() => onChoice(i)}"> -->
 
-                      <button
-                        class="rounded-lg  ma-3 pa-3"
-                        style="border: 5px solid yellow;"
-                        on:click="{() => {
-                          if (!classroom) onChoice(i)
-                        }}"
-                      >
-                        {#if choice.image}
-                          {#await choice.imageBase64P}
-                            loading image
-                          {:then base64}
-                            <img
-                              class="white"
-                              src="{base64}"
-                              style="max-width:400px;max-height:40vh;"
-                              alt="{`choice ${i}`}"
-                            />
-                          {:catch error}
-                            {error}
-                          {/await}
-                        {/if}
-                        {#if choice.markup}
-                          <div
-                            style="font-size:{classroom
-                              ? $classroomFontSize
-                              : $testFontSize + 4}px;"
-                          >
-                            {@html choice.markup}
-                          </div>
-                        {/if}
-                      </button>
+                        <button
+                          class="rounded-lg  ma-3 pa-3"
+                          style="border: 5px solid yellow;"
+                          on:click="{() => {
+                            if (!classroom) onChoice(i)
+                          }}"
+                        >
+                          {#if choice.image}
+                            {#await choice.imageBase64P}
+                              loading image
+                            {:then base64}
+                              <img
+                                class="white"
+                                src="{base64}"
+                                style="max-width:400px;max-height:40vh;"
+                                alt="{`choice ${i}`}"
+                              />
+                            {:catch error}
+                              {error}
+                            {/await}
+                          {/if}
+                          {#if choice.markup}
+                            <div
+                              style="font-size:{classroom
+                                ? $classroomFontSize
+                                : $testFontSize + 4}px;"
+                            >
+                              {@html choice.markup}
+                            </div>
+                          {/if}
+                        </button>
 
-                      <!-- </Button> -->
-                    {/each}
-                  </div>
-                {/if}
+                        <!-- </Button> -->
+                      {/each}
+                    </div>
+                  {/if}
+                </div>
               </div>
-            </div>
-          {/each}
+            {/each}
+          </div>
         </div>
-      </div>
-    {/if}
-    <!-- <div class="mt-1 mb-1 elevation-{4} rounded-lg">
+      {/if}
+      <!-- <div class="mt-1 mb-1 elevation-{4} rounded-lg">
       <Question
         size="{classroom ? $classroomFontSize : $testFontSize}"
         question="{generated}"
@@ -680,32 +689,36 @@ orientation: {orientation}
         </div>
       {/if}
     </div> -->
-    <!-- <div class:error> -->
+      <!-- <div class:error> -->
 
-    <div class="d-flex align-center justify-center">
-      {#if !card.choices && !classroom}
-        <div
-          class="mt-16 d-flex flex-row align-center justify-center"
-          style="max-width:500px;width:100%"
-        >
-          <span class="mr-4" style="font-size:{$testFontSize}px;"
-            >Ta réponse:</span
+      <div class="d-flex align-center justify-center {orientation === 'landscape' ? 'column2' : '' }" style='width:100%'>
+        {#if !card.choices && !classroom}
+          <div
+            class="d-flex align-center justify-center {orientation ===
+            'landscape'
+              ? 'flex-column'
+              : 'flex-row'}"
+            style="width:80%"
           >
-          <div class="flex-grow-1">
-            <math-field
-              style="width:100%;font-size:{$testFontSize}px;"
-              class="{correct
-                ? 'pa-2 light-green lighten-5'
-                : 'pa-2 deep-orange lighten-5'}"
-              virtual-keyboard-theme="apple"
-              on:input="{onChangeMathField}"
-              on:change="{commit}"
-              bind:this="{mf}"
+            <span class="mr-4" style="font-size:{$testFontSize}px;"
+              >Ta réponse:</span
             >
-            </math-field>
+            <div class="flex-grow-1" style="width:70%">
+              <math-field
+                style="width:100%;font-size:{$testFontSize}px;"
+                class="{correct
+                  ? 'pa-2 light-green lighten-5'
+                  : 'pa-2 deep-orange lighten-5'}"
+                virtual-keyboard-theme="apple"
+                on:input="{onChangeMathField}"
+                on:change="{commit}"
+                bind:this="{mf}"
+              >
+              </math-field>
+            </div>
           </div>
-        </div>
-      {/if}
+        {/if}
+      </div>
     </div>
   </div>
 {:else}
@@ -717,9 +730,34 @@ orientation: {orientation}
     border: 5px solid red;
   }
 
+  .portrait {
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .landscape {
+    width:100%;
+    display: flex;
+    align-items:center;
+  }
+
+  .column1 {
+    flex-basis: 60%;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+  .column2 {
+    flex-basis: 40%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    
+  }
+
   #cards-container {
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     position: relative;
     /* display: flex; */
     /* flex-direction: column; */

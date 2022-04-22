@@ -58,7 +58,7 @@
       
         <div
           id="enounce"
-          class="mt-4 text-center"
+          class="mt-3 mb-3 text-center"
           style="font-size:{size}px;max-width:900px;"
         >
           {@html enounce}
@@ -68,7 +68,7 @@
       
         <div
           id="enounce2"
-          class="mt-4 text-center"
+          class="mt-3 mb-3  text-center"
           style="font-size:{size}px;max-width:900px;"
         >
           {@html enounce2}
@@ -94,10 +94,10 @@
       {#if showExp}
         <div
           id="expressions"
-          class="mt-12 d-flex flex-column align-center justify-center"
+          class="mt-3 mb-3  d-flex flex-column align-center justify-center"
         >
    
-          <div id="expression" class="mt-4" style="font-size:{size + 8}px;">
+          <div id="expression" class="mt-3 mb-3 " style="font-size:{size + 8}px;">
             {@html expression}
           </div>
           {#if expression2}
