@@ -5,9 +5,24 @@ export const STATUS_CORRECT = 'correct'
 export const STATUS_INCORRECT = 'incorrect'
 export const STATUS_UNOPTIMAL_FORM = 'unoptimal  form'
 export const STATUS_BAD_FORM = 'bad form'
+export const STATUS_BAD_UNIT = 'bad unit'
 
 let { fail, trace, info } = getLogger('correction', 'info')
 
+
+// VALIDATION DES REPONSES
+// 1) on regarde si il y a eu une réponse -> STATUS_EMPTY
+// 2) on regarde si l'expression est valide mathématiquement -> STATUS_INCORRECT
+// 3) on regarde si la réponse de l'utilisateur est équivalente à la solution -> STATUS_INCORRECT
+// 4) on vérifie les contraintes (options require et no-penalty) :
+//   espaces, zéros inutiles, produits implicites, parenthèses superflues,
+//   signes superflus, termes nuls, facteurs nuls, facteurs égaux à 1,
+//   fractions réduites, unités
+//   -> STATUS_BAD_FORM ou STATUS_UNOPTIMAL_FORM
+// 5) si la solution n'est pas explicitement calculable un test (testAnswer) de validation 
+//    peut être effectué -> STATUS_INCORRECT ou STATUS_CORRECT ou inchangé (peut deja etre STATUS_UNOPTIMAL_FORM ou STATUS_BAD_FORM)
+// 6) Sinon après avoir mis en ordre les termes et facteurs, on compare strictement la réponse à la solution explicite -> STATUS_BAD_FORM ou STATUS_CORRECT
+// TODO: Formats 
 
 const EMPTY_ANSWER = "Tu n'as rien répondu."
 const ZEROS =
@@ -26,14 +41,17 @@ const SPACES =
     "Les chiffres sont mal espacés dans <span style='color:_COLORANSWER_'>ta réponse</span>."
 const SIGNS =
     "Tu peux faire des simplifications de signes dans <span style='color:_COLORANSWER_'>ta réponse</span>."
-const BAD =
+const MATH_INCORRECT =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> n'est pas mathématiquement correcte."
 const PRODUCTS =
     "Tu peux simplifier certains symboles de multiplication dans <span style='color:_COLORANSWER_'>ta réponse</span>."
 const FRACTIONS =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> contient une ou des fractions non simplifiées."
-const FORM =
+const BAD_FORM =
     "<span style='color:_COLORANSWER_'>Ta réponse</span> n'est pas écrite sous la forme demandée."
+
+const BAD_UNIT =
+    "<span style='color:_COLORANSWER_'>Ta réponse</span> n'est pas écrite avec l'unité demandée."
 
 const TERMS_PERMUTATION =
     "Dans <span style='color:_COLORANSWER_'>ta réponse</span> les termes doivent être écrits dans un certain ordre."
@@ -144,7 +162,7 @@ function checkAnswer(item) {
 
         if (failed) {
             item.status = STATUS_INCORRECT
-        } else if (item.status !== STATUS_UNOPTIMAL_FORM) {
+        } else if (item.status !== STATUS_UNOPTIMAL_FORM && item.status !== STATUS_BAD_FORM) {
             item.status = STATUS_CORRECT
         }
     } else {
@@ -176,12 +194,29 @@ function checkAnswer(item) {
         // }
         // il reste a tester la permutation des termes et facteurs qui est autorisée par défaut
 
+        console.log("vérification de l'unité ?", item)
+        console.log('e', e.string, e)
+     
+       
         const e2 = e.sortTermsAndFactors()
         const sols2 = sols.map((solution) => solution.sortTermsAndFactors())
-      
+
+        // Pourquoi regarder s'il y a une unité ?
         if (!e2.unit && !sols2.some((sol) => sol.strictlyEquals(e2))) {
-            
+
             item.status = STATUS_BAD_FORM
+        }
+        else if (item.unit
+            && (item.unit === 'HMS' && !e.isTime() || item.unit !=='HMS' && !e.unit || item.unit !=='HMS' &&  e.unit.string !== item.unit)) {
+            console.log("pb unit")
+            if (item.options.includes('require-specific-unit')) {
+                item.status = STATUS_BAD_UNIT
+            }
+            else if (!item.options.includes('no-penalty-for-not-respected-unit') && item.status !== STATUS_BAD_FORM) {
+
+                item.status = STATUS_UNOPTIMAL_FORM
+
+            }
         }
 
         else if (item.options.includes('disallow-terms-and-factors-permutation') ||
@@ -226,6 +261,8 @@ function checkAnswer(item) {
         }
 
 
+
+
         // if (
         //     item.options.includes('disallow-terms-and-factors-permutation') ||
         //     item.options.includes('disallow-terms-permutation') ||
@@ -256,12 +293,17 @@ function checkAnswer(item) {
         //     item.status = STATUS_CORRECT
         // }
 
-        if (item.status !== STATUS_UNOPTIMAL_FORM && item.status !== STATUS_BAD_FORM) {
+        // if (item.status !== STATUS_UNOPTIMAL_FORM && item.status !== STATUS_BAD_FORM && item.status!==) {
+        //     item.status = STATUS_CORRECT
+        // }
+
+        if (!item.status) {
             item.status = STATUS_CORRECT
         }
     }
 
-    if (item.status === STATUS_BAD_FORM) item.coms.push(FORM)
+    if (item.status === STATUS_BAD_FORM) item.coms.push(BAD_FORM)
+    else if (item.status === STATUS_BAD_UNIT) item.coms.push(BAD_UNIT)
 }
 
 function checkProducts(item) {
@@ -284,7 +326,7 @@ function checkBrackets(item) {
     switch (item.type) {
         case 'trou':
             e = math(item.qexp.replace('?', item.answer))
-          
+
             break
         default:
             e = math(item.answer)
@@ -318,7 +360,7 @@ function checkSigns(item) {
         .removeMultOperator()
         .string
     // il faut enlever les * inutiles
-   
+
     return e1 === e2
 
 }
@@ -342,8 +384,8 @@ function checkSpaces(item) {
     const regex = /\d+[\d\s]*(\.[\d\s]*\d+)?/g
     const matches = a.match(regex)
 
-    
-    
+
+
 
     if (matches) {
         const regexsInt = [
@@ -368,9 +410,9 @@ function checkSpaces(item) {
             // Dans le cas des entiers, il peut y a voir un espace à la fin,
             // il faut l'enlever
             int = int.trim()
-            
-            const result  = regexsInt.some((regex) => int.match(regex) ||
-            (dec && regexsDec.some((regex) => dec.match(regex))))
+
+            const result = regexsInt.some((regex) => int.match(regex) ||
+                (dec && regexsDec.some((regex) => dec.match(regex))))
             return result
         })
     }
@@ -394,6 +436,7 @@ export function assessItems(questions, answers, answers_latex, answers_choice, t
     for (let i = 0; i < questions.length; i++) {
         const question = questions[i]
         total += question.points
+        console.log('question', question)
         items[i] = {
             qexp: question.expression,
             qexp_latex: question.expression_latex,
@@ -421,6 +464,7 @@ export function assessItems(questions, answers, answers_latex, answers_choice, t
             imageBase64P: question.imageBase64P,
             imageCorrection: question.imageCorrection,
             imageCorrectionBase64: question.imageCorrectionBase64,
+            unit:question.unit
 
         }
 
@@ -446,8 +490,8 @@ export function assessItems(questions, answers, answers_latex, answers_choice, t
     info('corrected items', items)
     return { items, score, total }
 }
-export function assessItem(item, classroom) {
 
+export function assessItem(item, classroom) {
 
     if (!item.answer && item.answer_choice === null) {
         //answer_choice peut etre égal à 0
@@ -475,15 +519,21 @@ export function assessItem(item, classroom) {
 
 
                 if (isNotWellFormedExpression) {
-                    item.coms.push(BAD)
+                    item.coms.push(MATH_INCORRECT)
                     item.status = STATUS_INCORRECT
                 } else {
+                    // si i ly a un testAnswer, la validation se fera plus tard
+                    // A REVOIR : il n' y a pas de raison de faire intervenir testAnswer ici
+                    // il faut juste vérifier que l'on est dans un type de question 'result' ou que la solution est donnée
+                    // explicitement dans solutions
                     const equivalent =
                         item.testAnswer ||
-                        item.solutions.some((solution) =>
-                            math(item.answer).equals(math(solution)),
+                        item.solutions.some((solution) => {
+                            console.log('assess', item.answer, math(item.answer).string, solution, math(solution).string)
+                            return math(item.answer).equals(math(solution))
+                        }
                         )
-                   
+
                     // console.log(math(item.solutions[0]).shallow())
                     // console.log(math(item.solutions[0]))
                     if (!equivalent) {

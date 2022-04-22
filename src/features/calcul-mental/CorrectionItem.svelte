@@ -9,6 +9,7 @@
     STATUS_INCORRECT,
     STATUS_UNOPTIMAL_FORM,
     STATUS_EMPTY,
+    STATUS_BAD_UNIT,
   } from './correction'
   import { mdiDistributeVerticalBottom } from '@mdi/js'
 
@@ -78,7 +79,7 @@
     // if (image) {
     //   imageBase64P = fetchImage(image)
     // }
-    if (status === STATUS_BAD_FORM || status === STATUS_INCORRECT) {
+    if (status === STATUS_BAD_FORM || status === STATUS_INCORRECT || STATUS_BAD_UNIT) {
       answerColor = 'red'
     } else if (status === STATUS_UNOPTIMAL_FORM) {
       answerColor = 'orange'
@@ -95,7 +96,7 @@
           }
         })
       : null
-
+    //  console.log('solution_latex', solutions_latex)
     correction = createCorrection()
     detailedCorrection = correctionDetails ? createDetailedCorrection() : null
   }
@@ -143,7 +144,9 @@
             new RegExp('&sol', 'g'),
             item.type === 'choice'
               ? item.choices[solutions[0]].text
-              : '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' + solutions_latex[0] + '}}',
+              : '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
+                  solutions_latex[0] +
+                  '}}',
           )
           .replace(
             new RegExp('&ans', 'g'),
@@ -189,7 +192,9 @@
                 new RegExp('&sol', 'g'),
                 item.type === 'choice'
                   ? item.choices[solutions[0]].text
-                  : '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' + solutions_latex[0] + '}}',
+                  : '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
+                      solutions_latex[0] +
+                      '}}',
               )
               .replace(
                 '&answer',
@@ -236,7 +241,9 @@
                 new RegExp('&sol', 'g'),
                 item.type === 'choice'
                   ? item.choices[solutions[0]].text
-                  : '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' + solutions_latex[0] + '}}',
+                  : '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
+                      solutions_latex[0] +
+                      '}}',
               )
               .replace(
                 '&answer',
@@ -344,7 +351,10 @@
               line +=
                 `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
                 `\\\\&= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}\\end{align*}$$`
-            } else if (status === STATUS_BAD_FORM) {
+            } else if (
+              status === STATUS_BAD_FORM ||
+              status === STATUS_BAD_UNIT
+            ) {
               line +=
                 `&= \\textcolor{red}{${answer_latex}}` +
                 `\\\\&= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}\\end{align*}$$`
@@ -353,7 +363,7 @@
                 `&= \\textcolor{orange}{${answer_latex}}` +
                 `\\\\&= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}\\end{align*}$$`
             } else {
-              line += `=\\textcolor{green}{${answer_latex}}\\end{align*}$$`
+              line += `=\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${answer_latex}}}\\end{align*}$$`
             }
             lines.push(line)
           }

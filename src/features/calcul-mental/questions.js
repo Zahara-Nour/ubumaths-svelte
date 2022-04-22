@@ -1,35 +1,43 @@
 import { CP, CM1, CM2, SIXIEME, SECONDE, CINQUIEME, QUATRIEME, CE1, CE2, TROISIEME } from '../../app/grade'
 
 const UNKNOWN = 'a determiner'
+
+
+
 // OPTIONS
+// 
+// pour les réponses de l'utilisateur :
+// require et no-penalty : 
+// require : la réponse est considérée fausse si ce critère n'est pas respecté
+//           si require n'est pas utilisé, le critère correspondant non respecté
+//           cause une pénalité (false par défaut = désactivé)
+// no-penalty : ne peut pas être utilisé en même temps que require,
+//            il n'y a pas de pénalité si le critère précédent n'est pas respecté 
+//            (false par défaut = désactivé)
+
+
+// disallow : 
+
 // 
 // * espaces dans l'écriture des nombres
 // enounce-no-spaces = false
 // exp-no-spaces = false
-// answer-require-spaces = false
 // 
 // require-correct-spaces = false
 // no-penalty-for-incorrect-spaces = false
 
 
 // * produits implicites
-// answer-require-implicit-products = true
-
-
 // require-implicit-products = false
 // no-penalty-for-explicit-products = false
-// 
-// * parenthèses inutiles
-// answer-allow-unecessary-brackets = false
-// 
-// require-no-extraneaous-brackets
-// no-penalty-for-extraneous-brackets
-// no-penalty-for-extraneous-brackets-in-first-negative-term
 
+// * parenthèses inutiles
+// require-no-extraneaous-brackets = false
+// no-penalty-for-extraneous-brackets = false
+// no-penalty-for-extraneous-brackets-in-first-negative-term = false
 
 
 // * zéros inutiles
-// answer-allow-unecessary-zeros = false
 // exp-allow-unecessary-zeros = false
 // 
 // require-no-extraneaous-zeros
@@ -37,10 +45,8 @@ const UNKNOWN = 'a determiner'
 
 
 // * signes inutiles
-// answer-allow-unecessary-signs = false
-// 
-// require-no-extraneaous-signs
-// no-penalty-for-extraneous-signs
+// require-no-extraneaous-signs = false
+// no-penalty-for-extraneous-signs = false
 
 // * facteurs égaux à 1
 // require-no-factor-one = false
@@ -50,6 +56,19 @@ const UNKNOWN = 'a determiner'
 // require-no-factor-zero = false
 // no-penalty-for-factor-zero = false
 
+// * termes nuls
+// require-no-null-terms = false
+// no-penalty-for-null-terms = false
+
+// * fractions non simplifiées
+// require-reduced-fractions = false
+// no-penalty-for-non-reduced-fractions = false
+
+// * unités
+// require-specific-unit = false
+// no-penalty-for-not-respected-unit = false
+
+
 // * permutation des termes et facteurs
 // disallow-terms-permutation=false
 // disallow-factors-permutation=false
@@ -58,14 +77,8 @@ const UNKNOWN = 'a determiner'
 // penalty-for-terms-permutation = false
 // penalty-for-factors-permutation = false
 
-// * termes nuls
-// require-no-null-terms = false
-// no-penalty-for-null-terms = false
 
 
-//  options pour fractions non simplifiées
-// require-reduced-fractions
-// no-penalty-for-non-reduced-fractions
 
 // modifictaion de l'expression de la fonction
 // shuffle-terms = false
@@ -74,9 +87,6 @@ const UNKNOWN = 'a determiner'
 // shallow-shuffle-terms = false
 // shallow-shuffle-factors = false
 // exp-remove-unecessary-brackets = false
-
-
-
 
 //*  mélange des choix (mélangés par défaut)
 // no-shuffle-choices = false
@@ -247,7 +257,7 @@ const questions = {
         {
           description: 'Ecrire un grand nombre entier avec des espaces',
           description: 'Nombre à 4 chiffres',
-          enounces: ["Réécris ce nombre  entiers  en ajoutant un espace pour séparer le chiffre des milliers."],
+          enounces: ["Réécris ce nombre entier en ajoutant un espace pour séparer le chiffre des milliers."],
           expressions: ['&1'],
           variables: [
             { '&1': '$e{4;4}' },
@@ -260,7 +270,7 @@ const questions = {
         {
           description: 'Ecrire un grand nombre entier avec des espaces',
           description: "Jusqu'à 7 chiffres",
-          enounces: ["Réécris ce nombre  entiers  en rajoutant des espaces pour former des groupes de 3 chiffres."],
+          enounces: ["Réécris ce nombre entier en rajoutant des espaces pour former des groupes de 3 chiffres."],
           expressions: ['&2'],
           variables: [
             { '&1': '$e[4;7]', '&2': '$e{&1;&1}' },
@@ -272,7 +282,7 @@ const questions = {
         },
         {
           description: 'Ecrire un grand nombre entier sans les zéros inutiles',
-          enounces: ["Réécris ce nombre entiers en enlevant les zéros inuiles."],
+          enounces: ["Réécris ce nombre entier en enlevant les zéros inuiles."],
           expressions: [
             '00&1&2&3&4',
             '00&1&2&3&40',
@@ -292,7 +302,7 @@ const questions = {
         {
           description: 'Ecrire un grand nombre entier avec des espaces',
           description: "Jusqu'à 10 chiffres",
-          enounces: ["Réécris ce nombre  entiers  en rajoutant des espaces pour former des groupes de 3 chiffres."],
+          enounces: ["Réécris ce nombre entier en rajoutant des espaces pour former des groupes de 3 chiffres."],
           expressions: ['&2'],
           variables: [
             { '&1': '$e[4;10]', '&2': '$e{&1;&1}' },
@@ -7297,7 +7307,7 @@ const questions = {
           correctionFormat: [
             {
               correct: ['Le résultat de $$(-&1)+&2$$ est &solution'],
-              uncorrect: ['Le résultat de $$(-&1)+&2$$ est est &solution'],
+              uncorrect: ['Le résultat de $$(-&1)+&2$$ est &solution'],
               answer: 'Le résultat est &answer'
             },
             {
@@ -7317,7 +7327,7 @@ const questions = {
             },
             {
               correct: ['Le résultat de $$&2+(-&1)$$ est &solution'],
-              uncorrect: ['Le résultat de $$&2+(-&1)$$ est est &solution'],
+              uncorrect: ['Le résultat de $$&2+(-&1)$$ est &solution'],
               answer: 'Le résultat est &answer'
             },
 
@@ -10754,7 +10764,7 @@ const questions = {
             "Quelle est l'aire d'un <b>triangle</b> de base $$&1\\,m$$ et de hauteur $$&2\\,m$$ ?",
             "Quelle est l'aire d'un <b>triangle</b> de base $$&1\\,dam$$ et de hauteur $$&2\\,dam$$ ?",
             "Quelle est l'aire d'un <b>triangle</b> de base $$&1\\,hm$$ et de hauteur $$&2\\,hm$$ ?",
-            "Quelle est l'aire d'un <b>triangle</b> de base $$&1\\,km$$et de hauteur $$&2\\,km$$ ?",
+            "Quelle est l'aire d'un <b>triangle</b> de base $$&1\\,km$$ et de hauteur $$&2\\,km$$ ?",
 
           ],
           variables: [
@@ -10938,6 +10948,438 @@ const questions = {
         },
 
       ],
+    },
+    Durées: {
+      "Convertir": [
+        {
+          description: 'Convertir des durées',
+          subdescription: "heures en minutes",
+          enounces: ["Convertis en minutes (n'oublie pas l'unité <i>min</i>)."],
+          variables: [
+            {
+              '&1': '$e[1;10]',
+            },
+          ],
+          expressions: [
+            '&1 h',
+
+          ],
+          correctionDetails: [[{ text: "$$&1\\,h = &1 \\times 60\\,min = &sol$$" }]],
+          units: ['min'],
+          options: ['require-specific-unit'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Convertir des durées',
+          subdescription: "minutes en heures",
+          enounces: ["Convertis en heures (n'oublie pas l'unité <i>h</i>)."],
+          variables: [
+            {
+              '&1': '$e[1;10]',
+            },
+          ],
+          expressions: [
+            '#{&1*60} min',
+
+          ],
+          correctionDetails: [[{ text: "$$#{&1*60}\\,min = &1 \\times 60\\,min = &sol$$" }]],
+          units: ['h'],
+          options: ['require-specific-unit'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Convertir des durées',
+          subdescription: "minutes en secondes",
+          enounces: ["Convertis en secondes (n'oublie pas l'unité <i>s</i>)."],
+          variables: [
+            {
+              '&1': '$e[1;10]',
+            },
+          ],
+          expressions: [
+            '&1 min',
+
+          ],
+          correctionDetails: [[{ text: "$$&1\\,min = &1 \\times 60\\,s = &sol$$" }]],
+          units: ['s'],
+          options: ['require-specific-unit'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Convertir des durées',
+          subdescription: "secondes en minutes",
+          enounces: ["Convertis en minutes (n'oublie pas l'unité <i>min</i>)."],
+          variables: [
+            {
+              '&1': '$e[1;10]',
+            },
+          ],
+          expressions: [
+            '#{&1*60} s',
+
+          ],
+          correctionDetails: [[{ text: "$$#{&1*60}\\,s = &1 \\times 60\\,s = &sol$$" }]],
+
+          units: ['min'],
+          options: ['require-specific-unit'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Convertir des durées',
+          subdescription: "HMS en minutes",
+          enounces: ["Convertis en minutes (n'oublie pas l'unité <i>min</i>)."],
+          variables: [
+            {
+              '&1': '$e[1;2]',
+              '&2': '$e[1;5]*10'
+            },
+          ],
+          expressions: [
+            '&1 h #{&2} min',
+
+          ],
+          correctionDetails: [[{ text: "$$&1\\,h\\,#{&2}\\,min = &1\\times 60\\,min+#{&2}\\,min = &sol$$" }]],
+
+          units: ['min'],
+          options: ['require-specific-unit'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Convertir des durées',
+          subdescription: "HMS en minutes (2)",
+          enounces: ["Convertis en minutes (n'oublie pas l'unité <i>min</i>)."],
+          variables: [
+            {
+              '&1': '$e[1;2]',
+              '&2': '$e[1;59]'
+            },
+          ],
+          expressions: [
+            '&1 h #{&2} min',
+
+          ],
+          correctionDetails: [[{ text: "$$&1\\,h\\,#{&2}\\,min = &1\\times 60\\,min+#{&2}\\,min = &sol$$" }]],
+
+          units: ['min'],
+          options: ['require-specific-unit'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Convertir des durées',
+          subdescription: "minutes en HMS",
+          enounces: ["Convertis sous la forme ... <i>h</i> ... <i>min</i>"],
+          variables: [
+            {
+              '&1': '$e[1;2]',
+              '&2': '$e[1;5]*10'
+            },
+          ],
+          expressions: [
+            '#{&1*60+&2} min',
+
+          ],
+          correctionDetails: [[{ text: "$$%{&1*60+&2}\\,min = &1\\times 60\\,min+%{&2}\\,min = &sol$$" }]],
+
+          units: ['HMS'],
+          options: ['require-specific-unit', 'no-penalty-for-extraneous-zeros'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Convertir des durées',
+          subdescription: "minutes en HMS (2)",
+          enounces: ["Convertis sous la forme ... <i>h</i> ... <i>min</i>"],
+          variables: [
+            {
+              '&1': '$e[1;2]',
+              '&2': '$e[1;59]'
+            },
+          ],
+          expressions: [
+            '#{&1*60+&2} min',
+          ],
+          correctionDetails: [[{ text: "$$%{&1*60+&2}\\,min = &1\\times 60\\,min+%{&2}\\,min = &sol$$" }]],
+
+          units: ['HMS'],
+          options: ['require-specific-unit', 'no-penalty-for-extraneous-zeros'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Convertir des durées',
+          subdescription: "heures en HMS, heures décimales",
+          enounces: ["Convertis sous la forme ...<i>h</i>...<i>min</i>."],
+          variables: [
+            {
+              '&1': '$e[1;5]',
+              '&2': '$l{1;5;25}',
+              '&3': '&1,&2',
+            },
+          ],
+          expressions: [
+            '##{&3} h',
+          ],
+          correctionDetails: [[{ text: "$$%%{&3}\\,h = &1\\,h +  0,&2\\,h = &1\\,h + %{0,&2 h;min} =&sol$$" }]],
+
+          units: ['HMS'],
+          options: ['require-specific-unit', 'no-penalty-for-extraneous-zeros'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Convertir des durées',
+          subdescription: "heures en minutes, heures décimales",
+          enounces: ["Convertis en minutes (n'oublie pas l'unité <i>min</i>)."],
+          variables: [
+            {
+              '&1': '$e[1;5]',
+              '&2': '$l{1;5;25}',
+              '&3': '&1,&2',
+            },
+          ],
+          expressions: [
+            '##{&3} h',
+          ],
+          correctionDetails: [[{ text: "$$%%{&3}\\,h = &1\\,h +  0,&2\\,h = %{&1 h;min} + %{0,&2 h;min} =&sol$$" }]],
+
+          units: ['min'],
+          options: ['require-specific-unit'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+
+        {
+          description: 'Convertir des durées',
+          subdescription: "heures en HMS (2)",
+          enounces: ["Convertis sous la forme ...<i>h</i>...<i>min</i>."],
+          variables: [
+            {
+              '&1': '$e[1;2]',
+              '&2': '$e[1;9]',
+              '&3': '&1,&2',
+            },
+          ],
+          expressions: [
+            '##{&3} h',
+          ],
+          correctionDetails: [[{ text: "$$%%{&3}\\,h = &1\\,h +  0,&2\\,h = &1\\,h + &2 \\times %{0,1 h;min} = &1\\,h + %{0,&2 h;min} =&sol$$" }]],
+
+          units: ['HMS'],
+          options: ['require-specific-unit', 'no-penalty-for-extraneous-zeros'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Convertir des durées',
+          subdescription: "heures en minutes, heures décimales (2)",
+          enounces: ["Convertis en minutes (n'oublie pas l'unité <i>min</i>)."],
+          variables: [
+            {
+              '&1': '$e[1;2]',
+              '&2': '$e[1;9]',
+              '&3': '&1,&2',
+            },
+          ],
+          expressions: [
+            '##{&3} h',
+          ],
+          correctionDetails: [[{ text: "$$%%{&3}\\,h = &1\\,h +  0,&2\\,h = %{&1 h;min} + %{0,&2 h;min} = %{&1 h;min} + &2 \\times %{0,1 h;min}&sol$$" }]],
+          units: ['min'],
+          options: ['require-specific-unit'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+
+      ],
+      "Calculer": [
+        {
+          description: 'Ajouter des durées',
+          subdescription: "en HMS",
+          enounces: ["Calcule et écris la réponse sous la forme ...<i>h</i>...<i>min</i> ."],
+          variables: [
+            {
+              '&1': '$e[1;4]',
+              '&2': '$e[1;59]',
+              '&3': '$e[1;59]',
+            },
+          ],
+          expressions: [
+            '&1 h #{&2} min + #{&3} min',
+
+          ],
+          correctionDetails: [[{
+            text: "$$&1\\,h\\, %{&2}\\,min + %{&3}\\,min \
+          @@ &2+&3>59 ?? = &1\\,h + %{&2+&3}\\,min @@  \
+          = &sol$$"}]],
+          units: ['HMS'],
+          options: ['require-specific-unit', 'no-penalty-for-extraneous-zeros'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Ajouter des durées',
+          subdescription: "en HMS (2)",
+          enounces: ["Calcule et écris la réponse sous la forme ...<i>h</i>...<i>min</i> ."],
+          variables: [
+            {
+              '&1': '$e[1;4]',
+              '&2': '$e[1;4]',
+              '&3': '$e[1;5]',
+              '&4': '($e[1;5]\\{6-&3})',
+            },
+          ],
+          expressions: [
+            '&1 h #{&3*10} min + &2 h #{&4*10} min',
+
+          ],
+          correctionDetails: [[{
+            text: "$$&1\\,h\\, %{&3*10}\\,min + &2\\,h %{&4*10}\\,min \
+          @@ (&3+&4)*10>59 ?? = %{&1+&2}\\,h + %{(&3+&4)*10}\\,min @@  \
+          = &sol$$"}]],
+          units: ['HMS'],
+          options: ['require-specific-unit', 'no-penalty-for-extraneous-zeros'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Ajouter des durées',
+          subdescription: "en HMS (3)",
+          enounces: ["Calcule et écris la réponse sous la forme ...<i>h</i>...<i>min</i> ."],
+          variables: [
+            {
+              '&1': '$e[1;4]',
+              '&2': '$e[1;4]',
+              '&3': '$e[1;59]',
+              '&4': '$e[1;59]\\{60-&3}',
+            },
+          ],
+          expressions: [
+            '&1 h #{&3} min + &2 h #{&4} min',
+
+          ],
+          correctionDetails: [[{
+            text: "$$&1\\,h\\, &3\\,min + &2\\,h &4\\,min \
+          @@ &3+&4>59 ?? = %{&1+&2}\\,h + %{&3+&4}\\,min @@  \
+          = &sol$$"}]],
+          units: ['HMS'],
+          options: ['require-specific-unit', 'no-penalty-for-extraneous-zeros'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Soustraire des durées',
+          subdescription: "en HMS",
+          enounces: ["J'ai commencé à regarder un épisode d'une série à $$%%%{&1 h &2 min}$$, et je l'ai terminé à $$%{&1 h &2 min + &3 min; HMS}$$. Quelle était la durée de cet épisode ? (n'oublie pas l'unité)"],
+          variables: [
+            {
+              '&1': '$e[1;4]',
+              '&2': '$e[1;59]',
+              '&3': '$e[1;59]',
+            },
+          ],
+          expressions: [
+            '&3 min',
+
+          ],
+          units: ['min'],
+          type: 'result',
+          'result-type': 'decimal',
+          correctionFormat: [
+            {
+              correct: ["La durée de l'épisode est de &answer."],
+              uncorrect: ["La durée de l'épisode est de &solution."],
+              answer: "La durée est de &answer.",
+
+            }
+          ],
+          correctionDetails:[
+            [
+              {text:"@@&2+&3<60 ?? $$%{&1 h &2 min; HMS} + &sol = %{&1 h &2 min + &3 min; HMS}$$ @@\
+              @@&2+&3>59 ?? $$\\begin{align}%{&1 h &2 min + &3 min; HMS} &= %{&1 h &2 min; HMS} + %{60-&2}\\,min + %{&3+&2-60}\\,min\\\\ \
+                 &= %{&1 h &2 min; HMS} + &sol\\end{align}$$ @@"}
+            ]
+          ],
+          options: ['no-exp'],
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+        {
+          description: 'Soustraire des durées',
+          subdescription: "en HMS (2)",
+          enounces: ["J'ai commencé à regarder un film  à $$%%%{&1 h &3 min}$$, et je l'ai terminé à $$%{&1 h &3 min + &2 h &4 min; HMS}$$. Quelle était la durée de ce film ? (n'oublie pas l'unité)"],
+          variables: [
+            {
+              '&1': '$e[1;4]',
+              '&2': '$e[1;2]',
+              '&3': '$e[1;59]',
+              '&4': '$e[1;59]\\{60-&3}',
+            },
+          ],
+          expressions: [
+            '&2 h &4 min',
+
+          ],
+          correctionDetails:[
+            [
+              {text:"@@&3+&4<60 ?? $$%{&1 h &3 min; HMS} + &sol = %{&1 h &3 min + &2 h &4 min; HMS}$$ @@\
+              @@&3+&4>59 ?? $$\\begin{align}%{&1 h &3 min + &2 h &4 min; HMS} &= %{&1 h &3 min; HMS} + %{60-&3}\\,min + %{&2}\\,h + %{&3+&4-60}\\,min \\\\ \
+                 &= %{&1 h &3 min; HMS} + &sol\\end{align}$$ @@"}
+            ]
+          ],
+          units: ['HMS'],
+          options: ['require-specific-unit'],
+          type: 'result',
+          'result-type': 'decimal',
+          correctionFormat: [
+            {
+              correct: ["La durée de l'épisode est de &answer."],
+              uncorrect: ["La durée de l'épisode est de &solution."],
+              answer: "La durée est de &answer.",
+
+            }
+          ],
+          options: ['no-exp', 'require-specific-unit' , 'no-penalty-for-extraneous-zeros'],
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+      ],
+
     }
 
   },
@@ -11914,9 +12356,10 @@ const questions = {
             "Une fuite d'eau laisse s'échapper $$%{&2*&1}\\,L$$ d'eau en $$&2\\,h$$. En combien de temps s'échappe-t-il $$%{&3*&2*&1}\\,L$$ d'eau ?",
           ],
           variables: [
-            { '&1': '$l{2,5;3,5}', '&2': '$l{2;4;6}}', '&3': '$e[2;5]' }, 
+            { '&1': '$l{2,5;3,5}', '&2': '$l{2;4;6}}', '&3': '$e[2;5]' },
           ],
-          expressions:['&1*&2*&3 €', '&2*&3', '&1*&2*&3 €', '&2*&3', '&1*&2*&3 L', '&2*&3 h'],
+          expressions: ['&1*&2*&3 €', '&2*&3', '&1*&2*&3 €', '&2*&3 kg', '&1*&2*&3 L', '&2*&3 h'],
+          units: ['€', '', '€', 'kg', 'L', 'h'],
           correctionFormat: [
             {
               correct: ["$$%{&3*&2}$$ shawarmas coûtent &answer."],
@@ -11924,14 +12367,14 @@ const questions = {
               answer: "$$%{&3*&2}$$ shawarmas coûtent &answer."
             },
             {
-              correct: ["Je peux acheter &answer shawarmas pour $${&1*&2*&3}\\,€$$."],
-              uncorrect: ["Je peux acheter &solution shawarmas pour $${&1*&2*&3}\\,€."],
+              correct: ["Je peux acheter &answer shawarmas pour $$%{&1*&2*&3}\\,€$$."],
+              uncorrect: ["Je peux acheter &solution shawarmas pour $$%{&1*&2*&3}\\,€$$."],
               answer: "Je peux acheter &answer shawarmas."
             },
             {
               correct: ["$$%{&3*&2}\\,kg$$ de tomates coûtent &answer."],
               uncorrect: ["$$%{&3*&2}\\,kg$$ de tomates coûtent &solution."],
-              answer: "$$%{&3*&2\\,}kg$$ de tomates coûtent &answer."
+              answer: "$$%{&3*&2}\\,kg$$ de tomates coûtent &answer."
             },
             {
               correct: ["Je peux acheter &answer de tomates pour $$%{&3*&2*&1}\\,€$$."],
@@ -11939,45 +12382,47 @@ const questions = {
               answer: "Je peux acheter &answer de tomates pour $$%{&3*&2*&1}\\,€$$."
             },
             {
-              correct: ["Il s'échappe $$%{&3*&2*&1}\\,L$$ d'eau en &answer."],
-              uncorrect: ["Il s'échappe $$%{&3*&2*&1}\\,L$$ d'eau en &solution."],
-              answer: "Il s'échappe $$%{&3*&2*&1}\\,L$$ d'eau en &answer."
-            },
-            {
               correct: ["Il s'échappe &answer d'eau en $$%{&3*&2}\\,h$$."],
               uncorrect: ["Il s'échappe &solution d'eau en $$%{&3*&2}\\,h$$."],
               answer: "Il s'échappe &answer d'eau."
             },
+            {
+              correct: ["Il s'échappe $$%{&3*&2*&1}\\,L$$ d'eau en &answer."],
+              uncorrect: ["Il s'échappe $$%{&3*&2*&1}\\,L$$ d'eau en &solution."],
+              answer: "Il s'échappe $$%{&3*&2*&1}\\,L$$ d'eau en &answer."
+            },
+
           ],
           correctionDetails: [
             [
-              {text: "$$%{&3*&2}$$ shawarmas, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$&2$$ shawarmas à $$%{&1*&2 €}$$, donc le prix de $$%{&3*&2}$$ shawarmas est $$%{&1*&2 €}\\textcolor{teal}{\\times &3} = &sol$$."},
-            ],  
+              { text: "$$%{&3*&2}$$ shawarmas, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$&2$$ shawarmas à $$%{&1*&2 €}$$, donc le prix de $$%{&3*&2}$$ shawarmas est $$%{&1*&2 €}\\textcolor{teal}{\\times &3} = &sol$$." },
+            ],
             [
-              {text: "$$%{&3*&2*&1 €}$$, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$%{&2*&1 Qr}$$ pour $$&2$$ shawarmas, donc je peux acheter $$&2\\textcolor{teal}{\\times &3} = &sol$$ shawarmas."},
-            ],  
+              { text: "$$%{&3*&2*&1 €}$$, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$%{&2*&1 €}$$ pour $$&2$$ shawarmas, donc je peux acheter $$&2\\textcolor{teal}{\\times &3} = &sol$$ shawarmas." },
+            ],
             [
-              {text: "$$%{&3*&2}$$ shawarmas, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$&2$$ shawarmas à $$%{&1*&2 €}$$, donc le prix de $$%{&3*&2}$$ shawarmas est $$%{&1*&2 €}\\textcolor{teal}{\\times &3} = &sol$$."},
-            ],  
+              { text: "$$%{&3*&2}\\,kg$$ de tomates, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$&2\\,kg$$  à $$%{&1*&2€}$$, donc le prix de $$%{&3*&2}\\,kg$$ de tomates est $$%{&1*&2 €}\\textcolor{teal}{\\times &3} = &sol$$." },
+            ],
             [
-              {text: "$$%{&3*&2*&1 €}$$, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$%{&2*&1 Qr}$$ pour $$&2$$ shawarmas, donc je peux acheter $$&2\\textcolor{teal}{\\times &3} = &sol$$ shawarmas."},
-            ], 
+              { text: "$$%{&3*&2*&1 €}$$, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$%{&2*&1€}$$ pour $$&2\\,kg$$ de tomates, donc je peux acheter $$&2\\,kg\\textcolor{teal}{\\times &3} = &sol$$ de tomates." },
+            ],
             [
-              {text: "$$%{&3*&2}$$ shawarmas, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$&2$$ shawarmas à $$%{&1*&2 €}$$, donc le prix de $$%{&3*&2}$$ shawarmas est $$%{&1*&2 €}\\textcolor{teal}{\\times &3} = &sol$$."},
-            ],  
+              { text: "$$%{&3*&2}\\,h$$, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$&2\\,h$$ pour $$%{&1*&2}\\,L$$, donc il s'échappe  $$%{&1*&2}\\,L\\textcolor{teal}{\\times &3} = &sol$$ d'eau en $$%{&3*&2}\\,h$$." },
+            ],
             [
-              {text: "$$%{&3*&2*&1 €}$$, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$%{&2*&1 Qr}$$ pour $$&2$$ shawarmas, donc je peux acheter $$&2\\textcolor{teal}{\\times &3} = &sol$$ shawarmas."},
-            ], 
+              { text: "$$%{&3*&2*&1}\\,L$$, c'est $$\\textcolor{teal}{&3\\text{ fois}}$$ plus que $$%{&2*&1}\\,L$$ en $$&2\\,h$$, donc il faut $$&2\\,h \\textcolor{teal}{\\times &3} = &sol$$ pour perdre $$%{&1*&2*&3}\\,L$$ d'eau." },
+            ],
+
           ],
           type: 'result',
           options: ['no-exp'],
           defaultDelay: 20,
           grade: SIXIEME,
         },
-        
+
 
       ],
-      
+
 
     },
     'Pourcentages': {
@@ -11990,6 +12435,7 @@ const questions = {
           variables: [{ '&1': '$e[1;100]' }],
           solutions: [['&1/100']],
           type: 'result',
+          options: ['no-penalty-for-non-reduced-fractions'],
           defaultDelay: 10,
           grade: SIXIEME,
         },
@@ -12009,8 +12455,21 @@ const questions = {
           subdescription: "Convertir un pourcentage en une fraction simplifiée.",
           enounces: ['Quelle est la fraction simplifiée correspondant à :'],
           expressions: ['&1%'],
-          variables: [{ '&1': '$l{10;20;30;40;50;60;70;80;90;100;25;75;200;300;400}' }],
+          variables: [{ '&1': '$l{10;20;30;40;50;60;70;80;90;100;25;75;200;300;400}', '&2': 'pgcd(&1;100)' }],
           type: 'result',
+          correctionDetails: [
+            [
+              {
+                text: '@@ &2 = 1 ?? $$ &1\\%=&sol $$ @@ \
+                @@ &2 != 1 ?? $$\\begin{align} @@ \
+                @@ &2 != 1 ?? &1\\% &= \\frac{&1}{100}  \\\\ @@ \
+                @@ &2 != 1 ?? &= \\frac{&1 \\textcolor{teal}{\\div %{&2}}}{100 \\textcolor{teal}{\\div %{&2}}} \\\\ @@\
+                @@ &2 != 1 && 100/&2 = 1 ?? &= \\frac{%{&1/&2}}{1} \\\\  @@ \
+                @@ &2 != 1 ?? &= &sol \\\\ @@ \
+                @@ &2 != 1 ?? \\end{align}$$ @@'
+              },
+            ],
+          ],
           defaultDelay: 10,
           grade: SIXIEME,
         },
@@ -12168,6 +12627,279 @@ const questions = {
 
 
 
+    },
+    "Echelle d'une carte": {
+      "Trouver l'échelle": [
+        {
+          description: "Trouver l'échelle d'une carte",
+          subdescription: "Mêmes unités.",
+          enounces: ["Quelle est l'échelle d'une carte où $$%%%{&3}$$ sur la carte correspond à $$1\\,cm$$ en réalité ?"],
+          expressions: ['(1 cm)/&3'],
+          variables: [{ '&1': '$e[1;9]', '&2': '10^$e[1;6]', '&3': '#{&1*&2} cm' }],
+          type: 'result',
+          options: ['no-exp'],
+          defaultDelay: 10,
+          grade: SIXIEME,
+        },
+        {
+          description: "Trouver l'échelle d'une carte",
+          subdescription: "Unités différentes.",
+          enounces: ["Quelle est l'échelle d'une carte où $$%%%{&1}$$ sur la carte correspond à $$1\\,cm$$ en réalité ?"],
+          expressions: ['(1 cm)/&1'],
+          variables: [
+            { '&1': '$e[2;9] dm', },
+            { '&1': '$e[2;9] m', },
+            { '&1': '$e[2;9] dam', },
+            { '&1': '$e[2;9] hm', },
+            { '&1': '$e[2;9] km', },
+          ],
+          correctionDetails: [[
+            {
+              text: "$$\\frac{1\\,cm}{%%%{&1}}=\\frac{1\\,cm}{%{&1;cm}}=&sol$$"
+            }
+          ]
+          ],
+          type: 'result',
+          options: ['no-exp'],
+          defaultDelay: 10,
+          grade: SIXIEME,
+        },
+      ],
+      "Utiliser l'échelle": [
+        {
+          description: "Calculer la longueur sur une carte",
+          enounces: ["Sur une carte à l'échelle $$%{&4}$$, je veux représenter une longueur de $$%%%{&3}$$. Quelle est, en $$cm$$, la longueur sur la carte ?"],
+          expressions: ['(&3)/&1'],
+          variables: [
+            { '&1': '10', '&2': '$e[1;9]*10', '&3': '#{&2} dm', '&4': '1/&1' },
+            { '&1': '100', '&2': '$e[1;9]*10', '&3': '#{&2} dm', '&4': '1/&1' },
+            { '&1': '100', '&2': '$e[1;9]*10', '&3': '#{&2} m', '&4': '1/&1' },
+            { '&1': '1000', '&2': '$e[1;9]*10', '&3': '#{&2} m', '&4': '1/&1' },
+            { '&1': '100000', '&2': '$e[1;9]*10', '&3': '#{&2} km', '&4': '1/&1' },
+            { '&1': '1000000', '&2': '$e[1;9]*10', '&3': '#{&2} km', '&4': '1/&1' },
+          ],
+          units: ['cm'],
+          type: 'result',
+          options: ['no-exp'],
+          correctionFormat: [{
+            correct: ['Avec une échelle de $$%{&4}$$, $$%%%{&3}$$ est représenté par &answer.'],
+            uncorrect: ['Avec une échelle de $$%{&4}$$, $$%%%{&3}$$ est représenté par &solution.'],
+            answer: '$$%%%{&3}$$ est représenté par &answer.'
+          }],
+          correctionDetails: [
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{&1\\,cm}= \\frac{1\\,cm}{%{&1:10}\\,dm}= \\frac{&sol}{%%%{&3}}$$",
+            },],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{&1\\,cm}= \\frac{1\\,cm}{%{&1:10}\\,dm}= \\frac{&sol}{%%%{&3}}$$",
+            },],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{&1\\,cm}= \\frac{1\\,cm}{%{&1:100}\\,m}= \\frac{&sol}{%%%{&3}}$$",
+            },],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{&1\\,cm}= \\frac{1\\,cm}{%{&1:100}\\,m}= \\frac{&sol}{%%%{&3}}$$",
+            },],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{&1\\,cm}= \\frac{1\\,cm}{%{&1:100000}\\,km}= \\frac{&sol}{%%%{&3}}$$",
+            },],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{&1\\,cm}= \\frac{1\\,cm}{%{&1:100000}\\,km}= \\frac{&sol}{%%%{&3}}$$",
+            }]
+          ],
+          defaultDelay: 10,
+          grade: SIXIEME,
+        },
+        {
+          description: "Calculer la longueur réelle",
+          enounces: ["Sur une carte à l'échelle $$%{&4}$$, je mesure une longueur de $$%%%{&3}$$. Quelle est, en $$dm$$, la longueur réelle ?"],
+          expressions: ['(&3)*&1'],
+          variables: [
+            { '&1': '10', '&2': '$e[2;9]*10^$e[0;1]', '&3': '#{&2} cm', '&4': '1/&1' },
+            { '&1': '100', '&2': '$e[2;9]', '&3': '&2 cm', '&4': '1/&1' },
+            { '&1': '100', '&2': '$e[2;9]*10^$e[0;1]', '&3': '#{&2} cm', '&4': '1/&1' },
+            { '&1': '1000', '&2': '$e[2;9]', '&3': '&2 cm', '&4': '1/&1' },
+            { '&1': '100000', '&2': '$e[2;9]*10^$e[0;1]', '&3': '#{&2} cm', '&4': '1/&1' },
+            { '&1': '1000000', '&2': '$e[2;9]', '&3': '&2 cm', '&4': '1/&1' },
+
+          ],
+          units: [
+            'dm',
+            'dm',
+            'm',
+            'm',
+            'km',
+            'km',
+          ],
+          type: 'result',
+          // options: ['no-exp'],
+          correctionFormat: [{
+            correct: ['A une échelle de $$%{&4}$$, $$%%%{&3}$$ sur la carte correspond à une longueur réelle de &answer.'],
+            uncorrect: ['A une échelle de $$%{&4}$$, $$%%%{&3}$$ sur la carte correspond à une longueur réelle de &solution.'],
+            answer: 'La longueur réelle est de &answer.'
+          }],
+          correctionDetails: [
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{%%%{&1 cm}}= \\frac{1\\,cm}{%{(&1:10)}\\,dm}= \\frac{%%%{&3}}{&sol}$$",
+            }],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{%%%{&1 cm}}= \\frac{1\\,cm}{%{(&1:10)}\\,dm}= \\frac{%%%{&3}}{&sol}$$",
+            }],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{%%%{&1 cm}}= \\frac{1\\,cm}{%{(&1:100)}\\,m}= \\frac{%%%{&3}}{&sol}$$",
+            }],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{%%%{&1 cm}}= \\frac{1\\,cm}{%{(&1:100)}\\,m}= \\frac{%%%{&3}}{&sol}$$",
+            }],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{%%%{&1 cm}}= \\frac{1\\,cm}{%{(&1:100000)}\\,km}= \\frac{%%%{&3}}{&sol}$$",
+            }],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{%%%{&1 cm}}= \\frac{1\\,cm}{%{(&1:100000)}\\,km}= \\frac{%%%{&3}}{&sol}$$",
+            },],
+
+          ],
+          options: ['no-exp'],
+          defaultDelay: 10,
+          grade: SIXIEME,
+        },
+
+      ]
+    },
+    "Vitesse uniforme": {
+      "Déterminer une vitesse": [
+        {
+          description: "Déterminer une vitesse moyenne",
+          enounces: ["Une voiture parcourt $$&1$$ en Quelle est l'échelle d'une carte où $$%%%{&3}$$ sur la carte correspond à $$1\\,cm$$ en réalité ?"],
+          expressions: ['(1 cm)/&3'],
+          variables: [{ '&1': '$e[1;9]', '&2': '10^$e[1;6]', '&3': '#{&1*&2} cm' }],
+          type: 'result',
+          options: ['no-exp'],
+          defaultDelay: 10,
+          grade: SIXIEME,
+        },
+        {
+          description: "Trouver l'échelle d'une carte",
+          subdescription: "Unités différentes.",
+          enounces: ["Quelle est l'échelle d'une carte où $$%%%{&1}$$ sur la carte correspond à $$1\\,cm$$ en réalité ?"],
+          expressions: ['(1 cm)/&1'],
+          variables: [
+            { '&1': '$e[2;9] dm', },
+            { '&1': '$e[2;9] m', },
+            { '&1': '$e[2;9] dam', },
+            { '&1': '$e[2;9] hm', },
+            { '&1': '$e[2;9] km', },
+          ],
+          correctionDetails: [[
+            {
+              text: "$$\\frac{1\\,cm}{%%%{&1}}=\\frac{1\\,cm}{%{&1;cm}}=&sol$$"
+            }
+          ]
+          ],
+          type: 'result',
+          options: ['no-exp'],
+          defaultDelay: 10,
+          grade: SIXIEME,
+        },
+      ],
+      "Utiliser l'échelle": [
+        {
+          description: "Calculer la longueur sur une carte",
+          enounces: ["Sur une carte à l'échelle $$%{&4}$$, je veux représenter une longueur de $$%%%{&3}$$. Quelle est, en $$cm$$, la longueur sur la carte ?"],
+          expressions: ['(&3)/&1'],
+          variables: [
+            { '&1': '10', '&2': '$e[1;9]*10', '&3': '#{&2} dm', '&4': '1/&1' },
+            { '&1': '100', '&2': '$e[1;9]*10', '&3': '#{&2} dm', '&4': '1/&1' },
+            { '&1': '100', '&2': '$e[1;9]*10', '&3': '#{&2} m', '&4': '1/&1' },
+            { '&1': '1000', '&2': '$e[1;9]*10', '&3': '#{&2} m', '&4': '1/&1' },
+            { '&1': '100000', '&2': '$e[1;9]*10', '&3': '#{&2} km', '&4': '1/&1' },
+            { '&1': '1000000', '&2': '$e[1;9]*10', '&3': '#{&2} km', '&4': '1/&1' },
+          ],
+          units: ['cm'],
+          type: 'result',
+          options: ['no-exp'],
+          correctionFormat: [{
+            correct: ['Avec une échelle de $$%{&4}$$, $$%%%{&3}$$ est représenté par &answer.'],
+            uncorrect: ['Avec une échelle de $$%{&4}$$, $$%%%{&3}$$ est représenté par &solution.'],
+            answer: '$$%%%{&3}$$ est représenté par &answer.'
+          }],
+          correctionDetails: [
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{&1\\,cm}= \\frac{1\\,cm}{%{&1:10}\\,dm}= \\frac{&sol}{%%%{&3}}$$",
+            },],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{&1\\,cm}= \\frac{1\\,cm}{%{&1:10}\\,dm}= \\frac{&sol}{%%%{&3}}$$",
+            },],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{&1\\,cm}= \\frac{1\\,cm}{%{&1:100}\\,m}= \\frac{&sol}{%%%{&3}}$$",
+            },],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{&1\\,cm}= \\frac{1\\,cm}{%{&1:100}\\,m}= \\frac{&sol}{%%%{&3}}$$",
+            },],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{&1\\,cm}= \\frac{1\\,cm}{%{&1:100000}\\,km}= \\frac{&sol}{%%%{&3}}$$",
+            },],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{&1\\,cm}= \\frac{1\\,cm}{%{&1:100000}\\,km}= \\frac{&sol}{%%%{&3}}$$",
+            }]
+          ],
+          defaultDelay: 10,
+          grade: SIXIEME,
+        },
+        {
+          description: "Calculer la longueur réelle",
+          enounces: ["Sur une carte à l'échelle $$%{&4}$$, je mesure une longueur de $$%%%{&3}$$. Quelle est, en $$dm$$, la longueur réelle ?"],
+          expressions: ['(&3)*&1'],
+          variables: [
+            { '&1': '10', '&2': '$e[2;9]*10^$e[0;1]', '&3': '#{&2} cm', '&4': '1/&1' },
+            { '&1': '100', '&2': '$e[2;9]', '&3': '&2 cm', '&4': '1/&1' },
+            { '&1': '100', '&2': '$e[2;9]*10^$e[0;1]', '&3': '#{&2} cm', '&4': '1/&1' },
+            { '&1': '1000', '&2': '$e[2;9]', '&3': '&2 cm', '&4': '1/&1' },
+            { '&1': '100000', '&2': '$e[2;9]*10^$e[0;1]', '&3': '#{&2} cm', '&4': '1/&1' },
+            { '&1': '1000000', '&2': '$e[2;9]', '&3': '&2 cm', '&4': '1/&1' },
+
+          ],
+          units: [
+            'dm',
+            'dm',
+            'm',
+            'm',
+            'km',
+            'km',
+          ],
+          type: 'result',
+          // options: ['no-exp'],
+          correctionFormat: [{
+            correct: ['A une échelle de $$%{&4}$$, $$%%%{&3}$$ sur la carte correspond à une longueur réelle de &answer.'],
+            uncorrect: ['A une échelle de $$%{&4}$$, $$%%%{&3}$$ sur la carte correspond à une longueur réelle de &solution.'],
+            answer: 'La longueur réelle est de &answer.'
+          }],
+          correctionDetails: [
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{%%%{&1 cm}}= \\frac{1\\,cm}{%{(&1:10)}\\,dm}= \\frac{%%%{&3}}{&sol}$$",
+            }],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{%%%{&1 cm}}= \\frac{1\\,cm}{%{(&1:10)}\\,dm}= \\frac{%%%{&3}}{&sol}$$",
+            }],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{%%%{&1 cm}}= \\frac{1\\,cm}{%{(&1:100)}\\,m}= \\frac{%%%{&3}}{&sol}$$",
+            }],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{%%%{&1 cm}}= \\frac{1\\,cm}{%{(&1:100)}\\,m}= \\frac{%%%{&3}}{&sol}$$",
+            }],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{%%%{&1 cm}}= \\frac{1\\,cm}{%{(&1:100000)}\\,km}= \\frac{%%%{&3}}{&sol}$$",
+            }],
+            [{
+              text: "$$%{&4}=\\frac{1\\,cm}{%%%{&1 cm}}= \\frac{1\\,cm}{%{(&1:100000)}\\,km}= \\frac{%%%{&3}}{&sol}$$",
+            },],
+
+          ],
+          options: ['no-exp'],
+          defaultDelay: 10,
+          grade: SIXIEME,
+        },
+
+      ]
     }
   },
 

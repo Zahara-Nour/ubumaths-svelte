@@ -26,6 +26,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
   let testAnswer
   let image
   let imageCorrection
+  let unit
 
 
   const { options = [] } = question
@@ -41,15 +42,19 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
   // les regex correpondant aux expressions à évaluer
   // #{} : évaluation exacte
-  const regexExact = /#\{(.*?)\}/g
+  // const regexExact = /#\{(.*?)\}/g
+  const regexExact = /#{([^;]*?)(;(.+?))?}/g
   // #s{} : évaluation exacte avec le signe rajouté devant (+  ou -)
   const regexExactSigned = /#s\{(.*?)\}/g
   // ##{}: évaluation décimale
-  const regexDecimal = /##\{(.*?)\}/g
+  const regexDecimal = /##{([^;]*?)(;(.+?))?}/g
   // %{} : évaluation exacte mise sous format LaTeX
-  const regexExactLatex = /%\{(.*?)\}/g
+  const regexExactLatex = /%{([^;]*?)(;(.+?))?}/g
+
+  // %%%{} : mise en forme LaTeX
+  const regexLatex = /%%%\{(.*?)\}/g
   // %%{} : évaluation exacte mise sous format LaTeX
-  const regexDecimalLatex = /%%\{(.*?)\}/g
+  const regexDecimalLatex = /%%{([^;]*?)(;(.+?))?}/g
   // #s{} : évaluation exacte avec le signe rajouté devant (+  ou -), mise sous LaTeX
   const regexExactSignedLatex = /%s\{(.*?)\}/g
 
@@ -84,33 +89,64 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     return e.toLatex({ implicit: true })
   }
 
-  const replacementExact = (matched, p1) => {
+  const replacementLatex = (matched, p1) => {
+    const e = math(p1)
+    return e.string === 'Error' ? 'Error2' : math(p1).toLatex({ implicit: true })
+  }
+  const replacementExact = (matched, p1, p2, p3) => {
     const e = math(p1)
     if (e.string === 'Error') {
       console.log('matched', matched)
       console.log('p1', p1)
       console.log('****ERROR ', e)
     }
-    return e.string === 'Error' ? 'Error2' : math(p1).eval().toString({ implicit: true })
+    const params = {}
+    if (e.string === 'Error') {
+      return 'Error2'
+    }
+    else if (p3) {
+      params.unit = p3.trim()
+    } 
+    return math(p1).eval(params).toString({ implicit: true })
   }
 
-  const replacementExactLatex = (matched, p1) => {
+  const replacementExactLatex = (matched, p1, p2, p3) => {
     const e = math(p1)
-    return e.string === 'Error' ? 'Error2' : math(p1).eval().toLatex({ implicit: true })
+    const params = {}
+    if (e.string === 'Error') {
+      return 'Error2'
+    }
+    else if (p3) {
+      params.unit=p3.trim()
+    } 
+    return math(p1).eval(params).toLatex({ implicit: true })
   }
 
-  const replacementDecimal = (matched, p1) => {
+  const replacementDecimal = (matched, p1, p2, p3) => {
     const e = math(p1)
-    return e.string === 'Error'
-      ? 'Error2'
-      : math(p1).eval({ decimal: true }).string
+    const params = {decimal:true}
+    if (e.string === 'Error') {
+      return 'Error2'
+    }
+    else if (p3) {
+      
+     
+      params.unit = p3.trim()
+    } 
+    return math(p1).eval(params).toString({ implicit: true })
   }
 
-  const replacementDecimalLatex = (matched, p1) => {
+  const replacementDecimalLatex = (matched, p1, p2, p3) => {
     const e = math(p1)
-    return e.string === 'Error'
-      ? 'Error2'
-      : math(p1).eval({ decimal: true }).latex
+    const params = {decimal:true}
+    if (e.string === 'Error') {
+      return 'Error2'
+    }
+    else if (p3) {
+    
+      params.unit = p3.trim()
+    } 
+    return math(p1).eval(params).toLatex({ implicit: true })
   }
 
   function replaceVariablesAndExpressionsToBeEvaluated(o) {
@@ -126,6 +162,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
       }
 
       // on évalue les #...{}
+      result = result.replace(regexLatex, replacementLatex)
       result = result.replace(regexDecimalLatex, replacementDecimalLatex)
       result = result.replace(regexDecimal, replacementDecimal)
       result = result.replace(regexExactSigned, replacementExactSigned)
@@ -362,6 +399,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         enounce = enounce.replace(regexDecimal, replacementDecimal)
         enounce = enounce.replace(regexExactSigned, replacementExactSigned)
         enounce = enounce.replace(regexExact, replacementExact)
+        enounce = enounce.replace(regexLatex, replacementLatex)
         enounce = enounce.replace(regexDecimalLatex, replacementDecimalLatex)
         enounce = enounce.replace(regexExactLatex, replacementExactLatex)
       }
@@ -370,6 +408,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         enounce2 = enounce2.replace(regexDecimal, replacementDecimal)
         enounce2 = enounce2.replace(regexExactSigned, replacementExactSigned)
         enounce2 = enounce2.replace(regexExact, replacementExact)
+        enounce2 = enounce2.replace(regexLatex, replacementLatex)
         enounce2 = enounce2.replace(regexDecimalLatex, replacementDecimalLatex)
         enounce2 = enounce2.replace(regexExactLatex, replacementExactLatex)
       }
@@ -380,6 +419,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
             c.text = c.text.replace(regexDecimal, replacementDecimal)
             c.text = c.text.replace(regexExactSigned, replacementExactSigned)
             c.text = c.text.replace(regexExact, replacementExact)
+            c.text = c.text.replace(regexLatex, replacementLatex)
             c.text = c.text.replace(regexDecimalLatex, replacementDecimalLatex)
             c.text = c.text.replace(regexExactLatex, replacementExactLatex)
           }
@@ -511,6 +551,11 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     question.limits.limits[i].count += 1
   }
 
+  if (question.units) {
+    unit = getSelectedElement("units")
+    console.log('unit', unit)
+    // unit = math("1"+unit).unit
+  }
   // console.log('limits', JSON.parse(JSON.stringify(question.limits.limits)))
 
   if (question.solutions) {
@@ -563,7 +608,12 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         }
       })
 
+
       params = { ...params, ...letters }
+    }
+
+    if (unit) {
+      params.unit = unit
     }
 
     // TODO : i lfaut surement purifier encore plus la solution, quoique c'est surement fait plus tard
@@ -636,7 +686,6 @@ export default function generateQuestion(question, generateds = [], nbquestions 
         else {
           text = ''
         }
-        console.log('text', text)
         return text
       }
 
@@ -662,7 +711,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
         c = c.replace(regex, variables[name])
       })
-
+      c = c.replace(regexLatex, replacementLatex)
       c = c.replace(regexDecimalLatex, replacementDecimalLatex)
       c = c.replace(regexDecimal, replacementDecimal)
       c = c.replace(regexExactLatex, replacementExactLatex)
@@ -705,6 +754,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
       correction = correction.replace(regex, variables[name])
     })
+    correction = correction.replace(regexLatex, replacementLatex)
     correction = correction.replace(regexDecimalLatex, replacementDecimalLatex)
     correction = correction.replace(regexDecimal, replacementDecimal)
     correction = correction.replace(regexExactLatex, replacementExactLatex)
@@ -750,7 +800,8 @@ export default function generateQuestion(question, generateds = [], nbquestions 
     expression,
     expression_latex,
     expression2_latex,
-    choices
+    choices,
+    unit
   }
 
 
