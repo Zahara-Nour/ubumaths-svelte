@@ -73,12 +73,13 @@
 
 <div  style=" --theme-color: {color};position: relative;display: inline-block;text-align: center;">
   <svg width={sqSize} height={sqSize}>
-    <circle class={pulse ? "pulse" : ''} fill='red' cx = "50%" cy = "50%" r = "{radius}"></circle>
+    <circle class={pulse ? "pulse" : 'nopulse'}  cx = "50%" cy = "50%" r = "{radius}"></circle>
     <circle
-      class= "circle-background"
       cx="50%"
       cy="50%"
       r="{radius}"
+      stroke= #ddd
+      fill='white'
       stroke-width="{`${strokeWidth}px`}"
     >
     </circle>
@@ -87,9 +88,11 @@
       cx="50%"
       cy="50%"
       r="{radius}"
+      fill="none"
+      stroke={color}
       stroke-width="{`${strokeWidth}px`}"
-      transform="rotate(-90)"
-      style="{`stroke-dasharray: ${dashArray};stroke-dashoffset: ${dashOffset};`}"
+      stroke-dasharray ={dashArray}
+      stroke-dashoffset = {dashOffset}
     >
     </circle>
   </svg>
@@ -103,22 +106,20 @@
 <style>
   
   .circle-progress {
-    fill: none;
+    transform:rotate(-90deg);
     transform-origin: 50% 50%;
-  }
-
-  .circle-background {
-    stroke: #ddd;
-    fill:white;
-  }
-
-  .circle-progress {
-    stroke: var(--theme-color);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
+  .nopulse{
+    fill:none;
+    opacity:0;
+ 
+  }
+
   .pulse {
+    fill:red;
     animation: pulse 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
      transform-origin: 50% 50%;
     /*animation-duration: 1.5s;
