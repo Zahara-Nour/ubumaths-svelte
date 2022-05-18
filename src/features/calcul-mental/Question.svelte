@@ -59,7 +59,7 @@
         <div
           id="enounce"
           class="mt-3 mb-3 text-center"
-          style="font-size:{size}px;max-width:900px;"
+          style="font-size:{size}px;max-width:900px;line-height: normal;"
         >
           {@html enounce}
         </div>
