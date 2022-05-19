@@ -235,8 +235,23 @@
   const fillBasket = () => addToBasket(theme, domain, subdomain, level, 1)
 
   function copyLink() {
-    let url = `https://ubumaths.net/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
-    url = encodeURI(url)
+    let url
+    if (showBasket) {
+      const questions = []
+      url="https://ubumaths.net/mental-test?questions="
+      basket.forEach(q=> {
+        questions.push({
+          id:q.id,
+          count:q.count,
+          delay:q.delay
+        })
+      })
+      console.log('questions', questions)
+      url += JSON.stringify(questions)
+    }else {
+      url = `https://ubumaths.net/mental-test?theme=${theme}&domain=${domain}&subdomain=${subdomain}&level=${level}`
+    }
+   url = encodeURI(url)
     console.log('url', url)
     navigator.clipboard
       .writeText(url)
@@ -344,7 +359,8 @@
   flushBasket="{flushBasket}"
 />
 
-{#if isTeacher && showBasket}
+{#if showBasket}
+<!-- {#if isTeacher && showBasket} -->
   <Basket
     bind:basket
     bind:disableSave

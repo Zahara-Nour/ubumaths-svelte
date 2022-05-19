@@ -35,7 +35,7 @@
   let { info, fail, trace } = getLogger('MentalTest', 'trace')
   let question = {}
   let questions
-  let current = -1
+  let current = 0
   let answer
   let answer_latex
   let answer_choice
@@ -122,13 +122,14 @@
       // virtualKeyboardMode: 'onfocus',
       virtualKeyboardMode: 'auto',
       ...virtualKeyboard,
-      onKeystroke,
+      // onKeystroke,
       // 'keypress-sound': 'none',
       // 'keypress-vibration': false,
       inlineShortcuts: {
         xx: {},
       },
     })
+    mf.addEventListener('keystroke', onKeystroke)
     if (!mf.hasFocus) mf.focus()
   }
 
@@ -162,7 +163,32 @@
     questions = []
     generateds = []
 
-    if (queryParams.course) {
+    if (queryParams.questions) {
+
+      let offset = 0
+      const data = JSON.parse(queryParams.questions)
+      console.log(data)
+
+      data.forEach((d) => {
+        questions = []
+        const { theme, domain, subdomain, level } = ids[d.id]
+        const question = getQuestion(theme, domain, subdomain, level)
+        question.delay = d.delay
+
+        for (let i = 0; i < d.count; i++) {
+          questions.push(question)
+        }
+        console.log('questions', questions)
+        generateds = generateds.concat(
+          questions.reduce((acc, current) => {
+            const q = generate(current, acc, d.count, offset)
+            acc.push(q)
+            return acc
+          }, []),
+        )
+        offset += d.count
+      })
+    } else if (queryParams.course) {
       const course = JSON.parse(queryParams.course)
       console.log(course)
 
@@ -225,6 +251,7 @@
 
     // les questions ont été passée par un store
     else {
+      let offset = 0
       $calculMentalAssessment.questions.forEach((element) => {
         questions = []
         const question = getQuestion(
@@ -233,20 +260,19 @@
           element.subdomain,
           element.level,
         )
+        question.delay = element.delay
 
         for (let i = 0; i < element.count; i++) {
-          questions.push({
-            ...question,
-            delay: element.delay,
-          })
-          generateds = generateds.concat(
-            questions.reduce((acc, current) => {
-              const q = generate(current, acc, element.count)
-              acc.push(q)
-              return acc
-            }, []),
-          )
+          questions.push(question)
         }
+        generateds = generateds.concat(
+          questions.reduce((acc, current) => {
+            const q = generate(current, acc, element.count, offset)
+            acc.push(q)
+            return acc
+          }, []),
+        )
+        offset += element.count
       })
     }
     shuffle(generateds)
@@ -271,7 +297,7 @@
     //     })
     //   }
     // })
-
+    console.log('generateds', generateds)
     cards = generateds.map((generated) => {
       const card = { ...generated }
       if (card.choices) {
@@ -343,65 +369,57 @@
     change()
   }
 
-  function onKeystroke(mathfield, keystroke, e) {
-    const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%€L'
-    trace('keystroke', keystroke)
-    trace('e.key', e.key)
-    if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
-      // if (elapsed > 3000) commit()
-
-      if (answer !== '') {
-        commit()
-      }
-      return false
-    } else if (
-      keystroke === '[Space]' &&
-      !(
-        answer_latex &&
-        answer_latex.length >= 2 &&
-        // answer_latex.slice(answer_latex.length - 3) === '\\, '
-        answer_latex.slice(answer_latex.length - 2) === '\\,'
-      )
-    ) {
-      mf.insert('\\,')
-      return false
-    } else if (e.key === '%') {
-      mf.insert('\\%')
-      return false
-    } else if (e.key === 'r') {
-      mf.insert('\\sqrt')
-      return false
-    } else if (e.key === '*') {
-      mf.insert('\\times ')
-      return false
-    } else if (e.key === ':') {
-      mf.insert('\\div ')
-      return false
-    } else if (e.key === '<') {
-      mf.insert('<')
-      // prevent backslash
-      return false
-    }
-    // else if (e.key === '^') {
-    //   mf.insert('^')
-    //   return true
-    // }
-    else if (
-      e.key === 'Backspace' ||
-      e.key === 'ArrowLeft' ||
-      e.key === 'ArrowRight' ||
-      e.key === 'ArrowDown' ||
-      e.key === 'ArrowUp'
-    ) {
-      return true
-    } else if (!allowed.includes(e.key)) {
-      return false
-    }
-    // deactivate command mode with '\'
-    // else if (keystroke ==='alt+shift+[Period]') {
-    // else if (e.key ==='\\') {
+  function onKeystroke(ev) {
+    // const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%€L'
+    console.log('keystroke :', ev.detail.keystroke)
+    console.log('key :', ev.detail.event.key)
+    console.log(ev)
+    // trace('keystroke', keystroke)
+    // trace('e.key', e.key)
+    // if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
+    //   if (answer !== '') {
+    //     commit()
+    //   }
+    //   return false
+    // } else if (
+    //   keystroke === '[Space]' &&
+    //   !(
+    //     answer_latex &&
+    //     answer_latex.length >= 2 &&
+    //     answer_latex.slice(answer_latex.length - 2) === '\\,'
+    //   )
+    // ) {
+    //   mf.insert('\\,')
+    //   return false
+    // } else if (e.key === '%') {
+    //   mf.insert('\\%')
+    //   return false
+    // } else if (e.key === 'r') {
+    //   mf.insert('\\sqrt')
+    //   return false
+    // } else if (e.key === '*') {
+    //   mf.insert('\\times ')
+    //   return false
+    // } else if (e.key === ':') {
+    //   mf.insert('\\div ')
+    //   return false
+    // } else if (e.key === '<') {
+    //   mf.insert('<')
     //   return false
     // }
+ 
+    // else if (
+    //   e.key === 'Backspace' ||
+    //   e.key === 'ArrowLeft' ||
+    //   e.key === 'ArrowRight' ||
+    //   e.key === 'ArrowDown' ||
+    //   e.key === 'ArrowUp'
+    // ) {
+    //   return true
+    // } else if (!allowed.includes(e.key)) {
+    //   return false
+    // }
+
     return true
   }
 
@@ -412,6 +430,7 @@
 
   // on passe à la question suivante
   async function change() {
+    current++
     audio.play()
     if (timer) clearInterval(timer)
     // if (timeout) clearTimeout(timeout)
@@ -480,6 +499,7 @@
   }
 
   $: if (mf) {
+    console.log('init mathfield')
     initMathField()
   }
 
@@ -550,11 +570,10 @@
     </div>
   {/if}
 {:else if card}
-  orientation: {orientation}
   <div>
     <div class="{' mt-1 mb-1 d-flex justify-start'}">
       <CircularProgress
-        number="{questions.length - cards.length + 1}"
+        number="{current}"
         fontSize="{classroom ? $classroomFontSize : $testFontSize + 8}"
         strokeWidth="{7}"
         percentage="{percentage}"
@@ -576,7 +595,7 @@
       {#if cards}
         <div
           id="cards-container"
-          class="{orientation === 'landscape' ? 'column1' : ''}"
+          class=" {orientation === 'landscape' ? 'column1' : ''}"
         >
           <div id="cards">
             {#each cards as card (card.id + card.num)}
@@ -691,7 +710,12 @@
     </div> -->
       <!-- <div class:error> -->
 
-      <div class="d-flex align-center justify-center {orientation === 'landscape' ? 'column2' : '' }" style='width:100%'>
+      <div
+        class="d-flex align-center justify-center {orientation === 'landscape'
+          ? 'column2'
+          : ''}"
+        style="width:100%"
+      >
         {#if !card.choices && !classroom}
           <div
             class="d-flex align-center justify-center {orientation ===
@@ -731,16 +755,16 @@
   }
 
   .portrait {
-    width:100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
   .landscape {
-    width:100%;
+    width: 100%;
     display: flex;
-    align-items:center;
+    align-items: center;
   }
 
   .column1 {
@@ -752,7 +776,6 @@
     flex-basis: 40%;
     flex-grow: 0;
     flex-shrink: 0;
-    
   }
 
   #cards-container {

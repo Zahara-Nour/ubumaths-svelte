@@ -6,7 +6,7 @@ import { fetchImage } from './images'
 
 let { fail, warn, info } = getLogger('generateQuestion', 'info')
 
-export default function generateQuestion(question, generateds = [], nbquestions = 1) {
+export default function generateQuestion(question, generateds = [], nbquestions = 1, offset=0) {
 
 
   // firestore returns objects with read-only properties
@@ -185,7 +185,7 @@ export default function generateQuestion(question, generateds = [], nbquestions 
 
   if (!question) return emptyQuestion
 
-  question.num = question.num ? question.num + 1 : 1
+  question.num = question.num ? question.num + 1 : offset+1
   let count = 0
   let repeat = false
   let availables = []

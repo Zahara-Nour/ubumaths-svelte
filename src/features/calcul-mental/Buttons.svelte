@@ -64,17 +64,19 @@
 
   <div class="flex-grow-1"></div>
 
+  <Button
+    class="ml-2 mr-2 amber darken-2 white-text"
+    fab
+    size="x-small"
+    on:click="{copyLink}"
+  >
+    <Icon path="{mdiLink}" />
+  </Button>
+
   {#if !showBasket}
-    {#if isTeacher}
-      <Button
-        class="ml-2 mr-2 amber darken-2 white-text"
-        fab
-        size="x-small"
-        on:click="{copyLink}"
-      >
-        <Icon path="{mdiLink}" />
-      </Button>
-    {/if}
+    <!-- {#if isTeacher} -->
+
+    <!-- {/if} -->
     {#if !isStudent}
       <Button
         class="ml-2 mr-2 amber darken-2 white-text"
@@ -100,49 +102,39 @@
     </Button>
   {/if}
 
-  {#if isTeacher}
-    {#if !showBasket}
-      <Button
-        class="ml-2 mr-2 amber darken-2 white-text"
-        disabled="{disable}"
-        fab
-        size="x-small"
-        on:click="{fillBasket}"
-      >
-        <Icon path="{mdiBasketPlus}" />
-      </Button>
-    {/if}
-    {#if showBasket}
-      <Button
-        disabled="{!basket.length}"
-        class="amber white-text darken-2 ml-2 mr-2"
-        fab
-        size="x-small"
-        on:click="{flushBasket}"
-      >
-        <Icon path="{mdiTrashCanOutline}" />
-      </Button>
-    {/if}
-    {#if basket.length}
-      <Badge
-        class="red"
-        bordered
-        value="{basket.reduce((acc, item) => acc + item.count, 0)}"
-        offsetX="{16}"
-        offsetY="{16}"
-      >
-        <Button
-          disabled="{disable}"
-          class="amber white-text darken-2 ml-2 mr-2"
-          depressed="{showBasket}"
-          fab
-          size="x-small"
-          on:click="{toggleBasket}"
-        >
-          <Icon path="{mdiBasket}" />
-        </Button>
-      </Badge>
-    {:else}
+  <!-- {#if isTeacher} -->
+  {#if !showBasket}
+    <Button
+      class="ml-2 mr-2 amber darken-2 white-text"
+      disabled="{disable}"
+      fab
+      size="x-small"
+      on:click="{fillBasket}"
+    >
+      <Icon path="{mdiBasketPlus}" />
+    </Button>
+  {/if}
+  {#if showBasket}
+    <Button
+      disabled="{!basket.length}"
+      class="amber white-text darken-2 ml-2 mr-2"
+      fab
+      size="x-small"
+      on:click="{flushBasket}"
+    >
+      <Icon path="{mdiTrashCanOutline}" />
+    </Button>
+  {/if}
+  <!-- {/if} -->
+
+  {#if basket.length}
+    <Badge
+      class="red"
+      bordered
+      value="{basket.reduce((acc, item) => acc + item.count, 0)}"
+      offsetX="{16}"
+      offsetY="{16}"
+    >
       <Button
         disabled="{disable}"
         class="amber white-text darken-2 ml-2 mr-2"
@@ -153,7 +145,18 @@
       >
         <Icon path="{mdiBasket}" />
       </Button>
-    {/if}
+    </Badge>
+  {:else}
+    <Button
+      disabled="{disable}"
+      class="amber white-text darken-2 ml-2 mr-2"
+      depressed="{showBasket}"
+      fab
+      size="x-small"
+      on:click="{toggleBasket}"
+    >
+      <Icon path="{mdiBasket}" />
+    </Button>
   {/if}
 
   <Button

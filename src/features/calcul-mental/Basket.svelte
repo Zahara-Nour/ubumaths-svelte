@@ -50,9 +50,9 @@
   let confirmSave
   let activeConfirmSave = false
 
-  $user.classes.forEach((klass) => {
-    selectedStudents[klass] = []
-  })
+  // $user.classes.forEach((klass) => {
+  //   selectedStudents[klass] = []
+  // })
 
   const closeConfirmDialog = () => {
     activeConfirmSave = false
@@ -129,7 +129,6 @@
       })
     })
 
-    console.log('assigned ', assignedStudents)
 
     // TODO: il faut vérifier si cette éval a déjà été assignée
 
@@ -331,34 +330,34 @@
     console.log('students', $user.students)
   }
 
-  $: {
-    if ($user.classes && !selectedClass) {
-      console.log('reset', $user.classes)
-      selectedClass = $user.classes[0]
-    }
-  }
+  // $: {
+  //   if ($user.classes && !selectedClass) {
+  //     console.log('reset', $user.classes)
+  //     selectedClass = $user.classes[0]
+  //   }
+  // }
 
-  $: if (!$user.teacherAssessments && !loading) {
-    fetchTeacherAssessments()
-  }
+  // $: if (!$user.teacherAssessments && !loading) {
+  //   fetchTeacherAssessments()
+  // }
 
-  $: if ($user.teacherAssessments) {
-    teacherAssessmentsTitles = $user.teacherAssessments.map((ev) => ev.title)
-    console.log('titles', teacherAssessmentsTitles)
-  }
+  // $: if ($user.teacherAssessments) {
+  //   teacherAssessmentsTitles = $user.teacherAssessments.map((ev) => ev.title)
+  //   console.log('titles', teacherAssessmentsTitles)
+  // }
 
-  $: if (!$user.students && !fetchingStudent) {
-    fetchStudents()
-  }
-  $: disableSave = evalTitle === '' || saving
+  // $: if (!$user.students && !fetchingStudent) {
+  //   fetchStudents()
+  // }
+  // $: disableSave = evalTitle === '' || saving
 
-  $: confirmSave = teacherAssessmentsTitles.includes(evalTitle)
+  // $: confirmSave = teacherAssessmentsTitles.includes(evalTitle)
 
-  $: console.log('displayAssessmentList dans Basket', displayAssessmentList)
+  // $: console.log('displayAssessmentList dans Basket', displayAssessmentList)
 </script>
 
-<TextField filled bind:value="{evalTitle}" rules="{titleRules}">Titre</TextField
->
+<!-- <TextField filled bind:value="{evalTitle}" rules="{titleRules}">Titre</TextField
+> -->
 
 {#if basket.length}
   <List>
@@ -431,7 +430,7 @@
   Le panier est vide.
 {/if}
 
-<h5>Assigner à :</h5>
+<!-- <h5>Assigner à :</h5>
 <Row class="align-start" noGutters style="height:150px">
   <Col>
     <List>
@@ -519,4 +518,4 @@
   timeout="{3000}"
 >
   Enregistrement réussi
-</Snackbar>
+</Snackbar> -->

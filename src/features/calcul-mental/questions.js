@@ -4395,7 +4395,7 @@ const questions = {
         },
         {
           description: 'Calculer un quotient entier',
-          subdescription: 'Le dividende est un nombre de dizaine',
+          subdescription: 'Le dividende est un nombre de dizaines',
           enounces: ["Calcule."],
           expressions: ['#{&1*&2*10}:&2'],
           variables: [{ '&1': '$e[3;9]', '&2': '$e[3;9]' }],
@@ -4467,14 +4467,89 @@ const questions = {
           grade: CE2,
         },
         {
+          description: 'Reconnaître un quotient et un reste dans une division euclidienne ',
+          enounces:
+            [
+              "En regardant l'égalité ci-dessous, quel est le <b>quotient</b> de la division euclidienne de $$%{&1*&2+&3}$$ par $$&2$$ ?",
+              "En regardant l'égalité ci-dessous, quel est le <b>reste</b> de la division euclidienne de $$%{&1*&2+&3}$$ par $$&2$$ ?"
+            ],
+          variables: [{ '&1': '$e[2;9]', '&2': '$e[2;10]', '&3': '$e[1;&2-1]' }],
+          expressions: ['#{&1*&2+&3}=(&1* &2) +&3'],
+          solutions: [['&1'],['&3']],
+          correctionFormat: [{
+            correct: ['Dans la division de $$%{&1*&2+&3}$$ par $$&2$$, le quotient est &answer.'],
+            uncorrect: ['Dans la division de $$%{&1*&2+&3}$$ par $$&2$$, le quotient est &solution.'],
+            answer: 'Le quotient est &answer.'
+          },
+          {
+            correct: ['Dans la division de $$%{&1*&2+&3}$$ par $$&2$$, le reste est &answer.'],
+            uncorrect: ['Dans la division de $$%{&1*&2+&3}$$ par $$&2$$, le reste est &solution.'],
+            answer: 'Le reste est &answer.'
+          }
+        ],
+          correctionDetails: [
+            [
+              { text: '&solution car $$%{&1*&2+&3}=(\\textcolor{teal}{&1} \\times &2) + &3$$' },
+            ],
+            [
+              { text: '&solution car $$%{&1*&2+&3}=(&1 \\times &2) + \\textcolor{teal}{&3}$$' },
+            ],
+          ],
+          type: 'rewrite',
+          defaultDelay: 30,
+          grade: CE2,
+        },
+        {
+          description: 'Est-ce bien un reste de division eudlienne ? ',
+          enounces:
+            [
+              "En regardant l'égalité ci-dessous, peut-on dire que $$&3$$ est le reste de la division euclidienne de $$%{&1*&2+&3}$$ par $$&2$$ ?",
+              "En regardant l'égalité ci-dessous, peut-on dire que $$%{&3+&2}$$ est le reste de la division euclidienne de $$%{&1*&2+&3}$$ par $$&2$$ ?",
+            ],
+          variables: [
+            { '&1': '$e[3;9]', '&2': '$e[2;10]', '&3': '$e[1;&2-1]' }],
+          expressions: [
+            '#{&1*&2+&3}=(&1* &2) + &3',
+            '#{&1*&2+&3}=(#{&1-1}* &2) + #{&3+&2}',
+          ],
+          solutions: [
+            [0], [1],
+          ],
+          choices:[[{text:'oui'}, {text:'non'}]],
+          correctionFormat: [{
+            correct: ['&answer, $$&3$$ est le reste de la division euclidienne de $$%{&1*&2+&3}$$ par $$&2$$.'],
+            uncorrect: ['&solution, $$&3$$ est le reste de la division euclidienne de $$%{&1*&2+&3}$$ par $$&2$$.'],
+            answer: "&answer, $$&3$$ n'est pas le reste."
+          },
+          {
+            correct: ["&answer, $$%{&3+&2}$$ n'est pas le reste de la division euclidienne de $$%{&1*&2+&3}$$ par $$&2$$."],
+            uncorrect: ["&solution, $$%{&3+&2}$$ n'est pas le reste de la division euclidienne de $$%{&1*&2+&3}$$ par $$&2$$."],
+            answer: "&answer, $$%{&3+&2}$$ est le reste."
+          },
+         
+        ],
+          correctionDetails: [
+            [
+              { text: "&solution, $$&3$$ est le reste de la division euclidienne de $$%{&1*&2+&3}$$ par $$&2$$, car dans l'égalité $$%{&1*&2+&3}=(&1 \\times &2) + &3$$, on a bien $$&3<&2$$." },
+            ],
+            [
+              { text: "&solution, $$%{&3+&2}$$ n'est pas le reste de la division euclidienne de $$%{&1*&2+&3}$$ par $$&2$$, car dans l'égalité $$%{&1*&2+&3}=(%{&1-1} \\times &2) + %{&3+&2}$$, on n'a <b>pas</b>  $$%{&3+&2}<&2$$." },
+            ],
+          ],
+          options:['no-shuffle-choices'],
+          type: 'choice',
+          defaultDelay: 30,
+          grade: CE2,
+        },
+        {
           description: 'Effectuer une division euclidienne ',
           enounces:
-            ["Ecris l'expression correspondant à la division euclidienne de $$#{&1*&2+&3}$$ par $$&2$$."],
+            ["Ecris l'égalité correspondant à la division euclidienne de $$#{&1*&2+&3}$$ par $$&2$$."],
           variables: [{ '&1': '$e[2;9]', '&2': '$e[2;10]', '&3': '$e[1;&2-1]' }],
           expressions: ['#{&1*&2+&3}'],
-          solutions: [['(&1*&2)+&3']],
+          solutions: [['#{(&1*&2)+&3} =(&1*&2)+&3']],
           options: ['no-exp'],
-          type: 'decomposition',
+          type: 'rewrite',
           defaultDelay: 30,
           grade: CE2,
         },
@@ -6083,15 +6158,26 @@ const questions = {
       Produit: [
         {
           description: 'Calculer un produit',
-          subdescription: 'Un des facteurs est un entier',
+          subdescription: 'Un entier par un décimal inférieur à 1',
           enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$e[2;9]',
-              '&2': '$d{1;1}',
+              '&2': '$e[2;9]',
+              '&3': '0.&2',
+            },
+            {
+              '&1': '$e[2;9]',
+              '&2': '$e[2;9]',
+              '&3': '0.0&2',
             },
           ],
-          expressions: ['&1*&2', '&2*&1'],
+          expressions: ['&1*&3'],
+          conditions:["mod(&1*&2;10)!=0"],
+          correctionDetails:[
+            [{ text: "$$&1\\times &2=%{&1*&2}$$ donc $$&1\\times 0,\\textcolor{teal}{&2}=&sol$$ ($$\\textcolor{teal}{1\\text{ décimale}} $$)." }],
+            [{ text: "$$&1\\times &2=%{&1*&2}$$ donc $$&1\\times 0,\\textcolor{teal}{0&2}=&sol$$ ($$\\textcolor{teal}{2\\text{ décimales}} $$)." }]
+          ],
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
@@ -6115,6 +6201,9 @@ const questions = {
           expressions: ['##{&3:10^(&1-1)}*##{&4:10^(&2-1)}=#{&3*&4}'],
           conditions: ['mod(&3*&4;10)!=0'],
           solutions: [['##{&3*&4:10^(&1+&2-2)}']],
+          correctionDetails:[
+            [{ text: "Il y a $$\\textcolor{teal}{%{&1-1}\\text{ décimale(s)}}$$ dans $$%%{&3:10^(&1-1)}$$  et $$\\textcolor{teal}{%{&2-1}\\text{  décimale(s)}}$$ dans $$%%{&4:10^(&2-1)}$$, donc il y a en tout $$\\textcolor{teal}{%{&1+&2-2} \\text{ décimales}}$$  dans &solution." }],
+          ],
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
@@ -6122,22 +6211,43 @@ const questions = {
         },
         {
           description: 'Calculer un produit',
-          subdescription: 'Multiplier deux nombres décimaux',
+          subdescription: 'Multiplier deux nombres décimaux inférieurs à 1',
           enounces: ['Calcule.'],
           variables: [
             {
               '&1': '$e[2;9]',
-              '&2': '$l{0.1;0.01}',
+              '&2': '$e[1;2]',
               '&3': '$e[2;9]',
-              '&4': '$l{0.1;0.01}',
+              '&4': '$e[1;2]',
             },
           ],
-          expressions: ['##{&1*&2}*##{&3*&4}'],
+          conditions:["mod(&1*&3;10)!=0"],
+          expressions: ['##{&1*10^(-&2)}*##{&3*10^(-&4)}'],
+          correctionDetails:[
+            [{ text: "$$&1\\times &3=%{&1*&3}$$ donc $$%%{&1*10^(-&2)} \\times %%{&3*10^(-&4)}=&sol$$ ($$\\textcolor{teal}{&2+&4=%{&2+&4}\\text{ décimales}} $$)." }],
+          ],
           type: 'result',
           'result-type': 'decimal',
           defaultDelay: 20,
           grade: SIXIEME,
         },
+
+        {
+          description: 'Calculer un produit',
+          subdescription: 'Un des facteurs est un entier',
+          enounces: ['Calcule.'],
+          variables: [
+            {
+              '&1': '$e[2;9]',
+              '&2': '$d{1;1}',
+            },
+          ],
+          expressions: ['&1*&2', '&2*&1'],
+          type: 'result',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: CM2,
+        },    
         {
           description: 'Calculer un produit',
           subdescription: "Determiner un produit à partir d'un autre",
@@ -6155,6 +6265,10 @@ const questions = {
           ],
           options: ['no-exp'],
           expressions: ['##{&1*&3}* &2', '&2*##{&1*&3}'],
+          correctionDetails:[
+            [{ text: "$$%%{&1*&3}$$ est $$\\textcolor{teal}{%{&3}\\text{ fois}}$$ plus grand que $$%%{&1}$$, donc le résultat de $$%%{&1*&3} \\times %%{&2}$$ est  $$\\textcolor{teal}{%{&3}\\text{ fois}}$$ plus grand que celui de $$%%{&1}\\times%%{&2}$$, c'est-à-dire $$\\textcolor{teal}{%{&3}\\times} %%{&1*&2} = &sol$$" }],
+            [{ text: "$$%%{&1*&3}$$ est $$\\textcolor{teal}{%{&3}\\text{ fois}}$$ plus grand que $$%%{&1}$$, donc le résultat de $$%%{&2} \\times %%{&1*&3} $$ est  $$\\textcolor{teal}{%{&3}\\text{ fois}}$$ plus grand que celui de $$%%{&2} \\times %%{&1}$$, c'est-à-dire $$\\textcolor{teal}{%{&3}\\times} %%{&1*&2} = &sol$$" }],
+          ],
           solutions: [['##{&1*&3*&2}']],
           type: 'result',
           'result-type': 'decimal',
@@ -10270,6 +10384,685 @@ const questions = {
 
       ]
     },
+    Périmètres: {
+      "Périmètre d'un carré": [
+        {
+          description: "Calcul de l'aire d'un carré.",
+          subdescription: "A partir d'une description",
+          enounces: [
+            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 mm$$ ?",
+            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 cm$$ ?",
+            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 dm$$ ?",
+            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 m$$ ?",
+            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 dam$$ ?",
+            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 hm$$ ?",
+            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 km$$ ?",
+          ],
+          variables: [
+            {
+              '&1': '$e[1;11]',
+            },
+          ],
+          solutions: [
+            ['#{&1*&1} mm^2'],
+            ['#{&1*&1} cm^2'],
+            ['#{&1*&1} dm^2'],
+            ['#{&1*&1} m^2'],
+            ['#{&1*&1} dam^2'],
+            ['#{&1*&1} hm^2'],
+            ['#{&1*&1} km^2'],
+          ],
+          options: ['no-exp'],
+          correctionFormat: [
+            {
+              correct: ["L'aire d'un carré de côté $$&1\\,mm$$ est &answer."],
+              uncorrect: ["L'aire d'un carré de côté $$&1\\,mm$$ est &solution."],
+              answer: "L'aire du carré est &answer."
+            },
+            {
+              correct: ["L'aire d'un carré de côté $$&1\\,cm$$ est &answer."],
+              uncorrect: ["L'aire d'un carré de côté $$&1\\,cm$$ est &solution."],
+              answer: "L'aire du carré est &answer."
+            },
+            {
+              correct: ["L'aire d'un carré de côté $$&1\\,dm$$ est &answer."],
+              uncorrect: ["L'aire d'un carré de côté $$&1\\,dm$$ est &solution."],
+              answer: "L'aire du carré est &answer."
+            },
+            {
+              correct: ["L'aire d'un carré de côté $$&1\\,m$$ est &answer."],
+              uncorrect: ["L'aire d'un carré de côté $$&1\\,m$$ est &solution."],
+              answer: "L'aire du carré est &answer."
+            },
+            {
+              correct: ["L'aire d'un carré de côté $$&1\\,dam$$ est &answer."],
+              uncorrect: ["L'aire d'un carré de côté $$&1\\,dam$$ est &solution."],
+              answer: "L'aire du carré est &answer."
+            },
+            {
+              correct: ["L'aire d'un carré de côté $$&1\\,hm$$ est &answer."],
+              uncorrect: ["L'aire d'un carré de côté $$&1\\,hm$$ est &solution."],
+              answer: "L'aire du carré est &answer."
+            },
+            {
+              correct: ["L'aire d'un carré de côté $$&1\\,km$$ est &answer."],
+              uncorrect: ["L'aire d'un carré de côté $$&1\\,km$$ est &solution."],
+              answer: "L'aire du carré est &answer."
+            },
+          ],
+          correctionDetails: [
+            [
+              { text: "L'aire d'un carré de côté $$&1\\,mm$$  est $$&1\\,mm \\times &1\\,mm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&1}\\,mm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un carré de côté $$&1\\,cm$$  est $$&1\\,cm \\times &1\\,cm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&1}\\,cm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un carré de côté $$&1\\,dm$$  est $$&1\\,dm \\times &1\\,dm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&1}\\,dm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un carré de côté $$&1\\,m$$  est $$&1\\,m \\times &1\\,m = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&1}\\,m^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un carré de côté $$&1\\,dam$$  est $$&1\\,dam \\times &1\\,dam = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&1}\\,dam^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un carré de côté $$&1\\,hm$$  est $$&1\\,hm \\times &1\\,hm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&1}\\,hm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un carré de côté $$&1\\,km$$  est $$&1\\,km \\times &1\\,km = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&1}\\,km^2}$$." }
+            ],
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: SIXIEME,
+        },
+        {
+          description: "Trouver le côté d'un carré connaissant son aire.",
+          subdescription: "A partir d'une description.",
+          enounces: [
+            "Quelle est la longueur du côté d'un <b>carré</b> d'aire $$%%{&1*&1}\\,mm^2$$ ?",
+            "Quelle est la longueur du côté d'un <b>carré</b> d'aire $$%%{&1*&1}\\, cm^2$$ ?",
+            "Quelle est la longueur du côté d'un <b>carré</b> d'aire $$%%{&1*&1}\\, dm^2$$ ?",
+            "Quelle est la longueur du côté d'un <b>carré</b> d'aire $$%%{&1*&1}\\, m^2$$ ?",
+            "Quelle est la longueur du côté d'un <b>carré</b> d'aire $$%%{&1*&1}\\, dam^2$$ ?",
+            "Quelle est la longueur du côté d'un <b>carré</b> d'aire $$%%{&1*&1}\\, hm^2$$ ?",
+            "Quelle est la longueur du côté d'un <b>carré</b> d'aire $$%%{&1*&1}\\, km^2$$ ?",
+
+          ],
+          variables: [
+            {
+              '&1': '$e[1;11]',
+            },
+          ],
+          solutions: [
+            ['&1 mm'],
+            ['&1 cm'],
+            ['&1 dm'],
+            ['&1 m'],
+            ['&1 dam'],
+            ['&1 hm'],
+            ['&1 km'],
+          ],
+          options: ['no-exp'],
+          correctionFormat: [
+            {
+              correct: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,mm^2$$ est &answer."],
+              uncorrect: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,mm^2$$ est &solution."],
+              answer: "La longueur du côté est &answer."
+            },
+            {
+              correct: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,cm^2$$ est &answer."],
+              uncorrect: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,cm^2$$ est &solution."],
+              answer: "La longueur du côté est &answer."
+            },
+            {
+              correct: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,dm^2$$ est &answer."],
+              uncorrect: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,dm^2$$ est &solution."],
+              answer: "La longueur du côté est &answer."
+            },
+            {
+              correct: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,m^2$$ est &answer."],
+              uncorrect: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,m^2$$ est &solution."],
+              answer: "La longueur du côté est &answer."
+            },
+            {
+              correct: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,dam^2$$ est &answer."],
+              uncorrect: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,dam^2$$ est &solution."],
+              answer: "La longueur du côté est &answer."
+            },
+            {
+              correct: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,hm^2$$ est &answer."],
+              uncorrect: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,hm^2$$ est &solution."],
+              answer: "La longueur du côté est &answer."
+            },
+            {
+              correct: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,km^2$$ est &answer."],
+              uncorrect: ["La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,km^2$$ est &solution."],
+              answer: "La longueur du côté est &answer."
+            },
+
+
+          ],
+          correctionDetails: [
+            [
+              { text: "La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,mm^2$$ est &solution car $$&1\\,mm \\times &1\\,mm = #{&1*&1}\\,mm^2$$." }
+            ],
+            [
+              { text: "La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,cm^2$$ est &solution car $$&1\\,cm \\times &1\\,cm = #{&1*&1}\\,cm^2$$." }
+            ],
+            [
+              { text: "La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,dm^2$$ est &solution car $$&1\\,dm \\times &1\\,dm = #{&1*&1}\\,dm^2$$." }
+            ],
+            [
+              { text: "La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,m^2$$ est &solution car $$&1\\,m \\times &1\\,m = #{&1*&1}\\,m^2$$." }
+            ],
+            [
+              { text: "La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,dam^2$$ est &solution car $$&1\\,dam \\times &1\\,dam = #{&1*&1}\\,dam^2$$." }
+            ],
+            [
+              { text: "La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,hm^2$$ est &solution car $$&1\\,hm \\times &1\\,hm = #{&1*&1}\\,hm^2$$." }
+            ],
+            [
+              { text: "La longueur du côté d'un carré d'aire $$%%{&1*&1}\\,km^2$$ est &solution car $$&1\\,km \\times &1\\,km = #{&1*&1}\\,km^2$$." }
+            ],
+
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: SIXIEME,
+        },
+
+      ],
+
+      "Aire d'un rectangle": [
+        {
+          description: "Calcul de l'aire d'un rectangle.",
+          subdescription: "A partir d'une description",
+          enounces: [
+            "Quelle est l'aire d'un <b>rectangle</b> de longueur $$&1\\,mm$$ et de largeur $$&2\\,mm$$ ?",
+            "Quelle est l'aire d'un <b>rectangle</b> de longueur $$&1\\,cm$$ et de largeur $$&2\\,cm$$ ?",
+            "Quelle est l'aire d'un <b>rectangle</b> de longueur $$&1\\,dm$$ et de largeur $$&2\\,dm$$ ?",
+            "Quelle est l'aire d'un <b>rectangle</b> de longueur $$&1\\,m$$ et de largeur $$&2\\,m$$ ?",
+            "Quelle est l'aire d'un <b>rectangle</b> de longueur $$&1\\,dam$$ et de largeur $$&2\\,dam$$ ?",
+            "Quelle est l'aire d'un <b>rectangle</b> de longueur $$&1\\,hm$$ et de largeur $$&2\\,hm$$ ?",
+            "Quelle est l'aire d'un <b>rectangle</b> de longueur $$&1\\,km$$et de largeur $$&2\\,km$$ ?",
+
+          ],
+          variables: [
+            {
+              '&1': '$e[1;11]',
+              '&2': '$e[1;11]',
+            },
+          ],
+          solutions: [
+            ['#{&1*&2} mm^2'],
+            ['#{&1*&2} cm^2'],
+            ['#{&1*&2} dm^2'],
+            ['#{&1*&2} m^2'],
+            ['#{&1*&2} dam^2'],
+            ['#{&1*&2} hm^2'],
+            ['#{&1*&2} km^2'],
+          ],
+          options: ['no-exp'],
+          correctionFormat: [
+            {
+              correct: ["L'aire d'un rectangle de longueur $$&1\\,mm$$ et de largeur $$&2\\,mm$$ est &answer."],
+              uncorrect: ["L'aire d'un rectangle de longueur $$&1\\,mm$$ et de largeur $$&2\\,mm$$ est &solution."],
+              answer: "L'aire du rectangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un rectangle de longueur $$&1\\,cm$$ et de largeur $$&2\\,cm$$ est &answer."],
+              uncorrect: ["L'aire d'un rectangle de longueur $$&1\\,cm$$ et de largeur $$&2\\,cm$$ est &solution."],
+              answer: "L'aire du rectangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un rectangle de longueur $$&1\\,dm$$ et de largeur $$&2\\,dm$$ est &answer."],
+              uncorrect: ["L'aire d'un rectangle de longueur $$&1\\,dm$$ et de largeur $$&2\\,dm$$ est &solution."],
+              answer: "L'aire du rectangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un rectangle de longueur $$&1\\,m$$ et de largeur $$&2\\,m$$ est &answer."],
+              uncorrect: ["L'aire d'un rectangle de longueur $$&1\\,m$$ et de largeur $$&2\\,m$$ est &solution."],
+              answer: "L'aire du rectangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un rectangle de longueur $$&1\\,dam$$ et de largeur $$&2\\,dam$$ est &answer."],
+              uncorrect: ["L'aire d'un rectangle de longueur $$&1\\,dam$$ et de largeur $$&2\\,dam$$ est &solution."],
+              answer: "L'aire du rectangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un rectangle de longueur $$&1\\,hm$$ et de largeur $$&2\\,hm$$ est &answer."],
+              uncorrect: ["L'aire d'un rectangle de longueur $$&1\\,hm$$ et de largeur $$&2\\,hm$$ est &solution."],
+              answer: "L'aire du rectangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un rectangle de longueur $$&1\\,km$$ et de largeur $$&2\\,km$$ est &answer."],
+              uncorrect: ["L'aire d'un rectangle de longueur $$&1\\,km$$ et de largeur $$&2\\,km$$ est &solution."],
+              answer: "L'aire du rectangle est &answer."
+            },
+
+          ],
+          correctionDetails: [
+            [
+              { text: "L'aire d'un rectangle de longueur $$&1\\,mm$$ et de largeur $$&2\\,mm$$  est $$&1\\,mm \\times &2\\,mm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,mm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un rectangle de longueur $$&1\\,cm$$ et de largeur $$&2\\,cm$$  est $$&1\\,cm \\times &2\\,cm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,cm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un rectangle de longueur $$&1\\,dm$$ et de largeur $$&2\\,dm$$  est $$&1\\,dm \\times &2\\,dm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,dm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un rectangle de longueur $$&1\\,m$$ et de largeur $$&2\\,m$$  est $$&1\\,m \\times &2\\,m = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,m^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un rectangle de longueur $$&1\\,dam$$ et de largeur $$&2\\,dam$$  est $$&1\\,dam \\times &2\\,dam = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,dam^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un rectangle de longueur $$&1\\,hm$$ et de largeur $$&2\\,hm$$  est $$&1\\,hm \\times &2\\,hm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,hm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un rectangle de longueur $$&1\\,km$$ et de largeur $$&2\\,km$$  est $$&1\\,km \\times &2\\,km = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,km^2}$$." }
+            ],
+
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: SIXIEME,
+        },
+        {
+          description: "Trouver la largeur d'un rectangle.",
+          subdescription: "A partir de son aire et de sa longueur.",
+          enounces: [
+            "Quelle est la largeur d'un <b>rectangle</b> de longueur $$&1\\,mm$$ et d'aire $$%{&1*&2}\\,mm^2$$ ?",
+            "Quelle est la largeur d'un <b>rectangle</b> de longueur $$&1\\,cm$$ et d'aire $$%{&1*&2}\\,cm^2$$ ?",
+            "Quelle est la largeur d'un <b>rectangle</b> de longueur $$&1\\,dm$$ et d'aire $$%{&1*&2}\\,dm^2$$ ?",
+            "Quelle est la largeur d'un <b>rectangle</b> de longueur $$&1\\,m$$ et d'aire $$%{&1*&2}\\,m^2$$ ?",
+            "Quelle est la largeur d'un <b>rectangle</b> de longueur $$&1\\,dam$$ et d'aire $$%{&1*&2}\\,dam^2$$ ?",
+            "Quelle est la largeur d'un <b>rectangle</b> de longueur $$&1\\,hm$$ et d'aire $$%{&1*&2}\\,hm^2$$ ?",
+            "Quelle est la largeur d'un <b>rectangle</b> de longueur $$&1\\,km$$ et d'aire $$%{&1*&2}\\,km^2$$ ?",
+
+          ],
+          variables: [
+            {
+              '&1': '$e[1;11]',
+              '&2': '$e[1;11]',
+            },
+          ],
+          solutions: [
+            ['&2 mm'],
+            ['&2 cm'],
+            ['&2 dm'],
+            ['&2 m'],
+            ['&2 dam'],
+            ['&2 hm'],
+            ['&2 km'],
+          ],
+          options: ['no-exp'],
+          correctionFormat: [
+            {
+              correct: ["La largeur d'un rectangle de longueur $$&1\\,mm$$ et d'aire $$%{&2*&1}\\,mm^2$$ est &answer."],
+              uncorrect: ["La largeur d'un rectangle de longueur $$&1\\,mm$$ et d'aire $$%{&2*&1}\\,mm^2$$ est &solution."],
+              answer: "La largeur du rectangle est &answer."
+            },
+            {
+              correct: ["La largeur d'un rectangle de longueur $$&1\\,cm$$ et d'aire $$%{&2*&1}\\,cm^2$$ est &answer."],
+              uncorrect: ["La largeur d'un rectangle de longueur $$&1\\,cm$$ et d'aire $$%{&2*&1}\\,cm^2$$ est &solution."],
+              answer: "La largeur du rectangle est &answer."
+            },
+            {
+              correct: ["La largeur d'un rectangle de longueur $$&1\\,dm$$ et d'aire $$%{&2*&1}\\,dm^2$$ est &answer."],
+              uncorrect: ["La largeur d'un rectangle de longueur $$&1\\,dm$$ et d'aire $$%{&2*&1}\\,dm^2$$ est &solution."],
+              answer: "La largeur du rectangle est &answer."
+            },
+            {
+              correct: ["La largeur d'un rectangle de longueur $$&1\\,m$$ et d'aire $$%{&2*&1}\\,m^2$$ est &answer."],
+              uncorrect: ["La largeur d'un rectangle de longueur $$&1\\,m$$ et d'aire $$%{&2*&1}\\,m^2$$ est &solution."],
+              answer: "La largeur du rectangle est &answer."
+            },
+            {
+              correct: ["La largeur d'un rectangle de longueur $$&1\\,dam$$ et d'aire $$%{&2*&1}\\,dam^2$$ est &answer."],
+              uncorrect: ["La largeur d'un rectangle de longueur $$&1\\,dam$$ et d'aire $$%{&2*&1}\\,dam^2$$ est &solution."],
+              answer: "La largeur du rectangle est &answer."
+            },
+            {
+              correct: ["La largeur d'un rectangle de longueur $$&1\\,hm$$ et d'aire $$%{&2*&1}\\,hm^2$$ est &answer."],
+              uncorrect: ["La largeur d'un rectangle de longueur $$&1\\,hm$$ et d'aire $$%{&2*&1}\\,hm^2$$ est &solution."],
+              answer: "La largeur du rectangle est &answer."
+            },
+            {
+              correct: ["La largeur d'un rectangle de longueur $$&1\\,km$$ et d'aire $$%{&2*&1}\\,km^2$$ est &answer."],
+              uncorrect: ["La largeur d'un rectangle de longueur $$&1\\,km$$ et d'aire $$%{&2*&1}\\,km^2$$ est &solution."],
+              answer: "La largeur du rectangle est &answer."
+            },
+
+
+          ],
+          correctionDetails: [
+            [
+              { text: "La largeur d'un rectangle de longueur $$&1\\,mm$$ et d'aire $$%{&2*&1}\\,mm^2$$  est &solution car   $$&1\\,mm \\times &2\\,mm = #{&1*&2}\\,mm^2$$." }
+            ],
+            [
+              { text: "La largeur d'un rectangle de longueur $$&1\\,cm$$ et d'aire $$%{&2*&1}\\,cm^2$$  est &solution car   $$&1\\,cm \\times &2\\,cm = #{&1*&2}\\,cm^2$$." }
+            ],
+            [
+              { text: "La largeur d'un rectangle de longueur $$&1\\,dm$$ et d'aire $$%{&2*&1}\\,dm^2$$  est &solution car   $$&1\\,dm \\times &2\\,dm = #{&1*&2}\\,dm^2$$." }
+            ],
+            [
+              { text: "La largeur d'un rectangle de longueur $$&1\\,m$$ et d'aire $$%{&2*&1}\\,m^2$$  est &solution car   $$&1\\,m \\times &2\\,m = #{&1*&2}\\,m^2$$." }
+            ],
+            [
+              { text: "La largeur d'un rectangle de longueur $$&1\\,dam$$ et d'aire $$%{&2*&1}\\,dam^2$$  est &solution car   $$&1\\,dam \\times &2\\,dam = #{&1*&2}\\,dam^2$$." }
+            ],
+            [
+              { text: "La largeur d'un rectangle de longueur $$&1\\,hm$$ et d'aire $$%{&2*&1}\\,hm^2$$  est &solution car   $$&1\\,hm \\times &2\\,hm = #{&1*&2}\\,hm^2$$." }
+            ],
+            [
+              { text: "La largeur d'un rectangle de longueur $$&1\\,km$$ et d'aire $$%{&2*&1}\\,km^2$$  est &solution car   $$&1\\,km \\times &2\\,km = #{&1*&2}\\,km^2$$." }
+            ],
+
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+
+      ],
+      "Aire d'un triangle rectangle": [
+        {
+          description: "Calcul de l'aire d'un triangle rectangle.",
+          subdescription: "A partir d'une description",
+          enounces: [
+            "Quelle est l'aire d'un <b>triangle rectangle</b> de longueur $$&1\\,mm$$ et de largeur $$&2\\,mm$$ ?",
+            "Quelle est l'aire d'un <b>triangle rectangle</b> de longueur $$&1\\,cm$$ et de largeur $$&2\\,cm$$ ?",
+            "Quelle est l'aire d'un <b>triangle rectangle</b> de longueur $$&1\\,dm$$ et de largeur $$&2\\,dm$$ ?",
+            "Quelle est l'aire d'un <b>triangle rectangle</b> de longueur $$&1\\,m$$ et de largeur $$&2\\,m$$ ?",
+            "Quelle est l'aire d'un <b>triangle rectangle</b> de longueur $$&1\\,dam$$ et de largeur $$&2\\,dam$$ ?",
+            "Quelle est l'aire d'un <b>triangle rectangle</b> de longueur $$&1\\,hm$$ et de largeur $$&2\\,hm$$ ?",
+            "Quelle est l'aire d'un <b>triangle rectangle</b> de longueur $$&1\\,km$$et de largeur $$&2\\,km$$ ?",
+
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+            },
+          ],
+          solutions: [
+            ['##{&1*&2/2} mm^2'],
+            ['##{&1*&2/2} cm^2'],
+            ['##{&1*&2/2} dm^2'],
+            ['##{&1*&2/2} m^2'],
+            ['##{&1*&2/2} dam^2'],
+            ['##{&1*&2/2} hm^2'],
+            ['##{&1*&2/2} km^2'],
+          ],
+          options: ['no-exp'],
+          correctionFormat: [
+            {
+              correct: ["L'aire d'un triangle rectangle de longueur $$&1\\,mm$$ et de largeur $$&2\\,mm$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle rectangle de longueur $$&1\\,mm$$ et de largeur $$&2\\,mm$$ est &solution."],
+              answer: "L'aire du triangle rectangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un triangle rectangle de longueur $$&1\\,cm$$ et de largeur $$&2\\,cm$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle rectangle de longueur $$&1\\,cm$$ et de largeur $$&2\\,cm$$ est &solution."],
+              answer: "L'aire du triangle rectangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un triangle rectangle de longueur $$&1\\,dm$$ et de largeur $$&2\\,dm$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle rectangle de longueur $$&1\\,dm$$ et de largeur $$&2\\,dm$$ est &solution."],
+              answer: "L'aire du triangle rectangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un triangle rectangle de longueur $$&1\\,m$$ et de largeur $$&2\\,m$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle rectangle de longueur $$&1\\,m$$ et de largeur $$&2\\,m$$ est &solution."],
+              answer: "L'aire du triangle rectangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un triangle rectangle de longueur $$&1\\,dam$$ et de largeur $$&2\\,dam$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle rectangle de longueur $$&1\\,dam$$ et de largeur $$&2\\,dam$$ est &solution."],
+              answer: "L'aire du triangle rectangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un triangle rectangle de longueur $$&1\\,hm$$ et de largeur $$&2\\,hm$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle rectangle de longueur $$&1\\,hm$$ et de largeur $$&2\\,hm$$ est &solution."],
+              answer: "L'aire du triangle rectangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un triangle rectangle de longueur $$&1\\,km$$ et de largeur $$&2\\,km$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle rectangle de longueur $$&1\\,km$$ et de largeur $$&2\\,km$$ est &solution."],
+              answer: "L'aire du triangle rectangle est &answer."
+            },
+          ],
+          correctionDetails: [
+            [
+              { text: "L'aire d'un triangle rectangle de longueur $$&1\\,mm$$ et de largeur $$&2\\,mm$$  est $$\\frac{&1\\,mm \\times &2\\,mm}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,mm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un triangle rectangle de longueur $$&1\\,cm$$ et de largeur $$&2\\,cm$$  est $$\\frac{&1\\,cm \\times &2\\,cm}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,cm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un triangle rectangle de longueur $$&1\\,dm$$ et de largeur $$&2\\,dm$$  est $$\\frac{&1\\,dm \\times &2\\,dm}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,dm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un triangle rectangle de longueur $$&1\\,m$$ et de largeur $$&2\\,m$$  est $$\\frac{&1\\,m \\times &2\\,m}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,m^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un triangle rectangle de longueur $$&1\\,dam$$ et de largeur $$&2\\,dam$$  est $$\\frac{&1\\,dam \\times &2\\,dam}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,dam^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un triangle rectangle de longueur $$&1\\,hm$$ et de largeur $$&2\\,hm$$  est $$\\frac{&1\\,hm \\times &2\\,hm}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,hm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un triangle rectangle de longueur $$&1\\,km$$ et de largeur $$&2\\,km$$  est $$\\frac{&1\\,km \\times &2\\,km}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,km^2}$$." }
+            ],
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+
+      ],
+      "Aire d'un triangle quelconque": [
+        {
+          description: "Calcul de l'aire d'un triangle quelconque.",
+          subdescription: "A partir d'une description",
+          enounces: [
+            "Quelle est l'aire d'un <b>triangle</b> de base $$&1\\,mm$$ et de hauteur $$&2\\,mm$$ ?",
+            "Quelle est l'aire d'un <b>triangle</b> de base $$&1\\,cm$$ et de hauteur $$&2\\,cm$$ ?",
+            "Quelle est l'aire d'un <b>triangle</b> de base $$&1\\,dm$$ et de hauteur $$&2\\,dm$$ ?",
+            "Quelle est l'aire d'un <b>triangle</b> de base $$&1\\,m$$ et de hauteur $$&2\\,m$$ ?",
+            "Quelle est l'aire d'un <b>triangle</b> de base $$&1\\,dam$$ et de hauteur $$&2\\,dam$$ ?",
+            "Quelle est l'aire d'un <b>triangle</b> de base $$&1\\,hm$$ et de hauteur $$&2\\,hm$$ ?",
+            "Quelle est l'aire d'un <b>triangle</b> de base $$&1\\,km$$ et de hauteur $$&2\\,km$$ ?",
+
+          ],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+              '&2': '$e[1;9]',
+            },
+          ],
+          solutions: [
+            ['##{&1*&2/2} mm^2'],
+            ['##{&1*&2/2} cm^2'],
+            ['##{&1*&2/2} dm^2'],
+            ['##{&1*&2/2} m^2'],
+            ['##{&1*&2/2} dam^2'],
+            ['##{&1*&2/2} hm^2'],
+            ['##{&1*&2/2} km^2'],
+          ],
+          options: ['no-exp'],
+          correctionFormat: [
+            {
+              correct: ["L'aire d'un triangle de base $$&1\\,mm$$ et de hauteur $$&2\\,mm$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle de base $$&1\\,mm$$ et de hauteur $$&2\\,mm$$ est &solution."],
+              answer: "L'aire du triangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un triangle de base $$&1\\,cm$$ et de hauteur $$&2\\,cm$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle de base $$&1\\,cm$$ et de hauteur $$&2\\,cm$$ est &solution."],
+              answer: "L'aire du triangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un triangle de base $$&1\\,dm$$ et de hauteur $$&2\\,dm$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle de base $$&1\\,dm$$ et de hauteur $$&2\\,dm$$ est &solution."],
+              answer: "L'aire du triangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un triangle de base $$&1\\,m$$ et de hauteur $$&2\\,m$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle de base $$&1\\,m$$ et de hauteur $$&2\\,m$$ est &solution."],
+              answer: "L'aire du triangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un triangle de base $$&1\\,dam$$ et de hauteur $$&2\\,dam$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle de base $$&1\\,dam$$ et de hauteur $$&2\\,dam$$ est &solution."],
+              answer: "L'aire du triangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un triangle de base $$&1\\,hm$$ et de hauteur $$&2\\,hm$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle de base $$&1\\,hm$$ et de hauteur $$&2\\,hm$$ est &solution."],
+              answer: "L'aire du triangle est &answer."
+            },
+            {
+              correct: ["L'aire d'un triangle de base $$&1\\,km$$ et de hauteur $$&2\\,km$$ est &answer."],
+              uncorrect: ["L'aire d'un triangle de base $$&1\\,km$$ et de hauteur $$&2\\,km$$ est &solution."],
+              answer: "L'aire du triangle est &answer."
+            },
+          ],
+          correctionDetails: [
+            [
+              { text: "L'aire d'un triangle de base $$&1\\,mm$$ et de hauteur $$&2\\,mm$$  est $$\\frac{&1\\,mm \\times &2\\,mm}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,mm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un triangle de base $$&1\\,cm$$ et de hauteur $$&2\\,cm$$  est $$\\frac{&1\\,cm \\times &2\\,cm}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,cm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un triangle de base $$&1\\,dm$$ et de hauteur $$&2\\,dm$$  est $$\\frac{&1\\,dm \\times &2\\,dm}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,dm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un triangle de base $$&1\\,m$$ et de hauteur $$&2\\,m$$  est $$\\frac{&1\\,m \\times &2\\,m}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,m^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un triangle de base $$&1\\,dam$$ et de hauteur $$&2\\,dam$$  est $$\\frac{&1\\,dam \\times &2\\,dam}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,dam^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un triangle de base $$&1\\,hm$$ et de hauteur $$&2\\,hm$$  est $$\\frac{&1\\,hm \\times &2\\,hm}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,hm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un triangle de base $$&1\\,km$$ et de hauteur $$&2\\,km$$  est $$\\frac{&1\\,km \\times &2\\,km}{2} = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{%%{&1*&2/2}\\,km^2}$$." }
+            ],
+
+          ],
+          type: 'result',
+          defaultDelay: 20,
+          grade: SIXIEME,
+        },
+
+      ],
+      "Aire d'un parallélogramme": [
+        {
+          description: "Calcul de l'aire d'un parallélogramme.",
+          subdescription: "A partir d'une description",
+          enounces: [
+            "Quelle est l'aire d'un <b>parallélogramme</b> de base $$&1\\,mm$$ et de hauteur $$&2\\,mm$$ ?",
+            "Quelle est l'aire d'un <b>parallélogramme</b> de base $$&1\\,cm$$ et de hauteur $$&2\\,cm$$ ?",
+            "Quelle est l'aire d'un <b>parallélogramme</b> de base $$&1\\,dm$$ et de hauteur $$&2\\,dm$$ ?",
+            "Quelle est l'aire d'un <b>parallélogramme</b> de base $$&1\\,m$$ et de hauteur $$&2\\,m$$ ?",
+            "Quelle est l'aire d'un <b>parallélogramme</b> de base $$&1\\,dam$$ et de hauteur $$&2\\,dam$$ ?",
+            "Quelle est l'aire d'un <b>parallélogramme</b> de base $$&1\\,hm$$ et de hauteur $$&2\\,hm$$ ?",
+            "Quelle est l'aire d'un <b>parallélogramme</b> de base $$&1\\,km$$et de hauteur $$&2\\,km$$ ?",
+
+          ],
+          variables: [
+            {
+              '&1': '$e[1;11]',
+              '&2': '$e[1;11]',
+            },
+          ],
+          solutions: [
+            ['#{&1*&2} mm^2'],
+            ['#{&1*&2} cm^2'],
+            ['#{&1*&2} dm^2'],
+            ['#{&1*&2} m^2'],
+            ['#{&1*&2} dam^2'],
+            ['#{&1*&2} hm^2'],
+            ['#{&1*&2} km^2'],
+          ],
+          options: ['no-exp'],
+          correctionFormat: [
+            {
+              correct: ["L'aire d'un parallélogramme de base $$&1\\,mm$$ et de hauteur $$&2\\,mm$$ est &answer."],
+              uncorrect: ["L'aire d'un parallélogramme de base $$&1\\,mm$$ et de hauteur $$&2\\,mm$$ est &solution."],
+              answer: "L'aire du carré est &answer."
+            },
+            {
+              correct: ["L'aire d'un parallélogramme de base $$&1\\,cm$$ et de hauteur $$&2\\,cm$$ est &answer."],
+              uncorrect: ["L'aire d'un parallélogramme de base $$&1\\,cm$$ et de hauteur $$&2\\,cm$$ est &solution."],
+              answer: "L'aire du parallélogramme est &answer."
+            },
+            {
+              correct: ["L'aire d'un parallélogramme de base $$&1\\,dm$$ et de hauteur $$&2\\,dm$$ est &answer."],
+              uncorrect: ["L'aire d'un parallélogramme de base $$&1\\,dm$$ et de hauteur $$&2\\,dm$$ est &solution."],
+              answer: "L'aire du parallélogramme est &answer."
+            },
+            {
+              correct: ["L'aire d'un parallélogramme de base $$&1\\,m$$ et de hauteur $$&2\\,m$$ est &answer."],
+              uncorrect: ["L'aire d'un parallélogramme de base $$&1\\,m$$ et de hauteur $$&2\\,m$$ est &solution."],
+              answer: "L'aire du parallélogramme est &answer."
+            },
+            {
+              correct: ["L'aire d'un parallélogramme de base $$&1\\,dam$$ et de hauteur $$&2\\,dam$$ est &answer."],
+              uncorrect: ["L'aire d'un parallélogramme de base $$&1\\,dam$$ et de hauteur $$&2\\,dam$$ est &solution."],
+              answer: "L'aire du parallélogramme est &answer."
+            },
+            {
+              correct: ["L'aire d'un parallélogramme de base $$&1\\,hm$$ et de hauteur $$&2\\,hm$$ est &answer."],
+              uncorrect: ["L'aire d'un parallélogramme de base $$&1\\,hm$$ et de hauteur $$&2\\,hm$$ est &solution."],
+              answer: "L'aire du parallélogramme est &answer."
+            },
+            {
+              correct: ["L'aire d'un parallélogramme de base $$&1\\,km$$ et de hauteur $$&2\\,km$$ est &answer."],
+              uncorrect: ["L'aire d'un parallélogramme de base $$&1\\,km$$ et de hauteur $$&2\\,km$$ est &solution."],
+              answer: "L'aire du parallélogramme est &answer."
+            },
+
+          ],
+          correctionDetails: [
+            [
+              { text: "L'aire d'un parallélogramme de base $$&1\\,mm$$ et de hauteur $$&2\\,mm$$  est $$&1\\,mm \\times &2\\,mm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,mm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un parallélogramme de base $$&1\\,cm$$ et de hauteur $$&2\\,cm$$  est $$&1\\,cm \\times &2\\,cm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,cm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un parallélogramme de base $$&1\\,dm$$ et de hauteur $$&2\\,dm$$  est $$&1\\,dm \\times &2\\,dm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,dm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un parallélogramme de base $$&1\\,m$$ et de hauteur $$&2\\,m$$  est $$&1\\,m \\times &2\\,m = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,m^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un parallélogramme de base $$&1\\,dam$$ et de hauteur $$&2\\,dam$$  est $$&1\\,dam \\times &2\\,dam = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,dam^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un parallélogramme de base $$&1\\,hm$$ et de hauteur $$&2\\,hm$$  est $$&1\\,hm \\times &2\\,hm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,hm^2}$$." }
+            ],
+            [
+              { text: "L'aire d'un parallélogramme de base $$&1\\,km$$ et de hauteur $$&2\\,km$$  est $$&1\\,km \\times &2\\,km = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{#{&1*&2}\\,km^2}$$." }
+            ],
+
+          ],
+          type: 'result',
+          defaultDelay: 15,
+          grade: CINQUIEME,
+        },
+
+      ],
+    },
     Aires: {
       "Aire d'un carré": [
         {
@@ -11328,9 +12121,10 @@ const questions = {
 
             }
           ],
-          correctionDetails:[
+          correctionDetails: [
             [
-              {text:"@@&2+&3<60 ?? $$%{&1 h &2 min; HMS} + &sol = %{&1 h &2 min + &3 min; HMS}$$ @@\
+              {
+                text: "@@&2+&3<60 ?? $$%{&1 h &2 min; HMS} + &sol = %{&1 h &2 min + &3 min; HMS}$$ @@\
               @@&2+&3>59 ?? $$\\begin{align}%{&1 h &2 min + &3 min; HMS} &= %{&1 h &2 min; HMS} + %{60-&2}\\,min + %{&3+&2-60}\\,min\\\\ \
                  &= %{&1 h &2 min; HMS} + &sol\\end{align}$$ @@"}
             ]
@@ -11355,9 +12149,10 @@ const questions = {
             '&2 h &4 min',
 
           ],
-          correctionDetails:[
+          correctionDetails: [
             [
-              {text:"@@&3+&4<60 ?? $$%{&1 h &3 min; HMS} + &sol = %{&1 h &3 min + &2 h &4 min; HMS}$$ @@\
+              {
+                text: "@@&3+&4<60 ?? $$%{&1 h &3 min; HMS} + &sol = %{&1 h &3 min + &2 h &4 min; HMS}$$ @@\
               @@&3+&4>59 ?? $$\\begin{align}%{&1 h &3 min + &2 h &4 min; HMS} &= %{&1 h &3 min; HMS} + %{60-&3}\\,min + %{&2}\\,h + %{&3+&4-60}\\,min \\\\ \
                  &= %{&1 h &3 min; HMS} + &sol\\end{align}$$ @@"}
             ]
@@ -11374,10 +12169,88 @@ const questions = {
 
             }
           ],
-          options: ['no-exp', 'require-specific-unit' , 'no-penalty-for-extraneous-zeros'],
+          options: ['no-exp', 'require-specific-unit', 'no-penalty-for-extraneous-zeros'],
           defaultDelay: 20,
           grade: SIXIEME,
         },
+      ],
+
+    },
+    Vitesses: {
+      "Convertir": [
+        {
+          description: 'Convertir des vitesses',
+          enounces: ["Conplète."],
+          variables: [
+            {
+              '&1': '$e[1;9]',
+            },
+            {
+              '&1': '$l{3600;7200}',
+            },
+            {
+              '&1': '$e[1;9]*1000',
+            },
+            {
+              '&1': '$e[1;2]',
+            },
+            {
+              '&1': '$e[1;9]*1000',
+            },
+            {
+              '&1': '$e[1;9]',
+            },
+          ],
+          expressions: [
+            '&1 km.h^{-1}= ? m.h^{-1}',
+            '&1 km.h^{-1}= ? km.s^{-1}',
+            '#{&1} m.s^{-1}= ? km.s^{-1}',
+            '&1 m.s^{-1}= ? m.h^{-1}',
+            '#{&1} m.s^{-1}= ? m.ms^{-1}',
+            '&1 m.ms^{-1}= ? m.s^{-1}',
+
+          ],
+          solutions:[
+            ['##{&1*1000}'],
+            ['##{&1:3600}'],
+            ['##{&1:1000}'],
+            ['##{&1*3600}'],
+            ['##{&1:1000}'],
+            ['##{&1*1000}'],
+          ],
+          correctionDetails: [[{ text: "$$&1\\,h = &1 \\times 60\\,min = &sol$$" }]],
+          // units: ['min'],
+          // options: ['require-specific-unit'],
+          type: 'trou',
+          'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: QUATRIEME,
+        },
+        
+
+      ],
+      "Calculer": [
+        {
+          description: 'Calculer une vitesse moyenne.',
+          enounces: ["Quelle est la vitesse moyenne d'une voiture parcourant %{&2*&3} en %{&3} ? (n'oublie pas l'unité)"],
+          variables: [
+            {
+              '&1': '$e[2;9]*10 ',
+              '&2': '#{&1} km.h^{-1}',
+              '&3': '$e[2;9] h',
+            },
+          ],
+         
+          correctionDetails: [[{
+            text: ""}]],
+          units: ['km.h^{-1}'],
+          options: [],
+          type: 'result',
+          // 'result-type': 'decimal',
+          defaultDelay: 20,
+          grade: QUATRIEME,
+        },
+      
       ],
 
     }
