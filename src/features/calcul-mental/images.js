@@ -16,7 +16,7 @@ export async function fetchImage(name) {
 
             return new Promise(function (resolve, reject) {
                 let reader = new FileReader()
-                reader.readAsDataURL(blob)
+                
                 reader.onload = () => {
                     try {
                     sessionStorage.setItem(name, reader.result)
@@ -28,6 +28,7 @@ export async function fetchImage(name) {
                     return resolve(reader.result)
                 }
                 reader.onerror = (error) => reject('Error: ', error)
+                reader.readAsDataURL(blob)
             })
         }
     } else {

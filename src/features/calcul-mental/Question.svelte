@@ -47,9 +47,7 @@
   //   // $: console.log('enounce', question.enounce)
   // }
 
-  $: if (question.image && !question.imageBase64P) {
-    question.imageBase64P = fetchImage(question.image)
-  }
+
 </script>
 
 <div class="d-flex flex-column align-center">
@@ -83,7 +81,7 @@
           <img
             src="{base64}"
             class="mt-3 mb-3"
-            style="max-width:500px;max-height:40vh;"
+            style="width:100%;max-width:500px;max-height:40vh;"
             alt="Alright Buddy!"
           />
         {:catch error}

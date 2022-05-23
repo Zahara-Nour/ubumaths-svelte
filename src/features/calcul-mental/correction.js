@@ -3,7 +3,7 @@ import { getLogger } from '../../app/utils'
 export const STATUS_EMPTY = 'empty'
 export const STATUS_CORRECT = 'correct'
 export const STATUS_INCORRECT = 'incorrect'
-export const STATUS_UNOPTIMAL_FORM = 'unoptimal  form'
+export const STATUS_UNOPTIMAL_FORM = 'unoptimal form'
 export const STATUS_BAD_FORM = 'bad form'
 export const STATUS_BAD_UNIT = 'bad unit'
 
@@ -70,6 +70,7 @@ function checkConstraints(item) {
             option: ['no-penalty-for-incorrect-spaces', 'require-correct-spaces'],
             function: checkSpaces,
             com: SPACES,
+            text: 'spaces'
         },
         {
             option: [
@@ -78,6 +79,7 @@ function checkConstraints(item) {
             ],
             function: checkProducts,
             com: PRODUCTS,
+            text: 'implicits products'
         },
         {
             option: [
@@ -86,6 +88,7 @@ function checkConstraints(item) {
             ],
             function: checkBrackets,
             com: BRACKETS,
+            text: 'extraneous brackets'
         },
 
         // la vérifiaction pour le premiet terme se fait dans check_brackets
@@ -105,6 +108,7 @@ function checkConstraints(item) {
             ],
             function: checkZeros,
             com: ZEROS,
+            text: 'extraneous zeros'
         },
         {
             option: [
@@ -113,37 +117,43 @@ function checkConstraints(item) {
             ],
             function: checkSigns,
             com: SIGNS,
+            text: 'extraneous signs'
         },
         {
             option: ['no-penalty-for-factor-one', 'require-no-factor-one'],
             function: checkFactorsOne,
             com: FACTORE_ONE,
+            text: 'factor one'
         },
         {
             option: ['no-penalty-for-factor-zero', 'require-no-factor-zero'],
             function: checkFactorsZero,
             com: FACTORE_ZERO,
+            text: 'factor zero'
         },
         {
             option: ['no-penalty-for-null-terms', 'require-no-null-terms'],
             function: checkNullTerms,
             com: NULL_TERMS,
+            text: 'null term'
         },
         {
             option: ['no-penalty-for-non-reduced-fractions', 'require-reduced-fractions'],
             function: checkFractions,
             com: FRACTIONS,
+            text: 'non reduced fraction'
         },
     ]
 
     checks.forEach((check) => {
         if (!item.options.includes(check.option[0]) && !check.function(item)) {
-            console.log(check.option[0], 'not passed', item)
+            // console.log(check.option[0], 'not passed', item)
             item.coms.push(check.com)
             if (item.options.includes(check.option[1])) {
                 item.status = STATUS_BAD_FORM
             } else {
                 // penalty = true
+                item.unoptimals.push(check.text)
                 if (item.status !== STATUS_BAD_FORM) item.status = STATUS_UNOPTIMAL_FORM
             }
         }
@@ -172,8 +182,8 @@ function checkAnswer(item) {
 
         // Les tests de contraintes ont été faits. Il faut simplifier la réponse pour pouvoir
         // la comparer à la solution : on enlève les parenthèses inutiles, les signes inutiles....
-
         e = e
+            .removeZerosAndSpaces()
             .reduceFractions()
             .simplifyNullProducts()
             .removeNullTerms()
@@ -181,7 +191,9 @@ function checkAnswer(item) {
             .removeSigns()
             .removeUnecessaryBrackets()
             .removeMultOperator()
+            
         sols = sols.map((solution) => solution
+            .removeZerosAndSpaces()
             .reduceFractions()
             .simplifyNullProducts()
             .removeNullTerms()
@@ -190,14 +202,12 @@ function checkAnswer(item) {
             .removeUnecessaryBrackets()
             .removeMultOperator()
         )
-
+        item.cleanedExp = e.string
+        item.cleanedSolutions = sols.map(s => s.string)
         // }
         // il reste a tester la permutation des termes et facteurs qui est autorisée par défaut
 
-        console.log("vérification de l'unité ?", item)
-        console.log('e', e.string, e)
-     
-       
+
         const e2 = e.sortTermsAndFactors()
         const sols2 = sols.map((solution) => solution.sortTermsAndFactors())
 
@@ -207,13 +217,13 @@ function checkAnswer(item) {
             item.status = STATUS_BAD_FORM
         }
         else if (item.unit
-            && (item.unit === 'HMS' && !e.isTime() || item.unit !=='HMS' && !e.unit || item.unit !=='HMS' &&  e.unit.string !== item.unit)) {
-            console.log("pb unit")
+            && (item.unit === 'HMS' && !e.isTime() || item.unit !== 'HMS' && !e.unit || item.unit !== 'HMS' && e.unit.string !== item.unit)) {
+            // console.log("pb unit")
             if (item.options.includes('require-specific-unit')) {
                 item.status = STATUS_BAD_UNIT
             }
             else if (!item.options.includes('no-penalty-for-not-respected-unit') && item.status !== STATUS_BAD_FORM) {
-
+                item.unoptimals.push('unit not respected')
                 item.status = STATUS_UNOPTIMAL_FORM
 
             }
@@ -224,6 +234,7 @@ function checkAnswer(item) {
 
             if (!sols.some((sol) => sol.strictlyEquals(e))) {
                 if (item.options.includes('penalty-for-terms-and-factors-permutation')) {
+                    item.unoptimals.push('terms and factors unordered')
                     item.status = STATUS_UNOPTIMAL_FORM
                     item.coms.push(TERMS_FACTORS_PERMUTATION)
                 } else {
@@ -238,6 +249,7 @@ function checkAnswer(item) {
             sols = sols.map((solution) => solution.sortFactors())
             if (!sols.some((sol) => sol.strictlyEquals(e))) {
                 if (item.options.includes('penalty-for-terms-permutation')) {
+                    item.unoptimals.push('terms unordered')
                     item.status = STATUS_UNOPTIMAL_FORM
                     item.coms.push(TERMS_PERMUTATION)
                 } else {
@@ -252,6 +264,7 @@ function checkAnswer(item) {
             sols = sols.map((solution) => solution.sortTerms())
             if (!sols.some((sol) => sol.strictlyEquals(e))) {
                 if (item.options.includes('penalty-for-factors-permutation')) {
+                    item.unoptimals.push('factors unordered')
                     item.status = STATUS_UNOPTIMAL_FORM
                     item.coms.push(FACTORS_PERMUTATION)
                 } else {
@@ -325,7 +338,7 @@ function checkBrackets(item) {
     let e
     switch (item.type) {
         case 'trou':
-            e = math(item.qexp.replace('?', item.answer))
+            e = math(item.expression.replace('?', item.answer))
 
             break
         default:
@@ -378,14 +391,11 @@ function checkFactorsZero(item) {
 // retourne true si la vérification est OK
 function checkSpaces(item) {
     //  TODO: a Remplacer par searchMisplacedSpaces
-
-    const a = item.answer_latex.replace(/\\,/g, ' ').replace(',', '.').trim()
+    // la sortie asciimaths du mathfield ne garde pas les espaces
+    const a = item.answer_latex.replace(/\\,/g, ' ').replace('{,}', '.').trim()
 
     const regex = /\d+[\d\s]*(\.[\d\s]*\d+)?/g
     const matches = a.match(regex)
-
-
-
 
     if (matches) {
         const regexsInt = [
@@ -438,34 +448,12 @@ export function assessItems(questions, answers, answers_latex, answers_choice, t
         total += question.points
         console.log('question', question)
         items[i] = {
-            qexp: question.expression,
-            qexp_latex: question.expression_latex,
-            qexp2: question.expression2,
-            qexp2_latex: question.expression2_latex,
+            ...question,
             answer: answers[i],
             answer_latex: answers_latex[i],
             answer_choice: answers_choice[i],
             time: times[i],
-            solutions: question.solutions,
-            details: question.details,
-            type: question.type,
             number: i + 1,
-            points: question.points,
-            options: question.options ? question.options : [],
-            enounce: question.enounce,
-            correction: question.correction,
-            correctionFormat: question.correctionFormat,
-            correctionDetails: question.correctionDetails,
-            testAnswer: question.testAnswer,
-            choices: question.choices,
-            coms: [],
-            status: null,
-            image: question.image,
-            imageBase64P: question.imageBase64P,
-            imageCorrection: question.imageCorrection,
-            imageCorrectionBase64: question.imageCorrectionBase64,
-            unit:question.unit
-
         }
 
         assessItem(items[i], classroom)
@@ -491,9 +479,19 @@ export function assessItems(questions, answers, answers_latex, answers_choice, t
     return { items, score, total }
 }
 
-export function assessItem(item, classroom) {
+export function assessItem(item, classroom = false) {
 
-    if (!item.answer && item.answer_choice === null) {
+
+    item.options = item.options || []
+    item.coms = item.coms || []
+    if (!item.answer_latex && item.answer) {
+        item.answer_latex = item.answer.replace('/ /g', '\\,').replace(',', '{,}').replace('.', '{,}').trim()
+    }
+    item.unoptimals = []
+
+
+    if ((item.type === 'choice' && item.answer_choice === null)
+        || (item.type !== 'choice' && !item.answer)) {
         //answer_choice peut etre égal à 0
         if (!classroom) item.coms.push(EMPTY_ANSWER)
         item.status = STATUS_EMPTY
@@ -513,7 +511,7 @@ export function assessItem(item, classroom) {
                 let isNotWellFormedExpression
 
                 const expressionFormToBeChecked = item.type === 'trou'
-                    ? item.qexp.replace('?', item.answer)
+                    ? item.expression.replace('?', item.answer)
                     : item.answer
                 isNotWellFormedExpression = math(expressionFormToBeChecked).isIncorrect()
 
@@ -529,7 +527,6 @@ export function assessItem(item, classroom) {
                     const equivalent =
                         item.testAnswer ||
                         item.solutions.some((solution) => {
-                            console.log('assess', item.answer, math(item.answer).string, solution, math(solution).string)
                             return math(item.answer).equals(math(solution))
                         }
                         )

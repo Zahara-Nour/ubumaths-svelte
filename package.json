@@ -2,6 +2,7 @@
   "name": "ubumaths",
   "version": "0.5.22",
   "private": true,
+  
   "scripts": {
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install",
     "build": "rollup -c",
@@ -9,16 +10,25 @@
     "start": "sirv public -s",
     "format": "prettier --write \"src/**/*\"",
     "deploy": "firebase deploy",
-    "savedb": "node ./savedb.js "
+    "savedb": "node ./savedb.js ",
+    "install": "",
+    "test": "jest --colors",
+    "testw": "jest --watch --colors",
+    "specs": "node  src/features/calcul-mental/createBlankSpec.js"
   },
   "devDependencies": {
+    "@babel/core": "^7.18.0",
+    "@babel/preset-env": "^7.18.0",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
     "autoprefixer": "^9.8.6",
+    "babel-jest": "^28.1.0",
     "eslint": "^7.7.0",
     "eslint-plugin-svelte3": "^2.7.3",
     "firestore-export-import": "^0.10.0",
+    "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
     "postcss": "^8.0.0",
     "rollup": "^2.3.4",
     "rollup-plugin-analyzer": "^4.0.0",
@@ -30,6 +40,7 @@
     "rollup-plugin-terser": "^7.0.0",
     "sass": "^1.7.2",
     "svelte": "^3.0.0",
+    "svelte-jester": "^2.3.2",
     "svelte-preprocess": "^4.0.12"
   },
   "dependencies": {

@@ -79,12 +79,12 @@
   let card
   let orientation = Viewport.Orientation
 
-  console.log(
+  trace(
     'Viewport Width x Height:     ',
     Viewport.Width + 'x' + Viewport.Height,
   )
-  console.log('standard Screen Orientation: ', Viewport.Orientation)
-  console.log('detailled Screen Orientation:', Viewport.detailledOrientation)
+  trace('standard Screen Orientation: ', Viewport.Orientation)
+  trace('detailled Screen Orientation:', Viewport.detailledOrientation)
 
   const togglePause = () => {
     if (pause) {
@@ -96,7 +96,7 @@
   }
 
   const regex = /\$\$(.*?)\$\$/g
-  const replacement = (matched, p1) => Mathlive.convertLatexToMarkup(p1)
+  const replacement = (_, p1) => Mathlive.convertLatexToMarkup(p1)
 
   function countDown() {
     if (!pause) {
@@ -117,14 +117,13 @@
   })
 
   function initMathField() {
-    console.log('initfield')
+    
     mf.setOptions({
       // virtualKeyboardMode: 'onfocus',
+      decimalSeparator:",",
       virtualKeyboardMode: 'auto',
       ...virtualKeyboard,
       // onKeystroke,
-      // 'keypress-sound': 'none',
-      // 'keypress-vibration': false,
       inlineShortcuts: {
         xx: {},
       },
@@ -145,6 +144,7 @@
 
   function initTest() {
     info('init test')
+    current = 0
     restart = false
     finish = false
     generateds = []
@@ -164,10 +164,8 @@
     generateds = []
 
     if (queryParams.questions) {
-
       let offset = 0
       const data = JSON.parse(queryParams.questions)
-      console.log(data)
 
       data.forEach((d) => {
         questions = []
@@ -277,26 +275,22 @@
     }
     shuffle(generateds)
 
-    // generateds = questions.reduce((acc, current) => {
-    //   const question = generate(current, acc)
-    //   acc.push(question)
-    //   return acc
-    // }, [])
-    // generateds.forEach(async (q) => {
-    //   if (q.image) {
-    //     q.imageBase64P = await fetchImage(q.image)
-    //   }
-    // })
+    generateds.forEach(async (q) => {
+      if (q.image) {
+        q.imageBase64P =  fetchImage(q.image)
+      }
+      if (q.imageCorrection) {
+        q.imageCorrectionBase64P =  fetchImage(q.imageCorrection)
+      }
+      if (q.choices) {
+        q.choices.forEach(async (choice) => {
+          if (choice.image) {
+            choice.imageBase64P =  fetchImage(choice.image)
+          }
+        })
+      }
+    })
 
-    // generateds.forEach((q) => {
-    //   if (q.choices) {
-    //     q.choices.forEach(async (choice) => {
-    //       if (choice.image) {
-    //         choice.imageBase64P = await fetchImage(choice.image)
-    //       }
-    //     })
-    //   }
-    // })
     console.log('generateds', generateds)
     cards = generateds.map((generated) => {
       const card = { ...generated }
@@ -318,7 +312,6 @@
     } else {
       change()
     }
-    console.log('cards', cards)
 
     info('Begining test with questions :', cards)
   }
@@ -331,12 +324,13 @@
   }
 
   function recordAnswer() {
+    // console.log('mf value', mf.value)
     answer_latex = mf
       .getValue()
+      // on remplace plusieurs espaces par un seul, bizarrz normalement pas besoin
       .replace(/(\\,){2,}/g, '\\,')
       .trim()
     answer = mf.getValue('ascii-math')
-    trace(`answer latex: ${answer_latex} asccii: ${answer}`)
     answer = answer
       // .replace(/xx/g, '*')
       .replace(/÷/g, ':')
@@ -357,7 +351,6 @@
     if (classroom) {
       handleKeydown.set((event) => {
         event.preventDefault()
-        console.log(event.code)
         if (event.code === 'Space') {
           togglePause()
         } else if (event.code === 'ArrowRight') {
@@ -370,55 +363,55 @@
   }
 
   function onKeystroke(ev) {
-    // const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%€L'
-    console.log('keystroke :', ev.detail.keystroke)
-    console.log('key :', ev.detail.event.key)
-    console.log(ev)
-    // trace('keystroke', keystroke)
-    // trace('e.key', e.key)
+    const allowed = 'azertyuiopsdfghjklmwxcvbn0123456789,=<>/*-+()^%€L'
+    const keystroke = ev.detail.keystroke
+    const key = ev.detail.event.key
+    trace('keystroke', keystroke)
+    trace('key', key)
     // if (keystroke === '[Enter]' || keystroke === '[NumpadEnter]') {
+    //   trace('answer :' + answer + '!')
     //   if (answer !== '') {
+    //     trace('going to commit')
     //     commit()
     //   }
     //   return false
-    // } else if (
-    //   keystroke === '[Space]' &&
-    //   !(
-    //     answer_latex &&
-    //     answer_latex.length >= 2 &&
-    //     answer_latex.slice(answer_latex.length - 2) === '\\,'
-    //   )
-    // ) {
-    //   mf.insert('\\,')
-    //   return false
-    // } else if (e.key === '%') {
-    //   mf.insert('\\%')
-    //   return false
-    // } else if (e.key === 'r') {
-    //   mf.insert('\\sqrt')
-    //   return false
-    // } else if (e.key === '*') {
-    //   mf.insert('\\times ')
-    //   return false
-    // } else if (e.key === ':') {
-    //   mf.insert('\\div ')
-    //   return false
-    // } else if (e.key === '<') {
-    //   mf.insert('<')
-    //   return false
-    // }
- 
-    // else if (
-    //   e.key === 'Backspace' ||
-    //   e.key === 'ArrowLeft' ||
-    //   e.key === 'ArrowRight' ||
-    //   e.key === 'ArrowDown' ||
-    //   e.key === 'ArrowUp'
-    // ) {
-    //   return true
-    // } else if (!allowed.includes(e.key)) {
-    //   return false
-    // }
+    // } else
+    if (
+      keystroke === '[Space]' &&
+      !(
+        answer_latex &&
+        answer_latex.length >= 2 &&
+        answer_latex.slice(answer_latex.length - 2) === '\\,'
+      )
+    ) {
+      mf.insert('\\,')
+      return false
+    } else if (key === '%') {
+      mf.insert('\\%')
+      return false
+    } else if (key === 'r') {
+      mf.insert('\\sqrt')
+      return false
+    } else if (key === '*') {
+      mf.insert('\\times ')
+      return false
+    } else if (key === ':') {
+      mf.insert('\\div ')
+      return false
+    } else if (key === '<') {
+      mf.insert('<')
+      return false
+    } else if (
+      key === 'Backspace' ||
+      key === 'ArrowLeft' ||
+      key === 'ArrowRight' ||
+      key === 'ArrowDown' ||
+      key === 'ArrowUp'
+    ) {
+      return true
+    } else if (!allowed.includes(key)) {
+      return false
+    }
 
     return true
   }
@@ -476,7 +469,7 @@
   }
 
   function handleViewportChanged() {
-    console.log(
+    trace(
       'Viewport Size changed to: ',
       Viewport.Width + 'x' + Viewport.Height,
     )
@@ -488,7 +481,7 @@
       (Viewport.detailledOrientation == null
         ? ''
         : '(' + Viewport.detailledOrientation + ')')
-    console.log('$' + orientation + '$')
+    trace('$' + orientation + '$')
   }
 
   initTest()
@@ -499,7 +492,6 @@
   }
 
   $: if (mf) {
-    console.log('init mathfield')
     initMathField()
   }
 
@@ -729,13 +721,20 @@
             >
             <div class="flex-grow-1" style="width:70%">
               <math-field
+                
+                keypress-vibration="off"
+                remove-extraneous-parentheses="off"
+                smart-fence="off"
+                smart-superscript="off"
                 style="width:100%;font-size:{$testFontSize}px;"
                 class="{correct
                   ? 'pa-2 light-green lighten-5'
                   : 'pa-2 deep-orange lighten-5'}"
                 virtual-keyboard-theme="apple"
                 on:input="{onChangeMathField}"
-                on:change="{commit}"
+                on:change="{() => {
+                  if (answer !== '') commit()
+                }}"
                 bind:this="{mf}"
               >
               </math-field>

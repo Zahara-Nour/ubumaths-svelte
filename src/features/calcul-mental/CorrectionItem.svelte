@@ -2,7 +2,6 @@
   import { math } from 'tinycas/build/math/math'
   import Mathlive from 'mathlive/dist/mathlive.min.js'
   import { onMount } from 'svelte'
-  import { fetchImage } from './images'
   import {
     STATUS_BAD_FORM,
     STATUS_CORRECT,
@@ -11,7 +10,6 @@
     STATUS_EMPTY,
     STATUS_BAD_UNIT,
   } from './correction'
-  import { mdiDistributeVerticalBottom } from '@mdi/js'
 
   export let item
   export let displayDetails
@@ -79,7 +77,11 @@
     // if (image) {
     //   imageBase64P = fetchImage(image)
     // }
-    if (status === STATUS_BAD_FORM || status === STATUS_INCORRECT || STATUS_BAD_UNIT) {
+    if (
+      status === STATUS_BAD_FORM ||
+      status === STATUS_INCORRECT ||
+      status === STATUS_BAD_UNIT
+    ) {
       answerColor = 'red'
     } else if (status === STATUS_UNOPTIMAL_FORM) {
       answerColor = 'orange'
@@ -148,16 +150,7 @@
                   solutions_latex[0] +
                   '}}',
           )
-          .replace(
-            new RegExp('&ans', 'g'),
-            status === STATUS_CORRECT
-              ? '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
-                  answer_latex +
-                  '}}'
-              : status === STATUS_UNOPTIMAL_FORM
-              ? '\\textcolor{yellow}{' + answer_latex + '}'
-              : '\\textcolor{red}{' + answer_latex + '}',
-          )
+          
       }
       lines.push(line)
     })
@@ -168,7 +161,6 @@
   function createCorrection() {
     let line
     let lines = []
-
     if (correctionFormat) {
       if (status === STATUS_CORRECT) {
         correctionFormat.correct.forEach((format) => {
@@ -180,23 +172,6 @@
               .replace(new RegExp('&exp2', 'g'), qexp2_latex)
               .replace(new RegExp('&exp', 'g'), qexp_latex)
               .replace(
-                '&solution',
-                () =>
-                  '<span style="color:green; border:2px solid green; border-radius: 5px;  margin:2px; padding:5px;display:inline-block">' +
-                  (item.type === 'choice'
-                    ? convertToMarkup(item.choices[solutions[0]].text)
-                    : convertToMarkup('$$' + answer_latex + '$$')) +
-                  '</span>',
-              )
-              .replace(
-                new RegExp('&sol', 'g'),
-                item.type === 'choice'
-                  ? item.choices[solutions[0]].text
-                  : '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
-                      solutions_latex[0] +
-                      '}}',
-              )
-              .replace(
                 '&answer',
                 () =>
                   '<span style="color:green; border:2px solid green; border-radius: 5px;  margin:2px; padding:5px;display:inline-block">' +
@@ -207,13 +182,9 @@
               )
               .replace(
                 new RegExp('&ans', 'g'),
-                status === STATUS_CORRECT
-                  ? '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
-                      answer_latex +
-                      '}}'
-                  : status === STATUS_UNOPTIMAL_FORM
-                  ? '\\textcolor{yellow}{' + answer_latex + '}'
-                  : '\\textcolor{red}{' + answer_latex + '}',
+                '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
+                  answer_latex +
+                  '}}',
               )
           }
 
@@ -245,91 +216,36 @@
                       solutions_latex[0] +
                       '}}',
               )
-              .replace(
-                '&answer',
-                () =>
-                  '<span style="color:green; border:2px solid green; border-radius: 5px;  margin:2px; padding:5px;display:inline-block">' +
-                  (item.type === 'choice'
-                    ? convertToMarkup(item.choices[answer_choice].text)
-                    : convertToMarkup('$$' + answer_latex + '$$')) +
-                  '</span>',
-              )
-              .replace(
-                new RegExp('&ans', 'g'),
-                status === STATUS_CORRECT
-                  ? '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
-                      answer_latex +
-                      '}}'
-                  : status === STATUS_UNOPTIMAL_FORM
-                  ? '\\textcolor{yellow}{' + answer_latex + '}'
-                  : '\\textcolor{red}{' + answer_latex + '}',
-              )
           }
 
           lines.push(line)
         })
-        if (status === STATUS_INCORRECT) {
-          if (correctionFormat.answer === 'image') {
-            let img = choices[answer_choice].imageBase64
-            coms.unshift(
-              `<img src='${img}' style="padding:2px; border: 2px solid red ;max-width:400px;max-height:40vh;" alt='toto'>`,
-            )
-            coms.unshift('Ta réponse:')
-          } else {
-            coms.unshift(
-              'Ta réponse : ' +
-                correctionFormat.answer
-                  .replace(new RegExp('&exp2', 'g'), qexp2_latex)
-                  .replace(new RegExp('&exp', 'g'), qexp_latex)
 
-                  .replace(
-                    '&answer',
-                    () =>
-                      '<span style="color:red;display:inline-block">' +
-                      (item.type === 'choice'
-                        ? convertToMarkup(item.choices[answer_choice].text)
-                        : convertToMarkup('$$' + answer_latex + '$$')) +
-                      '</span>',
-                  )
-                  .replace(
-                    new RegExp('&ans', 'g'),
-                    status === STATUS_CORRECT
-                      ? '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
-                          answer_latex +
-                          '}}'
-                      : status === STATUS_UNOPTIMAL_FORM
-                      ? '\\textcolor{yellow}{' + answer_latex + '}'
-                      : '\\textcolor{red}{' + answer_latex + '}',
-                  ),
-            )
-          }
-        } else if (
-          status === STATUS_BAD_FORM ||
-          status === STATUS_UNOPTIMAL_FORM
-        ) {
+        if (correctionFormat.answer === 'image') {
+          let img = choices[answer_choice].imageBase64
+          coms.unshift(
+            `<img src='${img}' style="padding:2px; border: 2px solid red ;max-width:400px;max-height:40vh;" alt='toto'>`,
+          )
+          coms.unshift('Ta réponse:')
+        } else {
           coms.unshift(
             'Ta réponse : ' +
               correctionFormat.answer
                 .replace(new RegExp('&exp2', 'g'), qexp2_latex)
                 .replace(new RegExp('&exp', 'g'), qexp_latex)
+
                 .replace(
                   '&answer',
                   () =>
-                    '<span style="color:orange;">' +
+                    `<span style="color:${answerColor};display:inline-block">` +
                     (item.type === 'choice'
-                      ? item.choices[answer_choice].text
-                      : '$$' + answer_latex + '$$') +
+                      ? convertToMarkup(item.choices[answer_choice].text)
+                      : convertToMarkup('$$' + answer_latex + '$$')) +
                     '</span>',
                 )
                 .replace(
                   new RegExp('&ans', 'g'),
-                  status === STATUS_CORRECT
-                    ? '\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{' +
-                        answer_latex +
-                        '}}'
-                    : status === STATUS_UNOPTIMAL_FORM
-                    ? '\\textcolor{yellow}{' + answer_latex + '}'
-                    : '\\textcolor{red}{' + answer_latex + '}',
+                  `\\textcolor{${answerColor}}{` + answer_latex + '}',
                 ),
           )
         }
@@ -338,64 +254,52 @@
       switch (item.type) {
         case 'result':
         case 'rewrite': {
-          if (displayDetails) {
-          } else {
-            // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
-
-            line = `$$\\begin{align*}  ${qexp_latex}`
-            if (status === STATUS_EMPTY) {
-              line +=
-                `=\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}` +
-                '\\end{align*}$$'
-            } else if (status === STATUS_INCORRECT) {
-              line +=
-                `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
-                `\\\\&= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}\\end{align*}$$`
-            } else if (
-              status === STATUS_BAD_FORM ||
-              status === STATUS_BAD_UNIT
-            ) {
-              line +=
-                `&= \\textcolor{red}{${answer_latex}}` +
-                `\\\\&= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}\\end{align*}$$`
-            } else if (status === STATUS_UNOPTIMAL_FORM) {
-              line +=
-                `&= \\textcolor{orange}{${answer_latex}}` +
-                `\\\\&= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}\\end{align*}$$`
-            } else {
-              line += `=\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${answer_latex}}}\\end{align*}$$`
-            }
-            lines.push(line)
+          line = `$$\\begin{align*}  ${qexp_latex}`
+          if (status === STATUS_EMPTY) {
+            line +=
+              `=\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}` +
+              '\\end{align*}$$'
+          } else if (status === STATUS_INCORRECT) {
+            line +=
+              `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
+              `\\\\&= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}\\end{align*}$$`
+          } else if (status === STATUS_BAD_FORM || status === STATUS_BAD_UNIT || status === STATUS_UNOPTIMAL_FORM) {
+            line +=
+              `&= \\textcolor{${answerColor}}{${answer_latex}}` +
+              `\\\\&= \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${solutions_latex[0]}}}\\end{align*}$$`
+          }  else {
+            // STATUS_CORRECT
+            line += `=\\enclose{roundedbox}[3px solid green]{\\textcolor{green}{${answer_latex}}}\\end{align*}$$`
           }
+          lines.push(line)
+
           break
         }
 
         case 'equation': {
-          if (displayDetails) {
+          // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
+          line = `La solution de $$${qexp_latex}$$ est :`
+          lines.push(line)
+          line = `$$\\begin{align*}  x`
+          if (status === STATUS_EMPTY) {
+            line +=
+              `=\\textcolor{green}{${solutions_latex[0]}}` + '\\end{align*}$$'
+          } else if (status === STATUS_INCORRECT) {
+            line +=
+              `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
+              `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
+          } else if (
+            status === STATUS_BAD_FORM ||
+            status === STATUS_UNOPTIMAL_FORM
+          ) {
+            line +=
+              `&= \\textcolor{orange}{${answer_latex}}` +
+              `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
           } else {
-            // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
-            line = `La solution de $$${qexp_latex}$$ est :`
-            lines.push(line)
-            line = `$$\\begin{align*}  x`
-            if (status === STATUS_EMPTY) {
-              line +=
-                `=\\textcolor{green}{${solutions_latex[0]}}` + '\\end{align*}$$'
-            } else if (status === STATUS_INCORRECT) {
-              line +=
-                `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}` +
-                `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
-            } else if (
-              status === STATUS_BAD_FORM ||
-              status === STATUS_UNOPTIMAL_FORM
-            ) {
-              line +=
-                `&= \\textcolor{orange}{${answer_latex}}` +
-                `\\\\&= \\textcolor{green}{${solutions_latex[0]}}\\end{align*}$$`
-            } else {
-              line += `=\\textcolor{green}{${answer_latex}}\\end{align*}$$`
-            }
-            lines.push(line)
+            line += `=\\textcolor{green}{${answer_latex}}\\end{align*}$$`
           }
+          lines.push(line)
+
           break
         }
         case 'choice':
@@ -435,8 +339,7 @@
           break
 
         case 'decomposition':
-          if (displayDetails) {
-          } else {
+          
             // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
 
             line = `$$\\begin{align*}  ${qexp_latex}`
@@ -457,135 +360,54 @@
             } else {
               line += `=\\textcolor{green}{${answer_latex}}\\end{align*}$$`
             }
-            lines.push(line)
-          }
-          // if (displayDetails) {
-          // } else {
-          //   line = '$$\\begin{align*}' + qexp_latex
-          //   if (status===STATUS_EMPTY) {
-          //     solutions_latex.forEach((solution, i) => {
-          //       if (i !== 0) line += '\\\\'
-          //       line += ' &=\\textcolor{green}{' + solution + '}'
-          //     })
-          //     line += '\\end{align*}$$'
-          //   } else if (!seemsCorrect) {
-          //     line = '$$\\begin{align*}' + qexp_latex
-          //     line += `&= \\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{${answer_latex}}}`
-          //     solutions_latex.forEach((solution, i) => {
-          //       line += '\\\\ &=\\textcolor{green}{' + solution + '}'
-          //     })
-          //     line += '\\end{align*}$$'
-          //   } else if (!correct) {
-          //     line = '$$\\begin{align*}' + qexp_latex
-          //     line += `&=\\textcolor{orange}{${answer_latex}}`
-          //     solutions_latex.forEach((solution, i) => {
-          //       line += '\\\\ &=\\textcolor{green}{' + solution + '}'
-          //     })
-          //     line += '\\end{align*}$$'
-          //   } else {
-          //     line += `=\\textcolor{green}{${answer_latex}}$$`
-          //   }
-          //   lines.push(line)
-          // }
+            lines.push(line)   
           break
 
-        // case 'result':
-        //   if (displayDetails) {
-        //     line = '$$\\begin{align*}' + qexp_latex
-        //     details_latex.forEach((detail, i) => {
-        //       if (detail !== solutions_latex[0]) {
-        //         if (i !== 0) line += ' \\\\ '
-        //         line += '& =' + detail
-        //       }
-        //     })
-        //     line +=
-        //       ' \\\\ & =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-        //       solutions_latex[0] +
-        //       '}'
-        //     line += '\\end{align*}$$'
-        //     lines.push(line)
-        //   } else {
-        //     // let exp = '$$\\begin{align*}x & =5-3 \\\\  & =2\\end{align*}$$'
-        //     line = '$$' + qexp_latex
-        //     if (empty) {
-        //       line += `=\\textcolor{green}{${solutions_latex[0]}}` + '$$'
-        //     } else if (badExpression || !correct) {
-        //       line +=
-        //         '=\\enclose{updiagonalstrike}[6px solid rgba(205, 0, 11, .4)]{\\textcolor{red}{' +
-        //         answer_latex +
-        //         '}}\\text{  }\\textcolor{green}{' +
-        //         solutions_latex[0] +
-        //         '}$$'
-        //     } else {
-        //       line += '=\\textcolor{green}{' + answer_latex + '}$$'
-
-        //     }
-        //     lines.push(line)
-        //   }
-
-        // break
+      
 
         case 'trou':
-          if (displayDetails) {
-            line = '$$\\begin{align*}'
-            item.correctionDetails.forEach((detail, i) => {
-              if (i === 0) line += detail
-              if (i > 1) line += ' \\\\ '
-              if (i === item.correctionDetails.length - 1) {
-                line +=
-                  '& =\\enclose{roundedbox}[2px solid rgba(0, 255, 0, .8)]{' +
-                  solutions_latex[0] +
-                  '}'
-              } else {
-                line += '& =' + detail
-              }
-              line += '\\end{align*}$$'
-              lines.push(line)
-            })
+          //TODO : empty ?
+          if (status === STATUS_CORRECT) {
+            line =
+              '$$' +
+              qexp_latex.replace(
+                /\\ldots/,
+                `\\textcolor{green}{${answer_latex}}`,
+              ) +
+              '$$'
           } else {
-            //TODO : empty ?
-            if (status === STATUS_CORRECT) {
-              line =
-                '$$' +
-                qexp_latex.replace(
-                  /\\ldots/,
-                  `\\textcolor{green}{${answer_latex}}`,
-                ) +
-                '$$'
-            } else {
-              line =
-                '$$' +
-                qexp_latex.replace(
-                  /\\ldots/,
-                  `\\textcolor{green}{${solutions_latex[0]}}`,
-                ) +
-                '$$'
+            line =
+              '$$' +
+              qexp_latex.replace(
+                /\\ldots/,
+                `\\textcolor{green}{${solutions_latex[0]}}`,
+              ) +
+              '$$'
 
-              if (status === STATUS_INCORRECT) {
-                coms.unshift(
-                  'Ta réponse : $$' +
-                    qexp_latex.replace(
-                      /\\ldots/,
-                      `\\textcolor{red}{${answer_latex}}`,
-                    ) +
-                    '$$',
-                )
-              } else if (
-                status === STATUS_BAD_FORM ||
-                status === STATUS_UNOPTIMAL_FORM
-              ) {
-                coms.unshift(
-                  'Ta réponse : $$' +
-                    qexp_latex.replace(
-                      /\\ldots/,
-                      `\\textcolor{orange}{${answer_latex}}`,
-                    ) +
-                    '$$',
-                )
-              }
+            if (status === STATUS_INCORRECT) {
+              coms.unshift(
+                'Ta réponse : $$' +
+                  qexp_latex.replace(
+                    /\\ldots/,
+                    `\\textcolor{red}{${answer_latex}}`,
+                  ) +
+                  '$$',
+              )
+            } else if (
+              status === STATUS_BAD_FORM ||
+              status === STATUS_UNOPTIMAL_FORM
+            ) {
+              coms.unshift(
+                'Ta réponse : $$' +
+                  qexp_latex.replace(
+                    /\\ldots/,
+                    `\\textcolor{orange}{${answer_latex}}`,
+                  ) +
+                  '$$',
+              )
             }
-            lines.push(line)
           }
+          lines.push(line)
       }
     }
 
@@ -601,27 +423,13 @@
   }
 
   $: if (item) updateItem()
-  // console.log('item', item)
-  const test = '<img src="toto.png" alt="toto"/>'
 </script>
 
-<!-- 1
-<br/>
-<img src="toto.png" alt="toto"/>
-<br/>
-2
-<br/>
-{test}
-<br/>
 
-3
-<br/>
-{@html test}
-<br/> -->
 {#if correction}
   <div
     id="{`correction${number}`}"
-    style="word-break: break-word ;min-width: 0;;white-space: normal;"
+    style="word-break: break-word ;min-width: 0;white-space: normal;"
   >
     {#if image}
       {#if imageCorrection}
@@ -631,7 +439,7 @@
           <img
             src="{base64}"
             class="mt-3 mb-3"
-            style="max-width:90%;max-height:40vh;"
+            style="max-width:500px;max-height:40vh;"
             alt="Alright Buddy!"
           />
         {:catch error}
@@ -644,7 +452,7 @@
           <img
             src="{base64}"
             class="mt-3 mb-3"
-            style="max-width:90%;max-height:40vh;"
+            style="max-width:500px;max-height:40vh;"
             alt="Alright Buddy!"
           />
         {:catch error}
