@@ -10761,81 +10761,52 @@ const questions = {
           description: "Calcul de l'aire d'un carré.",
           subdescription: "A partir d'une description",
           enounces: [
-            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 mm$$ ?",
-            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 cm$$ ?",
-            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 dm$$ ?",
-            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 m$$ ?",
-            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 dam$$ ?",
-            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 hm$$ ?",
-            "Quelle est l'aire d'un <b>carré</b> de côté $$&1 km$$ ?",
+            "Quelle est l'aire d'un <b>carré</b> de côté $$[°&1°]$$ ?",
           ],
           variables: [
             {
-              '&1': '$e[1;11]',
+              '&1': '$e[1;11] mm',
+            },
+            {
+              '&1': '$e[1;11] cm',
+            },
+            {
+              '&1': '$e[1;11] dm',
+            },
+            {
+              '&1': '$e[1;11] m',
+            },
+            {
+              '&1': '$e[1;11] dam',
+            },
+            {
+              '&1': '$e[1;11] hm',
+            },
+            {
+              '&1': '$e[1;11] km',
             },
           ],
           solutions: [
-            ['[_&1*&1_] mm^2'],
-            ['[_&1*&1_] cm^2'],
-            ['[_&1*&1_] dm^2'],
-            ['[_&1*&1_] m^2'],
-            ['[_&1*&1_] dam^2'],
-            ['[_&1*&1_] hm^2'],
-            ['[_&1*&1_] km^2'],
+            ['[_&1*&1_mm^2_] '],
+            ['[_&1*&1_cm^2_]'],
+            ['[_&1*&1_dm^2_]'],
+            ['[_&1*&1_m^2_]'],
+            ['[_&1*&1_dam^2_] '],
+            ['[_&1*&1_hm^2_]'],
+            ['[_&1*&1_km^2_]'],
           ],
           options: ['no-exp'],
           correctionFormat: [
             {
-              correct: ["L'aire d'un carré de côté $$&1\\,mm$$ est &answer."],
-              answer: "L'aire du carré est &answer."
-            },
-            {
-              correct: ["L'aire d'un carré de côté $$&1\\,cm$$ est &answer."],
-              answer: "L'aire du carré est &answer."
-            },
-            {
-              correct: ["L'aire d'un carré de côté $$&1\\,dm$$ est &answer."],
-              answer: "L'aire du carré est &answer."
-            },
-            {
-              correct: ["L'aire d'un carré de côté $$&1\\,m$$ est &answer."],
-              answer: "L'aire du carré est &answer."
-            },
-            {
-              correct: ["L'aire d'un carré de côté $$&1\\,dam$$ est &answer."],
-              answer: "L'aire du carré est &answer."
-            },
-            {
-              correct: ["L'aire d'un carré de côté $$&1\\,hm$$ est &answer."],
-              answer: "L'aire du carré est &answer."
-            },
-            {
-              correct: ["L'aire d'un carré de côté $$&1\\,km$$ est &answer."],
+              correct: ["L'aire d'un carré de côté $$&1$$ est &answer."],
               answer: "L'aire du carré est &answer."
             },
           ],
           correctionDetails: [
             [
-              { text: "L'aire d'un carré de côté $$&1\\,mm$$  est $$&1\\,mm \\times &1\\,mm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{[_&1*&1_]\\,mm^2}$$." }
+              { text: "L'aire d'un carré de côté $$[°&1°]$$  est $$[°&1°] \\times [°&1°] = &sol$$." }
             ],
-            [
-              { text: "L'aire d'un carré de côté $$&1\\,cm$$  est $$&1\\,cm \\times &1\\,cm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{[_&1*&1_]\\,cm^2}$$." }
-            ],
-            [
-              { text: "L'aire d'un carré de côté $$&1\\,dm$$  est $$&1\\,dm \\times &1\\,dm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{[_&1*&1_]\\,dm^2}$$." }
-            ],
-            [
-              { text: "L'aire d'un carré de côté $$&1\\,m$$  est $$&1\\,m \\times &1\\,m = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{[_&1*&1_]\\,m^2}$$." }
-            ],
-            [
-              { text: "L'aire d'un carré de côté $$&1\\,dam$$  est $$&1\\,dam \\times &1\\,dam = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{[_&1*&1_]\\,dam^2}$$." }
-            ],
-            [
-              { text: "L'aire d'un carré de côté $$&1\\,hm$$  est $$&1\\,hm \\times &1\\,hm = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{[_&1*&1_]\\,hm^2}$$." }
-            ],
-            [
-              { text: "L'aire d'un carré de côté $$&1\\,km$$  est $$&1\\,km \\times &1\\,km = \\enclose{roundedbox}[3px solid green]{\\textcolor{green}{[_&1*&1_]\\,km^2}$$." }
-            ],
+           
           ],
           
           defaultDelay: 15,
