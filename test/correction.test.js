@@ -3126,38 +3126,7 @@ describe('testing correct answer with incorrect spaces', () => {
 
 
 
-describe('testing incorrect form of implicit product', () => {
-    const specs = [[
-        {
-            expressions: ['2*a'],
-            options: ['require-implicit-products']
-        },
-        {
-            answer: 'a2',
-            check_status: STATUS_INCORRECT
-        },
-    ],
-    [
-        {
-            expressions: ['(2+b)*3'],
-            options: ['require-implicit-products']
-        },
-        {
-            answer: '(2+b)3',
-            check_status: STATUS_INCORRECT
-        },
-    ],
-    ]
-    test.each(specs)('', (q, check) => {
-        const generated = generateQuestion(q)
-        const item = {
-            ...generated,
-            ...check
-        }
-        assessItem(item)
-        expect(item.status).toBe(item.check_status)
-    })
-})
+
 
 describe('testing correct answer with implicit product (require-implicit-products)', () => {
     const specs = [[
